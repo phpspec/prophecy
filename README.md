@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.org/phpspec/prophecy.png?branch=master)](https://travis-ci.org/phpspec/prophecy)
 
-Prophecy is a highly opinionated yet very powerful and frexible PHP object mocking
+Prophecy is a highly opinionated yet very powerful and flexible PHP object mocking
 framework. Though initially it was created to fullfil phpspec2 needs, it is flexible
-enough to be used inside any testing framework out there with minimal efforts.
+enough to be used inside any testing framework out there with minimal effort.
 
 ## Simple example
 
@@ -67,12 +67,12 @@ You can read more about Composer on its [official webpage](http://getcomposer.or
 
 ## How to use it
 
-First of all, in Prophecy every word has logical meaning, even name of the library
-itself (Prophecy). When you'll start feeling that, you'll become very fluid with this
+First of all, in Prophecy every word has a logical meaning, even the name of the library
+itself (Prophecy). When you start feeling that, you'll become very fluid with this
 tool.
 
-For example, Prophecy is called that way because it concentrates on describing future
-behavior of the objects with very limited knowledge about them. But as any other prophecy,
+For example, Prophecy is named that way because it concentrates on describing future
+behavior of the objects with very limited knowledge about them. But as with any other prophecy,
 those object prophecies can't create themselves - there should be Prophet:
 
 ```php
@@ -85,9 +85,9 @@ Prophet is the guy that creates prophecies by *prophesizing* them:
 $prophecy = $prophet->prophesize();
 ```
 
-Result of `prophesize()` method call is a new object of class `ObjectProphecy`. Yes,
+The result of the `prophesize()` method call is a new object of class `ObjectProphecy`. Yes,
 that's your specific object prophecy, which describes how your object would behave
-in nearest future. But first, you need to specify about which object you're talking,
+in the near future. But first, you need to specify which object you're talking about,
 right?
 
 ```php
@@ -95,8 +95,8 @@ $prophecy->willExtend('stdClass');
 $prophecy->willImplement('SessionHandlerInterface');
 ```
 
-There are 2 interesting calls - `willExtend` and `willImplement`. First one tells
-object prophecy that our object should extend specific class, second one tells that
+There are 2 interesting calls - `willExtend` and `willImplement`. The first one says
+object prophecy that our object should extend specific class, the second one says that
 it should implement some interface. Obviously, objects in PHP can implement multiple
 interfaces, but extend only one parent class.
 
@@ -109,43 +109,43 @@ our object *dummy* by revealing its prophecy:
 $dummy = $prophecy->reveal();
 ```
 
-`$dummy` variable now holds special dummy object. Dummy objects are objects that extend
-and/or implement preset classes/interfaces by overriding all their public methods. Key
+The `$dummy` variable now holds a special dummy object. Dummy objects are objects that extend
+and/or implement preset classes/interfaces by overriding all their public methods. The key
 point about dummies is that they do not hold any logic - they just do nothing. Any method
 of dummy will return `null` all the time and dummy should never throw any exception.
 Dummy is your friend if you don't care about actual behavior of this double & just need
 a token object to satisfy some method typehint.
 
-You need to understand one thing - dummy is not a prophecy. Your object prophecy still
+You need to understand one thing - dummy is not a prophecy. Your object prophecy is still
 assigned to `$prophecy` variable and in order to manipulate with your expectations, you
-should work with it. `$dummy` is a dummy - simple php object that tries to fullfil your
+should work with it. `$dummy` is a dummy - a simple php object that tries to fullfil your
 prophecy.
 
 ### Stubs
 
-Ok, now we know how to create basic prophecies and reveal dummies out of them. That's
+Ok, now we know how to create basic prophecies and reveal dummies from them. That's
 awesome if we don't care about our _doubles_ (objects that reflect originals)
 interactions? Then we need *stubs* or *mocks*.
 
 Stub is an object double, which doesn't have any expectations about the object behavior,
 but when put in specific environment, behaves in specific way. Ok, I know, it's cryptic,
-but bare with me for a minute. Simply put, stub is a dummy, which depending on called
-method signature does different things (has logic). How you create stubs in Prophecy:
+but bear with me for a minute. Simply put, stub is a dummy, which depending on the called
+method signature does different things (has logic). To create stubs in Prophecy:
 
 ```php
 $prophecy->read('123')->willReturn('value');
 ```
 
 Oh wow. We've just made arbitrary call on the objecy prophecy? Yes, we did. And this
-call returned us new object instance of class `MethodProphecy`. Yep, that's specific
-method with arguments prophecy. Method prophecies give you ability to create method
-promises or predictions. We'll talk about method predictions later in _Mocks_ section.
+call returned us a new object instance of class `MethodProphecy`. Yep, that's a specific
+method with arguments prophecy. Method prophecies give you the ability to create method
+promises or predictions. We'll talk about method predictions later in the _Mocks_ section.
 
 #### Promises
 
 Promises are logical blocks, that represent your fictional methods in prophecy terms
-and they are handled by `MethodProphecy::will(PromiseInterface $promise)` method.
-As a matter of fact, call that we made earlier (`willReturn('value')`) is a simple
+and they are handled by the `MethodProphecy::will(PromiseInterface $promise)` method.
+As a matter of fact, the call that we made earlier (`willReturn('value')`) is a simple
 shortcut to:
 
 ```php
@@ -153,12 +153,12 @@ $prophecy->read('123')->will(new Prophecy\Promise\ReturnPromise(array('value')))
 ```
 
 This promise will cause any call to our double's `read()` method with exactly one
-single argument - `'123'` to always return `'value'`. But that's only for this
+argument - `'123'` to always return `'value'`. But that's only for this
 promise, there's plenty others you can use:
 
-- `ReturnPromise` or `->willReturn(1)` - returns value from a method call
-- `ReturnArgumentPromise` or `->willReturnArgument()` - returns first method argument from call
-- `ThrowPromise` or `->willThrow` - causes method to throw specific exception
+- `ReturnPromise` or `->willReturn(1)` - returns a value from a method call
+- `ReturnArgumentPromise` or `->willReturnArgument()` - returns the first method argument from call
+- `ThrowPromise` or `->willThrow` - causes the method to throw specific exception
 - `CallbackPromise` or `->will($callback)` - gives you a quick way to define your own custom logic
 
 Keep in mind, that you can always add even more promises by implementing
@@ -195,12 +195,12 @@ What matters is their behaviors and how well you faked it.
 
 #### Arguments wildcarding
 
-Previous example is awesome (at least I hope it is for you), but that's not
+The previous example is awesome (at least I hope it is for you), but that's not
 optimal enough. We hardcoded `'everzet'` in our expectation. Isn't there a better
-way? In fact there is, but it envolves understanding of what this `'everzet'`
+way? In fact there is, but it envolves understanding what this `'everzet'`
 actually is.
 
-You see, though method arguments used during method prophecy creation look could
+You see, although method arguments used during method prophecy creation look could
 look like simple method arguments, in reality they are not. They are argument tokens
 wildcard.  As a matter of fact, `->setName('everzet')` looks like simple call just
 because Prophecy automatically transforms it under the hood into:
@@ -220,15 +220,15 @@ use Prophecy\Argument;
 $user->setName(Argument::exact('everzet'));
 ```
 
-`ExactValueToken` is not very useful in our case as it forced use to hardcode username.
+`ExactValueToken` is not very useful in our case as it forced us to hardcode username.
 That's why Prophecy comes bundled with bunch of other tokens:
 
-- `ExactValueToken` or `Argument::exact($value)` - checks that argument matches specific value
-- `TypeToken` or `Argument::type($typeOrClass)` - checks that argument matches specific type or
+- `ExactValueToken` or `Argument::exact($value)` - checks that the argument matches a specific value
+- `TypeToken` or `Argument::type($typeOrClass)` - checks that the argument matches a specific type or
   classname.
-- `ObjectStateToken` or `Argument::which($method, $value)` - checks that argument method returns
-  specific value
-- `CallbackToken` or `Argument::that(callback)` - checks that argument matches custom callback
+- `ObjectStateToken` or `Argument::which($method, $value)` - checks that the argument method returns
+  a specific value
+- `CallbackToken` or `Argument::that(callback)` - checks that the argument matches a custom callback
 - `AnyValueToken` or `Argument::any()` - matches any argument
 - `AnyValuesToken` or `Arugment::cetera()` - matches any arguments to the rest of the signature
 
