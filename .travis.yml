@@ -1,0 +1,9 @@
+language: php
+
+php: [5.3, 5.4, 5.5]
+
+before_script:
+  - curl http://getcomposer.org/installer | php
+  - php composer.phar install --dev --prefer-source
+
+script: phpspec run -fpretty -v
