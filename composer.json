@@ -25,7 +25,13 @@
 
     "autoload": {
         "psr-0": {
-            "Prophecy": "src/"
+            "Prophecy\\": "src/"
+        }
+    },
+
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
         }
     }
 }
