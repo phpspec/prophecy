@@ -3,10 +3,10 @@
 [![Build Status](https://travis-ci.org/phpspec/prophecy.png?branch=master)](https://travis-ci.org/phpspec/prophecy)
 
 Prophecy is a highly opinionated yet very powerful and flexible PHP object mocking
-framework. Though initially it was created to fullfil phpspec2 needs, it is flexible
+framework. Though initially it was created to fulfil phpspec2 needs, it is flexible
 enough to be used inside any testing framework out there with minimal effort.
 
-## Simple example
+## A simple example
 
 ```php
 <?php
@@ -71,15 +71,15 @@ First of all, in Prophecy every word has a logical meaning, even the name of the
 itself (Prophecy). When you start feeling that, you'll become very fluid with this
 tool.
 
-For example, Prophecy has been named that way because it concentrates on describing future
-behavior of the objects with very limited knowledge about them. But as with any other prophecy,
+For example, Prophecy has been named that way because it concentrates on describing the future
+behavior of objects with very limited knowledge about them. But as with any other prophecy,
 those object prophecies can't create themselves - there should be a Prophet:
 
 ```php
 $prophet = new Prophecy\Prophet;
 ```
 
-Prophet is the guy that creates prophecies by *prophesizing* them:
+The Prophet is the guy that creates prophecies by *prophesizing* them:
 
 ```php
 $prophecy = $prophet->prophesize();
@@ -95,7 +95,7 @@ $prophecy->willExtend('stdClass');
 $prophecy->willImplement('SessionHandlerInterface');
 ```
 
-There are 2 interesting calls - `willExtend` and `willImplement`. The first one says
+There are 2 interesting calls - `willExtend` and `willImplement`. The first one tells
 object prophecy that our object should extend specific class, the second one says that
 it should implement some interface. Obviously, objects in PHP can implement multiple
 interfaces, but extend only one parent class.
@@ -112,24 +112,24 @@ $dummy = $prophecy->reveal();
 The `$dummy` variable now holds a special dummy object. Dummy objects are objects that extend
 and/or implement preset classes/interfaces by overriding all their public methods. The key
 point about dummies is that they do not hold any logic - they just do nothing. Any method
-of dummy will return `null` all the time and the dummy will never throw any exception.
-Dummy is your friend if you don't care about actual behavior of this double & just need
-a token object to satisfy some method typehint.
+of the dummy will always return `null` and the dummy will never throw any exceptions.
+Dummy is your friend if you don't care about the actual behavior of this double and just need
+a token object to satisfy a method typehint.
 
-You need to understand one thing - dummy is not a prophecy. Your object prophecy is still
+You need to understand one thing - a dummy is not a prophecy. Your object prophecy is still
 assigned to `$prophecy` variable and in order to manipulate with your expectations, you
-should work with it. `$dummy` is a dummy - a simple php object that tries to fullfil your
+should work with it. `$dummy` is a dummy - a simple php object that tries to fulfil your
 prophecy.
 
 ### Stubs
 
 Ok, now we know how to create basic prophecies and reveal dummies from them. That's
 awesome if we don't care about our _doubles_ (objects that reflect originals)
-interactions. Otherwise, we need *stubs* or *mocks*.
+interactions. If we do, we need to use *stubs* or *mocks*.
 
-Stub is an object double, which doesn't have any expectations about the object behavior,
-but when put in specific environment, it behaves in specific way. Ok, I know, it's cryptic,
-but bear with me for a minute. Simply put, stub is a dummy, which depending on the called
+A stub is an object double, which doesn't have any expectations about the object behavior,
+but when put in specific environment, behaves in specific way. Ok, I know, it's cryptic,
+but bear with me for a minute. Simply put, a stub is a dummy, which depending on the called
 method signature does different things (has logic). To create stubs in Prophecy:
 
 ```php
@@ -166,8 +166,8 @@ Keep in mind, that you can always add even more promises by implementing
 
 #### Method prophecies idempotency
 
-Prophecy enforces same method prophecies and, as a consequense, same promises &
-predictions for same method calls with same arguments. This means:
+Prophecy enforces same method prophecies and, as a consequense, same promises and
+predictions for the same method calls with the same arguments. This means:
 
 ```php
 $methodProphecy1 = $prophecy->read('123');
@@ -200,9 +200,9 @@ optimal enough. We hardcoded `'everzet'` in our expectation. Isn't there a bette
 way? In fact there is, but it involves understanding what this `'everzet'`
 actually is.
 
-You see, even if method arguments used during method prophecy creation looks
-like simple method arguments, in reality they are not. They are argument tokens
-wildcard.  As a matter of fact, `->setName('everzet')` looks like a simple call just
+You see, even if method arguments used during method prophecy creation look
+like simple method arguments, in reality they are not. They are argument token
+wildcards.  As a matter of fact, `->setName('everzet')` looks like a simple call just
 because Prophecy automatically transforms it under the hood into:
 
 ```php
@@ -220,7 +220,7 @@ use Prophecy\Argument;
 $user->setName(Argument::exact('everzet'));
 ```
 
-`ExactValueToken` is not very useful in our case as it forced us to hardcode username.
+`ExactValueToken` is not very useful in our case as it forced us to hardcode the username.
 That's why Prophecy comes bundled with a bunch of other tokens:
 
 - `ExactValueToken` or `Argument::exact($value)` - checks that the argument matches a specific value
@@ -263,15 +263,15 @@ $user->setName(Argument::any())->will(function(){});
 ```
 
 Nothing. Your stub will continue behaving the way it did before. That's because of how
-arguments wildcarding works. Every argument token type has different score level, which
-wildcard then uses to calculate final arguments match score and use method prophecy
-promise that has highest score. In this case, `Argument::type()` in case of success
-scores to `5` and `Argument::any()` scores to `3`. Type token wins, so does first
-`setName()` method prophecy & its promise.
+arguments wildcarding works. Every argument token type has a different score level, which
+wildcard then uses to calculate the final arguments match score and use the method prophecy
+promise that has the highest score. In this case, `Argument::type()` in case of success
+scores `5` and `Argument::any()` scores `3`. So the type token wins, as does the first
+`setName()` method prophecy and its promise.
 
-#### Getting stub object
+#### Getting stub objects
 
-Ok, now as we know how to define our prophecy method promises, let's get our stub from
+Ok, now we know how to define our prophecy method promises, let's get our stub from
 it:
 
 ```php
@@ -280,15 +280,15 @@ $stub = $prophecy->reveal();
 
 As you might see, the only difference between how we get dummies and stubs is that with
 stubs we describe every object conversation instead of just agreeing with `null` returns
-(object being *dummy*). As a matter of fact, after you'll define your first promise
+(object being *dummy*). As a matter of fact, after you define your first promise
 (method call), Prophecy will force you to define all the communications - it throws
-`UnexpectedCallException` for any call you didn't describe with object prophecy before
-calling it on stub.
+the `UnexpectedCallException` for any call you didn't describe with object prophecy before
+calling it on a stub.
 
 ### Mocks
 
-Now we know how to define doubles without behavior (dummies) & doubles with behavior but
-no expectations (stubs). What's left is doubles to which we have some expectations. Those
+Now we know how to define doubles without behavior (dummies) and doubles with behavior but
+no expectations (stubs). What's left is doubles for which we have some expectations. These
 are called mocks and in Prophecy they look almost exactly the same as stubs, except that
 they define *predictions* instead of *promises* on method prophecies:
 
@@ -298,46 +298,46 @@ $entityManager->flush()->shouldBeCalled();
 
 #### Predictions
 
-`shouldBeCalled()` method here assigns `CallPrediction` to our method prophecy.
-Predictions are delayed behavior check for your prophecies. You see, during the entire lifetime
+The `shouldBeCalled()` method here assigns `CallPrediction` to our method prophecy.
+Predictions are a delayed behavior check for your prophecies. You see, during the entire lifetime
 of your doubles, Prophecy records every single call you're making against it inside your
-code. After that, Prophecy can use collected information to check if it matches defined
-predictions. You can assign prediction to method prophecy using
+code. After that, Prophecy can use this collected information to check if it matches defined
+predictions. You can assign predictions to method prophecies using the
 `MethodProphecy::should(PredictionInterface $prediction)` method. As a matter of fact,
-`shouldBeCalled()` method we used earlier is just a shortcut to:
+the `shouldBeCalled()` method we used earlier is just a shortcut to:
 
 ```php
 $entityManager->flush()->should(new Prophecy\Prediction\CallPrediction());
 ```
 
-It checks if your method of interest (that matches both method name & arguments wildcard)
-was called 1 or more times. If prediction failed - it throws an exception. When it does this
-check happen? Whenever you call `checkPredictions()` on main Prophet object:
+It checks if your method of interest (that matches both the method name and the arguments wildcard)
+was called 1 or more times. If the prediction failed then it throws an exception. When does this
+check happen? Whenever you call `checkPredictions()` on the main Prophet object:
 
 ```php
 $prophet->checkPredictions();
 ```
 
-In PHPUnit, you would want to put this call into `teardown()` method. If no predictions are
-defined, it would do nothing. So it wouldn't harm.
+In PHPUnit, you would want to put this call into the `teardown()` method. If no predictions
+are defined, it would do nothing. So it won't harm to call it after every test.
 
 There are plenty more predictions you can play with:
 
-- `CallPrediction` or `shouldBeCalled()` - checks that method has been called 1 or more times
-- `NoCallsPrediction` or `shouldNotBeCalled()` - checks that method has not been called
-- `CallTimesPrediction` or `shouldBeCalledTimes($count)` - checks that method has been called 
+- `CallPrediction` or `shouldBeCalled()` - checks that the method has been called 1 or more times
+- `NoCallsPrediction` or `shouldNotBeCalled()` - checks that the method has not been called
+- `CallTimesPrediction` or `shouldBeCalledTimes($count)` - checks that the method has been called 
   `$count` times
-- `CallbackPrediction` or `should($callback)` - checks method against your own custom callback
+- `CallbackPrediction` or `should($callback)` - checks the method against your own custom callback
 
 Of course, you can always create your own custom prediction any time by implementing
 `PredictionInterface`.
 
 ### Spies
 
-Last bit of awesomeness in Prophecy is out-of-the-box spies support. As I said in previous
-section, Prophecy records every call been made during entire double lifetime. This means
-you don't need to record predictions in order to check them. You can do it by hand
-by using `MethodProphecy::shouldHave(PredictionInterface $prediction)` method:
+The last bit of awesomeness in Prophecy is out-of-the-box spies support. As I said in the previous
+section, Prophecy records every call made during the double's entire lifetime. This means
+you don't need to record predictions in order to check them. You can also do it
+manually by using the `MethodProphecy::shouldHave(PredictionInterface $prediction)` method:
 
 ```php
 $em = $prophet->prophesize('Doctrine\ORM\EntityManager');
