@@ -125,7 +125,7 @@ prophecy.
 
 Ok, now we know how to create basic prophecies and reveal dummies from them. That's
 awesome if we don't care about our _doubles_ (objects that reflect originals)
-interactions? Then we need *stubs* or *mocks*.
+interactions. Otherwise, we need *stubs* or *mocks*.
 
 Stub is an object double, which doesn't have any expectations about the object behavior,
 but when put in specific environment, behaves in specific way. Ok, I know, it's cryptic,
@@ -200,8 +200,8 @@ optimal enough. We hardcoded `'everzet'` in our expectation. Isn't there a bette
 way? In fact there is, but it envolves understanding what this `'everzet'`
 actually is.
 
-You see, although method arguments used during method prophecy creation look could
-look like simple method arguments, in reality they are not. They are argument tokens
+You see, even if method arguments used during method prophecy creation looks
+like simple method arguments, in reality they are not. They are argument tokens
 wildcard.  As a matter of fact, `->setName('everzet')` looks like simple call just
 because Prophecy automatically transforms it under the hood into:
 
