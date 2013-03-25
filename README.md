@@ -1,5 +1,7 @@
 # Prophecy
 
+[![Build Status](https://travis-ci.org/phpspec/prophecy.png?branch=master)](https://travis-ci.org/phpspec/prophecy)
+
 Prophecy is a highly opinionated yet very powerful and frexible PHP object mocking
 framework. Though initially it was created to fullfil phpspec2 needs, it is flexible
 enough to be used inside any testing framework out there with minimal efforts.
