@@ -347,4 +347,4 @@ $controller->createUser($em->reveal());
 $em->flush()->shouldHaveBeenCalled();
 ```
 
-Such manipulation with doubles is called spying. And it Prophecy it just works.
+Such manipulation with doubles is called spying. And with Prophecy it just works.
