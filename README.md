@@ -52,7 +52,7 @@ First, add Prophecy to the list of dependencies inside your `composer.json`:
 ```json
 {
     "require-dev": {
-        "phpspec/prophecy": "dev-master"
+        "phpspec/prophecy": "~1.0.*@dev"
     }
 }
 ```
