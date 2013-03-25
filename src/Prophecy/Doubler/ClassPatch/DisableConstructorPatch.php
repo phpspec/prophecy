@@ -1,0 +1,58 @@
+<?php
+
+namespace Prophecy\Doubler\ClassPatch;
+
+use Prophecy\Doubler\Generator\Node\ClassNode;
+
+/*
+ * This file is part of the Prophecy.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *     Marcello Duarte <marcello.duarte@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * Disable constructor.
+ * Makes all constructor arguments optional.
+ *
+ * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ */
+class DisableConstructorPatch implements ClassPatchInterface
+{
+    /**
+     * Checks if class has `__construct` method.
+     *
+     * @param ClassNode $node
+     *
+     * @return bool
+     */
+    public function supports(ClassNode $node)
+    {
+        return $node->hasMethod('__construct');
+    }
+
+    /**
+     * Makes all class constructor arguments optional.
+     *
+     * @param ClassNode $node
+     */
+    public function apply(ClassNode $node)
+    {
+        $constructor = $node->getMethod('__construct');
+        foreach ($constructor->getArguments() as $argument) {
+            $argument->setDefault(null);
+        }
+    }
+
+    /**
+     * Returns patch priority, which determines when patch will be applied.
+     *
+     * @return int Priority number (higher - earlier)
+     */
+    public function getPriority()
+    {
+        return 100;
+    }
+}
