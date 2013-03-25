@@ -230,7 +230,7 @@ That's why Prophecy comes bundled with bunch of other tokens:
   a specific value
 - `CallbackToken` or `Argument::that(callback)` - checks that the argument matches a custom callback
 - `AnyValueToken` or `Argument::any()` - matches any argument
-- `AnyValuesToken` or `Arugment::cetera()` - matches any arguments to the rest of the signature
+- `AnyValuesToken` or `Argument::cetera()` - matches any arguments to the rest of the signature
 
 And you can add even more by implementing `TokenInterface` with your own custom classes.
 
