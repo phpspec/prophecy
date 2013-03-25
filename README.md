@@ -166,7 +166,7 @@ Keep in mind, that you can always add even more promises by implementing
 
 #### Method prophecies idempotency
 
-Prophecy enforces same method prophecies and, as a consequense, same promises and
+Prophecy enforces same method prophecies and, as a consequence, same promises and
 predictions for the same method calls with the same arguments. This means:
 
 ```php
