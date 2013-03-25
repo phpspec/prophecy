@@ -103,7 +103,7 @@ class MethodProphecy
 
         if (!$promise instanceof Promise\PromiseInterface) {
             throw new InvalidArgumentException(sprintf(
-                'Expected callable or instance of PromiseInterface, but giot %s.',
+                'Expected callable or instance of PromiseInterface, but got %s.',
                 gettype($promise)
             ));
         }
@@ -169,7 +169,7 @@ class MethodProphecy
 
         if (!$prediction instanceof Prediction\PredictionInterface) {
             throw new InvalidArgumentException(sprintf(
-                'Expected callable or instance of PredictionInterface, but giot %s.',
+                'Expected callable or instance of PredictionInterface, but got %s.',
                 gettype($prediction)
             ));
         }
@@ -235,7 +235,7 @@ class MethodProphecy
 
         if (!$prediction instanceof Prediction\PredictionInterface) {
             throw new InvalidArgumentException(sprintf(
-                'Expected callable or instance of PredictionInterface, but giot %s.',
+                'Expected callable or instance of PredictionInterface, but got %s.',
                 gettype($prediction)
             ));
         }
