@@ -71,9 +71,9 @@ First of all, in Prophecy every word has a logical meaning, even the name of the
 itself (Prophecy). When you start feeling that, you'll become very fluid with this
 tool.
 
-For example, Prophecy is named that way because it concentrates on describing future
+For example, Prophecy has been named that way because it concentrates on describing future
 behavior of the objects with very limited knowledge about them. But as with any other prophecy,
-those object prophecies can't create themselves - there should be Prophet:
+those object prophecies can't create themselves - there should be a Prophet:
 
 ```php
 $prophet = new Prophecy\Prophet;
@@ -112,7 +112,7 @@ $dummy = $prophecy->reveal();
 The `$dummy` variable now holds a special dummy object. Dummy objects are objects that extend
 and/or implement preset classes/interfaces by overriding all their public methods. The key
 point about dummies is that they do not hold any logic - they just do nothing. Any method
-of dummy will return `null` all the time and dummy should never throw any exception.
+of dummy will return `null` all the time and the dummy will never throw any exception.
 Dummy is your friend if you don't care about actual behavior of this double & just need
 a token object to satisfy some method typehint.
 
@@ -128,7 +128,7 @@ awesome if we don't care about our _doubles_ (objects that reflect originals)
 interactions. Otherwise, we need *stubs* or *mocks*.
 
 Stub is an object double, which doesn't have any expectations about the object behavior,
-but when put in specific environment, behaves in specific way. Ok, I know, it's cryptic,
+but when put in specific environment, it behaves in specific way. Ok, I know, it's cryptic,
 but bear with me for a minute. Simply put, stub is a dummy, which depending on the called
 method signature does different things (has logic). To create stubs in Prophecy:
 
@@ -136,7 +136,7 @@ method signature does different things (has logic). To create stubs in Prophecy:
 $prophecy->read('123')->willReturn('value');
 ```
 
-Oh wow. We've just made arbitrary call on the objecy prophecy? Yes, we did. And this
+Oh wow. We've just made an arbitrary call on the object prophecy? Yes, we did. And this
 call returned us a new object instance of class `MethodProphecy`. Yep, that's a specific
 method with arguments prophecy. Method prophecies give you the ability to create method
 promises or predictions. We'll talk about method predictions later in the _Mocks_ section.
@@ -197,12 +197,12 @@ What matters is their behaviors and how well you faked it.
 
 The previous example is awesome (at least I hope it is for you), but that's not
 optimal enough. We hardcoded `'everzet'` in our expectation. Isn't there a better
-way? In fact there is, but it envolves understanding what this `'everzet'`
+way? In fact there is, but it involves understanding what this `'everzet'`
 actually is.
 
 You see, even if method arguments used during method prophecy creation looks
 like simple method arguments, in reality they are not. They are argument tokens
-wildcard.  As a matter of fact, `->setName('everzet')` looks like simple call just
+wildcard.  As a matter of fact, `->setName('everzet')` looks like a simple call just
 because Prophecy automatically transforms it under the hood into:
 
 ```php
@@ -221,7 +221,7 @@ $user->setName(Argument::exact('everzet'));
 ```
 
 `ExactValueToken` is not very useful in our case as it forced us to hardcode username.
-That's why Prophecy comes bundled with bunch of other tokens:
+That's why Prophecy comes bundled with a bunch of other tokens:
 
 - `ExactValueToken` or `Argument::exact($value)` - checks that the argument matches a specific value
 - `TypeToken` or `Argument::type($typeOrClass)` - checks that the argument matches a specific type or
@@ -230,7 +230,7 @@ That's why Prophecy comes bundled with bunch of other tokens:
   a specific value
 - `CallbackToken` or `Argument::that(callback)` - checks that the argument matches a custom callback
 - `AnyValueToken` or `Argument::any()` - matches any argument
-- `AnyValuesToken` or `Argument::cetera()` - matches any arguments to the rest of the signature
+- `AnyValuesToken` or `Arugment::cetera()` - matches any arguments to the rest of the signature
 
 And you can add even more by implementing `TokenInterface` with your own custom classes.
 
@@ -246,7 +246,7 @@ $user->setName(Argument::type('string'))->will(function($args) {
 ```
 
 That's it. Now our `{set,get}Name()` prophecy will work with any string argument provided to it.
-We've just described how our stub object should behave, even though original object could have
+We've just described how our stub object should behave, even though the original object could have
 no behavior whatsoever.
 
 One last bit about arguments now. You might ask, what happens in case of:
@@ -282,13 +282,13 @@ As you might see, the only difference between how we get dummies and stubs is th
 stubs we describe every object conversation instead of just agreeing with `null` returns
 (object being *dummy*). As a matter of fact, after you'll define your first promise
 (method call), Prophecy will force you to define all the communications - it throws
-`UnexpectedCallException` for any call you didn't described with object prophecy before
+`UnexpectedCallException` for any call you didn't describe with object prophecy before
 calling it on stub.
 
 ### Mocks
 
 Now we know how to define doubles without behavior (dummies) & doubles with behavior but
-no expectations (stubs). What left is doubles to which we have some expectations. Those
+no expectations (stubs). What's left is doubles to which we have some expectations. Those
 are called mocks and in Prophecy they look almost exactly the same as stubs, except that
 they define *predictions* instead of *promises* on method prophecies:
 
@@ -299,7 +299,7 @@ $entityManager->flush()->shouldBeCalled();
 #### Predictions
 
 `shouldBeCalled()` method here assigns `CallPrediction` to our method prophecy.
-Predictions are delayed behavior check for your prophecies. You see, during entire lifetime
+Predictions are delayed behavior check for your prophecies. You see, during the entire lifetime
 of your doubles, Prophecy records every single call you're making against it inside your
 code. After that, Prophecy can use collected information to check if it matches defined
 predictions. You can assign prediction to method prophecy using
@@ -311,14 +311,14 @@ $entityManager->flush()->should(new Prophecy\Prediction\CallPrediction());
 ```
 
 It checks if your method of interest (that matches both method name & arguments wildcard)
-was called 1 or more times. If prediction failed - it throws exception. When it does this
-check happens? Whenever you call `checkPredictions()` on main Prophet object:
+was called 1 or more times. If prediction failed - it throws an exception. When it does this
+check happen? Whenever you call `checkPredictions()` on main Prophet object:
 
 ```php
 $prophet->checkPredictions();
 ```
 
-In PHPUnit, you would want to put this call into `teardown()` method. If no predictions
+In PHPUnit, you would want to put this call into `teardown()` method. If no predictions are
 defined, it would do nothing. So it wouldn't harm.
 
 There are plenty more predictions you can play with:
@@ -336,8 +336,8 @@ Of course, you can always create your own custom prediction any time by implemen
 
 Last bit of awesomeness in Prophecy is out-of-the-box spies support. As I said in previous
 section, Prophecy records every call been made during entire double lifetime. This means
-you don't need to record predictions in order to check them. You can do it with hands
-manually by using `MethodProphecy::shouldHave(PredictionInterface $prediction)` method:
+you don't need to record predictions in order to check them. You can do it by hand
+by using `MethodProphecy::shouldHave(PredictionInterface $prediction)` method:
 
 ```php
 $em = $prophet->prophesize('Doctrine\ORM\EntityManager');
