@@ -32,6 +32,7 @@ class CallPrediction extends ObjectBehavior
         $method->getMethodName()->willReturn('getName');
         $method->getArgumentsWildcard()->willReturn($arguments);
         $arguments->__toString()->willReturn('123');
+        $object->findProphecyMethodCalls('getName', ANY_ARGUMENT)->willReturn(array());
 
         $this->shouldThrow('Prophecy\Exception\Prediction\NoCallsException')
             ->duringCheck(array(), $object, $method);
