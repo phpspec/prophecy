@@ -39,7 +39,7 @@ class CallbackPrediction implements PredictionInterface
     {
         if (!is_callable($callback)) {
             throw new InvalidArgumentException(sprintf(
-                'Callable expected as an argument to CallbackToken, but got %s.',
+                'Callable expected as an argument to CallbackPrediction, but got %s.',
                 gettype($callback)
             ));
         }
