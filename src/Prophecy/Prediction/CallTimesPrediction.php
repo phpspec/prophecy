@@ -4,6 +4,8 @@ namespace Prophecy\Prediction;
 
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
+use Prophecy\Argument\ArgumentsWildcard;
+use Prophecy\Argument\Token\AnyValuesToken;
 use Prophecy\Util\StringUtil;
 
 use Prophecy\Exception\Prediction\UnexpectedCallsCountException;
@@ -55,23 +57,42 @@ class CallTimesPrediction implements PredictionInterface
             return;
         }
 
-        $message = sprintf(
-            "Expected exactly %d calls that match `%s->%s(%s)`, but 0 were made.",
-            $this->times,
-            get_class($object->reveal()),
+        $methodCalls = $object->findProphecyMethodCalls(
             $method->getMethodName(),
-            $method->getArgumentsWildcard()
+            new ArgumentsWildcard(array(new AnyValuesToken))
         );
 
         if (count($calls)) {
             $message = sprintf(
                 "Expected exactly %d calls that match `%s->%s(%s)`, but %d were made:\n%s",
+
                 $this->times,
                 get_class($object->reveal()),
                 $method->getMethodName(),
                 $method->getArgumentsWildcard(),
                 count($calls),
                 $this->util->stringifyCalls($calls)
+            );
+        } elseif (count($methodCalls)) {
+            $message = sprintf(
+                "Expected exactly %d calls that match `%s->%s(%s)`, but 0 were made.\n".
+                "Other calls to `%s(...)` been made:\n%s",
+
+                $this->times,
+                get_class($object->reveal()),
+                $method->getMethodName(),
+                $method->getArgumentsWildcard(),
+                $method->getMethodName(),
+                $this->util->stringifyCalls($methodCalls)
+            );
+        } else {
+            $message = sprintf(
+                "Expected exactly %d calls that match `%s->%s(%s)`, but 0 were made.",
+
+                $this->times,
+                get_class($object->reveal()),
+                $method->getMethodName(),
+                $method->getArgumentsWildcard()
             );
         }
 

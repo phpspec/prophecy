@@ -4,6 +4,9 @@ namespace Prophecy\Prediction;
 
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
+use Prophecy\Argument\ArgumentsWildcard;
+use Prophecy\Argument\Token\AnyValuesToken;
+use Prophecy\Util\StringUtil;
 
 use Prophecy\Exception\Prediction\NoCallsException;
 
@@ -23,6 +26,18 @@ use Prophecy\Exception\Prediction\NoCallsException;
  */
 class CallPrediction implements PredictionInterface
 {
+    private $util;
+
+    /**
+     * Initializes prediction.
+     *
+     * @param StringUtil $util
+     */
+    public function __construct(StringUtil $util = null)
+    {
+        $this->util = $util ?: new StringUtil;
+    }
+
     /**
      * Tests that there was at least one call.
      *
@@ -38,8 +53,27 @@ class CallPrediction implements PredictionInterface
             return;
         }
 
+        $methodCalls = $object->findProphecyMethodCalls(
+            $method->getMethodName(),
+            new ArgumentsWildcard(array(new AnyValuesToken))
+        );
+
+        if (count($methodCalls)) {
+            throw new NoCallsException(sprintf(
+                "No calls been made that match `%s->%s(%s)`, but expected at least one.\n".
+                "Other calls to `%s(...)` been made:\n%s",
+
+                get_class($object->reveal()),
+                $method->getMethodName(),
+                $method->getArgumentsWildcard(),
+                $method->getMethodName(),
+                $this->util->stringifyCalls($methodCalls)
+            ), $method);
+        }
+
         throw new NoCallsException(sprintf(
             'No calls been made that match `%s->%s(%s)`, but expected at least one.',
+
             get_class($object->reveal()),
             $method->getMethodName(),
             $method->getArgumentsWildcard()
