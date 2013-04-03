@@ -75,7 +75,7 @@ class ProphecySubjectPatch implements ClassPatchInterface
         }
 
         $__call->setCode(<<<PHP
-throw new \Prophecy\Exception\Prophecy\MethodNotFoundException(
+throw new \Prophecy\Exception\Doubler\MethodNotFoundException(
     sprintf('Method `%s::%s()` not found.', get_class(\$this), func_get_arg(0)),
     \$this->getProphecy(), func_get_arg(0)
 );
