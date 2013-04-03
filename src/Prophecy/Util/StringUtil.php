@@ -49,6 +49,13 @@ class StringUtil
         return (string) $value;
     }
 
+    /**
+     * Stringifies provided array of calls.
+     *
+     * @param array $calls Array of Call instances
+     *
+     * @return string
+     */
     public function stringifyCalls(array $calls)
     {
         $self = $this;
