@@ -64,15 +64,6 @@ class CallTimesPrediction implements PredictionInterface
         );
 
         if (count($calls)) {
-            $util   = $this->util;
-            $actual = implode("\n", array_map(function($call) use($util) {
-                return sprintf('- `%s(%s)` from %s',
-                    $call->getMethodName(),
-                    implode(', ', array_map(array($util, 'stringify'), $call->getArguments())),
-                    $call->getCallPlace()
-                );
-            }, $calls));
-
             $message = sprintf(
                 "Expected exactly %d calls that match `%s->%s(%s)`, but %d were made:\n%s",
                 $this->times,
@@ -80,7 +71,7 @@ class CallTimesPrediction implements PredictionInterface
                 $method->getMethodName(),
                 $method->getArgumentsWildcard(),
                 count($calls),
-                $actual
+                $this->util->stringifyCalls($calls)
             );
         }
 

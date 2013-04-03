@@ -51,21 +51,12 @@ class NoCallsPrediction implements PredictionInterface
             return;
         }
 
-        $util   = $this->util;
-        $actual = implode("\n", array_map(function($call) use($util) {
-            return sprintf('- `%s(%s)` from %s',
-                $call->getMethodName(),
-                implode(', ', array_map(array($util, 'stringify'), $call->getArguments())),
-                $call->getCallPlace()
-            );
-        }, $calls));
-
         throw new UnexpectedCallsException(sprintf(
             "No calls expected that match `%s->%s(%s)`, but some were made:\n%s",
             get_class($object->reveal()),
             $method->getMethodName(),
             $method->getArgumentsWildcard(),
-            $actual
+            $this->util->stringifyCalls($calls)
         ), $method, $calls);
     }
 }

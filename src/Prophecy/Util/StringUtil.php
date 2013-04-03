@@ -48,4 +48,17 @@ class StringUtil
 
         return (string) $value;
     }
+
+    public function stringifyCalls(array $calls)
+    {
+        $self = $this;
+
+        return implode("\n", array_map(function($call) use($self) {
+            return sprintf('- `%s(%s)` from %s',
+                $call->getMethodName(),
+                implode(', ', array_map(array($self, 'stringify'), $call->getArguments())),
+                $call->getCallPlace()
+            );
+        }, $calls));
+    }
 }
