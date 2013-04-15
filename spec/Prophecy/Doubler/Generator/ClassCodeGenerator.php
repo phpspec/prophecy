@@ -55,7 +55,7 @@ class ClassCodeGenerator extends ObjectBehavior
         $argument21->isPassedByReference()->willReturn(false);
 
         $code = $this->generate('CustomClass', $class);
-        $code->shouldBe(<<<'PHP'
+        $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
 public $name;
@@ -70,8 +70,9 @@ return $this->email;
 
 }
 }
-PHP
-        );
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $code->shouldBe($expected);
     }
 
     /**
@@ -101,7 +102,7 @@ PHP
         $argument->isPassedByReference()->willReturn(true);
 
         $code = $this->generate('CustomClass', $class);
-        $code->shouldBe(<<<'PHP'
+        $expected =<<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface {
 
@@ -111,8 +112,9 @@ return $this->name;
 
 }
 }
-PHP
-        );
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $code->shouldBe($expected);
     }
 
     /**
@@ -126,15 +128,16 @@ PHP
         $class->getMethods()->willReturn(array());
 
         $code = $this->generate('CustomClass', $class);
-        $code->shouldBe(<<<'PHP'
+        $expected =<<<'PHP'
 namespace  {
 class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
 
 
 }
 }
-PHP
-        );
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $code->shouldBe($expected);
     }
 
     /**
@@ -148,14 +151,15 @@ PHP
         $class->getMethods()->willReturn(array());
 
         $code = $this->generate('My\Awesome\CustomClass', $class);
-        $code->shouldBe(<<<'PHP'
+        $expected =<<<'PHP'
 namespace My\Awesome {
 class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
 
 
 }
 }
-PHP
-        );
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $code->shouldBe($expected);
     }
 }
