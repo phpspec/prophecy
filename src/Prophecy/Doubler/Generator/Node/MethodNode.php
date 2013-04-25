@@ -69,6 +69,12 @@ class MethodNode
         $this->arguments[] = $argument;
     }
 
+    public function setArguments(array $arguments)
+    {
+        $this->arguments = array();
+        array_map(array($this, 'addArgument'), $arguments);
+    }
+
     public function getArguments()
     {
         return $this->arguments;
