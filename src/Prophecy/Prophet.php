@@ -51,7 +51,6 @@ class Prophet
         if (null === $doubler) {
             $doubler = new Doubler;
             $doubler->registerClassPatch(new ClassPatch\SplFileInfoPatch);
-            $doubler->registerClassPatch(new ClassPatch\ReflectionClassPatch);
             $doubler->registerClassPatch(new ClassPatch\TraversablePatch);
             $doubler->registerClassPatch(new ClassPatch\DisableConstructorPatch);
             $doubler->registerClassPatch(new ClassPatch\ProphecySubjectPatch);
