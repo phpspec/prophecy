@@ -40,7 +40,13 @@ class StringUtil
             return $value ? 'true' : 'false';
         }
         if (is_string($value)) {
-            return sprintf('"%s"', str_replace("\n", '\\n', $value));
+            $str = sprintf('"%s"', str_replace("\n", '\\n', $value));
+
+            if (50 <= strlen($str)) {
+                return substr($str, 0, 50).'"...';
+            }
+
+            return $str;
         }
         if (null === $value) {
             return 'null';
@@ -60,11 +66,11 @@ class StringUtil
     {
         $self = $this;
 
-        return implode("\n", array_map(function($call) use($self) {
-            return sprintf('- `%s(%s)` from %s',
+        return implode(PHP_EOL, array_map(function($call) use($self) {
+            return sprintf('  - %s(%s) @ %s',
                 $call->getMethodName(),
                 implode(', ', array_map(array($self, 'stringify'), $call->getArguments())),
-                $call->getCallPlace()
+                str_replace(GETCWD().DIRECTORY_SEPARATOR, '', $call->getCallPlace())
             );
         }, $calls));
     }

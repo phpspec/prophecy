@@ -118,14 +118,19 @@ class CallCenter
         $classname = get_class($prophecy->reveal());
         $argstring = implode(', ', array_map(array($this->util, 'stringify'), $arguments));
         $expected  = implode("\n", array_map(function($methodProphecy) {
-            return sprintf(' - %s(%s)',
+            return sprintf('  - %s(%s)',
                 $methodProphecy->getMethodName(),
                 $methodProphecy->getArgumentsWildcard()
             );
         }, $prophecy->getMethodProphecies($methodName)));
 
         return new UnexpectedCallException(
-            sprintf("Method call `%s->%s(%s)` was not expected. Expected calls are:\n%s",
+            sprintf(
+                "Method call:\n".
+                "  %s->%s(%s)\n".
+                "was not expected.\n".
+                "Expected calls are:\n%s",
+
                 $classname, $methodName, $argstring, $expected
             ),
             $prophecy, $methodName, $arguments

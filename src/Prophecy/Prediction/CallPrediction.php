@@ -60,8 +60,10 @@ class CallPrediction implements PredictionInterface
 
         if (count($methodCalls)) {
             throw new NoCallsException(sprintf(
-                "No calls been made that match `%s->%s(%s)`, but expected at least one.\n".
-                "Other calls to `%s(...)` been made:\n%s",
+                "No calls been made that match:\n".
+                "  %s->%s(%s)\n".
+                "but expected at least one.\n".
+                "Recorded `%s(...)` calls:\n%s",
 
                 get_class($object->reveal()),
                 $method->getMethodName(),
@@ -72,7 +74,9 @@ class CallPrediction implements PredictionInterface
         }
 
         throw new NoCallsException(sprintf(
-            'No calls been made that match `%s->%s(%s)`, but expected at least one.',
+            "No calls been made that match:\n".
+            "  %s->%s(%s)\n".
+            "but expected at least one.",
 
             get_class($object->reveal()),
             $method->getMethodName(),

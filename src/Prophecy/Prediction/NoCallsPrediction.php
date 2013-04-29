@@ -52,10 +52,14 @@ class NoCallsPrediction implements PredictionInterface
         }
 
         throw new UnexpectedCallsException(sprintf(
-            "No calls expected that match `%s->%s(%s)`, but some were made:\n%s",
+            "No calls expected that match:\n".
+            "  %s->%s(%s)\n".
+            "but %d were made:\n%s",
+
             get_class($object->reveal()),
             $method->getMethodName(),
             $method->getArgumentsWildcard(),
+            count($calls),
             $this->util->stringifyCalls($calls)
         ), $method, $calls);
     }

@@ -64,7 +64,9 @@ class CallTimesPrediction implements PredictionInterface
 
         if (count($calls)) {
             $message = sprintf(
-                "Expected exactly %d calls that match `%s->%s(%s)`, but %d were made:\n%s",
+                "Expected exactly %d calls that match:\n".
+                "  %s->%s(%s)\n".
+                "but %d were made:\n%s",
 
                 $this->times,
                 get_class($object->reveal()),
@@ -75,8 +77,10 @@ class CallTimesPrediction implements PredictionInterface
             );
         } elseif (count($methodCalls)) {
             $message = sprintf(
-                "Expected exactly %d calls that match `%s->%s(%s)`, but 0 were made.\n".
-                "Other calls to `%s(...)` been made:\n%s",
+                "Expected exactly %d calls that match:\n".
+                "  %s->%s(%s)\n".
+                "but none were made.\n".
+                "Recorded `%s(...)` calls:\n%s",
 
                 $this->times,
                 get_class($object->reveal()),
@@ -87,7 +91,9 @@ class CallTimesPrediction implements PredictionInterface
             );
         } else {
             $message = sprintf(
-                "Expected exactly %d calls that match `%s->%s(%s)`, but 0 were made.",
+                "Expected exactly %d calls that match:\n".
+                "  %s->%s(%s)\n".
+                "but none were made.",
 
                 $this->times,
                 get_class($object->reveal()),
