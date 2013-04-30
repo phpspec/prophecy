@@ -122,7 +122,7 @@ class CallCenter
                 $methodProphecy->getMethodName(),
                 $methodProphecy->getArgumentsWildcard()
             );
-        }, $prophecy->getMethodProphecies($methodName)));
+        }, $prophecy->getMethodProphecies()));
 
         return new UnexpectedCallException(
             sprintf(
