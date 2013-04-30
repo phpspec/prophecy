@@ -68,7 +68,10 @@ class CallCenter extends ObjectBehavior
         $method3->getPromise()->willReturn($promise);
         $arguments3->scoreArguments(array('world', 'everything'))->willReturn(200);
 
-        $objectProphecy->getMethodProphecies()->willReturn(array($method1, $method2, $method3));
+        $objectProphecy->getMethodProphecies()->willReturn(array(
+            'method1' => array($method1),
+            'method2' => array($method2, $method3)
+        ));
         $objectProphecy->getMethodProphecies('getName')->willReturn(array($method1, $method3));
 
         $promise->execute(array('world', 'everything'), $objectProphecy, $method3)->willReturn(42);
@@ -107,7 +110,10 @@ class CallCenter extends ObjectBehavior
         $method3->getArgumentsWildcard()->willReturn($arguments3);
         $arguments3->scoreArguments(array('world', 'everything'))->willReturn(200);
 
-        $objectProphecy->getMethodProphecies()->willReturn(array($method1, $method2, $method3));
+        $objectProphecy->getMethodProphecies()->willReturn(array(
+            'method1' => array($method1),
+            'method2' => array($method2, $method3)
+        ));
         $objectProphecy->getMethodProphecies('getName')->willReturn(array(
             $method1, $method2, $method3
         ));
@@ -132,7 +138,7 @@ class CallCenter extends ObjectBehavior
         $arguments->scoreArguments(array('world', 'everything'))->willReturn(false);
         $arguments->__toString()->willReturn('arg1, arg2');
 
-        $objectProphecy->getMethodProphecies()->willReturn(array($method));
+        $objectProphecy->getMethodProphecies()->willReturn(array('method1' => array($method)));
         $objectProphecy->getMethodProphecies('getName')->willReturn(array($method));
 
         $this->shouldThrow('Prophecy\Exception\Call\UnexpectedCallException')
