@@ -52,6 +52,6 @@ class AggregateException extends ObjectBehavior
 
         $this->append($exception);
 
-        $this->getMessage()->shouldReturn("  Exception #1\n");
+        $this->getMessage()->shouldReturn("  Exception #1");
     }
 }
