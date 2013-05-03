@@ -241,6 +241,6 @@ class ObjectProphecy implements ProphecyInterface
      */
     public function __set($name, $value)
     {
-        $this->reveal()->$name = $value;
+        $this->reveal()->$name = $this->revealer->reveal($value);
     }
 }
