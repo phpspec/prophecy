@@ -47,7 +47,7 @@ class ObjectStateToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
-        if (is_object($argument) && is_callable(array($argument, $this->methodName))) {
+        if (is_object($argument) && method_exists($argument, $this->methodName)) {
             $actual = call_user_func(array($argument, $this->methodName));
 
             return $actual == $this->value ? 8 : false;

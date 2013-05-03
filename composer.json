@@ -18,7 +18,7 @@
     ],
 
     "require-dev": {
-        "phpspec/phpspec2": "dev-develop"
+        "phpspec/phpspec": "dev-master"
     },
 
     "minimum-stability": "dev",
@@ -27,6 +27,10 @@
         "psr-0": {
             "Prophecy\\": "src/"
         }
+    },
+
+    "config": {
+        "bin-dir": "bin"
     },
 
     "extra": {

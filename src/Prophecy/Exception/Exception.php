@@ -19,4 +19,8 @@ namespace Prophecy\Exception;
  */
 interface Exception
 {
+    /**
+     * @return string
+     */
+    public function getMessage();
 }
