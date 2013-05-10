@@ -42,7 +42,7 @@ class ClassMirror
      * @param array           $interfaces
      *
      * @return Node\ClassNode
-     * 
+     *
      * @throws \Prophecy\Exception\InvalidArgumentException
      */
     public function reflect(ReflectionClass $class = null, array $interfaces)
@@ -159,7 +159,7 @@ class ClassMirror
 
         if (true === $parameter->isDefaultValueAvailable()) {
             $node->setDefault($parameter->getDefaultValue());
-        } elseif (true === $parameter->isOptional()) {
+        } elseif (true === $parameter->isOptional() || true === $parameter->allowsNull()) {
             $node->setDefault(null);
         }
 
