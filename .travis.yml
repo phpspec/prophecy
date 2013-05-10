@@ -6,4 +6,4 @@ before_script:
   - curl http://getcomposer.org/installer | php
   - php composer.phar install --dev --prefer-source
 
-script: bin/phpspec run -fpretty -v
+script: vendor/bin/phpspec run -fpretty -v
