@@ -168,7 +168,7 @@ class MethodProphecySpec extends ObjectBehavior
         $objectProphecy, $arguments, $prediction, $call1, $call2
     )
     {
-        $prediction->check(array($call1, $call2), $objectProphecy, $this)->shouldBeCalled();
+        $prediction->check(array($call1, $call2), $objectProphecy->getWrappedObject(), $this)->shouldBeCalled();
         $objectProphecy->findProphecyMethodCalls('getName', $arguments)->willReturn(array($call1, $call2));
 
         $this->withArguments($arguments);
@@ -209,7 +209,7 @@ class MethodProphecySpec extends ObjectBehavior
         $objectProphecy, $arguments, $prediction, $call1, $call2
     )
     {
-        $prediction->check(array($call1, $call2), $objectProphecy, $this)->shouldBeCalled();
+        $prediction->check(array($call1, $call2), $objectProphecy->getWrappedObject(), $this)->shouldBeCalled();
         $objectProphecy->findProphecyMethodCalls('getName', $arguments)->willReturn(array($call1, $call2));
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 

@@ -71,7 +71,7 @@ class CallCenterSpec extends ObjectBehavior
         $objectProphecy->getMethodProphecies('getName')->willReturn(array($method1, $method3));
         $objectProphecy->reveal()->willReturn(new \stdClass());
 
-        $promise->execute(array('world', 'everything'), $objectProphecy, $method3)->willReturn(42);
+        $promise->execute(array('world', 'everything'), $objectProphecy->getWrappedObject(), $method3)->willReturn(42);
 
         $this->makeCall($objectProphecy, 'getName', array('world', 'everything'))->shouldReturn(42);
 
@@ -116,7 +116,7 @@ class CallCenterSpec extends ObjectBehavior
         ));
         $objectProphecy->reveal()->willReturn(new \stdClass());
 
-        $promise->execute(array('world', 'everything'), $objectProphecy, $method2)
+        $promise->execute(array('world', 'everything'), $objectProphecy->getWrappedObject(), $method2)
             ->willReturn('second');
 
         $this->makeCall($objectProphecy, 'getName', array('world', 'everything'))

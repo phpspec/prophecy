@@ -75,7 +75,7 @@ class ObjectProphecySpec extends ObjectBehavior
     {
         $this->beConstructedWith($lazyDouble, $callCenter);
 
-        $callCenter->makeCall($this, 'setName', array('everzet'))->willReturn(42);
+        $callCenter->makeCall($this->getWrappedObject(), 'setName', array('everzet'))->willReturn(42);
 
         $this->makeProphecyMethodCall('setName', array('everzet'))->shouldReturn(42);
     }
@@ -93,7 +93,7 @@ class ObjectProphecySpec extends ObjectBehavior
         $revealer->reveal(array('question'))->willReturn(array('life'));
         $revealer->reveal('answer')->willReturn(42);
 
-        $callCenter->makeCall($this, 'setName', array('life'))->willReturn('answer');
+        $callCenter->makeCall($this->getWrappedObject(), 'setName', array('life'))->willReturn('answer');
 
         $this->makeProphecyMethodCall('setName', array('question'))->shouldReturn(42);
     }
