@@ -18,7 +18,7 @@
     ],
 
     "require-dev": {
-        "phpspec/phpspec": "dev-master"
+        "phpspec/phpspec": "2.0.*"
     },
 
     "minimum-stability": "dev",
