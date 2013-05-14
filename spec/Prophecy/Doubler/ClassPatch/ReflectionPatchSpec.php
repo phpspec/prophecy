@@ -16,7 +16,7 @@ class ReflectionPatchSpec extends ObjectBehavior
     function it_changes_argument_name_when_it_indicates_its_varying($class, $method, $argument)
     {
         $argument->getName()->willReturn('...');
-        $argument->setName('arg1')->shouldBeCalled();
+        $argument->setName('__dot_dot_dot__')->shouldBeCalled();
 
         $class->getMethods()->willReturn(array($method));
         $method->getArguments()->willReturn(array($argument));

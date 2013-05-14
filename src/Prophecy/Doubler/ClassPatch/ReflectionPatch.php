@@ -29,9 +29,9 @@ class ReflectionPatch implements ClassPatchInterface
     public function apply(ClassNode $node)
     {
         foreach ($node->getMethods() as $method) {
-            foreach ($method->getArguments() as $i => $argument) {
+            foreach ($method->getArguments() as $argument) {
                 if ($argument->getName() == '...') {
-                    $argument->setName('arg' . ($i + 1));
+                    $argument->setName('__dot_dot_dot__');
                 }
             }
         }
