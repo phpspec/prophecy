@@ -60,6 +60,42 @@ class ClassMirrorSpec extends ObjectBehavior
     }
 
     /**
+     * @param ReflectionClass $class
+     * @param ReflectionMethod $method
+     * @param ReflectionParameter $parameter
+     */
+    function it_changes_argument_names_if_they_are_varying($class, $method, $parameter)
+    {
+
+        $class->getName()->willReturn('Custom\ClassName');
+        $class->isInterface()->willReturn(false);
+        $class->isFinal()->willReturn(false);
+        $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array($method));
+        $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
+
+        $method->getParameters()->willReturn(array($parameter));
+        $method->getName()->willReturn('methodName');
+        $method->isFinal()->willReturn(false);
+        $method->isProtected()->willReturn(false);
+        $method->isStatic()->willReturn(false);
+
+        $parameter->getName()->willReturn('...');
+        $parameter->isDefaultValueAvailable()->willReturn(true);
+        $parameter->getDefaultValue()->willReturn(null);
+        $parameter->isPassedByReference()->willReturn(false);
+        $parameter->getClass()->willReturn($class);
+
+        $classNode = $this->reflect($class, array());
+
+        $methodNodes = $classNode->getMethods();
+
+        $argumentNodes = $methodNodes['methodName']->getArguments();
+        $argumentNode = $argumentNodes[0];
+
+        $argumentNode->getName()->shouldReturn('__dot_dot_dot__');
+    }
+
+    /**
      * @param ReflectionClass  $class
      * @param ReflectionMethod $method
      */
