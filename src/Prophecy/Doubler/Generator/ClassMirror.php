@@ -149,7 +149,8 @@ class ClassMirror
 
     private function reflectArgumentToNode(ReflectionParameter $parameter, Node\MethodNode $methodNode)
     {
-        $node = new Node\ArgumentNode($parameter->getName());
+        $name = $parameter->getName() == '...' ? '__dot_dot_dot__' : $parameter->getName();
+        $node = new Node\ArgumentNode($name);
 
         if (null !== $parameter->getClass()) {
             $node->setTypeHint($parameter->getClass()->getName());
