@@ -46,6 +46,7 @@ class LogicalAndToken implements TokenInterface
         if (0 === count($this->tokens)) {
             return false;
         }
+
         $maxScore = 0;
         foreach($this->tokens as $token){
             $score = $token->scoreArgument($argument);
@@ -54,6 +55,7 @@ class LogicalAndToken implements TokenInterface
             }
             $maxScore = max($score, $maxScore);
         }
+
         return $maxScore;
     }
 

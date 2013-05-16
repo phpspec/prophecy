@@ -7,7 +7,6 @@ use Prophecy\Argument;
 
 class LogicalAndTokenSpec extends ObjectBehavior
 {
-
     function it_implements_TokenInterface()
     {
         $this->beConstructedWith(array());
