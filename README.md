@@ -52,7 +52,7 @@ First, add Prophecy to the list of dependencies inside your `composer.json`:
 ```json
 {
     "require-dev": {
-        "phpspec/prophecy": "~1.0@dev"
+        "phpspec/prophecy": "~1.0"
     }
 }
 ```
@@ -60,7 +60,7 @@ First, add Prophecy to the list of dependencies inside your `composer.json`:
 Then simply install it with composer:
 
 ```bash
-$> composer install --dev --prefer-dist
+$> composer install --prefer-dist
 ```
 
 You can read more about Composer on its [official webpage](http://getcomposer.org).
