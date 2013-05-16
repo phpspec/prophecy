@@ -106,7 +106,7 @@ class Argument
      * @param integer $value array elements count
      * @return Token\ArrayCountToken
      */
-    public static function count($value)
+    public static function size($value)
     {
         return new Token\ArrayCountToken($value);
     }

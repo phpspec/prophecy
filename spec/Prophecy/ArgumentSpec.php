@@ -51,7 +51,7 @@ class ArgumentSpec extends ObjectBehavior
 
     function it_has_a_shortcut_for_array_count_token()
     {
-        $token = $this->count(5);
+        $token = $this->size(5);
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\ArrayCountToken');
     }
 }

@@ -38,7 +38,7 @@ class ArrayCountToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
-        return (is_array($argument) || $argument instanceof \Countable ) && $this->count === count($argument)? 6 : false;
+        return $this->isCountable($argument) && $this->hasProperCount($argument) ? 6 : false;
     }
 
     /**
@@ -59,5 +59,27 @@ class ArrayCountToken implements TokenInterface
     public function __toString()
     {
         return sprintf('count(%s)', $this->count);
+    }
+
+    /**
+     * Returns true if object is either array or instance of \Countable
+     *
+     * @param $argument
+     * @return bool
+     */
+    private function isCountable($argument)
+    {
+        return (is_array($argument) || $argument instanceof \Countable);
+    }
+
+    /**
+     * Returns true if $argument has expected number of elements
+     *
+     * @param $argument
+     * @return bool
+     */
+    private function hasProperCount($argument)
+    {
+        return $this->count === count($argument);
     }
 }

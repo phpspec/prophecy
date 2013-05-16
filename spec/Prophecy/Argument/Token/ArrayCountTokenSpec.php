@@ -18,7 +18,7 @@ class ArrayCountTokenSpec extends ObjectBehavior
 
     function it_is_not_last()
     {
-        $this->isLast()->shouldBe(false);
+        $this->shouldNotBeLast();
     }
 
     function it_scores_6_if_argument_array_has_proper_count()
