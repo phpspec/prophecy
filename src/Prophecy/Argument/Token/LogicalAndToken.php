@@ -24,7 +24,7 @@ class LogicalAndToken implements TokenInterface
     /**
      * @param array $arguments exact values or tokens
      */
-    function __construct(array $arguments)
+    public function __construct(array $arguments)
     {
         foreach($arguments as $argument){
             if (!$argument instanceof TokenInterface) {
@@ -76,6 +76,6 @@ class LogicalAndToken implements TokenInterface
      */
     public function __toString()
     {
-        return sprintf('bool(%s)', join(' AND ', $this->tokens));
+        return sprintf('bool(%s)', implode(' AND ', $this->tokens));
     }
 }

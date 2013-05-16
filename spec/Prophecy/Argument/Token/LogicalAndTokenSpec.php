@@ -75,5 +75,4 @@ class LogicalAndTokenSpec extends ObjectBehavior
         $this->scoreArgument(1)->shouldReturn(false);
         $this->scoreArgument(2)->shouldReturn(false);
     }
-
 }
