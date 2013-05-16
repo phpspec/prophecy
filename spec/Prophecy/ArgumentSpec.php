@@ -3,6 +3,7 @@
 namespace spec\Prophecy;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 class ArgumentSpec extends ObjectBehavior
 {
@@ -41,5 +42,11 @@ class ArgumentSpec extends ObjectBehavior
     {
         $token = $this->which('getName', 'everzet');
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\ObjectStateToken');
+    }
+
+    function it_has_a_shortcut_for_logical_and_token()
+    {
+        $token = $this->allOf('integer', 5);
+        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\LogicalAndToken');
     }
 }
