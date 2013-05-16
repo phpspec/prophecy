@@ -3,7 +3,6 @@
 namespace spec\Prophecy;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class ArgumentSpec extends ObjectBehavior
 {
@@ -48,5 +47,11 @@ class ArgumentSpec extends ObjectBehavior
     {
         $token = $this->allOf('integer', 5);
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\LogicalAndToken');
+    }
+
+    function it_has_a_shortcut_for_array_count_token()
+    {
+        $token = $this->size(5);
+        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\ArrayCountToken');
     }
 }

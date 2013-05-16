@@ -99,4 +99,15 @@ class Argument
     {
         return new Token\LogicalAndToken(func_get_args());
     }
+
+    /**
+     * Checks that argument array or countable object has exact number of elements.
+     *
+     * @param integer $value array elements count
+     * @return Token\ArrayCountToken
+     */
+    public static function size($value)
+    {
+        return new Token\ArrayCountToken($value);
+    }
 }
