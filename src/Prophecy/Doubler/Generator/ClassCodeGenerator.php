@@ -39,8 +39,9 @@ class ClassCodeGenerator
             )
         );
 
-        foreach ($class->getProperties() as $name => $visibility) {
-            $code .= sprintf("%s \$%s;\n", $visibility, $name);
+        foreach ($class->getProperties() as $property) {
+            $code .= sprintf("%s %s\$%s;\n", $property->getVisibility(),
+                $property->isStatic() ? 'static ' : '', $property->getName());
         }
         $code .= "\n";
 
