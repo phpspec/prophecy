@@ -6,9 +6,12 @@ use PhpSpec\ObjectBehavior;
 
 class CallSpec extends ObjectBehavior
 {
-    function let()
+    /**
+     * @param Exception $exception
+     */
+    function let($exception)
     {
-        $this->beConstructedWith('setValues', array(5, 2), 42, 'some_file.php', 23);
+        $this->beConstructedWith('setValues', array(5, 2), 42, $exception, 'some_file.php', 23);
     }
 
     function it_exposes_method_name_through_getter()
@@ -26,6 +29,11 @@ class CallSpec extends ObjectBehavior
         $this->getReturnValue()->shouldReturn(42);
     }
 
+    function it_exposes_exception_through_getter($exception)
+    {
+        $this->getException()->shouldReturn($exception);
+    }
+
     function it_exposes_file_and_line_through_getter()
     {
         $this->getFile()->shouldReturn('some_file.php');
@@ -39,7 +47,7 @@ class CallSpec extends ObjectBehavior
 
     function it_returns_unknown_as_callPlace_if_no_file_or_line_provided()
     {
-        $this->beConstructedWith('setValues', array(), 0, null, null);
+        $this->beConstructedWith('setValues', array(), 0, null, null, null);
 
         $this->getCallPlace()->shouldReturn('unknown');
     }

@@ -2,6 +2,8 @@
 
 namespace Prophecy\Call;
 
+use Exception;
+
 /*
  * This file is part of the Prophecy.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -21,6 +23,7 @@ class Call
     private $methodName;
     private $arguments;
     private $returnValue;
+    private $exception;
     private $file;
     private $line;
 
@@ -30,14 +33,17 @@ class Call
      * @param string      $methodName
      * @param array       $arguments
      * @param mixed       $returnValue
+     * @param Exception   $exception
      * @param null|string $file
      * @param null|int    $line
      */
-    public function __construct($methodName, array $arguments, $returnValue, $file, $line)
+    public function __construct($methodName, array $arguments, $returnValue,
+                                Exception $exception = null, $file, $line)
     {
         $this->methodName  = $methodName;
         $this->arguments   = $arguments;
         $this->returnValue = $returnValue;
+        $this->exception   = $exception;
 
         if ($file) {
             $this->file = $file;
@@ -73,6 +79,16 @@ class Call
     public function getReturnValue()
     {
         return $this->returnValue;
+    }
+
+    /**
+     * Returns exception that call thrown.
+     *
+     * @return null|Exception
+     */
+    public function getException()
+    {
+        return $this->exception;
     }
 
     /**

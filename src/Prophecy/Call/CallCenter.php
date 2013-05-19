@@ -60,8 +60,8 @@ class CallCenter
         }
 
         // If no method prophecies defined, then it's a dummy, so we'll just return null
-        if (0 == count($prophecy->getMethodProphecies())) {
-            $this->recordedCalls[] = new Call($methodName, $arguments, null, $file, $line);
+        if ('__destruct' === $methodName || 0 == count($prophecy->getMethodProphecies())) {
+            $this->recordedCalls[] = new Call($methodName, $arguments, null, null, $file, $line);
 
             return null;
         }
@@ -84,11 +84,22 @@ class CallCenter
 
         // If Highest rated method prophecy has a promise - execute it or return null instead
         $returnValue = null;
+        $exception   = null;
         if ($promise = $matches[0][1]->getPromise()) {
-            $returnValue = $promise->execute($arguments, $prophecy, $matches[0][1]);
+            try {
+                $returnValue = $promise->execute($arguments, $prophecy, $matches[0][1]);
+            } catch (\Exception $e) {
+                $exception = $e;
+            }
         }
 
-        $this->recordedCalls[] = new Call($methodName, $arguments, $returnValue, $file, $line);
+        $this->recordedCalls[] = new Call(
+            $methodName, $arguments, $returnValue, $exception, $file, $line
+        );
+
+        if (null !== $exception) {
+            throw $exception;
+        }
 
         return $returnValue;
     }
