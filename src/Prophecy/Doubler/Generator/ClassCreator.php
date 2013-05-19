@@ -48,10 +48,17 @@ class ClassCreator
         $return = eval($this->generator->generate($classname, $class));
 
         if (!class_exists($classname, false)) {
-            throw new ClassCreatorException(sprintf(
-                'Could not double %s and implement interfaces [%s].',
-                $class->getParentClass(), implode(', ', $class->getInterfaces())
-            ), $class);
+            if (count($class->getInterfaces())) {
+                throw new ClassCreatorException(sprintf(
+                    'Could not double `%s` and implement interfaces: [%s].',
+                    $class->getParentClass(), implode(', ', $class->getInterfaces())
+                ), $class);
+            }
+
+            throw new ClassCreatorException(
+                sprintf('Could not double `%s`.', $class->getParentClass()),
+                $class
+            );
         }
 
         return $return;
