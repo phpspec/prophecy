@@ -37,6 +37,13 @@ class ObjectProphecySpec extends ObjectBehavior
         $this->willImplement('222');
     }
 
+    function it_sets_constructor_arguments_during_willBeConstructedWith_call($lazyDouble)
+    {
+        $lazyDouble->setArguments(array(1, 2, 5))->shouldBeCalled();
+
+        $this->willBeConstructedWith(array(1, 2, 5));
+    }
+
     function it_does_not_have_method_prophecies_by_default()
     {
         $this->getMethodProphecies()->shouldHaveCount(0);

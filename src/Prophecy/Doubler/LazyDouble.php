@@ -28,6 +28,7 @@ class LazyDouble
     private $doubler;
     private $class;
     private $interfaces = array();
+    private $arguments  = null;
     private $double;
 
     /**
@@ -96,6 +97,16 @@ class LazyDouble
     }
 
     /**
+     * Sets constructor arguments.
+     *
+     * @param array $arguments
+     */
+    public function setArguments(array $arguments = null)
+    {
+        $this->arguments = $arguments;
+    }
+
+    /**
      * Creates double instance or returns already created one.
      *
      * @return DoubleInterface
@@ -103,6 +114,12 @@ class LazyDouble
     public function getInstance()
     {
         if (null === $this->double) {
+            if (null !== $this->arguments) {
+                return $this->double = $this->doubler->double(
+                    $this->class, $this->interfaces, $this->arguments
+                );
+            }
+
             $this->double = $this->doubler->double($this->class, $this->interfaces);
         }
 

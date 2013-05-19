@@ -74,12 +74,13 @@ class Doubler
      *
      * @param ReflectionClass $class
      * @param array           $interfaces Array of ReflectionClass instances
+     * @param array           $args       Constructor arguments
      *
      * @return DoubleInterface
      *
      * @throws \Prophecy\Exception\InvalidArgumentException
      */
-    public function double(ReflectionClass $class = null, array $interfaces)
+    public function double(ReflectionClass $class = null, array $interfaces, array $args = null)
     {
         foreach ($interfaces as $interface) {
             if (!$interface instanceof ReflectionClass) {
@@ -94,6 +95,9 @@ class Doubler
         $classname  = $this->createDoubleClass($class, $interfaces);
         $reflection = new ReflectionClass($classname);
 
+        if (null !== $args) {
+            return $reflection->newInstanceWithArgs($args);
+        }
         if ((null === $constructor = $reflection->getConstructor()) || $constructor->isPublic()) {
             return $reflection->newInstance();
         }

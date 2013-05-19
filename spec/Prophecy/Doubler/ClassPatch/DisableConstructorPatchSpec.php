@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Doubler\ClassPatch;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 class DisableConstructorPatchSpec extends ObjectBehavior
 {
@@ -49,6 +50,8 @@ class DisableConstructorPatchSpec extends ObjectBehavior
 
         $arg1->setDefault(null)->shouldBeCalled();
         $arg2->setDefault(null)->shouldBeCalled();
+
+        $method->setCode(Argument::type('string'))->shouldBeCalled();
 
         $this->apply($class);
     }

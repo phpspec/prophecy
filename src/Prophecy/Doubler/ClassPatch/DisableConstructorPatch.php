@@ -44,6 +44,13 @@ class DisableConstructorPatch implements ClassPatchInterface
         foreach ($constructor->getArguments() as $argument) {
             $argument->setDefault(null);
         }
+
+        $constructor->setCode(<<<PHP
+if (0 < func_num_args()) {
+    call_user_func_array(array('parent', '__construct'), func_get_args());
+}
+PHP
+        );
     }
 
     /**

@@ -55,11 +55,11 @@ class DoublerSpec extends ObjectBehavior
     /**
      * @param Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt1
      * @param Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt2
-     * @param ReflectionClass                                $class
-     * @param ReflectionClass                                $interface1
-     * @param ReflectionClass                                $interface2
-     * @param Prophecy\Doubler\Generator\Node\ClassNode              $node
-     * @param stdClass                                       $object
+     * @param ReflectionClass                                 $class
+     * @param ReflectionClass                                 $interface1
+     * @param ReflectionClass                                 $interface2
+     * @param Prophecy\Doubler\Generator\Node\ClassNode       $node
+     * @param stdClass                                        $object
      */
     function its_double_mirrors_alterates_and_instantiates_provided_class(
         $mirror, $creator, $namer, $alt1, $alt2, $class, $interface1, $interface2, $node, $object
@@ -70,7 +70,6 @@ class DoublerSpec extends ObjectBehavior
         $alt2->supports($node)->willReturn(false);
         $alt1->getPriority()->willReturn(1);
         $alt2->getPriority()->willReturn(2);
-        // $creator->initialize(Argument::any())->willReturn($object);
         $namer->name($class, array($interface1, $interface2))->willReturn('SplStack');
         $class->getName()->willReturn('stdClass');
         $interface1->getName()->willReturn('ArrayAccess');

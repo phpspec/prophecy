@@ -76,6 +76,20 @@ class ObjectProphecy implements ProphecyInterface
     }
 
     /**
+     * Sets constructor arguments.
+     *
+     * @param array $arguments
+     *
+     * @return $this
+     */
+    public function willBeConstructedWith(array $arguments = null)
+    {
+        $this->lazyDouble->setArguments($arguments);
+
+        return $this;
+    }
+
+    /**
      * Reveals double.
      *
      * @return object
