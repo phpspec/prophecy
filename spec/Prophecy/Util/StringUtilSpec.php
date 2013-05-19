@@ -51,6 +51,13 @@ class StringUtilSpec extends ObjectBehavior
         $this->stringify(array('zet', 42))->shouldReturn('["zet", 42]');
     }
 
+    function it_generates_proper_string_representation_for_hash()
+    {
+        $this->stringify(array('ever' => 'zet', 52 => 'hey', 'num' => 42))->shouldReturn(
+            '["ever" => "zet", 52 => "hey", "num" => 42]'
+        );
+    }
+
     function it_generates_proper_string_representation_for_resource()
     {
         $resource = fopen(__FILE__, 'r');

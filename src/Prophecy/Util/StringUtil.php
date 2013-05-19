@@ -28,7 +28,15 @@ class StringUtil
     public function stringify($value)
     {
         if (is_array($value)) {
-            return '['.implode(', ', array_map(array($this, __FUNCTION__), $value)).']';
+            if (range(0, count($value) - 1) == array_keys($value)) {
+                return '['.implode(', ', array_map(array($this, __FUNCTION__), $value)).']';
+            }
+
+            $stringify = array($this, __FUNCTION__);
+            return '['.implode(', ', array_map(function($item, $key) use($stringify) {
+                return (is_integer($key) ? $key : '"'.$key.'"').
+                    ' => '.call_user_func($stringify, $item);
+            }, $value, array_keys($value))).']';
         }
         if (is_resource($value)) {
             return get_resource_type($value).':'.$value;
