@@ -1,3 +1,13 @@
+1.0.2 / 2013-05-19
+==================
+
+  * Logical `AND` token added (thanks @kagux)
+  * Logical `NOT` token added (thanks @kagux)
+  * Add support for setting custom constructor arguments
+  * Properly stringify hashes
+  * Record calls that throw exceptions
+  * Migrate spec suite to PhpSpec 2.0
+
 1.0.1 / 2013-04-30
 ==================
 
