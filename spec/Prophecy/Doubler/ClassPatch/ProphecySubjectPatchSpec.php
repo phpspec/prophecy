@@ -30,9 +30,27 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
      */
     function it_forces_class_to_implement_ProphecySubjectInterface($node)
     {
+        $node->hasStaticMethods()->willReturn(false);
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->shouldBeCalled();
 
-        $node->addProperty('objectProphecy', 'private')->willReturn(null);
+        $node->addProperty(Argument::type('Prophecy\Doubler\Generator\Node\PropertyNode'))->willReturn(null);
+        $node->getMethods()->willReturn(array());
+        $node->hasMethod(Argument::any())->willReturn(false);
+        $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))->willReturn(null);
+        $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))->willReturn(null);
+
+        $this->apply($node);
+    }
+
+    /**
+     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     */
+    function it_forces_class_to_implement_StaticProphecySubjectInterface_if_class_has_static_methods($node)
+    {
+        $node->hasStaticMethods()->willReturn(true);
+        $node->addInterface('Prophecy\Prophecy\StaticProphecySubjectInterface')->shouldBeCalled();
+
+        $node->addProperty(Argument::type('Prophecy\Doubler\Generator\Node\PropertyNode'))->willReturn(null);
         $node->getMethods()->willReturn(array());
         $node->hasMethod(Argument::any())->willReturn(false);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))->willReturn(null);
@@ -52,16 +70,20 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         $node, $constructor, $method1, $method2, $method3
     )
     {
+        $node->hasStaticMethods()->willReturn(false);
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->willReturn(null);
-        $node->addProperty('objectProphecy', 'private')->willReturn(null);
+        $node->addProperty(Argument::type('Prophecy\Doubler\Generator\Node\PropertyNode'))->willReturn(null);
         $node->hasMethod(Argument::any())->willReturn(false);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))->willReturn(null);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))->willReturn(null);
 
         $constructor->getName()->willReturn('__construct');
         $method1->getName()->willReturn('method1');
+        $method1->isStatic()->willReturn(false);
         $method2->getName()->willReturn('method2');
+        $method2->isStatic()->willReturn(false);
         $method3->getName()->willReturn('method3');
+        $method3->isStatic()->willReturn(false);
 
         $node->getMethods()->willReturn(array(
             'method1' => $method1,
@@ -76,6 +98,50 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         $method2->setCode('return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
             ->shouldBeCalled();
         $method3->setCode('return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
+            ->shouldBeCalled();
+
+        $this->apply($node);
+    }
+
+    /**
+     * @param Prophecy\Doubler\Generator\Node\ClassNode  $node
+     * @param Prophecy\Doubler\Generator\Node\MethodNode $constructor
+     * @param Prophecy\Doubler\Generator\Node\MethodNode $method1
+     * @param Prophecy\Doubler\Generator\Node\MethodNode $method2
+     * @param Prophecy\Doubler\Generator\Node\MethodNode $method3
+     */
+    function it_forces_all_static_class_methods_except_constructor_to_proxy_calls_into_static_prophecy_makeCall(
+        $node, $constructor, $method1, $method2, $method3
+    )
+    {
+        $node->hasStaticMethods()->willReturn(true);
+        $node->addInterface('Prophecy\Prophecy\StaticProphecySubjectInterface')->willReturn(null);
+        $node->addProperty(Argument::type('Prophecy\Doubler\Generator\Node\PropertyNode'))->willReturn(null);
+        $node->hasMethod(Argument::any())->willReturn(false);
+        $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))->willReturn(null);
+        $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))->willReturn(null);
+
+        $constructor->getName()->willReturn('__construct');
+        $method1->getName()->willReturn('method1');
+        $method1->isStatic()->willReturn(true);
+        $method2->getName()->willReturn('method2');
+        $method2->isStatic()->willReturn(true);
+        $method3->getName()->willReturn('method3');
+        $method3->isStatic()->willReturn(true);
+
+        $node->getMethods()->willReturn(array(
+            'method1' => $method1,
+            'method2' => $method2,
+            'method3' => $method3,
+        ));
+
+        $constructor->setCode(Argument::any())->shouldNotBeCalled();
+
+        $method1->setCode('return self::getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
+            ->shouldBeCalled();
+        $method2->setCode('return self::getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
+            ->shouldBeCalled();
+        $method3->setCode('return self::getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
             ->shouldBeCalled();
 
         $this->apply($node);

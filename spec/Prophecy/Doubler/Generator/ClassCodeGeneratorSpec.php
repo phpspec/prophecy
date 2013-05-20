@@ -8,6 +8,8 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
 {
     /**
      * @param Prophecy\Doubler\Generator\Node\ClassNode    $class
+     * @param Prophecy\Doubler\Generator\Node\PropertyNode $property1
+     * @param Prophecy\Doubler\Generator\Node\PropertyNode $property2
      * @param Prophecy\Doubler\Generator\Node\MethodNode   $method1
      * @param Prophecy\Doubler\Generator\Node\MethodNode   $method2
      * @param Prophecy\Doubler\Generator\Node\ArgumentNode $argument11
@@ -15,14 +17,23 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
      * @param Prophecy\Doubler\Generator\Node\ArgumentNode $argument21
      */
     function it_generates_proper_php_code_for_specific_ClassNode(
-        $class, $method1, $method2, $argument11, $argument12, $argument21
+        $class, $property1, $property2, $method1, $method2, $argument11, $argument12, $argument21
     )
     {
         $class->getParentClass()->willReturn('RuntimeException');
         $class->getInterfaces()->willReturn(array(
             'Prophecy\Doubler\Generator\MirroredInterface', 'ArrayAccess', 'ArrayIterator'
         ));
-        $class->getProperties()->willReturn(array('name' => 'public', 'email' => 'private'));
+
+        $property1->getName()->willReturn('name');
+        $property1->getVisibility()->willReturn('public');
+        $property1->isStatic()->willReturn(false);
+
+        $property2->getName()->willReturn('email');
+        $property2->getVisibility()->willReturn('private');
+        $property2->isStatic()->willReturn(false);
+
+        $class->getProperties()->willReturn(array($property1, $property2));
         $class->getMethods()->willReturn(array($method1, $method2));
 
         $method1->getName()->willReturn('getName');
@@ -154,6 +165,48 @@ PHP;
         $expected =<<<'PHP'
 namespace My\Awesome {
 class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
+
+
+}
+}
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $code->shouldBe($expected);
+    }
+
+    /**
+     * @param Prophecy\Doubler\Generator\Node\ClassNode $class
+     * @param Prophecy\Doubler\Generator\Node\PropertyNode $property1
+     * @param Prophecy\Doubler\Generator\Node\PropertyNode $property2
+     * @param Prophecy\Doubler\Generator\Node\PropertyNode $property3
+     */
+    function it_generates_class_with_static_properties($class, $property1, $property2, $property3)
+    {
+        $class->getParentClass()->willReturn('stdClass');
+        $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
+        $class->getMethods()->willReturn(array());
+
+        $property1->getName()->willReturn('normalProperty');
+        $property1->getVisibility()->willReturn('protected');
+        $property1->isStatic()->willReturn(false);
+
+        $property2->getName()->willReturn('firstStaticProperty');
+        $property2->getVisibility()->willReturn('public');
+        $property2->isStatic()->willReturn(true);
+
+        $property3->getName()->willReturn('secondStaticProperty');
+        $property3->getVisibility()->willReturn('private');
+        $property3->isStatic()->willReturn(true);
+
+        $class->getProperties()->willReturn(array($property1, $property2, $property3));
+
+        $code = $this->generate('CustomClass', $class);
+        $expected =<<<'PHP'
+namespace  {
+class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
+protected $normalProperty;
+public static $firstStaticProperty;
+private static $secondStaticProperty;
 
 
 }

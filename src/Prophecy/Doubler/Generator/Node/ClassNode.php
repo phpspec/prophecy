@@ -59,17 +59,9 @@ class ClassNode
         return $this->properties;
     }
 
-    public function addProperty($name, $visibility = 'public')
+    public function addProperty(PropertyNode $property)
     {
-        $visibility = strtolower($visibility);
-
-        if (!in_array($visibility, array('public', 'private', 'protected'))) {
-            throw new InvalidArgumentException(sprintf(
-                '`%s` property visibility is not supported.', $visibility
-            ));
-        }
-
-        $this->properties[$name] = $visibility;
+        $this->properties[$property->getName()] = $property;
     }
 
     public function getMethods()
@@ -90,5 +82,16 @@ class ClassNode
     public function hasMethod($name)
     {
         return isset($this->methods[$name]);
+    }
+
+    public function hasStaticMethods()
+    {
+        foreach ($this->methods as $method) {
+            if ($method->isStatic()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

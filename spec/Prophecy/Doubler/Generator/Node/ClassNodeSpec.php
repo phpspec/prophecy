@@ -121,24 +121,47 @@ class ClassNodeSpec extends ObjectBehavior
         $this->getProperties()->shouldHaveCount(0);
     }
 
-    function it_is_able_to_have_properties()
+    /**
+     * @param Prophecy\Doubler\Generator\Node\PropertyNode $property1
+     * @param Prophecy\Doubler\Generator\Node\PropertyNode $property2
+     */
+    function it_is_able_to_have_properties($property1, $property2)
     {
-        $this->addProperty('title');
-        $this->addProperty('text', 'private');
+        $property1->getName()->willReturn('title');
+        $property2->getName()->willReturn('text');
+
+        $this->addProperty($property1);
+        $this->addProperty($property2);
+
         $this->getProperties()->shouldReturn(array(
-            'title' => 'public',
-            'text'  => 'private'
+            'title' => $property1,
+            'text'  => $property2
         ));
     }
 
-    function its_addProperty_does_not_accept_unsupported_visibility()
+    /**
+     * @param Prophecy\Doubler\Generator\Node\MethodNode $method
+     */
+    function its_hasStaticMethods_returns_true_if_a_static_method_exists($method)
     {
-        $this->shouldThrow('InvalidArgumentException')->duringAddProperty('title', 'town');
+        $method->getName()->willReturn('getName');
+        $method->isStatic()->willReturn(true);
+
+        $this->addMethod($method);
+
+        $this->hasStaticMethods()->shouldReturn(true);
     }
 
-    function its_addProperty_lowercases_visibility_before_setting()
+    /**
+     * @param Prophecy\Doubler\Generator\Node\MethodNode $method
+     */
+    function its_hasStaticMethods_returns_false_if_a_static_method_does_not_exist($method)
     {
-        $this->addProperty('text', 'PRIVATE');
-        $this->getProperties()->shouldReturn(array('text' => 'private'));
+        $method->getName()->willReturn('getName');
+        $method->isStatic()->willReturn(false);
+
+        $this->addMethod($method);
+
+        $this->hasStaticMethods()->shouldReturn(false);
     }
 }

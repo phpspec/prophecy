@@ -5,6 +5,7 @@ namespace Prophecy\Doubler\ClassPatch;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
+use Prophecy\Doubler\Generator\Node\PropertyNode;
 
 /*
  * This file is part of the Prophecy.
@@ -42,27 +43,51 @@ class ProphecySubjectPatch implements ClassPatchInterface
      */
     public function apply(ClassNode $node)
     {
-        $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface');
-        $node->addProperty('objectProphecy', 'private');
+        $hasStaticMethods = $node->hasStaticMethods();
+        $prophectySubjectInterface = $hasStaticMethods ? 'Prophecy\Prophecy\StaticProphecySubjectInterface' :
+            'Prophecy\Prophecy\ProphecySubjectInterface';
+        $node->addInterface($prophectySubjectInterface);
+
+        $objectProphecyProperty = new PropertyNode('objectProphecy');
+        $objectProphecyProperty->setVisibility('private');
+        $objectProphecyProperty->setStatic($hasStaticMethods);
+        $node->addProperty($objectProphecyProperty);
 
         foreach ($node->getMethods() as $name => $method) {
             if ('__construct' === strtolower($name)) {
                 continue;
             }
 
-            $method->setCode(
-                'return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());'
-            );
+            if ($method->isStatic()) {
+                $method->setCode(
+                    'return self::getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());'
+                );
+            } else {
+                $method->setCode(
+                    'return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());'
+                );
+            }
         }
 
         $prophecySetter = new MethodNode('setProphecy');
+        $prophecySetter->setStatic($hasStaticMethods);
         $prophecyArgument = new ArgumentNode('prophecy');
         $prophecyArgument->setTypeHint('Prophecy\Prophecy\ProphecyInterface');
         $prophecySetter->addArgument($prophecyArgument);
-        $prophecySetter->setCode('$this->objectProphecy = $prophecy;');
+        if ($hasStaticMethods) {
+            $prophecySetter->setCode('self::$objectProphecy = $prophecy;');
+        } else {
+            $prophecySetter->setCode('$this->objectProphecy = $prophecy;');
+        }
 
         $prophecyGetter = new MethodNode('getProphecy');
-        $prophecyGetter->setCode('return $this->objectProphecy;');
+        $prophecyGetter->setStatic($hasStaticMethods);
+        if ($hasStaticMethods) {
+            $prophecyGetter->setCode('return self::$objectProphecy;');
+        } else {
+            $prophecyGetter->setCode('return $this->objectProphecy;');
+        }
+
 
         if ($node->hasMethod('__call')) {
             $__call = $node->getMethod('__call');
