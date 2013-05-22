@@ -85,4 +85,17 @@ class DoublerSpec extends ObjectBehavior
         $this->double($class, array($interface1, $interface2))
             ->shouldReturnAnInstanceOf('SplStack');
     }
+
+    /**
+     * @param ReflectionClass                           $class
+     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     */
+    function it_double_instantiates_a_class_with_constructor_argument($mirror, $class, $node, $namer)
+    {
+        $class->getName()->willReturn('ReflectionClass');
+        $mirror->reflect($class, array())->willReturn($node);
+        $namer->name($class, array())->willReturn('ReflectionClass');
+
+        $this->double($class, array(), array('stdClass'))->shouldReturnAnInstanceOf('ReflectionClass');
+    }
 }
