@@ -96,7 +96,7 @@ class Doubler
         $reflection = new ReflectionClass($classname);
 
         if (null !== $args) {
-            return $reflection->newInstanceWithArgs($args);
+            return $reflection->newInstanceArgs($args);
         }
         if ((null === $constructor = $reflection->getConstructor()) || $constructor->isPublic()) {
             return $reflection->newInstance();
