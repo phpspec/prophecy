@@ -96,6 +96,8 @@ class DoublerSpec extends ObjectBehavior
         $mirror->reflect($class, array())->willReturn($node);
         $namer->name($class, array())->willReturn('ReflectionClass');
 
-        $this->double($class, array(), array('stdClass'))->shouldReturnAnInstanceOf('ReflectionClass');
+        $double = $this->double($class, array(), array('stdClass'));
+        $double->shouldBeAnInstanceOf('ReflectionClass');
+        $double->getName()->shouldReturn('stdClass');
     }
 }
