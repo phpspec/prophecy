@@ -126,9 +126,11 @@ class ArrayEntryToken implements TokenInterface
     private function convertArrayAccessToEntry(\ArrayAccess $object)
     {
         if(!$this->key instanceof ExactValueToken){
-            throw new InvalidArgumentException(sprintf('You can only use ExactValueToken to match keys of object '.
-            'that implements ArrayAccess interface. '.
-            'You used a token of type "%s"', get_class($this->key)));
+            throw new InvalidArgumentException(sprintf(
+                'You can only use exact value tokens to match key of ArrayAccess object'.PHP_EOL.
+                'But you used `%s`.',
+                 $this->key
+            ));
         }
 
         $key = $this->key->getValue();
