@@ -94,11 +94,10 @@ class ArrayEntryTokenSpec extends ObjectBehavior
      */
     function it_throws_exception_during_scoring_of_array_accessible_object_if_key_is_not_ExactValueToken($key, $value, $object)
     {
+        $key->__toString()->willReturn('any_token');
         $this->beConstructedWith($key,$value);
-        $class = get_class($key->getWrappedObject());
-        $errorMessage = 'You can only use ExactValueToken to match keys of object '.
-                        'that implements ArrayAccess interface. '.
-                        'You used a token of type "'.$class.'"';
+        $errorMessage = 'You can only use exact value tokens to match key of ArrayAccess object'.PHP_EOL.
+                        'But you used `any_token`.';
         $this->shouldThrow(new InvalidArgumentException($errorMessage))->duringScoreArgument($object);
     }
 
