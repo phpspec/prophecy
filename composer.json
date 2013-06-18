@@ -1,5 +1,5 @@
 {
-    "name":         "magetest/prophecy",
+    "name":         "phpspec/prophecy",
     "description":  "Highly opinionated mocking framework for PHP 5.3+",
     "keywords":     ["Mock", "Stub", "Dummy", "Double", "Fake", "Spy"],
     "homepage":     "http://phpspec.org",
