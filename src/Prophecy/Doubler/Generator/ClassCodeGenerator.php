@@ -71,7 +71,11 @@ class ClassCodeGenerator
             $php = '';
 
             if ($hint = $argument->getTypeHint()) {
-                $php .= class_exists($hint) || interface_exists($hint) ? '\\'.$hint : $hint;
+                if ('array' == $hint) {
+                    $php .= $hint;
+                } else {
+                    $php .= class_exists($hint) || interface_exists($hint) ? '\\'.$hint : $hint;
+                }
             }
 
             $php .= ' '.($argument->isPassedByReference() ? '&' : '').'$'.$argument->getName();
