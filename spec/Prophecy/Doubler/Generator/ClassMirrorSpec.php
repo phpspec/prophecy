@@ -6,6 +6,7 @@ use PhpSpec\ObjectBehavior;
 
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionParameter;
 
 class ClassMirrorSpec extends ObjectBehavior
 {
@@ -156,9 +157,10 @@ class ClassMirrorSpec extends ObjectBehavior
      * @param ReflectionParameter $param1
      * @param ReflectionParameter $param2
      * @param ReflectionClass     $typeHint
+     * @param ReflectionParameter $param3
      */
     function it_properly_reads_methods_arguments_with_types(
-        $class, $method, $param1, $param2, $typeHint
+        $class, $method, $param1, $param2, $typeHint, $param3
     )
     {
         $class->getName()->willReturn('Custom\ClassName');
@@ -171,7 +173,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $method->isFinal()->willReturn(false);
         $method->isProtected()->willReturn(true);
         $method->isStatic()->willReturn(false);
-        $method->getParameters()->willReturn(array($param1, $param2));
+        $method->getParameters()->willReturn(array($param1, $param2, $param3));
 
         $param1->getName()->willReturn('arg_1');
         $param1->isArray()->willReturn(true);
@@ -190,6 +192,14 @@ class ClassMirrorSpec extends ObjectBehavior
         $param2->allowsNull()->willReturn(false);
         $typeHint->getName()->willReturn('ArrayAccess');
 
+        $param3->getName()->willReturn('arg_3');
+        $param3->isArray()->willReturn(false);
+        $param3->isCallable()->willReturn(true);
+        $param3->getClass()->willReturn(null);
+        $param3->isDefaultValueAvailable()->willReturn(false);
+        $param3->isPassedByReference()->willReturn(false);
+        $param3->allowsNull()->willReturn(true);
+
         $classNode   = $this->reflect($class, array());
         $methodNodes = $classNode->getMethods();
         $argNodes    = $methodNodes['methodWithArgs']->getArguments();
@@ -202,6 +212,11 @@ class ClassMirrorSpec extends ObjectBehavior
         $argNodes[1]->getName()->shouldReturn('arg2');
         $argNodes[1]->getTypeHint()->shouldReturn('ArrayAccess');
         $argNodes[1]->isOptional()->shouldReturn(false);
+
+        $argNodes[2]->getName()->shouldReturn('arg_3');
+        $argNodes[2]->getTypeHint()->shouldReturn('callable');
+        $argNodes[2]->isOptional()->shouldReturn(true);
+        $argNodes[2]->getDefault()->shouldReturn(null);
     }
 
     /**
