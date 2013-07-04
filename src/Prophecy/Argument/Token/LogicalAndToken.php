@@ -26,7 +26,7 @@ class LogicalAndToken implements TokenInterface
      */
     public function __construct(array $arguments)
     {
-        foreach($arguments as $argument){
+        foreach ($arguments as $argument) {
             if (!$argument instanceof TokenInterface) {
                 $argument = new ExactValueToken($argument);
             }
@@ -48,9 +48,9 @@ class LogicalAndToken implements TokenInterface
         }
 
         $maxScore = 0;
-        foreach($this->tokens as $token){
+        foreach ($this->tokens as $token) {
             $score = $token->scoreArgument($argument);
-            if(false === $score) {
+            if (false === $score) {
                 return false;
             }
             $maxScore = max($score, $maxScore);
