@@ -71,7 +71,7 @@ class ClassCodeGenerator
             $php = '';
 
             if ($hint = $argument->getTypeHint()) {
-                if ('array' == $hint) {
+                if ('array' === $hint || 'callable' === $hint) {
                     $php .= $hint;
                 } else {
                     $php .= class_exists($hint) || interface_exists($hint) ? '\\'.$hint : $hint;
