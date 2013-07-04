@@ -196,6 +196,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $param3->isArray()->willReturn(false);
         $param3->isCallable()->willReturn(true);
         $param3->getClass()->willReturn(null);
+        $param3->isOptional()->willReturn(false);
         $param3->isDefaultValueAvailable()->willReturn(false);
         $param3->isPassedByReference()->willReturn(false);
         $param3->allowsNull()->willReturn(true);
@@ -244,6 +245,7 @@ class ClassMirrorSpec extends ObjectBehavior
 
         $param1->getName()->willReturn('arg_1');
         $param1->isArray()->willReturn(false);
+        $param1->isCallable()->willReturn(false);
         $param1->getClass()->willReturn(null);
         $param1->isDefaultValueAvailable()->willReturn(false);
         $param1->isOptional()->willReturn(true);
