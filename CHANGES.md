@@ -1,3 +1,10 @@
+1.0.3 / 2013-07-04
+==================
+
+  * Support callable typehints (thanks @stof)
+  * Do not attempt to autoload arrays when generating code (thanks @MarcoDeBortoli)
+  * New ArrayEntryToken (thanks @kagux)
+
 1.0.2 / 2013-05-19
 ==================
 
