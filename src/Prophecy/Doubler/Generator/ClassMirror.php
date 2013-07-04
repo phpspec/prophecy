@@ -156,6 +156,8 @@ class ClassMirror
             $node->setTypeHint($parameter->getClass()->getName());
         } elseif (true === $parameter->isArray()) {
             $node->setTypeHint('array');
+        } elseif (version_compare(PHP_VERSION, '5.4', '>=') && true === $parameter->isCallable()) {
+            $node->setTypeHint('callable');
         }
 
         if (true === $parameter->isDefaultValueAvailable()) {
