@@ -194,7 +194,9 @@ class ClassMirrorSpec extends ObjectBehavior
 
         $param3->getName()->willReturn('arg_3');
         $param3->isArray()->willReturn(false);
-        $param3->isCallable()->willReturn(true);
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            $param3->isCallable()->willReturn(true);
+        }
         $param3->getClass()->willReturn(null);
         $param3->isOptional()->willReturn(false);
         $param3->isDefaultValueAvailable()->willReturn(false);
@@ -215,7 +217,9 @@ class ClassMirrorSpec extends ObjectBehavior
         $argNodes[1]->isOptional()->shouldReturn(false);
 
         $argNodes[2]->getName()->shouldReturn('arg_3');
-        $argNodes[2]->getTypeHint()->shouldReturn('callable');
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            $argNodes[2]->getTypeHint()->shouldReturn('callable');
+        }
         $argNodes[2]->isOptional()->shouldReturn(true);
         $argNodes[2]->getDefault()->shouldReturn(null);
     }
@@ -245,7 +249,9 @@ class ClassMirrorSpec extends ObjectBehavior
 
         $param1->getName()->willReturn('arg_1');
         $param1->isArray()->willReturn(false);
-        $param1->isCallable()->willReturn(false);
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            $param1->isCallable()->willReturn(false);
+        }
         $param1->getClass()->willReturn(null);
         $param1->isDefaultValueAvailable()->willReturn(false);
         $param1->isOptional()->willReturn(true);
