@@ -4,6 +4,7 @@ php: [5.3, 5.4, 5.5]
 
 before_script:
   - curl http://getcomposer.org/installer | php
-  - php composer.phar install --dev --prefer-source
+  # TODO remove the root version once https://github.com/composer/composer/issues/2065 is fixed
+  - COMPOSER_ROOT_VERSION=dev-master php composer.phar install --dev --prefer-source
 
 script: vendor/bin/phpspec run -fpretty -v
