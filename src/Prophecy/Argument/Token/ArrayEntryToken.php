@@ -45,15 +45,15 @@ class ArrayEntryToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
-        if($argument instanceof \Traversable){
+        if ($argument instanceof \Traversable) {
             $argument = iterator_to_array($argument);
         }
 
-        if($argument instanceof \ArrayAccess){
+        if ($argument instanceof \ArrayAccess) {
             $argument = $this->convertArrayAccessToEntry($argument);
         }
 
-        if(!is_array($argument) || empty($argument)){
+        if (!is_array($argument) || empty($argument)) {
             return false;
         }
 
@@ -129,7 +129,7 @@ class ArrayEntryToken implements TokenInterface
             throw new InvalidArgumentException(sprintf(
                 'You can only use exact value tokens to match key of ArrayAccess object'.PHP_EOL.
                 'But you used `%s`.',
-                 $this->key
+                $this->key
             ));
         }
 

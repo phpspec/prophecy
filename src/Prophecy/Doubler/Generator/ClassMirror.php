@@ -64,7 +64,7 @@ class ClassMirror
         foreach ($interfaces as $interface) {
             if (!$interface instanceof ReflectionClass) {
                 throw new InvalidArgumentException(sprintf(
-                    "[ReflectionClass \$interface1 [, ReflectionClass \$inteface2]] array expected as\n".
+                    "[ReflectionClass \$interface1 [, ReflectionClass \$interface2]] array expected as\n".
                     "a second argument to `ClassMirror::reflect(...)`, but got %s.",
                     is_object($interface) ? get_class($interface).' class' : gettype($interface)
                 ));
