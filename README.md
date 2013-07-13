@@ -118,7 +118,7 @@ a token object to satisfy a method typehint.
 
 You need to understand one thing - a dummy is not a prophecy. Your object prophecy is still
 assigned to `$prophecy` variable and in order to manipulate with your expectations, you
-should work with it. `$dummy` is a dummy - a simple php object that tries to fulfil your
+should work with it. `$dummy` is a dummy - a simple php object that tries to fulfill your
 prophecy.
 
 ### Stubs
