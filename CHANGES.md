@@ -1,3 +1,10 @@
+1.0.4 / 2013-08-10
+==================
+
+  * Better randomness for generated class names (thanks @sstok)
+  * Add support for interfaces into TypeToken and Argument::type() (thanks @sstok)
+  * Add support for old-style (method name === class name) constructors (thanks @l310 for report)
+
 1.0.3 / 2013-07-04
 ==================
 
