@@ -3,6 +3,7 @@
 namespace Prophecy\Doubler\ClassPatch;
 
 use Prophecy\Doubler\Generator\Node\ClassNode;
+use Prophecy\Doubler\Generator\Node\MethodNode;
 
 /*
  * This file is part of the Prophecy.
@@ -30,7 +31,7 @@ class DisableConstructorPatch implements ClassPatchInterface
      */
     public function supports(ClassNode $node)
     {
-        return $node->hasMethod('__construct');
+        return true;
     }
 
     /**
@@ -40,6 +41,12 @@ class DisableConstructorPatch implements ClassPatchInterface
      */
     public function apply(ClassNode $node)
     {
+        if (!$node->hasMethod('__construct')) {
+            $node->addMethod(new MethodNode('__construct', ''));
+
+            return;
+        }
+
         $constructor = $node->getMethod('__construct');
         foreach ($constructor->getArguments() as $argument) {
             $argument->setDefault(null);
