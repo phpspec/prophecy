@@ -269,9 +269,22 @@ class MethodProphecy
      *
      * @return $this
      */
-    public function shouldNotBeenCalled()
+    public function shouldNotHaveBeenCalled()
     {
         return $this->shouldHave(new Prediction\NoCallsPrediction);
+    }
+
+    /**
+     * Checks no calls prediction.
+     *
+     * @see Prophecy\Prediction\NoCallsPrediction
+     * @deprecated
+     *
+     * @return $this
+     */
+    public function shouldNotBeenCalled()
+    {
+        return $this->shouldNotHaveBeenCalled();
     }
 
     /**
