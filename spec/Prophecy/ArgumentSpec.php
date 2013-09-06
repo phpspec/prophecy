@@ -80,4 +80,11 @@ class ArgumentSpec extends ObjectBehavior
         $token = $this->not('kagux');
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\LogicalNotToken');
     }
+
+    function it_has_a_shortcut_for_string_contains_token()
+    {
+        $token = $this->containingString('string');
+        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\StringContainsToken');
+
+    }
 }
