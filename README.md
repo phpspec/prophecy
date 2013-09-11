@@ -318,7 +318,7 @@ check happen? Whenever you call `checkPredictions()` on the main Prophet object:
 $prophet->checkPredictions();
 ```
 
-In PHPUnit, you would want to put this call into the `teardown()` method. If no predictions
+In PHPUnit, you would want to put this call into the `tearDown()` method. If no predictions
 are defined, it would do nothing. So it won't harm to call it after every test.
 
 There are plenty more predictions you can play with:
