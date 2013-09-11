@@ -155,4 +155,9 @@ class Argument
     {
         return new Token\LogicalNotToken($value);
     }
+
+    public static function containingString($value)
+    {
+        return new Token\StringContainsToken($value);
+    }
 }
