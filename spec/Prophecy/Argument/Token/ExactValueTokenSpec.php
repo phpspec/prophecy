@@ -29,11 +29,38 @@ class ExactValueTokenSpec extends ObjectBehavior
     function it_scores_10_if_value_is_equal_to_argument()
     {
         $this->scoreArgument(42)->shouldReturn(10);
+        $this->scoreArgument('42')->shouldReturn(10);
+    }
+
+    function it_scores_10_if_value_is_an_object_and_equal_to_argument()
+    {
+        $value = new \DateTime();
+        $value2 = clone $value;
+
+        $this->beConstructedWith($value);
+        $this->scoreArgument($value2)->shouldReturn(10);
     }
 
     function it_does_not_scores_if_value_is_not_equal_to_argument()
     {
         $this->scoreArgument(50)->shouldReturn(false);
+        $this->scoreArgument(new \stdClass())->shouldReturn(false);
+    }
+
+    function it_does_not_scores_if_value_an_object_and_is_not_equal_to_argument()
+    {
+        $value = new \stdClass();
+        $value2 = new \stdClass();
+        $value2->foo = 'bar';
+
+        $this->beConstructedWith($value);
+        $this->scoreArgument($value2)->shouldReturn(false);
+    }
+
+    function it_does_not_scores_if_value_type_and_is_not_equal_to_argument()
+    {
+        $this->beConstructedWith(false);
+        $this->scoreArgument(0)->shouldReturn(false);
     }
 
     function it_generates_proper_string_representation_for_integer()
