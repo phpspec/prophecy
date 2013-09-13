@@ -16,7 +16,7 @@ class ArgumentsWildcardSpec extends ObjectBehavior
         $class = get_class($object->getWrappedObject());
         $hash  = spl_object_hash($object->getWrappedObject());
 
-        $this->__toString()->shouldReturn("exact(42), exact(\"zet\"), exact($class:$hash)");
+        $this->__toString()->shouldReturn("exact(42), exact(\"zet\"), exact($class:$hash Object (\n    'objectProphecy' => Prophecy\Prophecy\ObjectProphecy Object (*Prophecy*)\n))");
     }
 
     /**
