@@ -124,6 +124,17 @@ class Argument
     }
 
     /**
+     * Checks that arguments array entries all match value
+     *
+     * @param mixed $value
+     * @return Token\ArrayEveryEntryToken
+     */
+    public static function withEveryEntry($value)
+    {
+        return new Token\ArrayEveryEntryToken($value);
+    }
+
+    /**
      * Checks that argument array contains value
      *
      * @param mixed $value
