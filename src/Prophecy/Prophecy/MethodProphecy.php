@@ -8,6 +8,7 @@ use Prophecy\Prediction;
 
 use Prophecy\Exception\Doubler\MethodNotFoundException;
 use Prophecy\Exception\InvalidArgumentException;
+use Prophecy\Exception\Prophecy\MethodProphecyException;
 
 /*
  * This file is part of the Prophecy.
@@ -52,6 +53,16 @@ class MethodProphecy
 
         $this->objectProphecy = $objectProphecy;
         $this->methodName     = $methodName;
+
+        $reflectedMethod = new \ReflectionMethod($double, $methodName);
+        if ($reflectedMethod->isFinal()) {
+            throw new MethodProphecyException(sprintf(
+                "Can not add prophecy for a method `%s::%s()`\n".
+                "as it is a final method.",
+                get_class($double),
+                $methodName
+            ), $this);
+        }
 
         if (null !== $arguments) {
             $this->withArguments($arguments);

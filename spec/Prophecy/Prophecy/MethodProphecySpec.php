@@ -29,6 +29,13 @@ class MethodProphecySpec extends ObjectBehavior
         );
     }
 
+    function its_constructor_throws_MethodProphecyException_for_final_methods($objectProphecy, $reflection)
+    {
+        $this->shouldThrow('Prophecy\Exception\Prophecy\MethodProphecyException')->during(
+            '__construct', array($objectProphecy, '__clone', null)
+        );
+    }
+
     function its_constructor_transforms_array_passed_as_3rd_argument_to_ArgumentsWildcard(
         $objectProphecy
     )
