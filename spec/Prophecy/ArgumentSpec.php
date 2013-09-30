@@ -61,6 +61,12 @@ class ArgumentSpec extends ObjectBehavior
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\ArrayEntryToken');
     }
 
+    function it_has_a_shortcut_for_array_every_entry_token()
+    {
+        $token = $this->withEveryEntry('value');
+        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\ArrayEveryEntryToken');
+    }
+
     function it_has_a_shortcut_for_array_entry_token_matching_any_key()
     {
         $token = $this->containing('value');
