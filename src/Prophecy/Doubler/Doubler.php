@@ -98,14 +98,12 @@ class Doubler
         if (null !== $args) {
             return $reflection->newInstanceArgs($args);
         }
-        if ((null === $constructor = $reflection->getConstructor()) || $constructor->isPublic()) {
+        if ((null === $constructor = $reflection->getConstructor())
+            || ($constructor->isPublic() && !$constructor->isFinal())) {
             return $reflection->newInstance();
         }
-        if (version_compare(PHP_VERSION, '5.4', '<')) {
-            return unserialize(sprintf('O:%d:"%s":0:{}', strlen($classname), $classname));
-        }
 
-        return $reflection->newInstanceWithoutConstructor();
+        return $this->createClassWithoutConstructor($reflection, $classname);
     }
 
     /**
@@ -130,5 +128,30 @@ class Doubler
         $this->creator->create($name, $node);
 
         return $name;
+    }
+
+    /**
+     * @param $reflection
+     * @param $classname
+     * @return object
+     */
+    private function createClassWithoutConstructor($reflection, $classname)
+    {
+        try {
+            if (version_compare(PHP_VERSION, '5.4', '>=')) {
+                return $reflection->newInstanceWithoutConstructor();
+            }
+        } catch (\ReflectionException $e) {}
+
+        return $this->createEmptyClass($classname);
+    }
+
+    /**
+     * @param $classname
+     * @return object
+     */
+    private function createEmptyClass($classname)
+    {
+        return @unserialize(sprintf('O:%d:"%s":0:{}', strlen($classname), $classname));
     }
 }
