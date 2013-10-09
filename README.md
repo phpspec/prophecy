@@ -267,7 +267,8 @@ arguments wildcarding works. Every argument token type has a different score lev
 wildcard then uses to calculate the final arguments match score and use the method prophecy
 promise that has the highest score. In this case, `Argument::type()` in case of success
 scores `5` and `Argument::any()` scores `3`. So the type token wins, as does the first
-`setName()` method prophecy and its promise.
+`setName()` method prophecy and its promise. The simple rule of thumb - more precise token
+always wins.
 
 #### Getting stub objects
 
