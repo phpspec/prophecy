@@ -103,7 +103,7 @@ class Doubler
             return $reflection->newInstance();
         }
 
-        return $this->createClassWithoutConstructor($reflection, $classname);
+        return $this->createClassWithoutConstructor($reflection);
     }
 
     /**
@@ -131,27 +131,49 @@ class Doubler
     }
 
     /**
-     * @param $reflection
-     * @param $classname
+     * Creates a class without using its constructor using different strategies
+     *
+     * @param ReflectionClass $reflection
+     * @param string $classname
      * @return object
      */
-    private function createClassWithoutConstructor($reflection, $classname)
+    private function createClassWithoutConstructor(ReflectionClass $reflection)
     {
-        try {
-            if (version_compare(PHP_VERSION, '5.4', '>=')) {
-                return $reflection->newInstanceWithoutConstructor();
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            if ($class = $this->createClassWithoutConstructorUsingReflection($reflection)) {
+                return $class;
             }
-        } catch (\ReflectionException $e) {}
+        }
 
-        return $this->createEmptyClass($classname);
+        return $this->createClassWithoutConstructorUsingUnserialize($reflection);
     }
 
     /**
-     * @param $classname
+     * Creates a class bypassing the constructor using unserialization
+     *
+     * @param ReflectionClass $reflection
      * @return object
      */
-    private function createEmptyClass($classname)
+    private function createClassWithoutConstructorUsingUnserialize(ReflectionClass $reflection)
     {
-        return @unserialize(sprintf('O:%d:"%s":0:{}', strlen($classname), $classname));
+        $classname = $reflection->getName();
+        $serializedObject = sprintf('O:%d:"%s":0:{}', strlen($classname), $classname);
+        return @unserialize($serializedObject);
+    }
+
+    /**
+     * Creates a class bypassing the constructor using reflection, or false on failure
+     *
+     * @param ReflectionClass $reflection
+     * @return object
+     */
+    private function createClassWithoutConstructorUsingReflection(ReflectionClass $reflection)
+    {
+        try {
+            return $reflection->newInstanceWithoutConstructor();
+        } catch (\ReflectionException $e) {
+            // certain internal types can't have their constructor skipped
+            return false;
+        }
     }
 }
