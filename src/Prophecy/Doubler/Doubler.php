@@ -134,7 +134,6 @@ class Doubler
      * Creates a class without using its constructor using different strategies
      *
      * @param ReflectionClass $reflection
-     * @param string $classname
      * @return object
      */
     private function createClassWithoutConstructor(ReflectionClass $reflection)
@@ -165,7 +164,7 @@ class Doubler
      * Creates a class bypassing the constructor using reflection, or false on failure
      *
      * @param ReflectionClass $reflection
-     * @return object
+     * @return object|null
      */
     private function createClassWithoutConstructorUsingReflection(ReflectionClass $reflection)
     {
@@ -173,7 +172,7 @@ class Doubler
             return $reflection->newInstanceWithoutConstructor();
         } catch (\ReflectionException $e) {
             // certain internal types can't have their constructor skipped
-            return false;
+            return null;
         }
     }
 }
