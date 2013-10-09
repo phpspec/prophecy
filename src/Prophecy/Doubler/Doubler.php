@@ -98,14 +98,12 @@ class Doubler
         if (null !== $args) {
             return $reflection->newInstanceArgs($args);
         }
-        if ((null === $constructor = $reflection->getConstructor()) || $constructor->isPublic()) {
+        if ((null === $constructor = $reflection->getConstructor())
+            || ($constructor->isPublic() && !$constructor->isFinal())) {
             return $reflection->newInstance();
         }
-        if (version_compare(PHP_VERSION, '5.4', '<')) {
-            return unserialize(sprintf('O:%d:"%s":0:{}', strlen($classname), $classname));
-        }
 
-        return $reflection->newInstanceWithoutConstructor();
+        return $this->createClassWithoutConstructor($reflection);
     }
 
     /**
@@ -130,5 +128,51 @@ class Doubler
         $this->creator->create($name, $node);
 
         return $name;
+    }
+
+    /**
+     * Creates a class without using its constructor using different strategies
+     *
+     * @param ReflectionClass $reflection
+     * @return object
+     */
+    private function createClassWithoutConstructor(ReflectionClass $reflection)
+    {
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            if ($class = $this->createClassWithoutConstructorUsingReflection($reflection)) {
+                return $class;
+            }
+        }
+
+        return $this->createClassWithoutConstructorUsingUnserialize($reflection);
+    }
+
+    /**
+     * Creates a class bypassing the constructor using unserialization
+     *
+     * @param ReflectionClass $reflection
+     * @return object
+     */
+    private function createClassWithoutConstructorUsingUnserialize(ReflectionClass $reflection)
+    {
+        $classname = $reflection->getName();
+        $serializedObject = sprintf('O:%d:"%s":0:{}', strlen($classname), $classname);
+        return @unserialize($serializedObject);
+    }
+
+    /**
+     * Creates a class bypassing the constructor using reflection, or false on failure
+     *
+     * @param ReflectionClass $reflection
+     * @return object|null
+     */
+    private function createClassWithoutConstructorUsingReflection(ReflectionClass $reflection)
+    {
+        try {
+            return $reflection->newInstanceWithoutConstructor();
+        } catch (\ReflectionException $e) {
+            // certain internal types can't have their constructor skipped
+            return null;
+        }
     }
 }
