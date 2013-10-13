@@ -20,22 +20,22 @@ use Prophecy\Util\StringUtil;
  */
 class ObjectStateToken implements TokenInterface
 {
-    private $methodName;
+    private $name;
     private $value;
     private $util;
 
     /**
      * Initializes token.
      *
-     * @param string          $methodName Checker method name
-     * @param mixed           $value      Expected return value
+     * @param                 $methodName
+     * @param mixed           $value Expected return value
      * @param null|StringUtil $util
      */
     public function __construct($methodName, $value, StringUtil $util = null)
     {
-        $this->methodName = $methodName;
-        $this->value      = $value;
-        $this->util       = $util ?: new StringUtil;
+        $this->name  = $methodName;
+        $this->value = $value;
+        $this->util  = $util ?: new StringUtil;
     }
 
     /**
@@ -47,10 +47,14 @@ class ObjectStateToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
-        if (is_object($argument) && method_exists($argument, $this->methodName)) {
-            $actual = call_user_func(array($argument, $this->methodName));
+        if (is_object($argument) && method_exists($argument, $this->name)) {
+            $actual = call_user_func(array($argument, $this->name));
 
             return $actual == $this->value ? 8 : false;
+        }
+
+        if (is_object($argument) && property_exists($argument, $this->name)) {
+            return $argument->{$this->name} === $this->value ? 8 : false;
         }
 
         return false;
@@ -74,7 +78,7 @@ class ObjectStateToken implements TokenInterface
     public function __toString()
     {
         return sprintf('state(%s(), %s)',
-            $this->methodName,
+            $this->name,
             $this->util->stringify($this->value)
         );
     }
