@@ -28,7 +28,7 @@ class ObjectStateTokenSpec extends ObjectBehavior
     /**
      * @param ReflectionClass $reflection
      */
-    function it_scores_8_if_argument_object_has_specific_state($reflection)
+    function it_scores_8_if_argument_object_has_specific_method_state($reflection)
     {
         $reflection->getName()->willReturn('stdClass');
 
@@ -36,13 +36,33 @@ class ObjectStateTokenSpec extends ObjectBehavior
     }
 
     /**
+     * @param stdClass $class
+     */
+    function it_scores_8_if_argument_object_has_specific_property_state($class)
+    {
+        $class->getName = 'stdClass';
+
+        $this->scoreArgument($class)->shouldReturn(8);
+    }
+
+    /**
      * @param ReflectionClass $reflection
      */
-    function it_does_not_score_if_argument_state_does_not_match($reflection)
+    function it_does_not_score_if_argument_method_state_does_not_match($reflection)
     {
         $reflection->getName()->willReturn('SplFileInfo');
 
         $this->scoreArgument($reflection)->shouldReturn(false);
+    }
+
+    /**
+     * @param stdClass $class
+     */
+    function it_does_not_score_if_argument_property_state_does_not_match($class)
+    {
+        $class->getName = 'SplFileInfo';
+
+        $this->scoreArgument($class)->shouldReturn(false);
     }
 
     /**
