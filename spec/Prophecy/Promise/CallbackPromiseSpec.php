@@ -30,4 +30,29 @@ class CallbackPromiseSpec extends ObjectBehavior
 
         $this->execute(array('one', 'two'), $object, $method)->shouldReturn('one');
     }
+
+    /**
+     * @param Prophecy\Prophecy\ObjectProphecy $object
+     * @param Prophecy\Prophecy\MethodProphecy $method
+     */
+    function it_should_execute_array_callback($object, $method)
+    {
+        $firstArgumentCallback = array(__CLASS__, 'callbackMethod');
+
+        $this->beConstructedWith($firstArgumentCallback);
+
+        $this->execute(array('one', 'two'), $object, $method)->shouldReturn('one');
+    }
+
+    /**
+     * Callback function used in it_should_execute_array_callback
+     *
+     * @param array $args
+     */
+    static function callbackMethod($args)
+    {
+        return $args[0];
+    }
+
+
 }

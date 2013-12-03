@@ -59,12 +59,27 @@ class CallbackPromise implements PromiseInterface
     public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
     {
         $callback = $this->callback;
+
+        if (!is_array($callback)) {
+            $callback = $this->getBoundClosure($object, $callback);
+        }
+
+        return call_user_func($callback, $args, $object, $method);
+    }
+
+    /**
+     * @param ObjectProphecy $object
+     * @param $callback
+     * @return mixed
+     */
+    private function getBoundClosure(ObjectProphecy $object, $callback)
+    {
         $function = new ReflectionFunction($callback);
 
         if ($function->isClosure() && version_compare(PHP_VERSION, '5.4', '>=')) {
             $callback = Closure::bind($callback, $object);
+            return $callback;
         }
-
-        return call_user_func($callback, $args, $object, $method);
+        return $callback;
     }
 }
