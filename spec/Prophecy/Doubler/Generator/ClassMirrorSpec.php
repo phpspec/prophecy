@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Doubler\Generator;
 
 use PhpSpec\ObjectBehavior;
+use I\Simply;
 
 use ReflectionClass;
 use ReflectionMethod;
@@ -446,5 +447,32 @@ class ClassMirrorSpec extends ObjectBehavior
     {
         $this->shouldThrow('InvalidArgumentException')
              ->duringReflect(null, array(null));
+    }
+
+    function it_doesnt_fail_to_typehint_nonexistent_FQCN()
+    {
+        $classNode = $this->reflect(new ReflectionClass('spec\Prophecy\Doubler\Generator\OptionalDepsClass'), array());
+        $method = $classNode->getMethod('iHaveAStrangeTypeHintedArg');
+        $arguments = $method->getArguments();
+        $arguments[0]->getTypeHint()->shouldBe('I\Simply\Am\Nonexistent');
+    }
+
+    function it_doesnt_fail_to_typehint_nonexistent_RQCN()
+    {
+        $classNode = $this->reflect(new ReflectionClass('spec\Prophecy\Doubler\Generator\OptionalDepsClass'), array());
+        $method = $classNode->getMethod('iHaveAnEvenStrangerTypeHintedArg');
+        $arguments = $method->getArguments();
+        $arguments[0]->getTypeHint()->shouldBe('I\Simply\Am\Not');
+    }
+}
+
+class OptionalDepsClass
+{
+    public function iHaveAStrangeTypeHintedArg(\I\Simply\Am\Nonexistent $class)
+    {
+    }
+
+    public function iHaveAnEvenStrangerTypeHintedArg(Simply\Am\Not $class)
+    {
     }
 }

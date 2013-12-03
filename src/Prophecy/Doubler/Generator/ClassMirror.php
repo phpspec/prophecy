@@ -152,8 +152,8 @@ class ClassMirror
         $name = $parameter->getName() == '...' ? '__dot_dot_dot__' : $parameter->getName();
         $node = new Node\ArgumentNode($name);
 
-        if (null !== $parameter->getClass()) {
-            $node->setTypeHint($parameter->getClass()->getName());
+        if (null !== $className = $this->getParameterClassName($parameter)) {
+            $node->setTypeHint($className);
         } elseif (true === $parameter->isArray()) {
             $node->setTypeHint('array');
         } elseif (version_compare(PHP_VERSION, '5.4', '>=') && true === $parameter->isCallable()) {
@@ -171,5 +171,16 @@ class ClassMirror
         }
 
         $methodNode->addArgument($node);
+    }
+
+    private function getParameterClassName(ReflectionParameter $parameter)
+    {
+        try {
+            return $parameter->getClass() ? $parameter->getClass()->getName() : null;
+        } catch (\ReflectionException $e) {
+            preg_match('/\[\s\<\w+?>\s([\w,\\\]+)/s', $parameter, $matches);
+
+            return isset($matches[1]) ? $matches[1] : null;
+        }
     }
 }
