@@ -78,8 +78,8 @@ class CallbackPromise implements PromiseInterface
 
         if ($function->isClosure() && version_compare(PHP_VERSION, '5.4', '>=')) {
             $callback = Closure::bind($callback, $object);
-            return $callback;
         }
+
         return $callback;
     }
 }
