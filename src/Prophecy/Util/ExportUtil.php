@@ -2,6 +2,9 @@
 
 namespace Prophecy\Util;
 
+use Prophecy\Prophecy\ProphecyInterface;
+use SplObjectStorage;
+
 /*
  * This file is part of the Prophecy.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -10,7 +13,6 @@ namespace Prophecy\Util;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Prophecy\Prophecy\ProphecyInterface;
 
 /**
  * Exporting utility.
