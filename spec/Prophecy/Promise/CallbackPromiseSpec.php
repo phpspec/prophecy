@@ -64,7 +64,7 @@ class CallbackPromiseSpec extends ObjectBehavior
      */
     function it_should_execute_string_function_callback($object, $method)
     {
-        $firstArgumentCallback = 'spec\Prophecy\Promise\FunctionCallbackFirstArgument';
+        $firstArgumentCallback = 'spec\Prophecy\Promise\functionCallbackFirstArgument';
 
         $this->beConstructedWith($firstArgumentCallback);
 
@@ -104,7 +104,7 @@ class ClassCallback
  * @param array
  * @return string
  */
-function FunctionCallbackFirstArgument($args)
+function functionCallbackFirstArgument($args)
 {
     return $args[0];
 }
