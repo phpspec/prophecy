@@ -59,26 +59,10 @@ class CallbackPromise implements PromiseInterface
     {
         $callback = $this->callback;
 
-        if ($callback instanceof Closure) {
-            $callback = $this->bindClosureToObject($object, $callback);
-        }
-
-        return call_user_func($callback, $args, $object, $method);
-    }
-
-    /**
-     * Binds anonymous functions to the correct object scope
-     *
-     * @param ObjectProphecy $object
-     * @param $callback
-     * @return Callable
-     */
-    private function bindClosureToObject(ObjectProphecy $object, $callback)
-    {
-        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+        if ($callback instanceof Closure && version_compare(PHP_VERSION, '5.4', '>=')) {
             $callback = Closure::bind($callback, $object);
         }
 
-        return $callback;
+        return call_user_func($callback, $args, $object, $method);
     }
 }
