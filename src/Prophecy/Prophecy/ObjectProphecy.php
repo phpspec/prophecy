@@ -229,7 +229,8 @@ class ObjectProphecy implements ProphecyInterface
         $arguments = new ArgumentsWildcard($this->revealer->reveal($arguments));
 
         foreach ($this->getMethodProphecies($methodName) as $prophecy) {
-            if ($prophecy->getArgumentsWildcard() == $arguments) {
+            // Use the silence operator to suppress any notice about object to integer casting
+            if (@($prophecy->getArgumentsWildcard() == $arguments)) {
                 return $prophecy;
             }
         }
