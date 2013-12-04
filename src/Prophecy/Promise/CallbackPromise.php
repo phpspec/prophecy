@@ -7,7 +7,6 @@ use Prophecy\Prophecy\MethodProphecy;
 
 use Prophecy\Exception\InvalidArgumentException;
 
-use ReflectionFunction;
 use Closure;
 
 /*
@@ -60,23 +59,23 @@ class CallbackPromise implements PromiseInterface
     {
         $callback = $this->callback;
 
-        if (!is_array($callback)) {
-            $callback = $this->getBoundClosure($object, $callback);
+        if ($callback instanceof Closure) {
+            $callback = $this->bindClosure($object, $callback);
         }
 
         return call_user_func($callback, $args, $object, $method);
     }
 
     /**
+     * Binds anonymous functions to the correct object scope
+     *
      * @param ObjectProphecy $object
      * @param $callback
-     * @return mixed
+     * @return Callable
      */
-    private function getBoundClosure(ObjectProphecy $object, $callback)
+    private function bindClosure(ObjectProphecy $object, $callback)
     {
-        $function = new ReflectionFunction($callback);
-
-        if ($function->isClosure() && version_compare(PHP_VERSION, '5.4', '>=')) {
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
             $callback = Closure::bind($callback, $object);
         }
 
