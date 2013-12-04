@@ -20,7 +20,7 @@ class CallbackPromiseSpec extends ObjectBehavior
      * @param Prophecy\Prophecy\ObjectProphecy $object
      * @param Prophecy\Prophecy\MethodProphecy $method
      */
-    function it_should_execute_callback($object, $method)
+    function it_should_execute_closure_callback($object, $method)
     {
         $firstArgumentCallback = function($args) {
             return $args[0];
@@ -35,9 +35,9 @@ class CallbackPromiseSpec extends ObjectBehavior
      * @param Prophecy\Prophecy\ObjectProphecy $object
      * @param Prophecy\Prophecy\MethodProphecy $method
      */
-    function it_should_execute_array_callback($object, $method)
+    function it_should_execute_static_array_callback($object, $method)
     {
-        $firstArgumentCallback = array(__CLASS__, 'callbackMethod');
+        $firstArgumentCallback = array('spec\Prophecy\Promise\ClassCallback', 'staticCallbackMethod');
 
         $this->beConstructedWith($firstArgumentCallback);
 
@@ -45,14 +45,70 @@ class CallbackPromiseSpec extends ObjectBehavior
     }
 
     /**
+     * @param Prophecy\Prophecy\ObjectProphecy $object
+     * @param Prophecy\Prophecy\MethodProphecy $method
+     */
+    function it_should_execute_instance_array_callback($object, $method)
+    {
+        $class = new ClassCallback();
+        $firstArgumentCallback = array($class, 'callbackMethod');
+
+        $this->beConstructedWith($firstArgumentCallback);
+
+        $this->execute(array('one', 'two'), $object, $method)->shouldReturn('one');
+    }
+
+    /**
+     * @param Prophecy\Prophecy\ObjectProphecy $object
+     * @param Prophecy\Prophecy\MethodProphecy $method
+     */
+    function it_should_execute_string_function_callback($object, $method)
+    {
+        $firstArgumentCallback = 'spec\Prophecy\Promise\FunctionCallbackFirstArgument';
+
+        $this->beConstructedWith($firstArgumentCallback);
+
+        $this->execute(array('one', 'two'), $object, $method)->shouldReturn('one');
+    }
+
+}
+
+/**
+ * Class used to test callbacks
+ *
+ * @param array
+ * @return string
+ */
+class ClassCallback
+{
+    /**
      * Callback function used in it_should_execute_array_callback
      *
      * @param array $args
      */
-    static function callbackMethod($args)
+    function callbackMethod($args)
     {
         return $args[0];
     }
 
+    /**
+     * Callback function used in it_should_execute_array_callback
+     *
+     * @param array $args
+     */
+    static function staticCallbackMethod($args)
+    {
+        return $args[0];
+    }
+}
 
+/**
+ * Callback function used in CallbackPromiseSpec::it_should_execute_string_function
+ *
+ * @param array
+ * @return string
+ */
+function FunctionCallbackFirstArgument($args)
+{
+    return $args[0];
 }
