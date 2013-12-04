@@ -74,7 +74,7 @@ class CallbackPromiseSpec extends ObjectBehavior
 }
 
 /**
- * Class used to test callbacks
+ * Class used to test callbackpromise
  *
  * @param array
  * @return string
@@ -82,8 +82,6 @@ class CallbackPromiseSpec extends ObjectBehavior
 class ClassCallback
 {
     /**
-     * Callback function used in it_should_execute_array_callback
-     *
      * @param array $args
      */
     function callbackMethod($args)
@@ -92,8 +90,6 @@ class ClassCallback
     }
 
     /**
-     * Callback function used in it_should_execute_array_callback
-     *
      * @param array $args
      */
     static function staticCallbackMethod($args)
@@ -103,7 +99,7 @@ class ClassCallback
 }
 
 /**
- * Callback function used in CallbackPromiseSpec::it_should_execute_string_function
+ * Callback function used to test callbackpromise
  *
  * @param array
  * @return string
