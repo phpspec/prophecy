@@ -45,6 +45,6 @@ class NameGenerator
             $parts[] = 'stdClass';
         }
 
-        return sprintf('Double\%s\P%s', implode('\\', $parts), uniqid());
+        return sprintf('Double\%s\P%s', implode('\\', $parts), md5(microtime(true)));
     }
 }
