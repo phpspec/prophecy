@@ -54,6 +54,7 @@ class Prophet
             $doubler->registerClassPatch(new ClassPatch\TraversablePatch);
             $doubler->registerClassPatch(new ClassPatch\DisableConstructorPatch);
             $doubler->registerClassPatch(new ClassPatch\ProphecySubjectPatch);
+            $doubler->registerClassPatch(new ClassPatch\ReflectionClassNewInstancePatch);
         }
 
         $this->doubler  = $doubler;
