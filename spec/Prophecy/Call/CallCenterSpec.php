@@ -38,13 +38,13 @@ class CallCenterSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\MethodProphecy    $method1
-     * @param Prophecy\Prophecy\MethodProphecy    $method2
-     * @param Prophecy\Prophecy\MethodProphecy    $method3
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments1
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments2
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments3
-     * @param Prophecy\Promise\PromiseInterface   $promise
+     * @param \Prophecy\Prophecy\MethodProphecy    $method1
+     * @param \Prophecy\Prophecy\MethodProphecy    $method2
+     * @param \Prophecy\Prophecy\MethodProphecy    $method3
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments1
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments2
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments3
+     * @param \Prophecy\Promise\PromiseInterface   $promise
      */
     function it_executes_promise_of_method_prophecy_that_matches_signature_passed_to_makeCall(
         $objectProphecy, $method1, $method2, $method3, $arguments1, $arguments2, $arguments3,
@@ -81,13 +81,13 @@ class CallCenterSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\MethodProphecy    $method1
-     * @param Prophecy\Prophecy\MethodProphecy    $method2
-     * @param Prophecy\Prophecy\MethodProphecy    $method3
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments1
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments2
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments3
-     * @param Prophecy\Promise\PromiseInterface   $promise
+     * @param \Prophecy\Prophecy\MethodProphecy    $method1
+     * @param \Prophecy\Prophecy\MethodProphecy    $method2
+     * @param \Prophecy\Prophecy\MethodProphecy    $method3
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments1
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments2
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments3
+     * @param \Prophecy\Promise\PromiseInterface   $promise
      */
     function it_executes_promise_of_method_prophecy_that_matches_with_highest_score_to_makeCall(
         $objectProphecy, $method1, $method2, $method3, $arguments1, $arguments2, $arguments3,
@@ -124,8 +124,8 @@ class CallCenterSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\MethodProphecy    $method
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments
+     * @param \Prophecy\Prophecy\MethodProphecy    $method
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments
      */
     function it_throws_exception_if_call_does_not_match_any_of_defined_method_prophecies(
         $objectProphecy, $method, $arguments
@@ -144,8 +144,8 @@ class CallCenterSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\MethodProphecy    $method
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments
+     * @param \Prophecy\Prophecy\MethodProphecy    $method
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments
      */
     function it_returns_null_if_method_prophecy_that_matches_makeCall_arguments_has_no_promise(
         $objectProphecy, $method, $arguments
@@ -164,7 +164,7 @@ class CallCenterSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Argument\ArgumentsWildcard $wildcard
+     * @param \Prophecy\Argument\ArgumentsWildcard $wildcard
      */
     function it_finds_recorded_calls_by_a_method_name_and_arguments_wildcard(
         $objectProphecy, $wildcard

@@ -7,7 +7,7 @@ use PhpSpec\ObjectBehavior;
 class NameGeneratorSpec extends ObjectBehavior
 {
     /**
-     * @param ReflectionClass $class
+     * @param \ReflectionClass $class
      */
     function its_name_generates_name_based_on_simple_class_reflection($class)
     {
@@ -16,7 +16,7 @@ class NameGeneratorSpec extends ObjectBehavior
     }
 
     /**
-     * @param ReflectionClass $class
+     * @param \ReflectionClass $class
      */
     function its_name_generates_name_based_on_namespaced_class_reflection($class)
     {
@@ -25,8 +25,8 @@ class NameGeneratorSpec extends ObjectBehavior
     }
 
     /**
-     * @param ReflectionClass $interface1
-     * @param ReflectionClass $interface2
+     * @param \ReflectionClass $interface1
+     * @param \ReflectionClass $interface2
      */
     function its_name_generates_name_based_on_interface_shortnames($interface1, $interface2)
     {
@@ -44,9 +44,9 @@ class NameGeneratorSpec extends ObjectBehavior
     }
 
     /**
-     * @param ReflectionClass $class
-     * @param ReflectionClass $interface1
-     * @param ReflectionClass $interface2
+     * @param \ReflectionClass $class
+     * @param \ReflectionClass $interface1
+     * @param \ReflectionClass $interface2
      */
     function its_name_generates_name_based_only_on_class_if_its_available(
         $class, $interface1, $interface2
@@ -64,7 +64,7 @@ class NameGeneratorSpec extends ObjectBehavior
     public function getMatchers()
     {
         return array(
-            'startWith' => function($subject, $string) {
+            'startWith' => function ($subject, $string) {
                 return 0 === strpos($subject, $string);
             },
         );

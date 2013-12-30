@@ -24,7 +24,7 @@ class ArrayCountToken implements TokenInterface
     /**
      * @param integer $value
      */
-    function __construct($value)
+    public function __construct($value)
     {
         $this->count = $value;
     }
@@ -75,7 +75,8 @@ class ArrayCountToken implements TokenInterface
     /**
      * Returns true if $argument has expected number of elements
      *
-     * @param $argument
+     * @param array|\Countable $argument
+     *
      * @return bool
      */
     private function hasProperCount($argument)

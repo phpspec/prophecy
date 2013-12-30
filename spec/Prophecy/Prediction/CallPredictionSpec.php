@@ -13,9 +13,9 @@ class CallPredictionSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
-     * @param Prophecy\Call\Call               $call
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Call\Call               $call
      */
     function it_does_nothing_if_there_is_more_than_one_call_been_made($object, $method, $call)
     {
@@ -23,9 +23,9 @@ class CallPredictionSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy    $object
-     * @param Prophecy\Prophecy\MethodProphecy    $method
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments
+     * @param \Prophecy\Prophecy\ObjectProphecy    $object
+     * @param \Prophecy\Prophecy\MethodProphecy    $method
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments
      */
     function it_throws_NoCallsException_if_no_calls_found($object, $method, $arguments)
     {

@@ -36,7 +36,7 @@ class TypeTokenSpec extends ObjectBehavior
     }
 
     /**
-     * @param ReflectionObject $object
+     * @param \ReflectionObject $object
      */
     function it_scores_5_if_argument_is_an_instance_of_specified_class($object)
     {
@@ -53,7 +53,7 @@ class TypeTokenSpec extends ObjectBehavior
     function it_scores_5_if_argument_is_an_instance_of_specified_interface(\Prophecy\Argument\Token\TokenInterface $interface)
     {
         $this->beConstructedWith('Prophecy\Argument\Token\TokenInterface');
-    
+
         $this->scoreArgument($interface)->shouldReturn(5);
     }
 }

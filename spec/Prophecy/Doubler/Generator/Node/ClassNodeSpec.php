@@ -67,8 +67,8 @@ class ClassNodeSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\MethodNode $method1
-     * @param Prophecy\Doubler\Generator\Node\MethodNode $method2
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method1
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method2
      */
     function it_can_has_methods($method1, $method2)
     {
@@ -85,7 +85,7 @@ class ClassNodeSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\MethodNode $method
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method
      */
     function its_hasMethod_returns_true_if_method_exists($method)
     {
@@ -97,7 +97,7 @@ class ClassNodeSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\MethodNode $method
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method
      */
     function its_getMethod_returns_method_by_name($method)
     {
@@ -108,9 +108,6 @@ class ClassNodeSpec extends ObjectBehavior
         $this->getMethod('getName')->shouldReturn($method);
     }
 
-    /**
-     * @param Prophecy\Doubler\Generator\Node\MethodNode $method
-     */
     function its_hasMethod_returns_false_if_method_does_not_exists()
     {
         $this->hasMethod('getName')->shouldReturn(false);

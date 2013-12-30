@@ -23,14 +23,14 @@ class CallbackTokenSpec extends ObjectBehavior
 
     function it_scores_7_if_argument_matches_callback()
     {
-        $this->beConstructedWith(function($argument) { return 2 === $argument; });
+        $this->beConstructedWith(function ($argument) { return 2 === $argument; });
 
         $this->scoreArgument(2)->shouldReturn(7);
     }
 
     function it_does_not_scores_if_argument_does_not_match_callback()
     {
-        $this->beConstructedWith(function($argument) { return 2 === $argument; });
+        $this->beConstructedWith(function ($argument) { return 2 === $argument; });
 
         $this->scoreArgument(5)->shouldReturn(false);
     }

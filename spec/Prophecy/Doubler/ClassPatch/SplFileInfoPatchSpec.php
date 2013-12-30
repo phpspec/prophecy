@@ -18,7 +18,7 @@ class SplFileInfoPatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_does_not_support_nodes_without_parent_class($node)
     {
@@ -27,7 +27,7 @@ class SplFileInfoPatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_supports_nodes_with_SplFileInfo_as_parent_class($node)
     {
@@ -36,7 +36,7 @@ class SplFileInfoPatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_supports_nodes_with_derivative_of_SplFileInfo_as_parent_class($node)
     {
@@ -45,7 +45,7 @@ class SplFileInfoPatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_adds_a_method_to_node_if_not_exists($node)
     {
@@ -56,8 +56,8 @@ class SplFileInfoPatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode  $node
-     * @param Prophecy\Doubler\Generator\Node\MethodNode $method
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode  $node
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method
      */
     function it_updates_existing_method_if_found($node, $method)
     {

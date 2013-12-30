@@ -62,8 +62,8 @@ class ClassMirrorSpec extends ObjectBehavior
     }
 
     /**
-     * @param ReflectionClass $class
-     * @param ReflectionMethod $method
+     * @param ReflectionClass     $class
+     * @param ReflectionMethod    $method
      * @param ReflectionParameter $parameter
      */
     function it_changes_argument_names_if_they_are_varying($class, $method, $parameter)

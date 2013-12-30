@@ -8,7 +8,7 @@ use spec\Prophecy\Exception\Prophecy\Prophecy;
 class UnexpectedCallExceptionSpec extends ObjectBehavior
 {
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $objectProphecy
+     * @param \Prophecy\Prophecy\ObjectProphecy $objectProphecy
      */
     function let($objectProphecy)
     {

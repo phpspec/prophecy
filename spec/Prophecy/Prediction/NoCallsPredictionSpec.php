@@ -12,8 +12,8 @@ class NoCallsPredictionSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_does_nothing_if_there_is_no_calls_made($object, $method)
     {
@@ -21,10 +21,10 @@ class NoCallsPredictionSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy    $object
-     * @param Prophecy\Prophecy\MethodProphecy    $method
-     * @param Prophecy\Call\Call                  $call
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments
+     * @param \Prophecy\Prophecy\ObjectProphecy    $object
+     * @param \Prophecy\Prophecy\MethodProphecy    $method
+     * @param \Prophecy\Call\Call                  $call
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments
      */
     function it_throws_UnexpectedCallsException_if_calls_found($object, $method, $call, $arguments)
     {

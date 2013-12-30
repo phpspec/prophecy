@@ -91,6 +91,5 @@ class ArgumentSpec extends ObjectBehavior
     {
         $token = $this->containingString('string');
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\StringContainsToken');
-
     }
 }

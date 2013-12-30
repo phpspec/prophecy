@@ -17,8 +17,8 @@ class ReturnPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_returns_value_it_was_constructed_with($object, $method)
     {
@@ -26,8 +26,8 @@ class ReturnPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_always_returns_last_value_left_in_the_return_values($object, $method)
     {
@@ -36,8 +36,8 @@ class ReturnPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_consequently_returns_multiple_values_it_was_constructed_with($object, $method)
     {
@@ -49,8 +49,8 @@ class ReturnPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_returns_null_if_constructed_with_empty_array($object, $method)
     {

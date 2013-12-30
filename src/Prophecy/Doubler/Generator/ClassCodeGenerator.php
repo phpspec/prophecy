@@ -35,7 +35,7 @@ class ClassCodeGenerator
 
         $code = sprintf("class %s extends \%s implements %s {\n",
             $classname, $class->getParentClass(), implode(', ',
-                array_map(function($interface) {return '\\'.$interface;}, $class->getInterfaces())
+                array_map(function ($interface) {return '\\'.$interface;}, $class->getInterfaces())
             )
         );
 
@@ -44,7 +44,7 @@ class ClassCodeGenerator
         }
         $code .= "\n";
 
-        foreach ($class->getMethods() as $name => $method) {
+        foreach ($class->getMethods() as $method) {
             $code .= $this->generateMethod($method)."\n";
         }
         $code .= "\n}";
@@ -67,7 +67,7 @@ class ClassCodeGenerator
 
     private function generateArguments(array $arguments)
     {
-        return array_map(function($argument) {
+        return array_map(function ($argument) {
             $php = '';
 
             if ($hint = $argument->getTypeHint()) {

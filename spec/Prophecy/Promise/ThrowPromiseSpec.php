@@ -17,8 +17,8 @@ class ThrowPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_instantiates_and_throws_exception_from_provided_classname($object, $method)
     {
@@ -29,8 +29,8 @@ class ThrowPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_throws_provided_exception($object, $method)
     {

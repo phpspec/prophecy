@@ -65,7 +65,7 @@ class StringUtilSpec extends ObjectBehavior
     }
 
     /**
-     * @param stdClass $object
+     * @param \stdClass $object
      */
     function it_generates_proper_string_representation_for_object($object)
     {

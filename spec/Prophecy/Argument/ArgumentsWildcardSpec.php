@@ -7,7 +7,7 @@ use PhpSpec\ObjectBehavior;
 class ArgumentsWildcardSpec extends ObjectBehavior
 {
     /**
-     * @param stdClass $object
+     * @param \stdClass $object
      */
     function it_wraps_non_token_arguments_into_ExactValueToken($object)
     {
@@ -20,9 +20,9 @@ class ArgumentsWildcardSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Argument\Token\TokenInterface $token1
-     * @param Prophecy\Argument\Token\TokenInterface $token2
-     * @param Prophecy\Argument\Token\TokenInterface $token3
+     * @param \Prophecy\Argument\Token\TokenInterface $token1
+     * @param \Prophecy\Argument\Token\TokenInterface $token2
+     * @param \Prophecy\Argument\Token\TokenInterface $token3
      */
     function it_generates_string_representation_from_all_tokens_imploded($token1, $token2, $token3)
     {
@@ -42,9 +42,9 @@ class ArgumentsWildcardSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Argument\Token\TokenInterface $token1
-     * @param Prophecy\Argument\Token\TokenInterface $token2
-     * @param Prophecy\Argument\Token\TokenInterface $token3
+     * @param \Prophecy\Argument\Token\TokenInterface $token1
+     * @param \Prophecy\Argument\Token\TokenInterface $token2
+     * @param \Prophecy\Argument\Token\TokenInterface $token3
      */
     function it_should_return_match_score_based_on_all_tokens_score($token1, $token2, $token3)
     {
@@ -60,9 +60,9 @@ class ArgumentsWildcardSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Argument\Token\TokenInterface $token1
-     * @param Prophecy\Argument\Token\TokenInterface $token2
-     * @param Prophecy\Argument\Token\TokenInterface $token3
+     * @param \Prophecy\Argument\Token\TokenInterface $token1
+     * @param \Prophecy\Argument\Token\TokenInterface $token2
+     * @param \Prophecy\Argument\Token\TokenInterface $token3
      */
     function it_returns_false_if_there_is_less_arguments_than_tokens($token1, $token2, $token3)
     {
@@ -78,9 +78,9 @@ class ArgumentsWildcardSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Argument\Token\TokenInterface $token1
-     * @param Prophecy\Argument\Token\TokenInterface $token2
-     * @param Prophecy\Argument\Token\TokenInterface $token3
+     * @param \Prophecy\Argument\Token\TokenInterface $token1
+     * @param \Prophecy\Argument\Token\TokenInterface $token2
+     * @param \Prophecy\Argument\Token\TokenInterface $token3
      */
     function it_returns_false_if_there_is_less_tokens_than_arguments($token1, $token2, $token3)
     {
@@ -96,9 +96,9 @@ class ArgumentsWildcardSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Argument\Token\TokenInterface $token1
-     * @param Prophecy\Argument\Token\TokenInterface $token2
-     * @param Prophecy\Argument\Token\TokenInterface $token3
+     * @param \Prophecy\Argument\Token\TokenInterface $token1
+     * @param \Prophecy\Argument\Token\TokenInterface $token2
+     * @param \Prophecy\Argument\Token\TokenInterface $token3
      */
     function it_should_return_false_if_one_of_the_tokens_returns_false($token1, $token2, $token3)
     {
@@ -114,9 +114,9 @@ class ArgumentsWildcardSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Argument\Token\TokenInterface $token1
-     * @param Prophecy\Argument\Token\TokenInterface $token2
-     * @param Prophecy\Argument\Token\TokenInterface $token3
+     * @param \Prophecy\Argument\Token\TokenInterface $token1
+     * @param \Prophecy\Argument\Token\TokenInterface $token2
+     * @param \Prophecy\Argument\Token\TokenInterface $token3
      */
     function it_should_calculate_score_until_last_token($token1, $token2, $token3)
     {

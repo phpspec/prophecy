@@ -19,7 +19,7 @@ namespace Prophecy\Prophecy;
 interface ProphecyInterface
 {
     /**
-     * Reveals prophecy object (double).
+     * Reveals prophecy object (double) .
      *
      * @return object
      */

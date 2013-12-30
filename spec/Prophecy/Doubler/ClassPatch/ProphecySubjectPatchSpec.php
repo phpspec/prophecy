@@ -18,7 +18,7 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_supports_any_class($node)
     {
@@ -26,7 +26,7 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_forces_class_to_implement_ProphecySubjectInterface($node)
     {
@@ -42,11 +42,11 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode  $node
-     * @param Prophecy\Doubler\Generator\Node\MethodNode $constructor
-     * @param Prophecy\Doubler\Generator\Node\MethodNode $method1
-     * @param Prophecy\Doubler\Generator\Node\MethodNode $method2
-     * @param Prophecy\Doubler\Generator\Node\MethodNode $method3
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode  $node
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $constructor
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method1
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method2
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method3
      */
     function it_forces_all_class_methods_except_constructor_to_proxy_calls_into_prophecy_makeCall(
         $node, $constructor, $method1, $method2, $method3

@@ -44,10 +44,10 @@ class CallCenter
      * @param string         $methodName
      * @param array          $arguments
      *
-     * @return null|mixed  Returns null if no promise for prophecy found or
-     *                     promise return value.
+     * @return null|mixed Returns null if no promise for prophecy found or
+     *                    promise return value.
      *
-     * @throws \Prophecy\Exception\Call\UnexpectedCallException  If no appropriate method prophecy found
+     * @throws \Prophecy\Exception\Call\UnexpectedCallException If no appropriate method prophecy found
      */
     public function makeCall(ObjectProphecy $prophecy, $methodName, array $arguments)
     {
@@ -80,7 +80,7 @@ class CallCenter
         }
 
         // Sort matches by their score value
-        @usort($matches, function($match1, $match2) { return $match2[0] - $match1[0]; });
+        @usort($matches, function ($match1, $match2) { return $match2[0] - $match1[0]; });
 
         // If Highest rated method prophecy has a promise - execute it or return null instead
         $returnValue = null;
@@ -115,7 +115,7 @@ class CallCenter
     public function findCalls($methodName, ArgumentsWildcard $wildcard)
     {
         return array_values(
-            array_filter($this->recordedCalls, function($call) use($methodName, $wildcard) {
+            array_filter($this->recordedCalls, function ($call) use ($methodName, $wildcard) {
                 return $methodName === $call->getMethodName()
                     && 0 < $wildcard->scoreArguments($call->getArguments())
                 ;
@@ -128,7 +128,7 @@ class CallCenter
     {
         $classname = get_class($prophecy->reveal());
         $argstring = implode(', ', array_map(array($this->util, 'stringify'), $arguments));
-        $expected  = implode("\n", array_map(function($methodProphecy) {
+        $expected  = implode("\n", array_map(function ($methodProphecy) {
             return sprintf('  - %s(%s)',
                 $methodProphecy->getMethodName(),
                 $methodProphecy->getArgumentsWildcard()

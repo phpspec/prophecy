@@ -18,7 +18,7 @@ class AggregateExceptionSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
      */
     function it_can_store_objectProphecy_link($object)
     {
@@ -32,7 +32,7 @@ class AggregateExceptionSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Exception\Prediction\PredictionException $exception
+     * @param \Prophecy\Exception\Prediction\PredictionException $exception
      */
     function it_should_append_exception_through_append_method($exception)
     {
@@ -44,7 +44,7 @@ class AggregateExceptionSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Exception\Prediction\PredictionException $exception
+     * @param \Prophecy\Exception\Prediction\PredictionException $exception
      */
     function it_should_update_message_during_append($exception)
     {

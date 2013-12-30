@@ -7,7 +7,7 @@ use PhpSpec\ObjectBehavior;
 class ClassCreatorSpec extends ObjectBehavior
 {
     /**
-     * @param Prophecy\Doubler\Generator\ClassCodeGenerator $generator
+     * @param \Prophecy\Doubler\Generator\ClassCodeGenerator $generator
      */
     function let($generator)
     {
@@ -15,7 +15,7 @@ class ClassCreatorSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $class
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $class
      */
     function it_evaluates_code_generated_by_ClassCodeGenerator($generator, $class)
     {
@@ -27,7 +27,7 @@ class ClassCreatorSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $class
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $class
      */
     function it_throws_an_exception_if_class_does_not_exist_after_evaluation($generator, $class)
     {

@@ -17,12 +17,12 @@ class CallbackPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_should_execute_closure_callback($object, $method)
     {
-        $firstArgumentCallback = function($args) {
+        $firstArgumentCallback = function ($args) {
             return $args[0];
         };
 
@@ -32,8 +32,8 @@ class CallbackPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_should_execute_static_array_callback($object, $method)
     {
@@ -45,8 +45,8 @@ class CallbackPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_should_execute_instance_array_callback($object, $method)
     {
@@ -59,8 +59,8 @@ class CallbackPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_should_execute_string_function_callback($object, $method)
     {

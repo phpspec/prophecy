@@ -64,7 +64,7 @@ class Doubler
     {
         $this->patches[] = $patch;
 
-        @usort($this->patches, function($patch1, $patch2) {
+        @usort($this->patches, function ($patch1, $patch2) {
             return $patch2->getPriority() - $patch1->getPriority();
         });
     }
@@ -134,6 +134,7 @@ class Doubler
      * Creates a class without using its constructor using different strategies
      *
      * @param ReflectionClass $reflection
+     *
      * @return object
      */
     private function createClassWithoutConstructor(ReflectionClass $reflection)
@@ -151,12 +152,14 @@ class Doubler
      * Creates a class bypassing the constructor using unserialization
      *
      * @param ReflectionClass $reflection
+     *
      * @return object
      */
     private function createClassWithoutConstructorUsingUnserialize(ReflectionClass $reflection)
     {
         $classname = $reflection->getName();
         $serializedObject = sprintf('O:%d:"%s":0:{}', strlen($classname), $classname);
+
         return @unserialize($serializedObject);
     }
 
@@ -164,6 +167,7 @@ class Doubler
      * Creates a class bypassing the constructor using reflection, or false on failure
      *
      * @param ReflectionClass $reflection
+     *
      * @return object|null
      */
     private function createClassWithoutConstructorUsingReflection(ReflectionClass $reflection)

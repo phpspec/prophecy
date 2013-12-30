@@ -18,6 +18,9 @@ namespace Prophecy\Argument;
  */
 class ArgumentsWildcard
 {
+    /**
+     * @var Token\TokenInterface[]
+     */
     private $tokens = array();
     private $string;
 
@@ -80,7 +83,7 @@ class ArgumentsWildcard
     public function __toString()
     {
         if (null === $this->string) {
-            $this->string = implode(', ', array_map(function($token) {
+            $this->string = implode(', ', array_map(function ($token) {
                 return (string) $token;
             }, $this->tokens));
         }

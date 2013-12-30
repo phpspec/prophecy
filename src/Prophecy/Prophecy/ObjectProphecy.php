@@ -147,7 +147,7 @@ class ObjectProphecy implements ProphecyInterface
      *
      * @param null|string $methodName
      *
-     * @return array
+     * @return MethodProphecy[]
      */
     public function getMethodProphecies($methodName = null)
     {
@@ -201,7 +201,7 @@ class ObjectProphecy implements ProphecyInterface
         $exception = new AggregateException(sprintf("%s:\n", get_class($this->reveal())));
         $exception->setObjectProphecy($this);
 
-        foreach ($this->methodProphecies as $method => $prophecies) {
+        foreach ($this->methodProphecies as $prophecies) {
             foreach ($prophecies as $prophecy) {
                 try {
                     $prophecy->checkPrediction();

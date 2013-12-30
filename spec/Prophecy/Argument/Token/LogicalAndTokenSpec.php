@@ -36,7 +36,7 @@ class LogicalAndTokenSpec extends ObjectBehavior
 
     function it_wraps_non_token_arguments_into_ExactValueToken()
     {
-        $this->beConstructedWith(array(15,'1985'));
+        $this->beConstructedWith(array(15, '1985'));
         $this->__toString()->shouldReturn("bool(exact(15) AND exact(\"1985\"))");
     }
 

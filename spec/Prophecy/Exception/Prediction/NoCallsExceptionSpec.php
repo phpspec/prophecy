@@ -7,8 +7,8 @@ use PhpSpec\ObjectBehavior;
 class NoCallsExceptionSpec extends ObjectBehavior
 {
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $objectProphecy
-     * @param Prophecy\Prophecy\MethodProphecy   $methodProphecy
+     * @param \Prophecy\Prophecy\ObjectProphecy $objectProphecy
+     * @param \Prophecy\Prophecy\MethodProphecy $methodProphecy
      */
     function let($objectProphecy, $methodProphecy)
     {

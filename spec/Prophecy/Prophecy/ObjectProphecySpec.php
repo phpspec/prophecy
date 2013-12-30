@@ -8,8 +8,8 @@ use Prophecy\Argument;
 class ObjectProphecySpec extends ObjectBehavior
 {
     /**
-     * @param Prophecy\Doubler\LazyDouble                $lazyDouble
-     * @param Prophecy\Prophecy\ProphecySubjectInterface $double
+     * @param \Prophecy\Doubler\LazyDouble                $lazyDouble
+     * @param \Prophecy\Prophecy\ProphecySubjectInterface $double
      */
     function let($lazyDouble, $double)
     {
@@ -50,9 +50,9 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\MethodProphecy    $method1
-     * @param Prophecy\Prophecy\MethodProphecy    $method2
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments
+     * @param \Prophecy\Prophecy\MethodProphecy    $method1
+     * @param \Prophecy\Prophecy\MethodProphecy    $method2
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments
      */
     function it_should_get_method_prophecies_by_method_name($method1, $method2, $arguments)
     {
@@ -76,7 +76,7 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Call\CallCenter $callCenter
+     * @param \Prophecy\Call\CallCenter $callCenter
      */
     function it_should_proxy_makeProphecyMethodCall_to_CallCenter($lazyDouble, $callCenter)
     {
@@ -88,8 +88,8 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Call\CallCenter            $callCenter
-     * @param Prophecy\Prophecy\RevealerInterface $revealer
+     * @param \Prophecy\Call\CallCenter            $callCenter
+     * @param \Prophecy\Prophecy\RevealerInterface $revealer
      */
     function it_should_reveal_arguments_and_return_values_from_callCenter(
         $lazyDouble, $callCenter, $revealer
@@ -106,9 +106,9 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Call\CallCenter            $callCenter
-     * @param Prophecy\Argument\ArgumentsWildcard $wildcard
-     * @param Prophecy\Call\Call                  $call
+     * @param \Prophecy\Call\CallCenter            $callCenter
+     * @param \Prophecy\Argument\ArgumentsWildcard $wildcard
+     * @param \Prophecy\Call\Call                  $call
      */
     function it_should_proxy_getProphecyMethodCalls_to_CallCenter(
         $lazyDouble, $callCenter, $wildcard, $call
@@ -122,8 +122,8 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\MethodProphecy       $methodProphecy
-     * @param Prophecy\Argument\ArgumentsWildcard $argumentsWildcard
+     * @param \Prophecy\Prophecy\MethodProphecy    $methodProphecy
+     * @param \Prophecy\Argument\ArgumentsWildcard $argumentsWildcard
      */
     function its_addMethodProphecy_adds_method_prophecy(
         $methodProphecy, $argumentsWildcard
@@ -140,10 +140,10 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\MethodProphecy       $methodProphecy1
-     * @param Prophecy\Prophecy\MethodProphecy       $methodProphecy2
-     * @param Prophecy\Argument\ArgumentsWildcard $argumentsWildcard1
-     * @param Prophecy\Argument\ArgumentsWildcard $argumentsWildcard2
+     * @param \Prophecy\Prophecy\MethodProphecy    $methodProphecy1
+     * @param \Prophecy\Prophecy\MethodProphecy    $methodProphecy2
+     * @param \Prophecy\Argument\ArgumentsWildcard $argumentsWildcard1
+     * @param \Prophecy\Argument\ArgumentsWildcard $argumentsWildcard2
      */
     function its_addMethodProphecy_handles_prophecies_with_different_arguments(
         $methodProphecy1, $methodProphecy2, $argumentsWildcard1, $argumentsWildcard2
@@ -167,10 +167,10 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\MethodProphecy    $methodProphecy1
-     * @param Prophecy\Prophecy\MethodProphecy    $methodProphecy2
-     * @param Prophecy\Argument\ArgumentsWildcard $argumentsWildcard1
-     * @param Prophecy\Argument\ArgumentsWildcard $argumentsWildcard2
+     * @param \Prophecy\Prophecy\MethodProphecy    $methodProphecy1
+     * @param \Prophecy\Prophecy\MethodProphecy    $methodProphecy2
+     * @param \Prophecy\Argument\ArgumentsWildcard $argumentsWildcard1
+     * @param \Prophecy\Argument\ArgumentsWildcard $argumentsWildcard2
      */
     function its_addMethodProphecy_handles_prophecies_for_different_methods(
         $methodProphecy1, $methodProphecy2, $argumentsWildcard1, $argumentsWildcard2
@@ -196,7 +196,7 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\MethodProphecy $methodProphecy
+     * @param \Prophecy\Prophecy\MethodProphecy $methodProphecy
      */
     function its_addMethodProphecy_throws_exception_when_method_has_no_ArgumentsWildcard(
         $methodProphecy
@@ -217,10 +217,10 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\MethodProphecy    $methodProphecy1
-     * @param Prophecy\Prophecy\MethodProphecy    $methodProphecy2
-     * @param Prophecy\Argument\ArgumentsWildcard $argumentsWildcard1
-     * @param Prophecy\Argument\ArgumentsWildcard $argumentsWildcard2
+     * @param \Prophecy\Prophecy\MethodProphecy    $methodProphecy1
+     * @param \Prophecy\Prophecy\MethodProphecy    $methodProphecy2
+     * @param \Prophecy\Argument\ArgumentsWildcard $argumentsWildcard1
+     * @param \Prophecy\Argument\ArgumentsWildcard $argumentsWildcard2
      */
     function it_throws_AggregateException_during_checkPredictions_if_predictions_fail(
         $methodProphecy1, $methodProphecy2, $argumentsWildcard1, $argumentsWildcard2
@@ -244,8 +244,8 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Doubler                   $doubler
-     * @param Prophecy\Prophecy\ProphecySubjectInterface $reflection
+     * @param \Prophecy\Doubler\Doubler                   $doubler
+     * @param \Prophecy\Prophecy\ProphecySubjectInterface $reflection
      */
     function it_returns_new_MethodProphecy_instance_for_arbitrary_call($doubler, $reflection)
     {
@@ -257,8 +257,8 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Doubler                   $doubler
-     * @param Prophecy\Prophecy\ProphecySubjectInterface $reflection
+     * @param \Prophecy\Doubler\Doubler                   $doubler
+     * @param \Prophecy\Prophecy\ProphecySubjectInterface $reflection
      */
     function it_returns_same_MethodProphecy_for_same_registered_signature($doubler, $reflection)
     {
@@ -271,8 +271,8 @@ class ObjectProphecySpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Doubler                   $doubler
-     * @param Prophecy\Prophecy\ProphecySubjectInterface $reflection
+     * @param \Prophecy\Doubler\Doubler                   $doubler
+     * @param \Prophecy\Prophecy\ProphecySubjectInterface $reflection
      */
     function it_returns_new_MethodProphecy_for_different_signatures($doubler, $reflection)
     {

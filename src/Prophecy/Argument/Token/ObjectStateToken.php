@@ -27,8 +27,8 @@ class ObjectStateToken implements TokenInterface
     /**
      * Initializes token.
      *
-     * @param                 $methodName
-     * @param mixed           $value Expected return value
+     * @param string          $methodName
+     * @param mixed           $value      Expected return value
      * @param null|StringUtil $util
      */
     public function __construct($methodName, $value, StringUtil $util = null)
@@ -41,7 +41,7 @@ class ObjectStateToken implements TokenInterface
     /**
      * Scores 8 if argument is an object, which method returns expected value.
      *
-     * @param $argument
+     * @param mixed $argument
      *
      * @return bool|int
      */

@@ -2,6 +2,8 @@
 
 namespace Prophecy\Util;
 
+use Prophecy\Call\Call;
+
 /*
  * This file is part of the Prophecy.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -33,7 +35,8 @@ class StringUtil
             }
 
             $stringify = array($this, __FUNCTION__);
-            return '['.implode(', ', array_map(function($item, $key) use($stringify) {
+
+            return '['.implode(', ', array_map(function ($item, $key) use ($stringify) {
                 return (is_integer($key) ? $key : '"'.$key.'"').
                     ' => '.call_user_func($stringify, $item);
             }, $value, array_keys($value))).']';
@@ -66,7 +69,7 @@ class StringUtil
     /**
      * Stringifies provided array of calls.
      *
-     * @param array $calls Array of Call instances
+     * @param Call[] $calls Array of Call instances
      *
      * @return string
      */
@@ -74,7 +77,7 @@ class StringUtil
     {
         $self = $this;
 
-        return implode(PHP_EOL, array_map(function($call) use($self) {
+        return implode(PHP_EOL, array_map(function ($call) use ($self) {
             return sprintf('  - %s(%s) @ %s',
                 $call->getMethodName(),
                 implode(', ', array_map(array($self, 'stringify'), $call->getArguments())),

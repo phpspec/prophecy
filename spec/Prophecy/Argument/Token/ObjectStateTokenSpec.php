@@ -26,7 +26,7 @@ class ObjectStateTokenSpec extends ObjectBehavior
     }
 
     /**
-     * @param ReflectionClass $reflection
+     * @param \ReflectionClass $reflection
      */
     function it_scores_8_if_argument_object_has_specific_method_state($reflection)
     {
@@ -36,7 +36,7 @@ class ObjectStateTokenSpec extends ObjectBehavior
     }
 
     /**
-     * @param stdClass $class
+     * @param \stdClass $class
      */
     function it_scores_8_if_argument_object_has_specific_property_state($class)
     {
@@ -46,7 +46,7 @@ class ObjectStateTokenSpec extends ObjectBehavior
     }
 
     /**
-     * @param ReflectionClass $reflection
+     * @param \ReflectionClass $reflection
      */
     function it_does_not_score_if_argument_method_state_does_not_match($reflection)
     {
@@ -56,7 +56,7 @@ class ObjectStateTokenSpec extends ObjectBehavior
     }
 
     /**
-     * @param stdClass $class
+     * @param \stdClass $class
      */
     function it_does_not_score_if_argument_property_state_does_not_match($class)
     {
@@ -66,7 +66,7 @@ class ObjectStateTokenSpec extends ObjectBehavior
     }
 
     /**
-     * @param spec\Prophecy\Argument\Token\MyClass $class
+     * @param \spec\Prophecy\Argument\Token\MyClass $class
      */
     function it_does_not_score_if_argument_object_does_not_have_method_or_property($class)
     {

@@ -8,7 +8,7 @@ use spec\Prophecy\Exception\Prophecy;
 class ClassCreatorExceptionSpec extends ObjectBehavior
 {
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function let($node)
     {

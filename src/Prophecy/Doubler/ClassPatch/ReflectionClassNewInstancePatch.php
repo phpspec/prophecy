@@ -3,7 +3,6 @@
 namespace Prophecy\Doubler\ClassPatch;
 
 use Prophecy\Doubler\Generator\Node\ClassNode;
-use Prophecy\Doubler\Generator\Node\MethodNode;
 
 /*
  * This file is part of the Prophecy.

@@ -18,7 +18,7 @@ class DisableConstructorPatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_supports_anything($node)
     {
@@ -26,10 +26,10 @@ class DisableConstructorPatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode    $class
-     * @param Prophecy\Doubler\Generator\Node\MethodNode   $method
-     * @param Prophecy\Doubler\Generator\Node\ArgumentNode $arg1
-     * @param Prophecy\Doubler\Generator\Node\ArgumentNode $arg2
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode    $class
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $arg1
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $arg2
      */
     function it_makes_all_constructor_arguments_optional($class, $method, $arg1, $arg2)
     {
@@ -46,7 +46,7 @@ class DisableConstructorPatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $class
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $class
      */
     function it_creates_new_constructor_if_object_has_none($class)
     {

@@ -50,8 +50,8 @@ class MethodNodeSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ArgumentNode $argument1
-     * @param Prophecy\Doubler\Generator\Node\ArgumentNode $argument2
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument1
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument2
      */
     function its_useParentCode_causes_method_to_call_parent($argument1, $argument2)
     {
@@ -92,8 +92,8 @@ class MethodNodeSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ArgumentNode $argument1
-     * @param Prophecy\Doubler\Generator\Node\ArgumentNode $argument2
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument1
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument2
      */
     function it_supports_adding_arguments($argument1, $argument2)
     {

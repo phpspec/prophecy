@@ -8,9 +8,9 @@ use Prophecy\Argument;
 class DoublerSpec extends ObjectBehavior
 {
     /**
-     * @param Prophecy\Doubler\Generator\ClassMirror  $mirror
-     * @param Prophecy\Doubler\Generator\ClassCreator $creator
-     * @param Prophecy\Doubler\NameGenerator  $namer
+     * @param \Prophecy\Doubler\Generator\ClassMirror  $mirror
+     * @param \Prophecy\Doubler\Generator\ClassCreator $creator
+     * @param \Prophecy\Doubler\NameGenerator          $namer
      */
     function let($mirror, $creator, $namer)
     {
@@ -23,7 +23,7 @@ class DoublerSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\ClassPatch\ClassPatchInterface $patch
+     * @param \Prophecy\Doubler\ClassPatch\ClassPatchInterface $patch
      */
     function its_registerClassPatch_adds_a_patch_to_the_doubler($patch)
     {
@@ -32,10 +32,10 @@ class DoublerSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt1
-     * @param Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt2
-     * @param Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt3
-     * @param Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt4
+     * @param \Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt1
+     * @param \Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt2
+     * @param \Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt3
+     * @param \Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt4
      */
     function its_getClassPatches_sorts_patches_by_priority($alt1, $alt2, $alt3, $alt4)
     {
@@ -53,16 +53,15 @@ class DoublerSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt1
-     * @param Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt2
-     * @param ReflectionClass                                 $class
-     * @param ReflectionClass                                 $interface1
-     * @param ReflectionClass                                 $interface2
-     * @param Prophecy\Doubler\Generator\Node\ClassNode       $node
-     * @param stdClass                                        $object
+     * @param \Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt1
+     * @param \Prophecy\Doubler\ClassPatch\ClassPatchInterface $alt2
+     * @param \ReflectionClass                                 $class
+     * @param \ReflectionClass                                 $interface1
+     * @param \ReflectionClass                                 $interface2
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode       $node
      */
     function its_double_mirrors_alterates_and_instantiates_provided_class(
-        $mirror, $creator, $namer, $alt1, $alt2, $class, $interface1, $interface2, $node, $object
+        $mirror, $creator, $namer, $alt1, $alt2, $class, $interface1, $interface2, $node
     )
     {
         $mirror->reflect($class, array($interface1, $interface2))->willReturn($node);
@@ -87,8 +86,8 @@ class DoublerSpec extends ObjectBehavior
     }
 
     /**
-     * @param ReflectionClass                           $class
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \ReflectionClass                           $class
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_double_instantiates_a_class_with_constructor_argument($mirror, $class, $node, $namer)
     {
@@ -102,8 +101,8 @@ class DoublerSpec extends ObjectBehavior
     }
 
     /**
-     * @param ReflectionClass                           $class
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \ReflectionClass                           $class
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_can_instantiate_class_with_final_constructor($mirror, $class, $node, $namer)
     {
@@ -114,7 +113,6 @@ class DoublerSpec extends ObjectBehavior
         $double = $this->double($class, array());
 
         $double->shouldBeAnInstanceOf('spec\Prophecy\Doubler\WithFinalConstructor');
-
     }
 }
 

@@ -25,7 +25,7 @@ class ArrayEntryToken implements TokenInterface
     private $value;
 
     /**
-     * @param mixed $key exact value or token
+     * @param mixed $key   exact value or token
      * @param mixed $value exact value or token
      */
     public function __construct($key, $value)
@@ -119,13 +119,15 @@ class ArrayEntryToken implements TokenInterface
 
     /**
      * Converts instance of \ArrayAccess to key => value array entry
+     *
      * @param \ArrayAccess $object
+     *
      * @return array|null
      * @throws \Prophecy\Exception\InvalidArgumentException
      */
     private function convertArrayAccessToEntry(\ArrayAccess $object)
     {
-        if(!$this->key instanceof ExactValueToken){
+        if (!$this->key instanceof ExactValueToken) {
             throw new InvalidArgumentException(sprintf(
                 'You can only use exact value tokens to match key of ArrayAccess object'.PHP_EOL.
                 'But you used `%s`.',

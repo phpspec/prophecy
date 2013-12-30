@@ -82,6 +82,11 @@ class ClassNode
         $this->methods[$method->getName()] = $method;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return MethodNode|null
+     */
     public function getMethod($name)
     {
         return $this->hasMethod($name) ? $this->methods[$name] : null;

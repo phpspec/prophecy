@@ -7,7 +7,7 @@ use PhpSpec\ObjectBehavior;
 class CallSpec extends ObjectBehavior
 {
     /**
-     * @param Exception $exception
+     * @param \Exception $exception
      */
     function let($exception)
     {

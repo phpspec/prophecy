@@ -7,12 +7,12 @@ use PhpSpec\ObjectBehavior;
 class ClassCodeGeneratorSpec extends ObjectBehavior
 {
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode    $class
-     * @param Prophecy\Doubler\Generator\Node\MethodNode   $method1
-     * @param Prophecy\Doubler\Generator\Node\MethodNode   $method2
-     * @param Prophecy\Doubler\Generator\Node\ArgumentNode $argument11
-     * @param Prophecy\Doubler\Generator\Node\ArgumentNode $argument12
-     * @param Prophecy\Doubler\Generator\Node\ArgumentNode $argument21
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode    $class
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method1
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method2
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument11
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument12
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument21
      */
     function it_generates_proper_php_code_for_specific_ClassNode(
         $class, $method1, $method2, $argument11, $argument12, $argument21
@@ -57,14 +57,17 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $code = $this->generate('CustomClass', $class);
         $expected = <<<'PHP'
 namespace  {
-class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
+class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator
+{
 public $name;
 private $email;
 
-public static function getName(array $fullname = NULL, \ReflectionClass $class) {
+public static function getName(array $fullname = NULL, \ReflectionClass $class)
+{
 return $this->name;
 }
-protected  function getEmail( $default = 'ever.zet@gmail.com') {
+protected  function getEmail($default = 'ever.zet@gmail.com')
+{
 return $this->email;
 }
 
@@ -76,9 +79,9 @@ PHP;
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode    $class
-     * @param Prophecy\Doubler\Generator\Node\MethodNode   $method
-     * @param Prophecy\Doubler\Generator\Node\ArgumentNode $argument
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode    $class
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument
      */
     function it_overrides_properly_methods_with_args_passed_by_reference(
         $class, $method, $argument
@@ -104,9 +107,10 @@ PHP;
         $code = $this->generate('CustomClass', $class);
         $expected =<<<'PHP'
 namespace  {
-class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface {
-
-public  function getName(array &$fullname = NULL) {
+class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface
+{
+public  function getName(array &$fullname = NULL)
+{
 return $this->name;
 }
 
@@ -118,7 +122,7 @@ PHP;
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $class
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $class
      */
     function it_generates_empty_class_for_empty_ClassNode($class)
     {
@@ -130,9 +134,8 @@ PHP;
         $code = $this->generate('CustomClass', $class);
         $expected =<<<'PHP'
 namespace  {
-class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
-
-
+class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface
+{
 }
 }
 PHP;
@@ -141,7 +144,7 @@ PHP;
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $class
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $class
      */
     function it_wraps_class_in_namespace_if_it_is_namespaced($class)
     {
@@ -153,9 +156,8 @@ PHP;
         $code = $this->generate('My\Awesome\CustomClass', $class);
         $expected =<<<'PHP'
 namespace My\Awesome {
-class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
-
-
+class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface
+{
 }
 }
 PHP;

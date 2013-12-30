@@ -12,8 +12,8 @@ class ReturnArgumentPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_should_return_first_argument_if_provided($object, $method)
     {
@@ -21,8 +21,8 @@ class ReturnArgumentPromiseSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
      */
     function it_should_return_null_if_no_arguments_provided($object, $method)
     {

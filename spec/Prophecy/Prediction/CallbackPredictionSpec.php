@@ -19,13 +19,13 @@ class CallbackPredictionSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
-     * @param Prophecy\Call\Call               $call
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Call\Call               $call
      */
     function it_proxies_call_to_callback($object, $method, $call)
     {
-        $returnFirstCallCallback = function($calls, $object, $method) {
+        $returnFirstCallCallback = function ($calls, $object, $method) {
             throw new RuntimeException;
         };
 

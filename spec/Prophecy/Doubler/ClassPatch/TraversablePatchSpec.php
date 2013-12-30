@@ -13,7 +13,7 @@ class TraversablePatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_supports_class_that_implements_only_Traversable($node)
     {
@@ -23,7 +23,7 @@ class TraversablePatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_does_not_support_class_that_implements_Iterator($node)
     {
@@ -33,7 +33,7 @@ class TraversablePatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_does_not_support_class_that_implements_IteratorAggregate($node)
     {
@@ -48,7 +48,7 @@ class TraversablePatchSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Doubler\Generator\Node\ClassNode $node
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
     function it_forces_node_to_implement_IteratorAggregate($node)
     {

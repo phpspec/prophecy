@@ -17,10 +17,10 @@ class CallTimesPredictionSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy $object
-     * @param Prophecy\Prophecy\MethodProphecy $method
-     * @param Prophecy\Call\Call               $call1
-     * @param Prophecy\Call\Call               $call2
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Call\Call               $call1
+     * @param \Prophecy\Call\Call               $call2
      */
     function it_does_nothing_if_there_were_exact_amount_of_calls_being_made(
         $object, $method, $call1, $call2
@@ -30,10 +30,10 @@ class CallTimesPredictionSpec extends ObjectBehavior
     }
 
     /**
-     * @param Prophecy\Prophecy\ObjectProphecy    $object
-     * @param Prophecy\Prophecy\MethodProphecy    $method
-     * @param Prophecy\Call\Call                  $call
-     * @param Prophecy\Argument\ArgumentsWildcard $arguments
+     * @param \Prophecy\Prophecy\ObjectProphecy    $object
+     * @param \Prophecy\Prophecy\MethodProphecy    $method
+     * @param \Prophecy\Call\Call                  $call
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments
      */
     function it_throws_UnexpectedCallsCountException_if_calls_found(
         $object, $method, $call, $arguments

@@ -7,7 +7,6 @@ use Prophecy\Prophecy\MethodProphecy;
 
 use Prophecy\Exception\InvalidArgumentException;
 
-use ReflectionFunction;
 use Closure;
 
 /*

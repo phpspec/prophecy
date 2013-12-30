@@ -7,7 +7,7 @@ use PhpSpec\ObjectBehavior;
 class ClassMirrorExceptionSpec extends ObjectBehavior
 {
     /**
-     * @param ReflectionClass $class
+     * @param \ReflectionClass $class
      */
     function let($class)
     {
