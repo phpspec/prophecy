@@ -21,6 +21,8 @@ use ReflectionClass;
  */
 class NameGenerator
 {
+    private static $counter = 1;
+
     /**
      * Generates name.
      *
@@ -45,6 +47,6 @@ class NameGenerator
             $parts[] = 'stdClass';
         }
 
-        return sprintf('Double\%s\P%d', implode('\\', $parts), mt_rand());
+        return sprintf('Double\%s\P%d', implode('\\', $parts), self::$counter++);
     }
 }
