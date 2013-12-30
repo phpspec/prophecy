@@ -64,7 +64,7 @@ private $email;
 public static function getName(array $fullname = NULL, \ReflectionClass $class) {
 return $this->name;
 }
-protected  function getEmail($default = 'ever.zet@gmail.com') {
+protected  function getEmail( $default = 'ever.zet@gmail.com') {
 return $this->email;
 }
 
