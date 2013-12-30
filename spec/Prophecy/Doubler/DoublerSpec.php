@@ -105,15 +105,20 @@ class DoublerSpec extends ObjectBehavior
      * @param ReflectionClass                           $class
      * @param Prophecy\Doubler\Generator\Node\ClassNode $node
      */
-    function it_can_instantiate_internal_class_with_final_constructor($mirror, $class, $node, $namer)
+    function it_can_instantiate_class_with_final_constructor($mirror, $class, $node, $namer)
     {
-        $class->getName()->willReturn('SimpleXmlElement');
+        $class->getName()->willReturn('spec\Prophecy\Doubler\WithFinalConstructor');
         $mirror->reflect($class, array())->willReturn($node);
-        $namer->name($class, array())->willReturn('SimpleXmlElement');
+        $namer->name($class, array())->willReturn('spec\Prophecy\Doubler\WithFinalConstructor');
 
         $double = $this->double($class, array());
 
-        $double->shouldBeAnInstanceOf('SimpleXmlElement');
+        $double->shouldBeAnInstanceOf('spec\Prophecy\Doubler\WithFinalConstructor');
 
     }
+}
+
+class WithFinalConstructor
+{
+    final public function __construct() {}
 }
