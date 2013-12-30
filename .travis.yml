@@ -1,10 +1,12 @@
 language: php
 
-php: [5.3, 5.4, 5.5]
+php: [5.3, 5.4, 5.5, hhvm]
+
+matrix:
+  allow_failures:
+    - php: hhvm
 
 before_script:
-  - curl http://getcomposer.org/installer | php
-  # TODO remove the root version once https://github.com/composer/composer/issues/2065 is fixed
-  - COMPOSER_ROOT_VERSION=dev-master php composer.phar install --dev --prefer-source
+  - composer install --dev --prefer-source
 
 script: vendor/bin/phpspec run -fpretty -v
