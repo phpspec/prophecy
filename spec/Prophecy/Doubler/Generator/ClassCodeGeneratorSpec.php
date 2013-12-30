@@ -57,17 +57,14 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $code = $this->generate('CustomClass', $class);
         $expected = <<<'PHP'
 namespace  {
-class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator
-{
+class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
 public $name;
 private $email;
 
-public static function getName(array $fullname = NULL, \ReflectionClass $class)
-{
+public static function getName(array $fullname = NULL, \ReflectionClass $class) {
 return $this->name;
 }
-protected  function getEmail($default = 'ever.zet@gmail.com')
-{
+protected  function getEmail($default = 'ever.zet@gmail.com') {
 return $this->email;
 }
 
@@ -107,10 +104,9 @@ PHP;
         $code = $this->generate('CustomClass', $class);
         $expected =<<<'PHP'
 namespace  {
-class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface
-{
-public  function getName(array &$fullname = NULL)
-{
+class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface {
+
+public  function getName(array &$fullname = NULL) {
 return $this->name;
 }
 
@@ -134,8 +130,9 @@ PHP;
         $code = $this->generate('CustomClass', $class);
         $expected =<<<'PHP'
 namespace  {
-class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface
-{
+class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
+
+
 }
 }
 PHP;
@@ -156,8 +153,9 @@ PHP;
         $code = $this->generate('My\Awesome\CustomClass', $class);
         $expected =<<<'PHP'
 namespace My\Awesome {
-class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface
-{
+class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
+
+
 }
 }
 PHP;
