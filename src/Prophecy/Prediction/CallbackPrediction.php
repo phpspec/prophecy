@@ -57,9 +57,8 @@ class CallbackPrediction implements PredictionInterface
     public function check(array $calls, ObjectProphecy $object, MethodProphecy $method)
     {
         $callback = $this->callback;
-        $function = new ReflectionFunction($callback);
 
-        if ($function->isClosure() && version_compare(PHP_VERSION, '5.4', '>=')) {
+        if ($callback instanceof Closure && version_compare(PHP_VERSION, '5.4', '>=')) {
             $callback = Closure::bind($callback, $object);
         }
 
