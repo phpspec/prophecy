@@ -17,10 +17,10 @@ class UserTest extends PHPUnit_Framework_TestCase
 
     public function testPasswordHashing()
     {
-        $hasher = $this->prophet->prophesize('App\Security\Hasher');
-        $user   = new App\Entity\User($hasher->reveal());
+        $hasherProphecy = $this->prophet->prophesize('App\Security\Hasher');
+        $user   = new App\Entity\User($hasherProphecy->reveal());
 
-        $hasher->generateHash($user, 'qwerty')->willReturn('hashed_pass');
+        $hasherProphecy->generateHash($user, 'qwerty')->willReturn('hashed_pass');
 
         $user->setPassword('qwerty');
         
@@ -184,8 +184,8 @@ you do that by predicting how many times your method will be called. In Prophecy
 you'll use promises for that:
 
 ```php
-$user->getName()->willReturn(null);
-$user->setName('everzet')->will(function() {
+$userProphecy->getName()->willReturn(null);
+$userProphecy->setName('everzet')->will(function() {
     $this->getName()->willReturn('everzet');
 });
 ```
@@ -206,7 +206,7 @@ wildcards.  As a matter of fact, `->setName('everzet')` looks like a simple call
 because Prophecy automatically transforms it under the hood into:
 
 ```php
-$user->setName(new Prophecy\Argument\Token\ExactValueToken('everzet'));
+$userProphecy->setName(new Prophecy\Argument\Token\ExactValueToken('everzet'));
 ```
 
 Those argument tokens are simple PHP classes, that implement 
@@ -217,7 +217,7 @@ shortcut class `Prophecy\Argument`, which you can use to create tokens like that
 ```php
 use Prophecy\Argument;
 
-$user->setName(Argument::exact('everzet'));
+$userProphecy->setName(Argument::exact('everzet'));
 ```
 
 `ExactValueToken` is not very useful in our case as it forced us to hardcode the username.
@@ -239,8 +239,8 @@ So, let's refactor our initial `{set,get}Name()` logic with argument tokens:
 ```php
 use Prophecy\Argument;
 
-$user->getName()->willReturn(null);
-$user->setName(Argument::type('string'))->will(function($args) {
+$userProphecy->getName()->willReturn(null);
+$userProphecy->setName(Argument::type('string'))->will(function($args) {
     $this->getName()->willReturn($args[0]);
 });
 ```
@@ -254,12 +254,12 @@ One last bit about arguments now. You might ask, what happens in case of:
 ```php
 use Prophecy\Argument;
 
-$user->getName()->willReturn(null);
-$user->setName(Argument::type('string'))->will(function($args) {
+$userProphecy->getName()->willReturn(null);
+$userProphecy->setName(Argument::type('string'))->will(function($args) {
     $this->getName()->willReturn($args[0]);
 });
 
-$user->setName(Argument::any())->will(function(){});
+$userProphecy->setName(Argument::any())->will(function(){});
 ```
 
 Nothing. Your stub will continue behaving the way it did before. That's because of how
@@ -294,7 +294,7 @@ are called mocks and in Prophecy they look almost exactly the same as stubs, exc
 they define *predictions* instead of *promises* on method prophecies:
 
 ```php
-$entityManager->flush()->shouldBeCalled();
+$entityManagerProphecy->flush()->shouldBeCalled();
 ```
 
 #### Predictions
@@ -308,7 +308,7 @@ predictions. You can assign predictions to method prophecies using the
 the `shouldBeCalled()` method we used earlier is just a shortcut to:
 
 ```php
-$entityManager->flush()->should(new Prophecy\Prediction\CallPrediction());
+$entityManagerProphecy->flush()->should(new Prophecy\Prediction\CallPrediction());
 ```
 
 It checks if your method of interest (that matches both the method name and the arguments wildcard)
@@ -341,11 +341,11 @@ you don't need to record predictions in order to check them. You can also do it
 manually by using the `MethodProphecy::shouldHave(PredictionInterface $prediction)` method:
 
 ```php
-$em = $prophet->prophesize('Doctrine\ORM\EntityManager');
+$emProphecy = $prophet->prophesize('Doctrine\ORM\EntityManager');
 
-$controller->createUser($em->reveal());
+$controller->createUser($emProphecy->reveal());
 
-$em->flush()->shouldHaveBeenCalled();
+$emProphecy->flush()->shouldHaveBeenCalled();
 ```
 
 Such manipulation with doubles is called spying. And with Prophecy it just works.
