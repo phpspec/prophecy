@@ -1,7 +1,5 @@
 <?php
 
-namespace Prophecy\Exception\Doubler;
-
 /*
  * This file is part of the Prophecy.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -10,6 +8,8 @@ namespace Prophecy\Exception\Doubler;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace Prophecy\Exception\Doubler;
 
 class InterfaceNotFoundException extends ClassNotFoundException
 {

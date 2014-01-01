@@ -1,14 +1,5 @@
 <?php
 
-namespace Prophecy\Prediction;
-
-use Prophecy\Call\Call;
-use Prophecy\Prophecy\ObjectProphecy;
-use Prophecy\Prophecy\MethodProphecy;
-use Prophecy\Util\StringUtil;
-
-use Prophecy\Exception\Prediction\UnexpectedCallsException;
-
 /*
  * This file is part of the Prophecy.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -17,6 +8,15 @@ use Prophecy\Exception\Prediction\UnexpectedCallsException;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace Prophecy\Prediction;
+
+use Prophecy\Call\Call;
+use Prophecy\Prophecy\ObjectProphecy;
+use Prophecy\Prophecy\MethodProphecy;
+use Prophecy\Util\StringUtil;
+
+use Prophecy\Exception\Prediction\UnexpectedCallsException;
 
 /**
  * No calls prediction.

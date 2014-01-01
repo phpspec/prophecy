@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Prophecy.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *     Marcello Duarte <marcello.duarte@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Prophecy;
 
 use Prophecy\Doubler\Doubler;
@@ -16,15 +25,6 @@ use Prophecy\Util\StringUtil;
 
 use Prophecy\Exception\Prediction\PredictionException;
 use Prophecy\Exception\Prediction\AggregateException;
-
-/*
- * This file is part of the Prophecy.
- * (c) Konstantin Kudryashov <ever.zet@gmail.com>
- *     Marcello Duarte <marcello.duarte@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 /**
  * Prophet creates prophecies.

@@ -1,9 +1,5 @@
 <?php
 
-namespace Prophecy\Util;
-
-use Prophecy\Call\Call;
-
 /*
  * This file is part of the Prophecy.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -12,6 +8,10 @@ use Prophecy\Call\Call;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace Prophecy\Util;
+
+use Prophecy\Call\Call;
 
 /**
  * String utility.

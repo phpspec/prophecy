@@ -1,11 +1,5 @@
 <?php
 
-namespace Prophecy\Exception\Prediction;
-
-use Prophecy\Prophecy\MethodProphecy;
-
-use Prophecy\Exception\Prophecy\MethodProphecyException;
-
 /*
  * This file is part of the Prophecy.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -14,6 +8,12 @@ use Prophecy\Exception\Prophecy\MethodProphecyException;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace Prophecy\Exception\Prediction;
+
+use Prophecy\Prophecy\MethodProphecy;
+
+use Prophecy\Exception\Prophecy\MethodProphecyException;
 
 class UnexpectedCallsException extends MethodProphecyException implements PredictionException
 {

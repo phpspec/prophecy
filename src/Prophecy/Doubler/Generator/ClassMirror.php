@@ -1,14 +1,5 @@
 <?php
 
-namespace Prophecy\Doubler\Generator;
-
-use Prophecy\Exception\InvalidArgumentException;
-use Prophecy\Exception\Doubler\ClassMirrorException;
-
-use ReflectionClass;
-use ReflectionMethod;
-use ReflectionParameter;
-
 /*
  * This file is part of the Prophecy.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -17,6 +8,15 @@ use ReflectionParameter;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace Prophecy\Doubler\Generator;
+
+use Prophecy\Exception\InvalidArgumentException;
+use Prophecy\Exception\Doubler\ClassMirrorException;
+
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionParameter;
 
 /**
  * Class mirror.

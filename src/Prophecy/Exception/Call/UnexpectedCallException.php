@@ -1,10 +1,5 @@
 <?php
 
-namespace Prophecy\Exception\Call;
-
-use Prophecy\Exception\Prophecy\ObjectProphecyException;
-use Prophecy\Prophecy\ObjectProphecy;
-
 /*
  * This file is part of the Prophecy.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -13,6 +8,11 @@ use Prophecy\Prophecy\ObjectProphecy;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace Prophecy\Exception\Call;
+
+use Prophecy\Exception\Prophecy\ObjectProphecyException;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class UnexpectedCallException extends ObjectProphecyException
 {

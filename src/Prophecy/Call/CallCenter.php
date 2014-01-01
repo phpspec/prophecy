@@ -1,13 +1,5 @@
 <?php
 
-namespace Prophecy\Call;
-
-use Prophecy\Prophecy\ObjectProphecy;
-use Prophecy\Argument\ArgumentsWildcard;
-use Prophecy\Util\StringUtil;
-
-use Prophecy\Exception\Call\UnexpectedCallException;
-
 /*
  * This file is part of the Prophecy.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -16,6 +8,14 @@ use Prophecy\Exception\Call\UnexpectedCallException;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace Prophecy\Call;
+
+use Prophecy\Prophecy\ObjectProphecy;
+use Prophecy\Argument\ArgumentsWildcard;
+use Prophecy\Util\StringUtil;
+
+use Prophecy\Exception\Call\UnexpectedCallException;
 
 /**
  * Calls receiver & manager.

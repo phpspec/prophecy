@@ -1,7 +1,5 @@
 <?php
 
-namespace Prophecy\Argument\Token;
-
 /*
  * This file is part of the Prophecy.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -11,12 +9,13 @@ namespace Prophecy\Argument\Token;
  * file that was distributed with this source code.
  */
 
+namespace Prophecy\Argument\Token;
+
 /**
  * Logical AND token.
  *
  * @author Boris Mikhaylov <kaguxmail@gmail.com>
  */
-
 class LogicalAndToken implements TokenInterface
 {
     private $tokens = array();
