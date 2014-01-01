@@ -1,3 +1,19 @@
+1.1.0 / 2014-01-01
+==================
+
+  * Changed the generated class names to use a static counter instead of a random number
+  * Added a clss patch for ReflectionClass::newInstance to make its argument optional consistently (thanks @docteurklein)
+  * Fixed mirroring of classes with typehints on non-existent classes (thanks @docteurklein)
+  * Fixed the support of array callables in CallbackPromise and CallbackPrediction (thanks @ciaranmcnulty)
+  * Added support for properties in ObjectStateToken (thanks @adrienbrault)
+  * Added support for mocking classes with a final constructor (thanks @ciaranmcnulty)
+  * Added ArrayEveryEntryToken and Argument::withEveryEntry() (thanks @adrienbrault)
+  * Added an exception when trying to prophesize on a final method instead of ignoring silently (thanks @docteurklein)
+  * Added StringContainToken and Argument::containingString() (thanks @peterjmit)
+  * Added ``shouldNotHaveBeenCalled`` on the MethodProphecy (thanks @ciaranmcnulty)
+  * Fixed the comparison of objects in ExactValuetoken (thanks @sstok)
+  * Deprecated ``shouldNotBeenCalled`` in favor of ``shouldNotHaveBeenCalled``
+
 1.0.4 / 2013-08-10
 ==================
 
