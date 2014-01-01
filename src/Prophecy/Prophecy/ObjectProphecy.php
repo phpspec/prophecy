@@ -2,6 +2,7 @@
 
 namespace Prophecy\Prophecy;
 
+use Prophecy\Call\Call;
 use Prophecy\Doubler\LazyDouble;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Call\CallCenter;
@@ -30,6 +31,10 @@ class ObjectProphecy implements ProphecyInterface
     private $lazyDouble;
     private $callCenter;
     private $revealer;
+
+    /**
+     * @var MethodProphecy[][]
+     */
     private $methodProphecies = array();
 
     /**
@@ -184,7 +189,7 @@ class ObjectProphecy implements ProphecyInterface
      * @param string            $methodName
      * @param ArgumentsWildcard $wildcard
      *
-     * @return array
+     * @return Call[]
      */
     public function findProphecyMethodCalls($methodName, ArgumentsWildcard $wildcard)
     {

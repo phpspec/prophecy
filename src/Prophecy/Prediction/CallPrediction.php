@@ -2,6 +2,7 @@
 
 namespace Prophecy\Prediction;
 
+use Prophecy\Call\Call;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Argument\ArgumentsWildcard;
@@ -41,7 +42,7 @@ class CallPrediction implements PredictionInterface
     /**
      * Tests that there was at least one call.
      *
-     * @param array          $calls
+     * @param Call[]         $calls
      * @param ObjectProphecy $object
      * @param MethodProphecy $method
      *

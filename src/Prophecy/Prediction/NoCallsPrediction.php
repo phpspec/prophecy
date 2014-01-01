@@ -2,6 +2,7 @@
 
 namespace Prophecy\Prediction;
 
+use Prophecy\Call\Call;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Util\StringUtil;
@@ -39,7 +40,7 @@ class NoCallsPrediction implements PredictionInterface
     /**
      * Tests that there were no calls made.
      *
-     * @param array          $calls
+     * @param Call[]         $calls
      * @param ObjectProphecy $object
      * @param MethodProphecy $method
      *

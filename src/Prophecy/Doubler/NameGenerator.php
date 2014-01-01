@@ -26,8 +26,8 @@ class NameGenerator
     /**
      * Generates name.
      *
-     * @param ReflectionClass $class
-     * @param array           $interfaces
+     * @param ReflectionClass   $class
+     * @param ReflectionClass[] $interfaces
      *
      * @return string
      */

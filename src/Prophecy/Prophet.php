@@ -36,6 +36,10 @@ class Prophet
     private $doubler;
     private $revealer;
     private $util;
+
+    /**
+     * @var ObjectProphecy[]
+     */
     private $prophecies = array();
 
     /**
@@ -91,7 +95,7 @@ class Prophet
     /**
      * Returns all created object prophecies.
      *
-     * @return array
+     * @return ObjectProphecy[]
      */
     public function getProphecies()
     {

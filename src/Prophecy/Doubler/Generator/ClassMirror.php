@@ -38,8 +38,8 @@ class ClassMirror
     /**
      * Reflects provided arguments into class node.
      *
-     * @param ReflectionClass $class
-     * @param array           $interfaces
+     * @param ReflectionClass   $class
+     * @param ReflectionClass[] $interfaces
      *
      * @return Node\ClassNode
      *

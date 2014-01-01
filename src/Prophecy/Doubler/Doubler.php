@@ -28,6 +28,10 @@ class Doubler
     private $mirror;
     private $creator;
     private $namer;
+
+    /**
+     * @var ClassPatch\ClassPatchInterface[]
+     */
     private $patches = array();
 
     /**
@@ -72,9 +76,9 @@ class Doubler
     /**
      * Creates double from specific class or/and list of interfaces.
      *
-     * @param ReflectionClass $class
-     * @param array           $interfaces Array of ReflectionClass instances
-     * @param array           $args       Constructor arguments
+     * @param ReflectionClass   $class
+     * @param ReflectionClass[] $interfaces Array of ReflectionClass instances
+     * @param array             $args       Constructor arguments
      *
      * @return DoubleInterface
      *
@@ -109,8 +113,8 @@ class Doubler
     /**
      * Creates double class and returns its FQN.
      *
-     * @param ReflectionClass $class
-     * @param array           $interfaces
+     * @param ReflectionClass   $class
+     * @param ReflectionClass[] $interfaces
      *
      * @return string
      */

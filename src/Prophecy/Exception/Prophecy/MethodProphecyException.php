@@ -24,6 +24,9 @@ class MethodProphecyException extends ObjectProphecyException
         $this->methodProphecy = $methodProphecy;
     }
 
+    /**
+     * @return MethodProphecy
+     */
     public function getMethodProphecy()
     {
         return $this->methodProphecy;

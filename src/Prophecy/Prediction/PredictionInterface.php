@@ -2,6 +2,7 @@
 
 namespace Prophecy\Prediction;
 
+use Prophecy\Call\Call;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
 
@@ -25,7 +26,7 @@ interface PredictionInterface
     /**
      * Tests that double fulfilled prediction.
      *
-     * @param array          $calls
+     * @param Call[]        $calls
      * @param ObjectProphecy $object
      * @param MethodProphecy $method
      *

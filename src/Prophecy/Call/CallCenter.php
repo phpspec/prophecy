@@ -25,6 +25,10 @@ use Prophecy\Exception\Call\UnexpectedCallException;
 class CallCenter
 {
     private $util;
+
+    /**
+     * @var Call[]
+     */
     private $recordedCalls = array();
 
     /**
@@ -44,8 +48,7 @@ class CallCenter
      * @param string         $methodName
      * @param array          $arguments
      *
-     * @return null|mixed Returns null if no promise for prophecy found or
-     *                    promise return value.
+     * @return mixed Returns null if no promise for prophecy found or promise return value.
      *
      * @throws \Prophecy\Exception\Call\UnexpectedCallException If no appropriate method prophecy found
      */
@@ -110,7 +113,7 @@ class CallCenter
      * @param string            $methodName
      * @param ArgumentsWildcard $wildcard
      *
-     * @return array
+     * @return Call[]
      */
     public function findCalls($methodName, ArgumentsWildcard $wildcard)
     {

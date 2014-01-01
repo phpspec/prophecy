@@ -23,6 +23,10 @@ class MethodNode
     private $name;
     private $visibility = 'public';
     private $static = false;
+
+    /**
+     * @var ArgumentNode[]
+     */
     private $arguments = array();
 
     public function __construct($name, $code = null)
@@ -69,6 +73,9 @@ class MethodNode
         $this->arguments[] = $argument;
     }
 
+    /**
+     * @return ArgumentNode[]
+     */
     public function getArguments()
     {
         return $this->arguments;

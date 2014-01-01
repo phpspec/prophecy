@@ -2,6 +2,7 @@
 
 namespace Prophecy\Prediction;
 
+use Prophecy\Call\Call;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
 
@@ -49,7 +50,7 @@ class CallbackPrediction implements PredictionInterface
     /**
      * Executes preset callback.
      *
-     * @param array          $calls
+     * @param Call[]         $calls
      * @param ObjectProphecy $object
      * @param MethodProphecy $method
      */

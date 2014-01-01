@@ -23,6 +23,10 @@ class ClassNode
     private $parentClass = 'stdClass';
     private $interfaces  = array();
     private $properties  = array();
+
+    /**
+     * @var MethodNode[]
+     */
     private $methods     = array();
 
     public function getParentClass()
@@ -72,6 +76,9 @@ class ClassNode
         $this->properties[$name] = $visibility;
     }
 
+    /**
+     * @return MethodNode[]
+     */
     public function getMethods()
     {
         return $this->methods;

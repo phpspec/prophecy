@@ -46,6 +46,12 @@ class CachedDoubler extends Doubler
         return $this->classes[$classId] = parent::createDoubleClass($class, $interfaces);
     }
 
+    /**
+     * @param ReflectionClass   $class
+     * @param ReflectionClass[] $interfaces
+     *
+     * @return string
+     */
     private function generateClassId(ReflectionClass $class = null, array $interfaces)
     {
         $parts = array();

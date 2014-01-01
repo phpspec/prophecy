@@ -24,6 +24,9 @@ class ObjectProphecyException extends \RuntimeException implements ProphecyExcep
         $this->objectProphecy = $objectProphecy;
     }
 
+    /**
+     * @return ObjectProphecy
+     */
     public function getObjectProphecy()
     {
         return $this->objectProphecy;

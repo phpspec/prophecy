@@ -154,7 +154,7 @@ class MethodProphecy
      *
      * @see Prophecy\Promise\ThrowPromise
      *
-     * @param string|Exception $exception Exception class or instance
+     * @param string|\Exception $exception Exception class or instance
      *
      * @return $this
      */
