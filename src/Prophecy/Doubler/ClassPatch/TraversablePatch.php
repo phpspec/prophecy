@@ -14,8 +14,6 @@ namespace Prophecy\Doubler\ClassPatch;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 
-use Traversable;
-
 /**
  * Traversable interface patch.
  * Forces classes that implement interfaces, that extend Traversable to also implement Iterator.
