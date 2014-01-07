@@ -373,6 +373,20 @@ class MethodProphecy
     {
         return $this->argumentsWildcard;
     }
+    
+    public function __call($method, array $arguments)
+    {
+        if ('and' === substr($method, 0, 3)) {
+            $realMethod = lcfirst(substr($method, 3));
+            if (method_exists($this, $realMethod)) {
+                call_user_func_array(array($this, $realMethod), $arguments);
+                
+                return;
+            }
+        }
+        
+        throw new \BadMethodCallException('Called undefined method '.$method);
+    }
 
     private function bindToObjectProphecy()
     {
