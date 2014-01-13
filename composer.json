@@ -16,6 +16,9 @@
             "email":     "marcello.duarte@gmail.com"
         }
     ],
+    "require": {
+        "phpdocumentor/reflection-docblock": "~2.0"
+    },
 
     "require-dev": {
         "phpspec/phpspec": "2.0.*"

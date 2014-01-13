@@ -56,6 +56,7 @@ class Prophet
             $doubler->registerClassPatch(new ClassPatch\ProphecySubjectPatch);
             $doubler->registerClassPatch(new ClassPatch\ReflectionClassNewInstancePatch);
             $doubler->registerClassPatch(new ClassPatch\HhvmExceptionPatch());
+            $doubler->registerClassPatch(new ClassPatch\MagicCallPatch);
         }
 
         $this->doubler  = $doubler;
