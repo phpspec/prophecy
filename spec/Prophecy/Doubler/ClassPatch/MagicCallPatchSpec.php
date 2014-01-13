@@ -24,12 +24,11 @@ class MagicCallPatchSpec extends ObjectBehavior
     /**
      * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
-    function it_discover_api_using_phpdoc($node)
+    function it_discovers_api_using_phpdoc($node)
     {
         $node->getParentClass()->willReturn('Prophecy\Doubler\ClassPatch\MagicCallPatch');
 
         $node->addMethod(new MethodNode('undefinedMethod'))->shouldBeCalled();
-        $node->addMethod(new MethodNode('undefinedMethodFoo'))->shouldBeCalled();
 
         $this->apply($node);
     }
