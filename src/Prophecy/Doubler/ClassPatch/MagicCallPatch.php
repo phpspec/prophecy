@@ -19,8 +19,6 @@ use Prophecy\Doubler\Generator\Node\MethodNode;
 /**
  * Discover Magical API using @method PHPDoc format.
  *
- * @method void undefinedMethod()
- *
  * @author Thomas Tourlourat <thomas@tourlourat.com>
  */
 class MagicCallPatch implements ClassPatchInterface
