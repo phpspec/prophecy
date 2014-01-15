@@ -151,15 +151,7 @@ class ClassMirror
         $name = $parameter->getName() == '...' ? '__dot_dot_dot__' : $parameter->getName();
         $node = new Node\ArgumentNode($name);
 
-        if (null !== $className = $this->getParameterClassName($parameter)) {
-            $node->setTypeHint($className);
-        } elseif (true === $parameter->isArray()) {
-            $node->setTypeHint('array');
-        } elseif (version_compare(PHP_VERSION, '5.4', '>=') && true === $parameter->isCallable()) {
-            $node->setTypeHint('callable');
-        } elseif (defined('HHVM_VERSION') && $parameter->getTypehintText()) {
-            $node->setTypeHint($parameter->getTypehintText());
-        }
+        $node->setTypeHint($this->getTypeHint($parameter));
 
         if (true === $parameter->isDefaultValueAvailable()) {
             $node->setDefault($parameter->getDefaultValue());
@@ -172,6 +164,27 @@ class ClassMirror
         }
 
         $methodNode->addArgument($node);
+    }
+
+    private function getTypeHint(ReflectionParameter $parameter)
+    {
+        if (null !== $className = $this->getParameterClassName($parameter)) {
+            return $className;
+        }
+
+        if (true === $parameter->isArray()) {
+            return 'array';
+        }
+
+        if (version_compare(PHP_VERSION, '5.4', '>=') && true === $parameter->isCallable()) {
+            return 'callable';
+        }
+
+        if (defined('HHVM_VERSION') && $parameter->getTypehintText()) {
+            return $parameter->getTypehintText();
+        }
+
+        return null;
     }
 
     private function getParameterClassName(ReflectionParameter $parameter)
