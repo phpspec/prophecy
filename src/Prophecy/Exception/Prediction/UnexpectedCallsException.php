@@ -12,7 +12,6 @@
 namespace Prophecy\Exception\Prediction;
 
 use Prophecy\Prophecy\MethodProphecy;
-
 use Prophecy\Exception\Prophecy\MethodProphecyException;
 
 class UnexpectedCallsException extends MethodProphecyException implements PredictionException

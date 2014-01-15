@@ -35,6 +35,7 @@ interface ClassPatchInterface
      * Applies patch to the specific class node.
      *
      * @param ClassNode $node
+     * @return void
      */
     public function apply(ClassNode $node);
 

@@ -61,7 +61,7 @@ class LogicalAndToken implements TokenInterface
     /**
      * Returns false.
      *
-     * @return bool|int
+     * @return boolean
      */
     public function isLast()
     {

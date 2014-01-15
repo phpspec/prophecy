@@ -22,6 +22,9 @@ class TypeToken implements TokenInterface
 {
     private $type;
 
+    /**
+     * @param string $type
+     */
     public function __construct($type)
     {
         $checker = "is_{$type}";
