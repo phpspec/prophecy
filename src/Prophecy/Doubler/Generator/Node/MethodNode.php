@@ -21,6 +21,7 @@ use Prophecy\Exception\InvalidArgumentException;
 class MethodNode
 {
     private $name;
+    private $code;
     private $visibility = 'public';
     private $static = false;
 

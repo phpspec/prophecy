@@ -18,6 +18,8 @@ namespace Prophecy\Argument\Token;
  */
 class StringContainsToken implements TokenInterface
 {
+    private $value;
+
     /**
      * Initializes token.
      *
