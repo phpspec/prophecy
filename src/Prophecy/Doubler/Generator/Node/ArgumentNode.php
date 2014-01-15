@@ -24,6 +24,9 @@ class ArgumentNode
     private $optional    = false;
     private $byReference = false;
 
+    /**
+     * @param string $name
+     */
     public function __construct($name)
     {
         $this->name = $name;

@@ -34,6 +34,9 @@ class ClassNode
         return $this->parentClass;
     }
 
+    /**
+     * @param string $class
+     */
     public function setParentClass($class)
     {
         $this->parentClass = $class ?: 'stdClass';
@@ -44,6 +47,9 @@ class ClassNode
         return $this->interfaces;
     }
 
+    /**
+     * @param string $interface
+     */
     public function addInterface($interface)
     {
         if ($this->hasInterface($interface)) {
@@ -99,6 +105,9 @@ class ClassNode
         return $this->hasMethod($name) ? $this->methods[$name] : null;
     }
 
+    /**
+     * @param string $name
+     */
     public function hasMethod($name)
     {
         return isset($this->methods[$name]);

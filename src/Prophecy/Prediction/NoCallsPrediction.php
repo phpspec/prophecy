@@ -15,7 +15,6 @@ use Prophecy\Call\Call;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Util\StringUtil;
-
 use Prophecy\Exception\Prediction\UnexpectedCallsException;
 
 /**

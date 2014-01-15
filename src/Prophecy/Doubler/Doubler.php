@@ -14,7 +14,6 @@ namespace Prophecy\Doubler;
 use Prophecy\Doubler\Generator\ClassMirror;
 use Prophecy\Doubler\Generator\ClassCreator;
 use Prophecy\Exception\InvalidArgumentException;
-
 use ReflectionClass;
 
 /**
@@ -52,7 +51,7 @@ class Doubler
     /**
      * Returns list of registered class patches.
      *
-     * @return array
+     * @return ClassPatch\ClassPatchInterface[]
      */
     public function getClassPatches()
     {

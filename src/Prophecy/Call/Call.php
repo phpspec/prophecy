@@ -94,7 +94,7 @@ class Call
     /**
      * Returns callee filename.
      *
-     * @return mixed
+     * @return string
      */
     public function getFile()
     {

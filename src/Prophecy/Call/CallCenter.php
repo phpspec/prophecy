@@ -14,7 +14,6 @@ namespace Prophecy\Call;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Util\StringUtil;
-
 use Prophecy\Exception\Call\UnexpectedCallException;
 
 /**

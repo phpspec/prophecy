@@ -17,7 +17,6 @@ use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Argument\Token\AnyValuesToken;
 use Prophecy\Util\StringUtil;
-
 use Prophecy\Exception\Prediction\NoCallsException;
 
 /**

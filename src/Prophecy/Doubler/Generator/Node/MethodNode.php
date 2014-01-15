@@ -29,6 +29,10 @@ class MethodNode
      */
     private $arguments = array();
 
+    /**
+     * @param string $name
+     * @param string $code
+     */
     public function __construct($name, $code = null)
     {
         $this->name = $name;
@@ -40,6 +44,9 @@ class MethodNode
         return $this->visibility;
     }
 
+    /**
+     * @param string $visibility
+     */
     public function setVisibility($visibility)
     {
         $visibility = strtolower($visibility);
@@ -81,6 +88,9 @@ class MethodNode
         return $this->arguments;
     }
 
+    /**
+     * @param string $code
+     */
     public function setCode($code)
     {
         $this->code = $code;

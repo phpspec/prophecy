@@ -13,7 +13,6 @@ namespace Prophecy\Doubler\Generator;
 
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Doubler\ClassMirrorException;
-
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
