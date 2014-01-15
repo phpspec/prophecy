@@ -157,6 +157,8 @@ class ClassMirror
             $node->setTypeHint('array');
         } elseif (version_compare(PHP_VERSION, '5.4', '>=') && true === $parameter->isCallable()) {
             $node->setTypeHint('callable');
+        } elseif (defined('HHVM_VERSION') && $parameter->getTypehintText()) {
+            $node->setTypeHint($parameter->getTypehintText());
         }
 
         if (true === $parameter->isDefaultValueAvailable()) {

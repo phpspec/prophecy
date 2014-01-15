@@ -29,10 +29,12 @@ class MethodProphecySpec extends ObjectBehavior
         );
     }
 
-    function its_constructor_throws_MethodProphecyException_for_final_methods($objectProphecy, $reflection)
+    function its_constructor_throws_MethodProphecyException_for_final_methods($objectProphecy, ClassWithFinalMethod $subject)
     {
+        $objectProphecy->reveal()->willReturn($subject);
+
         $this->shouldThrow('Prophecy\Exception\Prophecy\MethodProphecyException')->during(
-            '__construct', array($objectProphecy, '__clone', null)
+            '__construct', array($objectProphecy, 'finalMethod', null)
         );
     }
 
@@ -268,4 +270,9 @@ class MethodProphecySpec extends ObjectBehavior
     {
         $this->shouldThrow('Prophecy\Exception\InvalidArgumentException')->duringWithArguments(42);
     }
+}
+
+class ClassWithFinalMethod
+{
+    final public function finalMethod() {}
 }

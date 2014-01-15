@@ -258,6 +258,9 @@ class ClassMirrorSpec extends ObjectBehavior
         $param1->isOptional()->willReturn(true);
         $param1->isPassedByReference()->willReturn(true);
         $param1->allowsNull()->willReturn(false);
+        if (defined('HHVM_VERSION')) {
+            $param1->getTypehintText()->willReturn(null);
+        }
 
         $param2->getName()->willReturn('arg2');
         $param2->isArray()->willReturn(false);
