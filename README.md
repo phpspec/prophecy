@@ -23,7 +23,7 @@ class UserTest extends PHPUnit_Framework_TestCase
         $hasher->generateHash($user, 'qwerty')->willReturn('hashed_pass');
 
         $user->setPassword('qwerty');
-        
+
         $this->assertEquals('hashed_pass', $user->getPassword());
     }
 
@@ -185,8 +185,20 @@ you'll use promises for that:
 
 ```php
 $user->getName()->willReturn(null);
+
+// For PHP 5.4
 $user->setName('everzet')->will(function() {
     $this->getName()->willReturn('everzet');
+});
+
+// For PHP 5.3
+$user->setName('everzet')->will(function($args, $user) {
+    $user->getName()->willReturn('everzet');
+});
+
+// Or
+$user->setName('everzet')->will(function($args) use ($user) {
+    $user->getName()->willReturn('everzet');
 });
 ```
 
@@ -209,7 +221,7 @@ because Prophecy automatically transforms it under the hood into:
 $user->setName(new Prophecy\Argument\Token\ExactValueToken('everzet'));
 ```
 
-Those argument tokens are simple PHP classes, that implement 
+Those argument tokens are simple PHP classes, that implement
 `Prophecy\Argument\Token\TokenInterface` and tell Prophecy how to compare real arguments
 with your expectations. And yes, those classnames are damn big. That's why there's a
 shortcut class `Prophecy\Argument`, which you can use to create tokens like that:
@@ -240,8 +252,20 @@ So, let's refactor our initial `{set,get}Name()` logic with argument tokens:
 use Prophecy\Argument;
 
 $user->getName()->willReturn(null);
+
+// For PHP 5.4
 $user->setName(Argument::type('string'))->will(function($args) {
     $this->getName()->willReturn($args[0]);
+});
+
+// For PHP 5.3
+$user->setName(Argument::type('string'))->will(function($args, $user) {
+    $user->getName()->willReturn($args[0]);
+});
+
+// Or
+$user->setName(Argument::type('string'))->will(function($args) use ($user) {
+    $user->getName()->willReturn($args[0]);
 });
 ```
 
@@ -255,8 +279,20 @@ One last bit about arguments now. You might ask, what happens in case of:
 use Prophecy\Argument;
 
 $user->getName()->willReturn(null);
+
+// For PHP 5.4
 $user->setName(Argument::type('string'))->will(function($args) {
     $this->getName()->willReturn($args[0]);
+});
+
+// For PHP 5.3
+$user->setName(Argument::type('string'))->will(function($args, $user) {
+    $user->getName()->willReturn($args[0]);
+});
+
+// Or
+$user->setName(Argument::type('string'))->will(function($args) use ($user) {
+    $user->getName()->willReturn($args[0]);
 });
 
 $user->setName(Argument::any())->will(function(){});
@@ -326,7 +362,7 @@ There are plenty more predictions you can play with:
 
 - `CallPrediction` or `shouldBeCalled()` - checks that the method has been called 1 or more times
 - `NoCallsPrediction` or `shouldNotBeCalled()` - checks that the method has not been called
-- `CallTimesPrediction` or `shouldBeCalledTimes($count)` - checks that the method has been called 
+- `CallTimesPrediction` or `shouldBeCalledTimes($count)` - checks that the method has been called
   `$count` times
 - `CallbackPrediction` or `should($callback)` - checks the method against your own custom callback
 
