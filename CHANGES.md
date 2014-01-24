@@ -1,3 +1,8 @@
+1.1.2 / 2014-01-24
+==================
+
+  * Spy automatically promotes spied method call to an expected one
+
 1.1.1 / 2014-01-15
 ==================
 
