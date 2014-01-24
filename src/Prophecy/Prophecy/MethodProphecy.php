@@ -250,6 +250,10 @@ class MethodProphecy
             ));
         }
 
+        if (null === $this->promise) {
+            $this->willReturn();
+        }
+
         $calls = $this->getObjectProphecy()->findProphecyMethodCalls(
             $this->getMethodName(),
             $this->getArgumentsWildcard()
