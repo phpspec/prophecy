@@ -28,7 +28,7 @@ class MagicCallPatch implements ClassPatchInterface
      *
      * @param ClassNode $node
      *
-     * @return bool
+     * @return boolean
      */
     public function supports(ClassNode $node)
     {
@@ -60,7 +60,7 @@ class MagicCallPatch implements ClassPatchInterface
     /**
      * Returns patch priority, which determines when patch will be applied.
      *
-     * @return int Priority number (higher - earlier)
+     * @return integer Priority number (higher - earlier)
      */
     public function getPriority()
     {
