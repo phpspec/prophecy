@@ -67,3 +67,4 @@ class MagicCallPatch implements ClassPatchInterface
         return 50;
     }
 }
+
