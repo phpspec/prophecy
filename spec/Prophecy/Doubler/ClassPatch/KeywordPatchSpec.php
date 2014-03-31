@@ -6,7 +6,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 
-class RedisEchoEvalPatchSpec extends ObjectBehavior
+class KeywordPatchSpec extends ObjectBehavior
 {
     function it_is_a_patch()
     {
@@ -26,9 +26,13 @@ class RedisEchoEvalPatchSpec extends ObjectBehavior
         $node->removeMethod('eval')->shouldBeCalled();
         $node->removeMethod('echo')->shouldBeCalled();
 
-        $node->addMethod(new MethodNode('echo'));
-        $node->addMethod(new MethodNode('eval'));
-        $node->addMethod(new MethodNode('get'));
+        $node->getMethods()->willReturn(
+            array(
+                'echo' => new MethodNode('echo'),
+                'eval' => new MethodNode('eval'),
+                'notKeyword' => new MethodNode('notKeyword')
+            )
+        );
 
         $this->apply($node);
     }
