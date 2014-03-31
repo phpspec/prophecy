@@ -1,15 +1,42 @@
 <?php
+
+/*
+ * This file is part of the Prophecy.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *     Marcello Duarte <marcello.duarte@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Prophecy\Doubler\ClassPatch;
 
 use Prophecy\Doubler\Generator\Node\ClassNode;
 
+/**
+ * Remove method functionality from the double which will clash with php keywords.
+ *
+ * @author Milan Magudia <milan@magudia.com>
+ */
 class KeywordPatch implements ClassPatchInterface
 {
+    /**
+     * Support any class
+     *
+     * @param ClassNode $node
+     *
+     * @return boolean
+     */
     public function supports(ClassNode $node)
     {
         return true;
     }
 
+    /**
+     * Remove methods that clash with php keywords
+     *
+     * @param ClassNode $node
+     */
     public function apply(ClassNode $node)
     {
         $methodNames = array_keys($node->getMethods());
@@ -28,7 +55,12 @@ class KeywordPatch implements ClassPatchInterface
         return 50;
     }
 
-    public function getKeywords() {
+    /**
+     * Returns array of php keywords.
+     *
+     * @return array
+     */
+    private function getKeywords() {
 
         return array(
             '__halt_compiler',
