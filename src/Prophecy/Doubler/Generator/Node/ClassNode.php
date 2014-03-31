@@ -95,6 +95,11 @@ class ClassNode
         $this->methods[$method->getName()] = $method;
     }
 
+    public function removeMethod($name)
+    {
+        unset($this->methods[$name]);
+    }
+
     /**
      * @param string $name
      *
