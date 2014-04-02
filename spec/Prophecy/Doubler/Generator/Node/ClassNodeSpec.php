@@ -113,6 +113,19 @@ class ClassNodeSpec extends ObjectBehavior
         $this->hasMethod('getName')->shouldReturn(false);
     }
 
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method
+     */
+    function its_hasMethod_returns_false_if_method_has_been_removed($method)
+    {
+        $method->getName()->willReturn('getName');
+        $this->addMethod($method);
+        $this->removeMethod('getName');
+
+        $this->hasMethod('getName')->shouldReturn(false);
+    }
+
+
     function it_does_not_have_properties_by_default()
     {
         $this->getProperties()->shouldHaveCount(0);
