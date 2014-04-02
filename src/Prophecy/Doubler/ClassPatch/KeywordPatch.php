@@ -94,6 +94,7 @@ class KeywordPatch implements ClassPatchInterface
             'exit',
             'extends',
             'final',
+            'finally',
             'for',
             'foreach',
             'function',
@@ -127,7 +128,8 @@ class KeywordPatch implements ClassPatchInterface
             'use',
             'var',
             'while',
-            'xor'
+            'xor',
+            'yield',
         );
     }
 }
