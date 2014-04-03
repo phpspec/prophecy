@@ -25,6 +25,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
         $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
+        $class->getMethods(ReflectionMethod::IS_FINAL)->willReturn(array());
         $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array(
             $method1, $method2, $method3
         ));
@@ -73,6 +74,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
         $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array($method));
+        $class->getMethods(ReflectionMethod::IS_FINAL)->willReturn(array());
         $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
 
         $method->getParameters()->willReturn(array($parameter));
@@ -107,6 +109,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
         $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array($method));
+        $class->getMethods(ReflectionMethod::IS_FINAL)->willReturn(array());
         $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array());
 
         $method->isProtected()->willReturn(true);
@@ -134,6 +137,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
         $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array($method));
+        $class->getMethods(ReflectionMethod::IS_FINAL)->willReturn(array());
         $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array());
 
         $method->isProtected()->willReturn(true);
@@ -168,6 +172,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
         $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
+        $class->getMethods(ReflectionMethod::IS_FINAL)->willReturn(array());
         $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array($method));
 
         $method->getName()->willReturn('methodWithArgs');
@@ -240,6 +245,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
         $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
+        $class->getMethods(ReflectionMethod::IS_FINAL)->willReturn(array());
         $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array($method));
 
         $method->getName()->willReturn('methodWithArgs');
@@ -302,6 +308,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
         $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
+        $class->getMethods(ReflectionMethod::IS_FINAL)->willReturn(array());
         $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array($method));
 
         $method->isFinal()->willReturn(true);
@@ -309,6 +316,27 @@ class ClassMirrorSpec extends ObjectBehavior
 
         $classNode = $this->reflect($class, array());
         $classNode->getMethods()->shouldHaveCount(0);
+    }
+
+    /**
+     * @param ReflectionClass  $class
+     * @param ReflectionMethod $method
+     */
+    function it_detects_final_constructor($class, $method)
+    {
+        $class->getName()->willReturn('Custom\ClassName');
+        $class->isInterface()->willReturn(false);
+        $class->isFinal()->willReturn(false);
+        $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
+        $class->getMethods(ReflectionMethod::IS_FINAL)->willReturn(array($method));
+        $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array());
+
+        $method->isFinal()->willReturn(true);
+        $method->getName()->willReturn('__construct');
+
+        $classNode = $this->reflect($class, array());
+        $classNode->getMethods()->shouldHaveCount(0);
+        $classNode->isConstructorFinal()->shouldReturn(true);
     }
 
     /**
@@ -387,6 +415,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
         $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
+        $class->getMethods(ReflectionMethod::IS_FINAL)->willReturn(array());
         $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array($method1, $method2, $method3));
 
         $method1->getName()->willReturn('_getName');
@@ -426,6 +455,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
         $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
+        $class->getMethods(ReflectionMethod::IS_FINAL)->willReturn(array());
         $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array($method));
 
         $method->getName()->willReturn('__toString');

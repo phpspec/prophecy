@@ -21,6 +21,7 @@ use Prophecy\Exception\InvalidArgumentException;
 class ClassNode
 {
     private $parentClass = 'stdClass';
+    private $constructorIsFinal = false;
     private $interfaces  = array();
     private $properties  = array();
 
@@ -28,6 +29,24 @@ class ClassNode
      * @var MethodNode[]
      */
     private $methods     = array();
+
+    /**
+     * @return boolean
+     */
+    public function isConstructorFinal()
+    {
+        return $this->constructorIsFinal;
+    }
+
+    /**
+     * @param boolean $constructorIsFinal
+     */
+    public function setConstructorIsFinal($constructorIsFinal)
+    {
+        $this->constructorIsFinal = $constructorIsFinal;
+
+        return $this;
+    }
 
     public function getParentClass()
     {

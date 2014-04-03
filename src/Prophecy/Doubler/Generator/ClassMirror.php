@@ -102,6 +102,12 @@ class ClassMirror
             $this->reflectMethodToNode($method, $node);
         }
 
+        foreach ($class->getMethods(ReflectionMethod::IS_FINAL) as $method) {
+            if ('__construct' === $method->getName()) {
+                $node->setConstructorIsFinal(true);
+            }
+        }
+
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             if (0 === strpos($method->getName(), '_')
                 && !in_array($method->getName(), self::$reflectableMethods)) {
