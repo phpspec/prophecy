@@ -23,11 +23,12 @@ class StringUtil
     /**
      * Stringifies any provided value.
      *
-     * @param mixed $value
+     * @param mixed   $value
+     * @param boolean $exportObject
      *
      * @return string
      */
-    public function stringify($value)
+    public function stringify($value, $exportObject = true)
     {
         if (is_array($value)) {
             if (range(0, count($value) - 1) == array_keys($value)) {
@@ -45,7 +46,7 @@ class StringUtil
             return get_resource_type($value).':'.$value;
         }
         if (is_object($value)) {
-            return sprintf('%s:%s', get_class($value), spl_object_hash($value));
+            return $exportObject ? ExportUtil::export($value) : sprintf('%s:%s', get_class($value), spl_object_hash($value));
         }
         if (true === $value || false === $value) {
             return $value ? 'true' : 'false';

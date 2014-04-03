@@ -135,6 +135,6 @@ class ExactValueTokenSpec extends ObjectBehavior
         );
 
         $this->beConstructedWith($object);
-        $this->__toString()->shouldReturn("exact($objHash)");
+        $this->__toString()->shouldReturn("exact($objHash Object (\n    'objectProphecy' => Prophecy\Prophecy\ObjectProphecy Object (*Prophecy*)\n))");
     }
 }
