@@ -183,4 +183,16 @@ class Argument
     {
         return new Token\StringContainsToken($value);
     }
+
+    /**
+     * Checks that argument is identical value.
+     *
+     * @param mixed $value
+     *
+     * @return Token\IdenticalValueToken
+     */
+    public static function is($value)
+    {
+        return new Token\IdenticalValueToken($value);
+    }
 }
