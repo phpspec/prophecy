@@ -15,12 +15,12 @@ use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 
 /**
- * SplFileInfo patch.
- * Makes SplFileInfo and derivative classes usable with Prophecy.
+ * UploadedFile patch.
+ * Makes UploadedFile and derivative classes usable with Prophecy.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SplFileInfoPatch implements ClassPatchInterface
+class UploadedFilePatch implements ClassPatchInterface
 {
     /**
      * Supports everything SplFileInfo subclass that has one and only required constructor argument
@@ -36,17 +36,9 @@ class SplFileInfoPatch implements ClassPatchInterface
         }
 
 
-        if ('SplFileInfo' !== $node->getParentClass() && !is_subclass_of($node->getParentClass(), 'SplFileInfo')) {
-            return false;
-        }
-
-        $reflClass = new \ReflectionClass($node->getParentClass());
-        $reflMethod = $reflClass->getMethod('__construct');
-        if (1 < $reflMethod->getNumberOfRequiredParameters()) {
-            return false;
-        }
-
-        return true;
+        return 'Symfony\Component\HttpFoundation\File\UploadedFile' === $node->getParentClass()
+            || is_subclass_of($node->getParentClass(), 'Symfony\Component\HttpFoundation\File\UploadedFile')
+        ;
     }
 
     /**
@@ -63,7 +55,7 @@ class SplFileInfoPatch implements ClassPatchInterface
             $node->addMethod($constructor);
         }
 
-        $constructor->setCode('return parent::__construct("'.__FILE__.'");');
+        $constructor->setCode('return parent::__construct("'.__FILE__.'", "'.dirname(__FILE__).'");');
     }
 
     /**
