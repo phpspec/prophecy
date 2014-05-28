@@ -60,6 +60,7 @@ class MagicCallPatchSpec extends ObjectBehavior
 
 /**
  * @method void undefinedMethod()
+ * @method void definedMethod()
  */
 class MagicalApi
 {
