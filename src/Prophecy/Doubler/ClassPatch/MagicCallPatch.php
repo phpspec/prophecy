@@ -12,6 +12,7 @@
 namespace Prophecy\Doubler\ClassPatch;
 
 use phpDocumentor\Reflection\DocBlock;
+use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 
@@ -55,9 +56,34 @@ class MagicCallPatch implements ClassPatchInterface
                 $methodNode = new MethodNode($tag->getMethodName());
                 $methodNode->setStatic($tag->isStatic());
 
+                foreach ($tag->getArguments() as $argument) {
+                    $methodNode->addArgument($this->parseArgument($argument));
+                }
+
                 $node->addMethod($methodNode);
             }
+
+            $node->addMethod($methodNode);
         }
+    }
+
+    /**
+     * @param array $argument
+     * @return ArgumentNode
+     */
+    private function parseArgument(array $argument)
+    {
+        $eqPos = array_search('=', $argument);
+        $optional = $eqPos !== false;
+        $name = $optional ? $argument[$eqPos - 1] : end($argument);
+
+        $argumentNode = new ArgumentNode(ltrim($name, '$'));
+
+        if ($optional && isset($argument[$eqPos + 1])) {
+            $argumentNode->setDefault(trim($argument[$eqPos + 1], "'\""));
+        }
+
+        return $argumentNode;
     }
 
     /**

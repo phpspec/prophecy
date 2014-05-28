@@ -4,6 +4,7 @@ namespace spec\Prophecy\Doubler\ClassPatch;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 
 class MagicCallPatchSpec extends ObjectBehavior
@@ -46,6 +47,24 @@ class MagicCallPatchSpec extends ObjectBehavior
         $this->apply($node);
     }
 
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
+     */
+    function it_discovers_api_with_parameters_using_phpdoc($node)
+    {
+        $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalParametrizedApi');
+
+        $method = new MethodNode('parametrizedMethod');
+        $method->addArgument(new ArgumentNode('param'));
+        $argumentWithDefaultValue = new ArgumentNode('param');
+        $argumentWithDefaultValue->setDefault('value');
+        $method->addArgument($argumentWithDefaultValue);
+        $method->addArgument($argumentWithDefaultValue);
+        $node->addMethod($method)->shouldBeCalled();
+
+        $this->apply($node);
+    }
+
     function it_has_50_priority()
     {
         $this->getPriority()->shouldReturn(50);
@@ -67,6 +86,14 @@ class MagicalApi
 }
 
 /**
+ * @method void parametrizedMethod($param, $param = 'value', $param = "value")
+ */
+class MagicalParametrizedApi
+{
+
+}
+
+/**
  * @method void undefinedMethod()
  * @method void definedMethod()
  */
@@ -74,3 +101,4 @@ class MagicalApiExtended extends MagicalApi
 {
 
 }
+
