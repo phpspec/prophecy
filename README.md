@@ -235,6 +235,7 @@ $user->setName(Argument::exact('everzet'));
 `ExactValueToken` is not very useful in our case as it forced us to hardcode the username.
 That's why Prophecy comes bundled with a bunch of other tokens:
 
+- `IdenticalValueToken` or `Argument::is($value)` - checks that the argument is identical to a specific value
 - `ExactValueToken` or `Argument::exact($value)` - checks that the argument matches a specific value
 - `TypeToken` or `Argument::type($typeOrClass)` - checks that the argument matches a specific type or
   classname.
