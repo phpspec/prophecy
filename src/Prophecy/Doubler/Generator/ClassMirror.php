@@ -180,10 +180,6 @@ class ClassMirror
             return 'callable';
         }
 
-        if (defined('HHVM_VERSION') && $parameter->getTypehintText()) {
-            return $parameter->getTypehintText();
-        }
-
         return null;
     }
 
