@@ -24,8 +24,6 @@
         "phpspec/phpspec": "2.0.*"
     },
 
-    "minimum-stability": "dev",
-
     "autoload": {
         "psr-0": {
             "Prophecy\\": "src/"
