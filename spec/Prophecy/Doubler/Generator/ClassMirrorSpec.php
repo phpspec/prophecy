@@ -467,6 +467,16 @@ class ClassMirrorSpec extends ObjectBehavior
         $arguments = $method->getArguments();
         $arguments[0]->getTypeHint()->shouldBe('I\Simply\Am\Not');
     }
+
+    function it_doesnt_use_scalar_typehints()
+    {
+        $classNode = $this->reflect(new ReflectionClass('ReflectionMethod'), array());
+        $method = $classNode->getMethod('export');
+        $arguments = $method->getArguments();
+        $arguments[0]->getTypeHint()->shouldReturn(null);
+        $arguments[1]->getTypeHint()->shouldReturn(null);
+        $arguments[2]->getTypeHint()->shouldReturn(null);
+    }
 }
 
 class OptionalDepsClass
