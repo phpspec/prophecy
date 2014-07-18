@@ -5,6 +5,7 @@ php: [5.3, 5.4, 5.5, hhvm, hhvm-nightly]
 matrix:
   allow_failures:
     - php: hhvm
+    - php: hhvm-nightly # will pass once https://github.com/facebook/hhvm/pull/3233 is merged and built in nightly
 
 before_script:
   - composer self-update
