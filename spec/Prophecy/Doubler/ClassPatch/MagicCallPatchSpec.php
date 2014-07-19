@@ -33,6 +33,19 @@ class MagicCallPatchSpec extends ObjectBehavior
         $this->apply($node);
     }
 
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
+     */
+    function it_ignores_existing_methods($node)
+    {
+        $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiExtended');
+
+        $node->addMethod(new MethodNode('undefinedMethod'))->shouldBeCalled();
+        $node->addMethod(new MethodNode('definedMethod'))->shouldNotBeCalled();
+
+        $this->apply($node);
+    }
+
     function it_has_50_priority()
     {
         $this->getPriority()->shouldReturn(50);
@@ -51,4 +64,13 @@ class MagicalApi
     {
 
     }
+}
+
+/**
+ * @method void undefinedMethod()
+ * @method void definedMethod()
+ */
+class MagicalApiExtended extends MagicalApi
+{
+
 }
