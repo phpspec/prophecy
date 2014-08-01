@@ -51,6 +51,7 @@ class SplFileInfoPatchSpec extends ObjectBehavior
     {
         $node->hasMethod('__construct')->willReturn(false);
         $node->addMethod(Argument::any())->shouldBeCalled();
+        $node->getParentClass()->shouldBeCalled();
 
         $this->apply($node);
     }
@@ -63,9 +64,28 @@ class SplFileInfoPatchSpec extends ObjectBehavior
     {
         $node->hasMethod('__construct')->willReturn(true);
         $node->getMethod('__construct')->willReturn($method);
+        $node->getParentClass()->shouldBeCalled();
 
         $method->useParentCode()->shouldBeCalled();
 
         $this->apply($node);
     }
+
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode  $node
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method
+     */
+    function it_should_not_supply_a_file_for_a_directory_iterator($node, $method)
+    {
+        $node->hasMethod('__construct')->willReturn(true);
+        $node->getMethod('__construct')->willReturn($method);
+        $node->getParentClass()->willReturn('DirectoryIterator');
+
+        $method->setCode(Argument::that(function($value) {
+            return strpos($value, '.php') === false;
+        }))->shouldBeCalled();
+
+        $this->apply($node);
+    }
+
 }
