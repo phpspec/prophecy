@@ -50,10 +50,14 @@ class MagicCallPatch implements ClassPatchInterface
         $tagList = $phpdoc->getTagsByName('method');
 
         foreach($tagList as $tag) {
-            $methodNode = new MethodNode($tag->getMethodName());
-            $methodNode->setStatic($tag->isStatic());
+            $methodName = $tag->getMethodName();
 
-            $node->addMethod($methodNode);
+            if (!$reflectionClass->hasMethod($methodName)) {
+                $methodNode = new MethodNode($tag->getMethodName());
+                $methodNode->setStatic($tag->isStatic());
+
+                $node->addMethod($methodNode);
+            }
         }
     }
 
