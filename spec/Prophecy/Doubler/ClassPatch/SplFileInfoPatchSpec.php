@@ -64,7 +64,7 @@ class SplFileInfoPatchSpec extends ObjectBehavior
         $node->hasMethod('__construct')->willReturn(true);
         $node->getMethod('__construct')->willReturn($method);
 
-        $method->setCode(Argument::any())->shouldBeCalled();
+        $method->useParentCode()->shouldBeCalled();
 
         $this->apply($node);
     }

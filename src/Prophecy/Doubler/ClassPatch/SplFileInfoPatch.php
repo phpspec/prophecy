@@ -54,7 +54,7 @@ class SplFileInfoPatch implements ClassPatchInterface
             $node->addMethod($constructor);
         }
 
-        $constructor->setCode('return parent::__construct("'.__FILE__.'");');
+        $constructor->useParentCode();
     }
 
     /**
