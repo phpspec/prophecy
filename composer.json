@@ -17,7 +17,8 @@
         }
     ],
     "require": {
-        "phpdocumentor/reflection-docblock": "~2.0"
+        "phpdocumentor/reflection-docblock": "~2.0",
+        "doctrine/instantiator":             "~1.0,>=1.0.2"
     },
 
     "require-dev": {

@@ -11,6 +11,7 @@
 
 namespace Prophecy\Promise;
 
+use Doctrine\Instantiator\Instantiator;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Exception\InvalidArgumentException;
@@ -24,6 +25,11 @@ use ReflectionClass;
 class ThrowPromise implements PromiseInterface
 {
     private $exception;
+
+    /**
+     * @var \Doctrine\Instantiator\Instantiator
+     */
+    private $instantiator;
 
     /**
      * Initializes promise.
@@ -72,11 +78,12 @@ class ThrowPromise implements PromiseInterface
             if ($constructor->isPublic() && 0 == $constructor->getNumberOfRequiredParameters()) {
                 throw $reflection->newInstance();
             }
-            if (version_compare(PHP_VERSION, '5.4', '<')) {
-                throw unserialize(sprintf('O:%d:"%s":0:{}', strlen($classname), $classname));
+
+            if (!$this->instantiator) {
+                $this->instantiator = new Instantiator();
             }
 
-            throw $reflection->newInstanceWithoutConstructor();
+            throw $this->instantiator->instantiate($classname);
         }
 
         throw $this->exception;

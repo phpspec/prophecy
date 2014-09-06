@@ -11,6 +11,7 @@
 
 namespace Prophecy\Doubler;
 
+use Doctrine\Instantiator\Instantiator;
 use Prophecy\Doubler\Generator\ClassMirror;
 use Prophecy\Doubler\Generator\ClassCreator;
 use Prophecy\Exception\InvalidArgumentException;
@@ -32,6 +33,11 @@ class Doubler
      * @var ClassPatch\ClassPatchInterface[]
      */
     private $patches = array();
+
+    /**
+     * @var \Doctrine\Instantiator\Instantiator
+     */
+    private $instantiator;
 
     /**
      * Initializes doubler.
@@ -106,7 +112,11 @@ class Doubler
             return $reflection->newInstance();
         }
 
-        return $this->createInstanceWithoutConstructor($reflection);
+        if (!$this->instantiator) {
+            $this->instantiator = new Instantiator();
+        }
+
+        return $this->instantiator->instantiate($classname);
     }
 
     /**
@@ -131,55 +141,5 @@ class Doubler
         $this->creator->create($name, $node);
 
         return $name;
-    }
-
-    /**
-     * Creates an instance without using its constructor using different strategies
-     *
-     * @param ReflectionClass $reflection
-     *
-     * @return object
-     */
-    private function createInstanceWithoutConstructor(ReflectionClass $reflection)
-    {
-        if (version_compare(PHP_VERSION, '5.4', '>=')) {
-            if ($class = $this->createInstanceWithoutConstructorUsingReflection($reflection)) {
-                return $class;
-            }
-        }
-
-        return $this->createInstanceWithoutConstructorUsingUnserialize($reflection);
-    }
-
-    /**
-     * Creates an instance bypassing the constructor using unserialization
-     *
-     * @param ReflectionClass $reflection
-     *
-     * @return object
-     */
-    private function createInstanceWithoutConstructorUsingUnserialize(ReflectionClass $reflection)
-    {
-        $classname = $reflection->getName();
-        $serializedObject = sprintf('O:%d:"%s":0:{}', strlen($classname), $classname);
-
-        return @unserialize($serializedObject);
-    }
-
-    /**
-     * Creates an instance bypassing the constructor using reflection, or null on failure
-     *
-     * @param ReflectionClass $reflection
-     *
-     * @return object|null
-     */
-    private function createInstanceWithoutConstructorUsingReflection(ReflectionClass $reflection)
-    {
-        try {
-            return $reflection->newInstanceWithoutConstructor();
-        } catch (\ReflectionException $e) {
-            // certain internal types can't have their constructor skipped
-            return null;
-        }
     }
 }

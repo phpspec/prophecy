@@ -32,10 +32,27 @@ class ThrowPromiseSpec extends ObjectBehavior
      * @param \Prophecy\Prophecy\ObjectProphecy $object
      * @param \Prophecy\Prophecy\MethodProphecy $method
      */
+    function it_instantiates_exceptions_with_required_arguments($object, $method)
+    {
+        $this->beConstructedWith('spec\Prophecy\Promise\RequiredArgumentException');
+
+        $this->shouldThrow('spec\Prophecy\Promise\RequiredArgumentException')
+            ->duringExecute(array(), $object, $method);
+    }
+
+    /**
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
+     */
     function it_throws_provided_exception($object, $method)
     {
         $this->beConstructedWith($exc = new \RuntimeException('Some exception'));
 
         $this->shouldThrow($exc)->duringExecute(array(), $object, $method);
     }
+}
+
+class RequiredArgumentException extends \Exception
+{
+    final public function __construct($message, $code) {}
 }
