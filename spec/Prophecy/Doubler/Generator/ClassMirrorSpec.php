@@ -101,6 +101,9 @@ class ClassMirrorSpec extends ObjectBehavior
         $parameter->getDefaultValue()->willReturn(null);
         $parameter->isPassedByReference()->willReturn(false);
         $parameter->getClass()->willReturn($class);
+        if (version_compare(PHP_VERSION, '5.6', '>=')) {
+            $parameter->isVariadic()->willReturn(false);
+        }
 
         $classNode = $this->reflect($class, array());
 
@@ -270,9 +273,10 @@ class ClassMirrorSpec extends ObjectBehavior
      * @param ReflectionParameter $param2
      * @param ReflectionClass     $typeHint
      * @param ReflectionParameter $param3
+     * @param ReflectionParameter $param4
      */
     function it_properly_reads_methods_arguments_with_types(
-        $class, $method, $param1, $param2, $typeHint, $param3
+        $class, $method, $param1, $param2, $typeHint, $param3, $param4
     )
     {
         $class->getName()->willReturn('Custom\ClassName');
@@ -286,7 +290,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $method->isProtected()->willReturn(true);
         $method->isStatic()->willReturn(false);
         $method->returnsReference()->willReturn(false);
-        $method->getParameters()->willReturn(array($param1, $param2, $param3));
+        $method->getParameters()->willReturn(array($param1, $param2, $param3, $param4));
 
         if (version_compare(PHP_VERSION, '7.0', '>=')) {
             $method->hasReturnType()->willReturn(false);
@@ -320,6 +324,22 @@ class ClassMirrorSpec extends ObjectBehavior
         $param3->isPassedByReference()->willReturn(false);
         $param3->allowsNull()->willReturn(true);
 
+        $param4->getName()->willReturn('arg_4');
+        $param4->isArray()->willReturn(false);
+        $param4->getClass()->willReturn($typeHint);
+        $param4->isPassedByReference()->willReturn(false);
+        $param4->allowsNull()->willReturn(true);
+
+        if (version_compare(PHP_VERSION, '5.6', '>=')) {
+            $param1->isVariadic()->willReturn(false);
+            $param2->isVariadic()->willReturn(false);
+            $param3->isVariadic()->willReturn(false);
+            $param4->isVariadic()->willReturn(true);
+        } else {
+            $param4->isOptional()->willReturn(true);
+            $param4->isDefaultValueAvailable()->willReturn(false);
+        }
+
         $classNode   = $this->reflect($class, array());
         $methodNodes = $classNode->getMethods();
         $argNodes    = $methodNodes['methodWithArgs']->getArguments();
@@ -340,6 +360,15 @@ class ClassMirrorSpec extends ObjectBehavior
             $argNodes[2]->getDefault()->shouldReturn(null);
         } else {
             $argNodes[2]->isOptional()->shouldReturn(false);
+        }
+
+        $argNodes[3]->getName()->shouldReturn('arg_4');
+        $argNodes[3]->getTypeHint()->shouldReturn('ArrayAccess');
+        if (version_compare(PHP_VERSION, '5.6', '>=')) {
+            $argNodes[3]->isVariadic()->shouldReturn(true);
+        } else {
+            $argNodes[3]->isOptional()->shouldReturn(true);
+            $argNodes[3]->getDefault()->shouldReturn(null);
         }
     }
 
@@ -380,6 +409,9 @@ class ClassMirrorSpec extends ObjectBehavior
             $param1->hasType()->willReturn(false);
         }
 
+        if (version_compare(PHP_VERSION, '5.6', '>=')) {
+            $param1->isVariadic()->willReturn(false);
+        }
         $param1->isDefaultValueAvailable()->willReturn(false);
         $param1->isOptional()->willReturn(false);
         $param1->isPassedByReference()->willReturn(false);
@@ -400,10 +432,11 @@ class ClassMirrorSpec extends ObjectBehavior
      * @param ReflectionMethod    $method
      * @param ReflectionParameter $param1
      * @param ReflectionParameter $param2
+     * @param ReflectionParameter $param3
      * @param ReflectionClass     $typeHint
      */
     function it_marks_passed_by_reference_args_as_passed_by_reference(
-        $class, $method, $param1, $param2, $typeHint
+        $class, $method, $param1, $param2, $param3, $typeHint
     )
     {
         $class->getName()->willReturn('Custom\ClassName');
@@ -417,7 +450,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $method->isProtected()->willReturn(false);
         $method->isStatic()->willReturn(false);
         $method->returnsReference()->willReturn(false);
-        $method->getParameters()->willReturn(array($param1, $param2));
+        $method->getParameters()->willReturn(array($param1, $param2, $param3));
 
         if (version_compare(PHP_VERSION, '7.0', '>=')) {
             $method->hasReturnType()->willReturn(false);
@@ -429,6 +462,9 @@ class ClassMirrorSpec extends ObjectBehavior
             $param1->isCallable()->willReturn(false);
         }
         $param1->getClass()->willReturn(null);
+        if (version_compare(PHP_VERSION, '5.6', '>=')) {
+            $param1->isVariadic()->willReturn(false);
+        }
         $param1->isDefaultValueAvailable()->willReturn(false);
         $param1->isOptional()->willReturn(true);
         $param1->isPassedByReference()->willReturn(true);
@@ -445,6 +481,9 @@ class ClassMirrorSpec extends ObjectBehavior
         $param2->getName()->willReturn('arg2');
         $param2->isArray()->willReturn(false);
         $param2->getClass()->willReturn($typeHint);
+        if (version_compare(PHP_VERSION, '5.6', '>=')) {
+            $param2->isVariadic()->willReturn(false);
+        }
         $param2->isDefaultValueAvailable()->willReturn(false);
         $param2->isOptional()->willReturn(false);
         $param2->isPassedByReference()->willReturn(false);
@@ -456,12 +495,25 @@ class ClassMirrorSpec extends ObjectBehavior
         $param2->allowsNull()->willReturn(false);
         $typeHint->getName()->willReturn('ArrayAccess');
 
+        $param3->getName()->willReturn('arg2');
+        $param3->isArray()->willReturn(false);
+        $param3->getClass()->willReturn($typeHint);
+        if (version_compare(PHP_VERSION, '5.6', '>=')) {
+            $param3->isVariadic()->willReturn(true);
+        } else {
+            $param3->isOptional()->willReturn(true);
+            $param3->isDefaultValueAvailable()->willReturn(false);
+        }
+        $param3->isPassedByReference()->willReturn(true);
+        $param3->allowsNull()->willReturn(true);
+
         $classNode   = $this->reflect($class, array());
         $methodNodes = $classNode->getMethods();
         $argNodes    = $methodNodes['methodWithArgs']->getArguments();
 
         $argNodes[0]->isPassedByReference()->shouldReturn(true);
         $argNodes[1]->isPassedByReference()->shouldReturn(false);
+        $argNodes[2]->isPassedByReference()->shouldReturn(true);
     }
 
     /**

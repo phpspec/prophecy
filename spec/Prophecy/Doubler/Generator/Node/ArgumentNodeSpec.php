@@ -22,6 +22,36 @@ class ArgumentNodeSpec extends ObjectBehavior
         $this->shouldBePassedByReference();
     }
 
+    function it_is_not_variadic_by_default()
+    {
+        $this->shouldNotBeVariadic();
+    }
+
+    function it_is_variadic_if_marked()
+    {
+        $this->setAsVariadic();
+        $this->shouldBeVariadic();
+    }
+
+    function it_does_not_have_default_by_default()
+    {
+        $this->shouldNotHaveDefault();
+    }
+
+    function it_does_not_have_default_if_variadic()
+    {
+        $this->setDefault(null);
+        $this->setAsVariadic();
+        $this->shouldNotHaveDefault();
+    }
+
+    function it_does_have_default_if_not_variadic()
+    {
+        $this->setDefault(null);
+        $this->setAsVariadic(false);
+        $this->hasDefault()->shouldReturn(true);
+    }
+
     function it_has_name_with_which_it_was_been_constructed()
     {
         $this->getName()->shouldReturn('name');
