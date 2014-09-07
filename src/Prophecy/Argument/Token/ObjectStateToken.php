@@ -11,6 +11,8 @@
 
 namespace Prophecy\Argument\Token;
 
+use SebastianBergmann\Comparator\Factory as ComparatorFactory;
+use SebastianBergmann\Comparator\ComparisonFailure;
 use Prophecy\Util\StringUtil;
 
 /**
@@ -23,19 +25,27 @@ class ObjectStateToken implements TokenInterface
     private $name;
     private $value;
     private $util;
+    private $comparatorFactory;
 
     /**
      * Initializes token.
      *
-     * @param string          $methodName
-     * @param mixed           $value      Expected return value
-     * @param null|StringUtil $util
+     * @param string            $methodName
+     * @param mixed             $value             Expected return value
+     * @param null|StringUtil   $util
+     * @param ComparatorFactory $comparatorFactory
      */
-    public function __construct($methodName, $value, StringUtil $util = null)
-    {
+    public function __construct(
+        $methodName,
+        $value,
+        StringUtil $util = null,
+        ComparatorFactory $comparatorFactory = null
+    ) {
         $this->name  = $methodName;
         $this->value = $value;
         $this->util  = $util ?: new StringUtil;
+
+        $this->comparatorFactory = $comparatorFactory ?: ComparatorFactory::getInstance();
     }
 
     /**
@@ -50,7 +60,16 @@ class ObjectStateToken implements TokenInterface
         if (is_object($argument) && method_exists($argument, $this->name)) {
             $actual = call_user_func(array($argument, $this->name));
 
-            return $actual == $this->value ? 8 : false;
+            $comparator = $this->comparatorFactory->getComparatorFor(
+                $actual, $this->value
+            );
+
+            try {
+                $comparator->assertEquals($actual, $this->value);
+                return 8;
+            } catch (ComparisonFailure $failure) {
+                return false;
+            }
         }
 
         if (is_object($argument) && property_exists($argument, $this->name)) {
