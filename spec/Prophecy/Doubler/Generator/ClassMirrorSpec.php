@@ -220,9 +220,53 @@ class ClassMirrorSpec extends ObjectBehavior
         $argNodes[2]->getName()->shouldReturn('arg_3');
         if (version_compare(PHP_VERSION, '5.4', '>=')) {
             $argNodes[2]->getTypeHint()->shouldReturn('callable');
+            $argNodes[2]->isOptional()->shouldReturn(true);
+            $argNodes[2]->getDefault()->shouldReturn(null);
+        } else {
+            $argNodes[2]->isOptional()->shouldReturn(false);
         }
-        $argNodes[2]->isOptional()->shouldReturn(true);
-        $argNodes[2]->getDefault()->shouldReturn(null);
+    }
+
+    /**
+     * @param ReflectionClass     $class
+     * @param ReflectionMethod    $method
+     * @param ReflectionParameter $param1
+     */
+    function it_marks_required_args_without_types_as_not_optional(
+        $class, $method, $param1
+    )
+    {
+        $class->getName()->willReturn('Custom\ClassName');
+        $class->isInterface()->willReturn(false);
+        $class->isFinal()->willReturn(false);
+        $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
+        $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array($method));
+
+        $method->getName()->willReturn('methodWithArgs');
+        $method->isFinal()->willReturn(false);
+        $method->isProtected()->willReturn(false);
+        $method->isStatic()->willReturn(false);
+        $method->getParameters()->willReturn(array($param1));
+
+        $param1->getName()->willReturn('arg_1');
+        $param1->isArray()->willReturn(false);
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            $param1->isCallable()->willReturn(false);
+        }
+        $param1->getClass()->willReturn(null);
+        $param1->isDefaultValueAvailable()->willReturn(false);
+        $param1->isOptional()->willReturn(false);
+        $param1->isPassedByReference()->willReturn(false);
+        $param1->allowsNull()->willReturn(true);
+        if (defined('HHVM_VERSION')) {
+            $param1->getTypehintText()->willReturn(null);
+        }
+
+        $classNode   = $this->reflect($class, array());
+        $methodNodes = $classNode->getMethods();
+        $argNodes    = $methodNodes['methodWithArgs']->getArguments();
+
+        $argNodes[0]->isOptional()->shouldReturn(false);
     }
 
     /**
