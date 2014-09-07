@@ -155,21 +155,43 @@ class ClassMirror
         $name = $parameter->getName() == '...' ? '__dot_dot_dot__' : $parameter->getName();
         $node = new Node\ArgumentNode($name);
 
-        $typeHint = $this->getTypeHint($parameter);
-        $node->setTypeHint($typeHint);
+        $node->setTypeHint($this->getTypeHint($parameter));
 
-        if (true === $parameter->isDefaultValueAvailable()) {
-            $node->setDefault($parameter->getDefaultValue());
-        } elseif (true === $parameter->isOptional()
-              || (true === $parameter->allowsNull() && $typeHint)) {
-            $node->setDefault(null);
+        if ($this->isVariadic($parameter)) {
+            $node->setAsVariadic();
         }
 
-        if (true === $parameter->isPassedByReference()) {
+        if ($this->hasDefaultValue($parameter)) {
+            $node->setDefault($this->getDefaultValue($parameter));
+        }
+
+        if ($parameter->isPassedByReference()) {
             $node->setAsPassedByReference();
         }
 
         $methodNode->addArgument($node);
+    }
+
+    private function hasDefaultValue(ReflectionParameter $parameter)
+    {
+        if ($this->isVariadic($parameter)) {
+            return false;
+        }
+
+        if ($parameter->isDefaultValueAvailable()) {
+            return true;
+        }
+
+        return $parameter->isOptional() || $this->isNullable($parameter);
+    }
+
+    private function getDefaultValue(ReflectionParameter $parameter)
+    {
+        if (!$parameter->isDefaultValueAvailable()) {
+            return null;
+        }
+
+        return $parameter->getDefaultValue();
     }
 
     private function getTypeHint(ReflectionParameter $parameter)
@@ -187,6 +209,16 @@ class ClassMirror
         }
 
         return null;
+    }
+
+    private function isVariadic(ReflectionParameter $parameter)
+    {
+        return PHP_VERSION_ID >= 50600 && $parameter->isVariadic();
+    }
+
+    private function isNullable(ReflectionParameter $parameter)
+    {
+        return $parameter->allowsNull() && null !== $this->getTypeHint($parameter);
     }
 
     private function getParameterClassName(ReflectionParameter $parameter)

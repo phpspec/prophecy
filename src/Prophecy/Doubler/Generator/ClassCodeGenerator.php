@@ -59,33 +59,63 @@ class ClassCodeGenerator
             $method->isStatic() ? 'static' : '',
             $method->returnsReference() ? '&':'',
             $method->getName(),
-            implode(', ', $this->generateArguments($method->getArguments()))
+            $this->generateArguments($method)
         );
         $php .= $method->getCode()."\n";
 
         return $php.'}';
     }
 
-    private function generateArguments(array $arguments)
+    private function generateArguments(Node\MethodNode $method)
     {
-        return array_map(function (Node\ArgumentNode $argument) {
-            $php = '';
+        return implode(', ', array_map(
+            array($this, 'generateArgument'),
+            $method->getArguments()
+        ));
+    }
 
-            if ($hint = $argument->getTypeHint()) {
-                if ('array' === $hint || 'callable' === $hint) {
-                    $php .= $hint;
-                } else {
-                    $php .= '\\'.$hint;
-                }
-            }
+    private function generateArgument(Node\ArgumentNode $argument)
+    {
+        return $this->generateArgumentTypeHint($argument)
+              .$this->generateArgumentPrefix($argument)
+              .'$'.$argument->getName()
+              .$this->generateArgumentDefault($argument);
+    }
 
-            $php .= ' '.($argument->isPassedByReference() ? '&' : '').'$'.$argument->getName();
+    private function generateArgumentTypeHint(Node\ArgumentNode $argument)
+    {
+        if (!($hint = $argument->getTypeHint())) {
+            return '';
+        }
 
-            if ($argument->isOptional()) {
-                $php .= ' = '.var_export($argument->getDefault(), true);
-            }
+        if ('array' === $hint || 'callable' === $hint) {
+            return $hint;
+        }
 
-            return $php;
-        }, $arguments);
+        return '\\'.$hint;
+    }
+
+    private function generateArgumentPrefix(Node\ArgumentNode $argument)
+    {
+        $prefix = ' ';
+
+        if ($argument->isPassedByReference()) {
+            $prefix .= '&';
+        }
+
+        if ($argument->isVariadic()) {
+            $prefix .= '...';
+        }
+
+        return $prefix;
+    }
+
+    private function generateArgumentDefault(Node\ArgumentNode $argument)
+    {
+        if (!$argument->hasDefault()) {
+            return '';
+        }
+
+        return ' = '.var_export($argument->getDefault(), true);
     }
 }

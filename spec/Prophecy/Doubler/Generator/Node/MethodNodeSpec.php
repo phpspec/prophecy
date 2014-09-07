@@ -69,13 +69,16 @@ class MethodNodeSpec extends ObjectBehavior
         $argument1->getName()->willReturn('objectName');
         $argument2->getName()->willReturn('default');
 
+        $argument1->isVariadic()->willReturn(false);
+        $argument2->isVariadic()->willReturn(true);
+
         $this->addArgument($argument1);
         $this->addArgument($argument2);
 
         $this->useParentCode();
 
         $this->getCode()->shouldReturn(
-            'return parent::getTitle($objectName, $default);'
+            'return parent::getTitle($objectName, ...$default);'
         );
     }
 
