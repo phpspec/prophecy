@@ -17,7 +17,8 @@
         }
     ],
     "require": {
-        "phpdocumentor/reflection-docblock": "~2.0"
+        "phpdocumentor/reflection-docblock": "~2.0",
+        "sebastian/comparator":              "~1.0"
     },
 
     "require-dev": {
