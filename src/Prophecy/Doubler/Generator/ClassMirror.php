@@ -153,17 +153,41 @@ class ClassMirror
 
         $node->setTypeHint($this->getTypeHint($parameter));
 
-        if (true === $parameter->isDefaultValueAvailable()) {
-            $node->setDefault($parameter->getDefaultValue());
-        } elseif (true === $parameter->isOptional() || true === $parameter->allowsNull()) {
-            $node->setDefault(null);
+        if ($this->isVariadic($parameter)) {
+            $node->setAsVariadic();
         }
 
-        if (true === $parameter->isPassedByReference()) {
+        if ($this->hasDefaultValue($parameter)) {
+            $node->setDefault($this->getDefaultValue($parameter));
+        }
+
+        if ($parameter->isPassedByReference()) {
             $node->setAsPassedByReference();
         }
 
         $methodNode->addArgument($node);
+    }
+
+    private function hasDefaultValue(ReflectionParameter $parameter)
+    {
+        if ($this->isVariadic($parameter)) {
+            return false;
+        }
+
+        if ($parameter->isDefaultValueAvailable()) {
+            return true;
+        }
+
+        return $parameter->isOptional() || $parameter->allowsNull();
+    }
+
+    private function getDefaultValue(ReflectionParameter $parameter)
+    {
+        if (!$parameter->isDefaultValueAvailable()) {
+            return null;
+        }
+
+        return $parameter->getDefaultValue();
     }
 
     private function getTypeHint(ReflectionParameter $parameter)
@@ -181,6 +205,11 @@ class ClassMirror
         }
 
         return null;
+    }
+
+    private function isVariadic(ReflectionParameter $parameter)
+    {
+        return version_compare(PHP_VERSION, '5.6', '>=') && $parameter->isVariadic();
     }
 
     private function getParameterClassName(ReflectionParameter $parameter)
