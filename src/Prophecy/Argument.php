@@ -195,4 +195,17 @@ class Argument
     {
         return new Token\IdenticalValueToken($value);
     }
+
+    /**
+     * Invoke a callback arguement with supplied values
+     *
+     * @param mixed[] $arguments
+     * @param mixed   $expectedResult
+     *
+     * @return Token\InvokeToken
+     */
+    public function invoke(array $arguments = array(), $expectedResult = null)
+    {
+        return new Token\InvokeToken($arguments, func_num_args() === 2, $expectedResult);
+    }
 }

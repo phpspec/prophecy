@@ -73,6 +73,20 @@ class ArgumentSpec extends ObjectBehavior
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\IdenticalValueToken');
     }
 
+    function it_has_a_shortcut_for_invoke_token()
+    {
+        $token = $this->invoke(array('value1', 2));
+        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\InvokeToken');
+        $token->__toString()->shouldReturn('invoke("value1", 2)');
+    }
+
+    function it_has_a_shortcut_for_invoke_token_with_expected_result()
+    {
+        $token = $this->invoke(array('value'), 'result');
+        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\InvokeToken');
+        $token->__toString()->shouldReturn('"result" == invoke("value")');
+    }
+
     function it_has_a_shortcut_for_array_entry_token_matching_any_key()
     {
         $token = $this->containing('value');
