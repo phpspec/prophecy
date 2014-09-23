@@ -1,3 +1,10 @@
+1.2.1 / 2014-09-23
+==================
+
+  * Fix instantiation for latest PHP versions (thanks @whatthejeff)
+  * Add support for DirectoryIterators (thanks @shanethehat)
+  * Prefer real methods over magics via docblock (thanks Vaidas Mikalauskas)
+
 1.2.0 / 2014-07-18
 ==================
 
