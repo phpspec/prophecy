@@ -12,12 +12,11 @@
 namespace Prophecy\Doubler\ClassPatch;
 
 use phpDocumentor\Reflection\DocBlock;
-use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 
 /**
- * Discover Magical API using @method PHPDoc format.
+ * Discover Magical API using "@method" PHPDoc format.
  *
  * @author Thomas Tourlourat <thomas@tourlourat.com>
  */

@@ -125,7 +125,7 @@ class ExportUtil
         $origValue = $value;
 
         if (is_object($value)) {
-            if ($value instanceof ProphecyInterface || $value instanceof DoubleInterface || $value instanceof ProphecySubjectInterface) {
+            if ($value instanceof ProphecyInterface) {
                 return sprintf('%s Object (*Prophecy*)', get_class($value));
             } elseif (in_array($value, $processedObjects, true)) {
                 return sprintf('%s Object (*RECURSION*)', get_class($value));
