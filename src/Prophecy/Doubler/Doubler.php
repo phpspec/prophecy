@@ -12,6 +12,7 @@
 namespace Prophecy\Doubler;
 
 use Doctrine\Instantiator\Instantiator;
+use Prophecy\Doubler\ClassPatch\ClassPatchInterface;
 use Prophecy\Doubler\Generator\ClassMirror;
 use Prophecy\Doubler\Generator\ClassCreator;
 use Prophecy\Exception\InvalidArgumentException;
@@ -30,7 +31,7 @@ class Doubler
     private $namer;
 
     /**
-     * @var ClassPatch\ClassPatchInterface[]
+     * @var ClassPatchInterface[]
      */
     private $patches = array();
 
@@ -57,7 +58,7 @@ class Doubler
     /**
      * Returns list of registered class patches.
      *
-     * @return ClassPatch\ClassPatchInterface[]
+     * @return ClassPatchInterface[]
      */
     public function getClassPatches()
     {
@@ -67,13 +68,13 @@ class Doubler
     /**
      * Registers new class patch.
      *
-     * @param ClassPatch\ClassPatchInterface $patch
+     * @param ClassPatchInterface $patch
      */
-    public function registerClassPatch(ClassPatch\ClassPatchInterface $patch)
+    public function registerClassPatch(ClassPatchInterface $patch)
     {
         $this->patches[] = $patch;
 
-        @usort($this->patches, function ($patch1, $patch2) {
+        @usort($this->patches, function (ClassPatchInterface $patch1, ClassPatchInterface $patch2) {
             return $patch2->getPriority() - $patch1->getPriority();
         });
     }

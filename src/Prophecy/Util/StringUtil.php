@@ -78,7 +78,7 @@ class StringUtil
     {
         $self = $this;
 
-        return implode(PHP_EOL, array_map(function ($call) use ($self) {
+        return implode(PHP_EOL, array_map(function (Call $call) use ($self) {
             return sprintf('  - %s(%s) @ %s',
                 $call->getMethodName(),
                 implode(', ', array_map(array($self, 'stringify'), $call->getArguments())),

@@ -67,7 +67,7 @@ class ClassCodeGenerator
 
     private function generateArguments(array $arguments)
     {
-        return array_map(function ($argument) {
+        return array_map(function (Node\ArgumentNode $argument) {
             $php = '';
 
             if ($hint = $argument->getTypeHint()) {

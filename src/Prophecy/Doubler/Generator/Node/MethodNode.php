@@ -106,7 +106,7 @@ class MethodNode
     {
         $this->code = sprintf(
             'return parent::%s(%s);', $this->getName(), implode(', ',
-                array_map(function ($arg) { return '$'.$arg->getName(); }, $this->arguments)
+                array_map(function (ArgumentNode $arg) { return '$'.$arg->getName(); }, $this->arguments)
             )
         );
     }

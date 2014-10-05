@@ -11,6 +11,7 @@
 
 namespace Prophecy\Call;
 
+use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Util\StringUtil;
@@ -117,7 +118,7 @@ class CallCenter
     public function findCalls($methodName, ArgumentsWildcard $wildcard)
     {
         return array_values(
-            array_filter($this->recordedCalls, function ($call) use ($methodName, $wildcard) {
+            array_filter($this->recordedCalls, function (Call $call) use ($methodName, $wildcard) {
                 return $methodName === $call->getMethodName()
                     && 0 < $wildcard->scoreArguments($call->getArguments())
                 ;
@@ -130,7 +131,7 @@ class CallCenter
     {
         $classname = get_class($prophecy->reveal());
         $argstring = implode(', ', array_map(array($this->util, 'stringify'), $arguments));
-        $expected  = implode("\n", array_map(function ($methodProphecy) {
+        $expected  = implode("\n", array_map(function (MethodProphecy $methodProphecy) {
             return sprintf('  - %s(%s)',
                 $methodProphecy->getMethodName(),
                 $methodProphecy->getArgumentsWildcard()

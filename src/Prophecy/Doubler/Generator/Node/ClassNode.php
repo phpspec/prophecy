@@ -42,6 +42,9 @@ class ClassNode
         $this->parentClass = $class ?: 'stdClass';
     }
 
+    /**
+     * @return string[]
+     */
     public function getInterfaces()
     {
         return $this->interfaces;
@@ -59,6 +62,11 @@ class ClassNode
         array_unshift($this->interfaces, $interface);
     }
 
+    /**
+     * @param string $interface
+     *
+     * @return bool
+     */
     public function hasInterface($interface)
     {
         return in_array($interface, $this->interfaces);
@@ -112,6 +120,8 @@ class ClassNode
 
     /**
      * @param string $name
+     *
+     * @return bool
      */
     public function hasMethod($name)
     {
