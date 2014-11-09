@@ -79,7 +79,7 @@ those object prophecies can't create themselves - there should be a Prophet:
 $prophet = new Prophecy\Prophet;
 ```
 
-The Prophet is the guy that creates prophecies by *prophesizing* them:
+The Prophet creates prophecies by *prophesizing* them:
 
 ```php
 $prophecy = $prophet->prophesize();
