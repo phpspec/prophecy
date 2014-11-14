@@ -30,6 +30,7 @@ class MethodProphecy
     private $argumentsWildcard;
     private $promise;
     private $prediction;
+    private $checkedPredictions = array();
     private $bound = false;
 
     /**
@@ -261,6 +262,8 @@ class MethodProphecy
 
         $prediction->check($calls, $this->getObjectProphecy(), $this);
 
+        $this->checkedPredictions[] = $prediction;
+
         return $this;
     }
 
@@ -345,6 +348,16 @@ class MethodProphecy
     public function getPrediction()
     {
         return $this->prediction;
+    }
+
+    /**
+     * Returns predictions that were checked on this object.
+     *
+     * @return PredictionInterface[]
+     */
+    public function getCheckedPredictions()
+    {
+        return $this->checkedPredictions;
     }
 
     /**

@@ -229,6 +229,31 @@ class MethodProphecySpec extends ObjectBehavior
 
     /**
      * @param \Prophecy\Argument\ArgumentsWildcard     $arguments
+     * @param \Prophecy\Prediction\PredictionInterface $prediction1
+     * @param \Prophecy\Prediction\PredictionInterface $prediction2
+     * @param \Prophecy\Call\Call                      $call1
+     * @param \Prophecy\Call\Call                      $call2
+     * @param \Prophecy\Promise\PromiseInterface       $promise
+     */
+    function it_records_checked_predictions(
+        $objectProphecy, $arguments, $prediction1, $prediction2, $call1, $call2, $promise
+    )
+    {
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+        $prediction1->check(array($call1, $call2), $objectProphecy->getWrappedObject(), $this)->willReturn();
+        $prediction2->check(array($call1, $call2), $objectProphecy->getWrappedObject(), $this)->willReturn();
+        $objectProphecy->findProphecyMethodCalls('getName', $arguments)->willReturn(array($call1, $call2));
+
+        $this->will($promise);
+        $this->withArguments($arguments);
+        $this->callOnWrappedObject('shouldHave', array($prediction1));
+        $this->callOnWrappedObject('shouldHave', array($prediction2));
+
+        $this->getCheckedPredictions()->shouldReturn(array($prediction1, $prediction2));
+    }
+
+    /**
+     * @param \Prophecy\Argument\ArgumentsWildcard     $arguments
      * @param \Prophecy\Prediction\PredictionInterface $prediction
      * @param \Prophecy\Call\Call                      $call1
      * @param \Prophecy\Call\Call                      $call2
