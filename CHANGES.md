@@ -1,3 +1,11 @@
+1.3.0 / 2014-11-14
+==================
+
+  * Added support for doubling magic methods documented in the class phpdoc (thanks @armetiz)
+  * Fix HHVM compatibility
+  * Remove dead code (thanks @stof)
+  * Add support for DirectoryIterators (thanks @shanethehat)
+
 1.2.0 / 2014-07-18
 ==================
 
