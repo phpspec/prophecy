@@ -257,6 +257,31 @@ class MethodProphecySpec extends ObjectBehavior
      * @param \Prophecy\Prediction\PredictionInterface $prediction
      * @param \Prophecy\Call\Call                      $call1
      * @param \Prophecy\Call\Call                      $call2
+     * @param \Prophecy\Promise\PromiseInterface       $promise
+     */
+    function it_records_even_failed_checked_predictions(
+        $objectProphecy, $arguments, $prediction, $call1, $call2, $promise
+    )
+    {
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+        $prediction->check(array($call1, $call2), $objectProphecy->getWrappedObject(), $this)->willThrow(new \RuntimeException());
+        $objectProphecy->findProphecyMethodCalls('getName', $arguments)->willReturn(array($call1, $call2));
+
+        $this->will($promise);
+        $this->withArguments($arguments);
+
+        try {
+          $this->callOnWrappedObject('shouldHave', array($prediction));
+        } catch (\Exception $e) {}
+
+        $this->getCheckedPredictions()->shouldReturn(array($prediction));
+    }
+
+    /**
+     * @param \Prophecy\Argument\ArgumentsWildcard     $arguments
+     * @param \Prophecy\Prediction\PredictionInterface $prediction
+     * @param \Prophecy\Call\Call                      $call1
+     * @param \Prophecy\Call\Call                      $call2
      */
     function it_checks_prediction_via_shouldHave_method_call_with_callback(
         $objectProphecy, $arguments, $prediction, $call1, $call2
