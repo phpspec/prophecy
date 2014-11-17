@@ -1,6 +1,12 @@
+1.3.1 / 2014-11-17
+==================
+
+  * Fix the edge case when failed predictions weren't recorded for `getCheckedPredictions()`
+
 1.3.0 / 2014-11-14
 ==================
 
+  * Add a way to get checked predictions with `MethodProphecy::getCheckedPredictions()`
   * Fix HHVM compatibility
   * Remove dead code (thanks @stof)
   * Add support for DirectoryIterators (thanks @shanethehat)
