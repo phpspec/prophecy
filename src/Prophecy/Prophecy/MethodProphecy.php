@@ -260,9 +260,14 @@ class MethodProphecy
             $this->getArgumentsWildcard()
         );
 
-        $prediction->check($calls, $this->getObjectProphecy(), $this);
+        try {
+            $prediction->check($calls, $this->getObjectProphecy(), $this);
+            $this->checkedPredictions[] = $prediction;
+        } catch (\Exception $e) {
+            $this->checkedPredictions[] = $prediction;
 
-        $this->checkedPredictions[] = $prediction;
+            throw $e;
+        }
 
         return $this;
     }
