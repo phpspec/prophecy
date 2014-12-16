@@ -187,17 +187,17 @@ you'll use promises for that:
 $user->getName()->willReturn(null);
 
 // For PHP 5.4
-$user->setName('everzet')->will(function() {
+$user->setName('everzet')->will(function () {
     $this->getName()->willReturn('everzet');
 });
 
 // For PHP 5.3
-$user->setName('everzet')->will(function($args, $user) {
+$user->setName('everzet')->will(function ($args, $user) {
     $user->getName()->willReturn('everzet');
 });
 
 // Or
-$user->setName('everzet')->will(function($args) use ($user) {
+$user->setName('everzet')->will(function ($args) use ($user) {
     $user->getName()->willReturn('everzet');
 });
 ```
@@ -238,7 +238,7 @@ That's why Prophecy comes bundled with a bunch of other tokens:
 - `IdenticalValueToken` or `Argument::is($value)` - checks that the argument is identical to a specific value
 - `ExactValueToken` or `Argument::exact($value)` - checks that the argument matches a specific value
 - `TypeToken` or `Argument::type($typeOrClass)` - checks that the argument matches a specific type or
-  classname.
+  classname
 - `ObjectStateToken` or `Argument::which($method, $value)` - checks that the argument method returns
   a specific value
 - `CallbackToken` or `Argument::that(callback)` - checks that the argument matches a custom callback
@@ -255,17 +255,17 @@ use Prophecy\Argument;
 $user->getName()->willReturn(null);
 
 // For PHP 5.4
-$user->setName(Argument::type('string'))->will(function($args) {
+$user->setName(Argument::type('string'))->will(function ($args) {
     $this->getName()->willReturn($args[0]);
 });
 
 // For PHP 5.3
-$user->setName(Argument::type('string'))->will(function($args, $user) {
+$user->setName(Argument::type('string'))->will(function ($args, $user) {
     $user->getName()->willReturn($args[0]);
 });
 
 // Or
-$user->setName(Argument::type('string'))->will(function($args) use ($user) {
+$user->setName(Argument::type('string'))->will(function ($args) use ($user) {
     $user->getName()->willReturn($args[0]);
 });
 ```
@@ -282,21 +282,22 @@ use Prophecy\Argument;
 $user->getName()->willReturn(null);
 
 // For PHP 5.4
-$user->setName(Argument::type('string'))->will(function($args) {
+$user->setName(Argument::type('string'))->will(function ($args) {
     $this->getName()->willReturn($args[0]);
 });
 
 // For PHP 5.3
-$user->setName(Argument::type('string'))->will(function($args, $user) {
+$user->setName(Argument::type('string'))->will(function ($args, $user) {
     $user->getName()->willReturn($args[0]);
 });
 
 // Or
-$user->setName(Argument::type('string'))->will(function($args) use ($user) {
+$user->setName(Argument::type('string'))->will(function ($args) use ($user) {
     $user->getName()->willReturn($args[0]);
 });
 
-$user->setName(Argument::any())->will(function(){});
+$user->setName(Argument::any())->will(function () {
+});
 ```
 
 Nothing. Your stub will continue behaving the way it did before. That's because of how
@@ -325,7 +326,7 @@ calling it on a stub.
 
 ### Mocks
 
-Now we know how to define doubles without behavior (dummies) and doubles with behavior but
+Now we know how to define doubles without behavior (dummies) and doubles with behavior, but
 no expectations (stubs). What's left is doubles for which we have some expectations. These
 are called mocks and in Prophecy they look almost exactly the same as stubs, except that
 they define *predictions* instead of *promises* on method prophecies:
