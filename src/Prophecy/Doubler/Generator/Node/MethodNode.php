@@ -24,6 +24,7 @@ class MethodNode
     private $code;
     private $visibility = 'public';
     private $static = false;
+    private $returnsReference = false;
 
     /**
      * @var ArgumentNode[]
@@ -69,6 +70,16 @@ class MethodNode
     public function setStatic($static = true)
     {
         $this->static = (bool) $static;
+    }
+
+    public function returnsReference()
+    {
+        return $this->returnsReference;
+    }
+
+    public function setReturnsReference($value = true)
+    {
+        $this->returnsReference = (bool) $value;
     }
 
     public function getName()
