@@ -32,6 +32,17 @@ class MethodNodeSpec extends ObjectBehavior
         $this->shouldNotBeStatic();
     }
 
+    function it_does_not_return_a_reference_by_default()
+    {
+        $this->returnsReference()->shouldReturn(false);
+    }
+
+    function it_should_be_settable_as_returning_a_reference_through_setter()
+    {
+        $this->setReturnsReference();
+        $this->returnsReference()->shouldReturn(true);
+    } 
+
     function it_should_be_settable_as_static_through_setter()
     {
         $this->setStatic();

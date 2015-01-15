@@ -77,9 +77,9 @@ class MethodNode
         return $this->returnsReference;
     }
 
-    public function setReturnsReference($value = true)
+    public function setReturnsReference()
     {
-        $this->returnsReference = (bool) $value;
+        $this->returnsReference = true;
     }
 
     public function getName()

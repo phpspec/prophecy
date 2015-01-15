@@ -45,6 +45,10 @@ class ClassMirrorSpec extends ObjectBehavior
         $method2->isStatic()->willReturn(false);
         $method3->isStatic()->willReturn(false);
 
+        $method1->returnsReference()->willReturn(false);
+        $method2->returnsReference()->willReturn(false);
+        $method3->returnsReference()->willReturn(false);
+
         $method1->getParameters()->willReturn(array());
         $method2->getParameters()->willReturn(array());
         $method3->getParameters()->willReturn(array());
@@ -80,6 +84,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $method->isFinal()->willReturn(false);
         $method->isProtected()->willReturn(false);
         $method->isStatic()->willReturn(false);
+        $method->returnsReference()->willReturn(false);
 
         $parameter->getName()->willReturn('...');
         $parameter->isDefaultValueAvailable()->willReturn(true);
@@ -113,6 +118,8 @@ class ClassMirrorSpec extends ObjectBehavior
         $method->isStatic()->willReturn(false);
         $method->getParameters()->willReturn(array());
         $method->getName()->willReturn('innerDetail');
+        $method->returnsReference()->willReturn(false);
+
 
         $classNode   = $this->reflect($class, array());
         $classNode->shouldBeAnInstanceOf('Prophecy\Doubler\Generator\Node\ClassNode');
@@ -140,6 +147,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $method->isStatic()->willReturn(true);
         $method->getParameters()->willReturn(array());
         $method->getName()->willReturn('innerDetail');
+        $method->returnsReference()->willReturn(false);
 
         $classNode   = $this->reflect($class, array());
         $classNode->shouldBeAnInstanceOf('Prophecy\Doubler\Generator\Node\ClassNode');
@@ -174,6 +182,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $method->isFinal()->willReturn(false);
         $method->isProtected()->willReturn(true);
         $method->isStatic()->willReturn(false);
+        $method->returnsReference()->willReturn(false);
         $method->getParameters()->willReturn(array($param1, $param2, $param3));
 
         $param1->getName()->willReturn('arg_1');
@@ -246,6 +255,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $method->isFinal()->willReturn(false);
         $method->isProtected()->willReturn(false);
         $method->isStatic()->willReturn(false);
+        $method->returnsReference()->willReturn(false);
         $method->getParameters()->willReturn(array($param1, $param2));
 
         $param1->getName()->willReturn('arg_1');
@@ -351,6 +361,10 @@ class ClassMirrorSpec extends ObjectBehavior
         $method2->isProtected()->willReturn(false);
         $method3->isProtected()->willReturn(false);
 
+        $method1->returnsReference()->willReturn(false);
+        $method2->returnsReference()->willReturn(false);
+        $method3->returnsReference()->willReturn(false);
+
         $method1->isStatic()->willReturn(false);
         $method2->isStatic()->willReturn(false);
         $method3->isStatic()->willReturn(false);
@@ -404,6 +418,10 @@ class ClassMirrorSpec extends ObjectBehavior
         $method1->isStatic()->willReturn(false);
         $method2->isStatic()->willReturn(false);
         $method3->isStatic()->willReturn(false);
+
+        $method1->returnsReference()->willReturn(false);
+        $method2->returnsReference()->willReturn(false);
+        $method3->returnsReference()->willReturn(false);
 
         $method1->getParameters()->willReturn(array());
         $method2->getParameters()->willReturn(array());
