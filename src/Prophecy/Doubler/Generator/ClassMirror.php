@@ -137,6 +137,10 @@ class ClassMirror
             $node->setStatic();
         }
 
+        if (true === $method->returnsReference()) {
+            $node->setReturnsReference();
+        }
+
         if (is_array($params = $method->getParameters()) && count($params)) {
             foreach ($params as $param) {
                 $this->reflectArgumentToNode($param, $node);
