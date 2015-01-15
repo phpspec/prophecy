@@ -27,12 +27,14 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
 
         $method1->getName()->willReturn('getName');
         $method1->getVisibility()->willReturn('public');
+        $method1->returnsReference()->willReturn(false);
         $method1->isStatic()->willReturn(true);
         $method1->getArguments()->willReturn(array($argument11, $argument12));
         $method1->getCode()->willReturn('return $this->name;');
 
         $method2->getName()->willReturn('getEmail');
         $method2->getVisibility()->willReturn('protected');
+        $method2->returnsReference()->willReturn(false);
         $method2->isStatic()->willReturn(false);
         $method2->getArguments()->willReturn(array($argument21));
         $method2->getCode()->willReturn('return $this->email;');
@@ -93,6 +95,7 @@ PHP;
         $method->getVisibility()->willReturn('public');
         $method->isStatic()->willReturn(false);
         $method->getArguments()->willReturn(array($argument));
+        $method->returnsReference()->willReturn(false);
         $method->getCode()->willReturn('return $this->name;');
 
         $argument->getName()->willReturn('fullname');
