@@ -112,7 +112,7 @@ class MethodNode
     {
         if ($this->returnsReference)
         {
-            return "throw new \Prophecy\Exception\Doubler\MethodNotFoundException('Returning by reference not supported', get_class(\$this), '{$this->name}');";
+            return "throw new \Prophecy\Exception\Doubler\ReturnByReferenceException('Returning by reference not supported', get_class(\$this), '{$this->name}');";
         }
 
         return (string) $this->code;

@@ -89,7 +89,7 @@ class MethodNodeSpec extends ObjectBehavior
     {
         $this->setCode('echo "code";');
         $this->setReturnsReference();
-        $this->getCode()->shouldReturn("throw new \Prophecy\Exception\Doubler\MethodNotFoundException('Returning by reference not supported', get_class(\$this), 'getTitle');");
+        $this->getCode()->shouldReturn("throw new \Prophecy\Exception\Doubler\ReturnByReferenceException('Returning by reference not supported', get_class(\$this), 'getTitle');");
     }
 
     function its_setCode_provided_with_null_cleans_method_body()
