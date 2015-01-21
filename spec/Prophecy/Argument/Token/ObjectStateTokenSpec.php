@@ -4,10 +4,6 @@ namespace spec\Prophecy\Argument\Token;
 
 use PhpSpec\ObjectBehavior;
 
-class MyClass
-{
-}
-
 class ObjectStateTokenSpec extends ObjectBehavior
 {
     function let()
@@ -45,14 +41,13 @@ class ObjectStateTokenSpec extends ObjectBehavior
         $this->scoreArgument($class)->shouldReturn(8);
     }
 
-    /**
-     * @param \ReflectionClass $reflection
-     */
-    function it_does_not_score_if_argument_method_state_does_not_match($reflection)
+    function it_does_not_score_if_argument_method_state_does_not_match()
     {
-        $reflection->getName()->willReturn('SplFileInfo');
+        $value = new ObjectStateTokenFixtureB('ABC');
+        $value2 = new ObjectStateTokenFixtureB('CBA');
 
-        $this->scoreArgument($reflection)->shouldReturn(false);
+        $this->beConstructedWith('getSelf', $value);
+        $this->scoreArgument($value2)->shouldReturn(false);
     }
 
     /**
@@ -66,7 +61,7 @@ class ObjectStateTokenSpec extends ObjectBehavior
     }
 
     /**
-     * @param \spec\Prophecy\Argument\Token\MyClass $class
+     * @param \spec\Prophecy\Argument\Token\ObjectStateTokenFixtureA $class
      */
     function it_does_not_score_if_argument_object_does_not_have_method_or_property($class)
     {
@@ -81,5 +76,26 @@ class ObjectStateTokenSpec extends ObjectBehavior
     function it_has_simple_string_representation()
     {
         $this->__toString()->shouldReturn('state(getName(), "stdClass")');
+    }
+}
+
+class ObjectStateTokenFixtureA
+{
+    public $errors;
+}
+
+class ObjectStateTokenFixtureB extends ObjectStateTokenFixtureA
+{
+    public $errors;
+    public $value = null;
+
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
+
+    public function getSelf()
+    {
+        return $this;
     }
 }
