@@ -59,13 +59,13 @@ class MagicCallPatch implements ClassPatchInterface
                     $node->addMethod($method);
                 }
             } catch(RuntimeException $e) {
-                // Whats happens we cannot parse method tag? should we issue a warning here?
+                // What happens we cannot parse method tag? should we issue a warning here?
             }
         }
     }
 
     /**
-     * @param $tag
+     * @param MethodTag $tag
      * @return MethodNode
      */
     private function parseMethod(MethodTag $tag)
