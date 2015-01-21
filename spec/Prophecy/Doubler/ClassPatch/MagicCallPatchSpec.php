@@ -54,12 +54,59 @@ class MagicCallPatchSpec extends ObjectBehavior
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalParametrizedApi');
 
-        $method = new MethodNode('parametrizedMethod');
-        $method->addArgument(new ArgumentNode('param'));
-        $argumentWithDefaultValue = new ArgumentNode('param');
-        $argumentWithDefaultValue->setDefault('value');
-        $method->addArgument($argumentWithDefaultValue);
-        $method->addArgument($argumentWithDefaultValue);
+        $method = new MethodNode('simpleParam');
+        $method->addArgument(new ArgumentNode('param1'));
+        $method->addArgument(new ArgumentNode('second'));
+
+        $node->addMethod($method)->shouldBeCalled();
+
+        $this->apply($node);
+    }
+
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
+     */
+    function it_discovers_api_with_hinted_parameters_using_phpdoc($node)
+    {
+        $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalParametrizedApi');
+
+        $method = new MethodNode('withHintedType');
+
+        $argument = new ArgumentNode('integer');
+        $argument->setDefault("2");
+        $argument->setTypeHint("int");
+        $method->addArgument($argument);
+
+        $argument = new ArgumentNode('class');
+        $argument->setTypeHint('\spec\Prophecy\Doubler\ClassPatch\MagicalApi');
+        $method->addArgument($argument);
+
+        $node->addMethod($method)->shouldBeCalled();
+
+        $this->apply($node);
+    }
+
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
+     */
+    function it_discovers_api_with_parameter_default_values_using_phpdoc($node)
+    {
+        $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalParametrizedApi');
+
+        $method = new MethodNode('withDefaultValue');
+
+        $argument = new ArgumentNode('singleQuote');
+        $argument->setDefault("value");
+        $method->addArgument($argument);
+
+        $argument = new ArgumentNode('doubleQuote');
+        $argument->setDefault('value');
+        $method->addArgument($argument);
+
+        $argument = new ArgumentNode('const');
+        $argument->setDefault('\DateTime::RSS');
+        $method->addArgument($argument);
+
         $node->addMethod($method)->shouldBeCalled();
 
         $this->apply($node);
@@ -86,7 +133,9 @@ class MagicalApi
 }
 
 /**
- * @method void parametrizedMethod($param, $param = 'value', $param = "value")
+ * @method void simpleParam($param1,  $second )
+ * @method void withDefaultValue($singleQuote = 'value', $doubleQuote="value", $const= \DateTime::RSS)
+ * @method void withHintedType(int $integer = 2, \spec\Prophecy\Doubler\ClassPatch\MagicalApi $class)
  */
 class MagicalParametrizedApi
 {
@@ -101,4 +150,3 @@ class MagicalApiExtended extends MagicalApi
 {
 
 }
-

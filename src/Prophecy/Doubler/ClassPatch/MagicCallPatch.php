@@ -12,9 +12,11 @@
 namespace Prophecy\Doubler\ClassPatch;
 
 use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\DocBlock\Tag\MethodTag;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use RuntimeException;
 
 /**
  * Discover Magical API using "@method" PHPDoc format.
@@ -50,40 +52,57 @@ class MagicCallPatch implements ClassPatchInterface
         $tagList = $phpdoc->getTagsByName('method');
 
         foreach($tagList as $tag) {
-            $methodName = $tag->getMethodName();
+            try {
+                $method = $this->parseMethod($tag);
 
-            if (!$reflectionClass->hasMethod($methodName)) {
-                $methodNode = new MethodNode($tag->getMethodName());
-                $methodNode->setStatic($tag->isStatic());
-
-                foreach ($tag->getArguments() as $argument) {
-                    $methodNode->addArgument($this->parseArgument($argument));
+                if (!$reflectionClass->hasMethod($method->getName())) {
+                    $node->addMethod($method);
                 }
-
-                $node->addMethod($methodNode);
+            } catch(RuntimeException $e) {
+                // Whats happens we cannot parse method tag? should we issue a warning here?
             }
-
-            $node->addMethod($methodNode);
         }
     }
 
     /**
-     * @param array $argument
-     * @return ArgumentNode
+     * @param $tag
+     * @return MethodNode
      */
-    private function parseArgument(array $argument)
+    private function parseMethod(MethodTag $tag)
     {
-        $eqPos = array_search('=', $argument);
-        $optional = $eqPos !== false;
-        $name = $optional ? $argument[$eqPos - 1] : end($argument);
+        $methodNode = new MethodNode($tag->getMethodName());
+        $methodNode->setStatic($tag->isStatic());
 
-        $argumentNode = new ArgumentNode(ltrim($name, '$'));
-
-        if ($optional && isset($argument[$eqPos + 1])) {
-            $argumentNode->setDefault(trim($argument[$eqPos + 1], "'\""));
+        foreach ($tag->getArguments() as $arg) {
+            $methodNode->addArgument(
+                $this->parseArgument(implode(' ', $arg))
+            );
         }
 
-        return $argumentNode;
+        return $methodNode;
+    }
+
+    /**
+     * @param string $argument
+     * @return ArgumentNode
+     */
+    private function parseArgument($argument)
+    {
+        if (preg_match('/^([\w\\\\]+)?\s*\$?(\w+)(?:\s*=\s*[\'\"]?([\w\\\\:]+)[\'\"]?)?/', $argument, $matches)) {
+            $argumentNode = new ArgumentNode($matches[2]);
+
+            if (!empty($matches[1])) {
+                $argumentNode->setTypeHint($matches[1]);
+            }
+
+            if (!empty($matches[3])) {
+                $argumentNode->setDefault($matches[3]);
+            }
+
+            return $argumentNode;
+        } else {
+            throw new RuntimeException("Invalid argument format");
+        }
     }
 
     /**
@@ -96,4 +115,3 @@ class MagicCallPatch implements ClassPatchInterface
         return 50;
     }
 }
-
