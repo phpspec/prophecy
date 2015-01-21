@@ -52,14 +52,10 @@ class MagicCallPatch implements ClassPatchInterface
         $tagList = $phpdoc->getTagsByName('method');
 
         foreach($tagList as $tag) {
-            try {
-                $method = $this->parseMethod($tag);
+            $method = $this->parseMethod($tag);
 
-                if (!$reflectionClass->hasMethod($method->getName())) {
-                    $node->addMethod($method);
-                }
-            } catch(RuntimeException $e) {
-                // What happens we cannot parse method tag? should we issue a warning here?
+            if (!$reflectionClass->hasMethod($method->getName())) {
+                $node->addMethod($method);
             }
         }
     }
@@ -74,9 +70,12 @@ class MagicCallPatch implements ClassPatchInterface
         $methodNode->setStatic($tag->isStatic());
 
         foreach ($tag->getArguments() as $arg) {
-            $methodNode->addArgument(
-                $this->parseArgument(implode(' ', $arg))
-            );
+            try {
+                $argument = $this->parseArgument(implode(' ', $arg));
+                $methodNode->addArgument($argument);
+            } catch (RuntimeException $e) {
+                // just ignore incorrectly defined arguments
+            }
         }
 
         return $methodNode;
@@ -88,21 +87,27 @@ class MagicCallPatch implements ClassPatchInterface
      */
     private function parseArgument($argument)
     {
-        if (preg_match('/^([\w\\\\]+)?\s*\$?(\w+)(?:\s*=\s*[\'\"]?([\w\\\\:]+)[\'\"]?)?/', $argument, $matches)) {
-            $argumentNode = new ArgumentNode($matches[2]);
+        /** @see http://php.net/manual/en/language.oop5.basic.php */
+        $variable = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
+        $class = '(?:' . $variable . '|\\\\)+';
+        $default = '(?:\\\'.*\\\'|\".*\"|[.0-9]+[-+e.0-9]*|' . $class . '::' . $variable . '|' . $variable . ')';
+        $pattern = '/^(' . $class . ')?\s*\$(' . $variable . ')(?:\s*=\s*(' . $default . '))?/';
 
-            if (!empty($matches[1])) {
-                $argumentNode->setTypeHint($matches[1]);
-            }
-
-            if (!empty($matches[3])) {
-                $argumentNode->setDefault($matches[3]);
-            }
-
-            return $argumentNode;
-        } else {
+        if (!preg_match($pattern, $argument, $matches)) {
             throw new RuntimeException("Invalid argument format");
         }
+
+        $argumentNode = new ArgumentNode($matches[2]);
+
+        if (!empty($matches[1])) {
+            $argumentNode->setTypeHint($matches[1]);
+        }
+
+        if (!empty($matches[3])) {
+            $argumentNode->setDefault(trim($matches[3], '\'"'));
+        }
+
+        return $argumentNode;
     }
 
     /**

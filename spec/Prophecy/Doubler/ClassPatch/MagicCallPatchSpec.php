@@ -58,6 +58,7 @@ class MagicCallPatchSpec extends ObjectBehavior
         $method->addArgument(new ArgumentNode('param1'));
         $method->addArgument(new ArgumentNode('second'));
 
+        $node->addMethod(Argument::any())->willReturn(null);
         $node->addMethod($method)->shouldBeCalled();
 
         $this->apply($node);
@@ -72,15 +73,16 @@ class MagicCallPatchSpec extends ObjectBehavior
 
         $method = new MethodNode('withHintedType');
 
-        $argument = new ArgumentNode('integer');
-        $argument->setDefault("2");
-        $argument->setTypeHint("int");
+        $argument = new ArgumentNode('floatVar');
+        $argument->setDefault("2.3");
+        $argument->setTypeHint("float");
         $method->addArgument($argument);
 
         $argument = new ArgumentNode('class');
         $argument->setTypeHint('\spec\Prophecy\Doubler\ClassPatch\MagicalApi');
         $method->addArgument($argument);
 
+        $node->addMethod(Argument::any())->willReturn(null);
         $node->addMethod($method)->shouldBeCalled();
 
         $this->apply($node);
@@ -107,6 +109,7 @@ class MagicCallPatchSpec extends ObjectBehavior
         $argument->setDefault('\DateTime::RSS');
         $method->addArgument($argument);
 
+        $node->addMethod(Argument::any())->willReturn(null);
         $node->addMethod($method)->shouldBeCalled();
 
         $this->apply($node);
@@ -135,7 +138,7 @@ class MagicalApi
 /**
  * @method void simpleParam($param1,  $second )
  * @method void withDefaultValue($singleQuote = 'value', $doubleQuote="value", $const= \DateTime::RSS)
- * @method void withHintedType(int $integer = 2, \spec\Prophecy\Doubler\ClassPatch\MagicalApi $class)
+ * @method void withHintedType(float $floatVar = 2.3, \spec\Prophecy\Doubler\ClassPatch\MagicalApi $class)
  */
 class MagicalParametrizedApi
 {
