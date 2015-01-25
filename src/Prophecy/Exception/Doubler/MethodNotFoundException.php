@@ -15,18 +15,24 @@ class MethodNotFoundException extends DoubleException
 {
     private $classname;
     private $methodName;
+    /**
+     * @var array|null
+     */
+    private $arguments;
 
     /**
      * @param string $message
      * @param string $classname
      * @param string $methodName
+     * @param array  $arguments
      */
-    public function __construct($message, $classname, $methodName)
+    public function __construct($message, $classname, $methodName, $arguments = array())
     {
         parent::__construct($message);
 
         $this->classname  = $classname;
         $this->methodName = $methodName;
+        $this->arguments = $arguments;
     }
 
     public function getClassname()
@@ -37,5 +43,10 @@ class MethodNotFoundException extends DoubleException
     public function getMethodName()
     {
         return $this->methodName;
+    }
+
+    public function getArguments()
+    {
+        return $this->arguments;
     }
 }
