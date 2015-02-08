@@ -32,9 +32,9 @@ class MethodNotFoundException extends DoubleException
      * @param string $message
      * @param string $classname
      * @param string $methodName
-     * @param array  $arguments
+     * @param null|Argument\ArgumentsWildcard|array $arguments
      */
-    public function __construct($message, $classname, $methodName, array $arguments = array())
+    public function __construct($message, $classname, $methodName, $arguments = null)
     {
         parent::__construct($message);
 
