@@ -32,9 +32,9 @@ class MethodNotFoundExceptionSpec extends ObjectBehavior
         $this->getArguments()->shouldReturn(array(1, 2, 3));
     }
 
-    function it_has_a_default_empty_argument_list()
+    function it_has_a_default_null_argument_list()
     {
         $this->beConstructedWith('', 'User', 'getName');
-        $this->getArguments()->shouldReturn(array());
+        $this->getArguments()->shouldReturn(null);
     }
 }

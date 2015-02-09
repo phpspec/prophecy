@@ -47,8 +47,8 @@ class MethodProphecy
         $double = $objectProphecy->reveal();
         if (!method_exists($double, $methodName)) {
             throw new MethodNotFoundException(sprintf(
-                'Method `%s::%s()` is not defined.', get_class($double), $methodName, $arguments ?: array()
-            ), get_class($double), $methodName);
+                'Method `%s::%s()` is not defined.', get_class($double), $methodName
+            ), get_class($double), $methodName, $arguments);
         }
 
         $this->objectProphecy = $objectProphecy;
