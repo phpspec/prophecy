@@ -102,6 +102,16 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\ReturnArgumentPromise');
     }
 
+    function it_adds_ReturnArgumentPromise_during_willReturnArgument_call_with_index_argument($objectProphecy)
+    {
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+
+        $this->willReturnArgument(1);
+        $promise = $this->getPromise();
+        $promise->shouldBeAnInstanceOf('Prophecy\Promise\ReturnArgumentPromise');
+        $promise->execute(array('one', 'two'), $objectProphecy, $this)->shouldReturn('two');
+    }
+
     function it_adds_CallbackPromise_during_will_call_with_callback_argument($objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
