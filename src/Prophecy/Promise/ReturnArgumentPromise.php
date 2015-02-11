@@ -25,24 +25,24 @@ class ReturnArgumentPromise implements PromiseInterface
     /**
      * @var int
      */
-    private $argN;
+    private $argument;
 
     /**
      * Initializes callback promise.
      *
-     * @param int $argN The zero-indexed number of the argument to return
+     * @param int $argument The zero-indexed number of the argument to return
      *
      * @throws \Prophecy\Exception\InvalidArgumentException
      */
-    public function __construct($argN = 0)
+    public function __construct($argument = 0)
     {
-        if (!is_int($argN) || $argN < 0) {
+        if (!is_int($argument) || $argument < 0) {
             throw new InvalidArgumentException(
                 'Zero-based index expected as argument to ReturnArgumentPromise, but got %s.',
-                $argN
+                $argument
             );
         }
-        $this->argN = $argN;
+        $this->argument = $argument;
     }
 
     /**
@@ -56,6 +56,6 @@ class ReturnArgumentPromise implements PromiseInterface
      */
     public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
     {
-        return count($args) > $this->argN ? $args[$this->argN] : null;
+        return count($args) > $this->argument ? $args[$this->argument] : null;
     }
 }

@@ -140,15 +140,15 @@ class MethodProphecy
     /**
      * Sets return argument promise to the prophecy.
      *
-     * @param int $argN The zero-indexed number of the argument to return
+     * @param int $argument The zero-indexed number of the argument to return
      *
      * @see Prophecy\Promise\ReturnArgumentPromise
      *
      * @return $this
      */
-    public function willReturnArgument($argN = 0)
+    public function willReturnArgument($argument = 0)
     {
-        return $this->will(new Promise\ReturnArgumentPromise($argN));
+        return $this->will(new Promise\ReturnArgumentPromise($argument));
     }
 
     /**
