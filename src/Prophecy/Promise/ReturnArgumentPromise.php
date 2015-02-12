@@ -11,6 +11,7 @@
 
 namespace Prophecy\Promise;
 
+use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
 
@@ -22,7 +23,30 @@ use Prophecy\Prophecy\MethodProphecy;
 class ReturnArgumentPromise implements PromiseInterface
 {
     /**
-     * Returns first argument if has one, null otherwise.
+     * @var int
+     */
+    private $index;
+
+    /**
+     * Initializes callback promise.
+     *
+     * @param int $index The zero-indexed number of the argument to return
+     *
+     * @throws \Prophecy\Exception\InvalidArgumentException
+     */
+    public function __construct($index = 0)
+    {
+        if (!is_int($index) || $index < 0) {
+            throw new InvalidArgumentException(
+                'Zero-based index expected as argument to ReturnArgumentPromise, but got %s.',
+                $index
+            );
+        }
+        $this->index = $index;
+    }
+
+    /**
+     * Returns nth argument if has one, null otherwise.
      *
      * @param array          $args
      * @param ObjectProphecy $object
@@ -32,6 +56,6 @@ class ReturnArgumentPromise implements PromiseInterface
      */
     public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
     {
-        return count($args) ? $args[0] : null;
+        return count($args) > $this->index ? $args[$this->index] : null;
     }
 }

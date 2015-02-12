@@ -28,4 +28,14 @@ class ReturnArgumentPromiseSpec extends ObjectBehavior
     {
         $this->execute(array(), $object, $method)->shouldReturn(null);
     }
+
+    /**
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
+     */
+    function it_should_return_nth_argument_if_provided($object, $method)
+    {
+        $this->beConstructedWith(1);
+        $this->execute(array('one', 'two'), $object, $method)->shouldReturn('two');
+    }
 }

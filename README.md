@@ -157,7 +157,7 @@ argument - `'123'` to always return `'value'`. But that's only for this
 promise, there's plenty others you can use:
 
 - `ReturnPromise` or `->willReturn(1)` - returns a value from a method call
-- `ReturnArgumentPromise` or `->willReturnArgument()` - returns the first method argument from call
+- `ReturnArgumentPromise` or `->willReturnArgument($index)` - returns the nth method argument from call
 - `ThrowPromise` or `->willThrow` - causes the method to throw specific exception
 - `CallbackPromise` or `->will($callback)` - gives you a quick way to define your own custom logic
 
