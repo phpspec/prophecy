@@ -141,11 +141,10 @@ class CallCenter
         return new UnexpectedCallException(
             sprintf(
                 "Method call:\n".
-                "  %s->%s(%s)\n".
-                "was not expected.\n".
-                "Expected calls are:\n%s",
+                "  - %s(%s)\n".
+                "on %s was not expected, expected calls were:\n%s",
 
-                $classname, $methodName, $argstring, $expected
+                $methodName, $argstring, $classname, $expected
             ),
             $prophecy, $methodName, $arguments
         );
