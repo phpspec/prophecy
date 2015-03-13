@@ -29,7 +29,7 @@ class MagicCallPatchSpec extends ObjectBehavior
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApi');
         $node->hasMethod('undefinedMethod')->willReturn(false);
         $node->hasMethod('undefinedInterfaceMethod')->willReturn(false);
-        $node->getInterfaces()->willReturn(['spec\Prophecy\Doubler\ClassPatch\MagicalInterface']);
+        $node->getInterfaces()->willReturn(array('spec\Prophecy\Doubler\ClassPatch\MagicalInterface'));
 
         $node->addMethod(new MethodNode('undefinedMethod'))->shouldBeCalled();
         $node->addMethod(new MethodNode('undefinedInterfaceMethod'))->shouldBeCalled();

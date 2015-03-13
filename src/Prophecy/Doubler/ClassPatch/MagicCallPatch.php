@@ -43,7 +43,7 @@ class MagicCallPatch implements ClassPatchInterface
     {
         $this->attach($node, $node->getParentClass());
 
-        $interfaces = $node->getInterfaces() ?: [];
+        $interfaces = $node->getInterfaces() ?: array();
         foreach ($interfaces as $interfaceName) {
             $this->attach($node, $interfaceName);
         }
