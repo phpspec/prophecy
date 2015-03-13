@@ -53,9 +53,9 @@ class MagicCallPatch implements ClassPatchInterface
      * Discovers and attaches Magical API to node
      *
      * @param ClassNode $node
-     * @param $className
+     * @param string $className
      */
-    protected function attach(ClassNode $node, $className)
+    private function attach(ClassNode $node, $className)
     {
         $reflectionClass = new \ReflectionClass($className);
         $phpdoc = new DocBlock($reflectionClass->getDocComment());
