@@ -51,6 +51,11 @@ class StringUtilSpec extends ObjectBehavior
         $this->stringify(array('zet', 42))->shouldReturn('["zet", 42]');
     }
 
+    function it_generates_proper_string_representation_for_hash_containing_one_value()
+    {
+        $this->stringify(array('ever' => 'zet'))->shouldReturn('["ever" => "zet"]');
+    }
+
     function it_generates_proper_string_representation_for_hash()
     {
         $this->stringify(array('ever' => 'zet', 52 => 'hey', 'num' => 42))->shouldReturn(

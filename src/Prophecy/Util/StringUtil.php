@@ -31,7 +31,7 @@ class StringUtil
     public function stringify($value, $exportObject = true)
     {
         if (is_array($value)) {
-            if (range(0, count($value) - 1) == array_keys($value)) {
+            if (range(0, count($value) - 1) === array_keys($value)) {
                 return '['.implode(', ', array_map(array($this, __FUNCTION__), $value)).']';
             }
 
