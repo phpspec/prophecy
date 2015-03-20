@@ -360,7 +360,7 @@ class MethodProphecy
     /**
      * Returns predictions that were checked on this object.
      *
-     * @return PredictionInterface[]
+     * @return Prediction\PredictionInterface[]
      */
     public function getCheckedPredictions()
     {
