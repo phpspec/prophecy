@@ -27,8 +27,12 @@ class MagicCallPatchSpec extends ObjectBehavior
     function it_discovers_api_using_phpdoc($node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApi');
+        $node->hasMethod('undefinedMethod')->willReturn(false);
+        $node->hasMethod('undefinedInterfaceMethod')->willReturn(false);
+        $node->getInterfaces()->willReturn(array('spec\Prophecy\Doubler\ClassPatch\MagicalInterface'));
 
         $node->addMethod(new MethodNode('undefinedMethod'))->shouldBeCalled();
+        $node->addMethod(new MethodNode('undefinedInterfaceMethod'))->shouldBeCalled();
 
         $this->apply($node);
     }
@@ -39,8 +43,12 @@ class MagicCallPatchSpec extends ObjectBehavior
     function it_ignores_existing_methods($node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiExtended');
+        $node->getInterfaces()->shouldBeCalled();
 
+        $node->hasMethod('undefinedMethod')->willReturn(false);
         $node->addMethod(new MethodNode('undefinedMethod'))->shouldBeCalled();
+
+        $node->hasMethod('definedMethod')->willReturn(true);
         $node->addMethod(new MethodNode('definedMethod'))->shouldNotBeCalled();
 
         $this->apply($node);
@@ -53,9 +61,16 @@ class MagicCallPatchSpec extends ObjectBehavior
 }
 
 /**
+ * @method void undefinedInterfaceMethod()
+ */
+interface MagicalInterface {
+
+}
+
+/**
  * @method void undefinedMethod()
  */
-class MagicalApi
+class MagicalApi implements MagicalInterface
 {
     /**
      * @return void
