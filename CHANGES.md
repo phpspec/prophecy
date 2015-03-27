@@ -1,5 +1,5 @@
-1.4.0 / 2015-x-x
-================
+1.4.0 / 2015-03-27
+==================
 
   * Fixed errors in return type phpdocs (thanks @sobit)
   * Fixed stringifying of hash containing one value (thanks @avant1)
