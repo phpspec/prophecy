@@ -11,7 +11,7 @@
   * Adopted '^' in composer dependencies (thanks @GrahamCampbell)
   * Fixed non-typehinted arguments being treated as optional (thanks @whatthejeff)
   * Magic methods are now filtered for keywords (thanks @seagoj)
-  * More readable errors for failure when expecting single calls (thanks dantleech)
+  * More readable errors for failure when expecting single calls (thanks @dantleech)
 
 1.3.1 / 2014-11-17
 ==================
