@@ -60,7 +60,7 @@ class CallPrediction implements PredictionInterface
 
         if (count($methodCalls)) {
             throw new NoCallsException(sprintf(
-                "No calls been made that match:\n".
+                "No calls have been made that match:\n".
                 "  %s->%s(%s)\n".
                 "but expected at least one.\n".
                 "Recorded `%s(...)` calls:\n%s",
@@ -74,7 +74,7 @@ class CallPrediction implements PredictionInterface
         }
 
         throw new NoCallsException(sprintf(
-            "No calls been made that match:\n".
+            "No calls have been made that match:\n".
             "  %s->%s(%s)\n".
             "but expected at least one.",
 
