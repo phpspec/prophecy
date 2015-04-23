@@ -62,7 +62,7 @@ class ExactValueToken implements TokenInterface
             } catch (ComparisonFailure $failure) {}
         }
 
-        // If either one is an object it should castable to a string
+        // If either one is an object it should be castable to a string
         if (is_object($argument) xor is_object($this->value)) {
             if (is_object($argument) && !method_exists($argument, '__toString')) {
                 return false;
