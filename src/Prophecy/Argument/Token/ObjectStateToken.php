@@ -11,8 +11,8 @@
 
 namespace Prophecy\Argument\Token;
 
-use SebastianBergmann\Comparator\Factory as ComparatorFactory;
 use SebastianBergmann\Comparator\ComparisonFailure;
+use Prophecy\Comparator\Factory as ComparatorFactory;
 use Prophecy\Util\StringUtil;
 
 /**
