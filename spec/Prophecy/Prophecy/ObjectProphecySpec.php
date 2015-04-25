@@ -286,6 +286,20 @@ class ObjectProphecySpec extends ObjectBehavior
 
         $methodProphecy2->shouldNotBe($methodProphecy1);
     }
+
+    /**
+     * @param \Prophecy\Doubler\Doubler                   $doubler
+     * @param \Prophecy\Prophecy\ProphecySubjectInterface $reflection
+     */
+    function it_returns_new_MethodProphecy_for_all_callback_signatures($doubler, $reflection)
+    {
+        $doubler->double(Argument::any())->willReturn($reflection);
+
+        $this->addMethodProphecy($methodProphecy1 = $this->getProphecy(function(){}));
+        $methodProphecy2 = $this->getProphecy(function(){});
+
+        $methodProphecy2->shouldNotBe($methodProphecy1);
+    }
 }
 
 class ObjectProphecySpecFixtureA
