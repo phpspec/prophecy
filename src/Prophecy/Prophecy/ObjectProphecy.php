@@ -11,8 +11,8 @@
 
 namespace Prophecy\Prophecy;
 
-use SebastianBergmann\Comparator\Factory as ComparatorFactory;
 use SebastianBergmann\Comparator\ComparisonFailure;
+use Prophecy\Comparator\Factory as ComparatorFactory;
 use Prophecy\Call\Call;
 use Prophecy\Doubler\LazyDouble;
 use Prophecy\Argument\ArgumentsWildcard;
