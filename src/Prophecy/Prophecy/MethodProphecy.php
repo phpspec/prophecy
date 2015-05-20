@@ -232,6 +232,34 @@ class MethodProphecy
     }
 
     /**
+     * Upper boundary call prediction.
+     *
+     * @see Prophecy\Prediction\UpperBoundaryCallPrediction
+     *
+     * @param int $count
+     *
+     * @return $this
+     */
+    public function shouldHaveBeenCalledAtLeastTimes($count)
+    {
+        return $this->shouldHave(new Prediction\UpperBoundaryCallPrediction($count));
+    }
+
+    /**
+     * Lower boundary call prediction.
+     *
+     * @see Prophecy\Prediction\LowerBoundaryCallPrediction
+     *
+     * @param int $count
+     *
+     * @return $this
+     */
+    public function shouldHaveBeenCalledNoMoreThanTimes($count)
+    {
+        return $this->shouldHave(new Prediction\LowerBoundaryCallPrediction($count));
+    }
+
+    /**
      * Checks provided prediction immediately.
      *
      * @param callable|Prediction\PredictionInterface $prediction
