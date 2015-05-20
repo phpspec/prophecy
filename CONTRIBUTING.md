@@ -17,5 +17,5 @@ Make sure that you don't break anything with your changes by running:
 
 ```bash
 $> composer install --dev --prefer-dist
-$> vendor/bin/phpspec
+$> vendor/bin/phpspec run
 ```
