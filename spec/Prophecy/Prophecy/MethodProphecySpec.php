@@ -94,6 +94,14 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\ReturnPromise');
     }
 
+    function it_adds_ReturnSelfPromise_during_willReturnSelf_call($objectProphecy)
+    {
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+
+        $this->willReturnSelf();
+        $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\ReturnSelfPromise');
+    }
+
     function it_adds_ThrowPromise_during_willThrow_call($objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
