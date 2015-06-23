@@ -50,7 +50,13 @@ class CallbackToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
-        return call_user_func($this->callback, $argument) ? 7 : false;
+        try {
+            if(call_user_func($this->callback, $argument)) {
+                return 7;
+            }
+        } catch (\Exception $e) {}
+
+        return false;
     }
 
     /**
