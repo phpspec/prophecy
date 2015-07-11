@@ -112,7 +112,6 @@ class MethodNode
     public function setReturnType($type = null)
     {
         switch ($type) {
-            case null:
             case '':
                 $this->returnType = null;
                 break;
