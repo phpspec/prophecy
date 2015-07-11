@@ -141,6 +141,10 @@ class ClassMirror
             $node->setReturnsReference();
         }
 
+        if (version_compare(PHP_VERSION, '7.0', '>=') && true === $method->hasReturnType()) {
+            $node->setReturnType((string) $method->getReturnType());
+        }
+
         if (is_array($params = $method->getParameters()) && count($params)) {
             foreach ($params as $param) {
                 $this->reflectArgumentToNode($param, $node);
@@ -184,6 +188,10 @@ class ClassMirror
 
         if (version_compare(PHP_VERSION, '5.4', '>=') && true === $parameter->isCallable()) {
             return 'callable';
+        }
+
+        if (version_compare(PHP_VERSION, '7.0', '>=') && true === $parameter->hasType()) {
+            return (string) $parameter->getType();
         }
 
         return null;

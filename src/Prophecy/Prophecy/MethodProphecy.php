@@ -12,6 +12,7 @@
 namespace Prophecy\Prophecy;
 
 use Prophecy\Argument;
+use Prophecy\Prophet;
 use Prophecy\Promise;
 use Prophecy\Prediction;
 use Prophecy\Exception\Doubler\MethodNotFoundException;
@@ -66,6 +67,33 @@ class MethodProphecy
 
         if (null !== $arguments) {
             $this->withArguments($arguments);
+        }
+
+        if (version_compare(PHP_VERSION, '7.0', '>=') && true === $reflectedMethod->hasReturnType()) {
+            $type = (string) $reflectedMethod->getReturnType();
+            $this->will(function () use ($type) {
+                switch ($type) {
+                    case 'string': return '';
+                    case 'float':  return 0.0;
+                    case 'int':    return 0;
+                    case 'bool':   return false;
+                    case 'array':  return array();
+
+                    case 'callable':
+                    case 'Closure':
+                        return function () {};
+
+                    case 'Traversable':
+                    case 'Generator':
+                        // Remove eval() when minimum version >=5.5
+                        $generator = eval('return function () { yield; };');
+                        return $generator();
+
+                    default:
+                        $prophet = new Prophet;
+                        return $prophet->prophesize($type)->reveal();
+                }
+            });
         }
     }
 

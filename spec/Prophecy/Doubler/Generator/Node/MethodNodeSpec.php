@@ -120,4 +120,19 @@ class MethodNodeSpec extends ObjectBehavior
 
         $this->getArguments()->shouldReturn(array($argument1, $argument2));
     }
+
+    function it_does_not_have_return_type_by_default()
+    {
+        $this->hasReturnType()->shouldReturn(false);
+    }
+
+    function it_setReturnType_sets_return_type()
+    {
+        $returnType = 'string';
+
+        $this->setReturnType($returnType);
+
+        $this->hasReturnType()->shouldReturn(true);
+        $this->getReturnType()->shouldReturn($returnType);
+    }
 }
