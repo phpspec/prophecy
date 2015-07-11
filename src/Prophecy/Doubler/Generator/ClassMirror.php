@@ -141,6 +141,10 @@ class ClassMirror
             $node->setReturnsReference();
         }
 
+        if (version_compare(PHP_VERSION, '7.0', '>=') && true === $method->hasReturnType()) {
+            $node->setReturnType((string) $method->getReturnType());
+        }
+
         if (is_array($params = $method->getParameters()) && count($params)) {
             foreach ($params as $param) {
                 $this->reflectArgumentToNode($param, $node);

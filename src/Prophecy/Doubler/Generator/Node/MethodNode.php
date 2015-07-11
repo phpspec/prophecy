@@ -25,6 +25,7 @@ class MethodNode
     private $visibility = 'public';
     private $static = false;
     private $returnsReference = false;
+    private $returnType;
 
     /**
      * @var ArgumentNode[]
@@ -98,6 +99,41 @@ class MethodNode
     public function getArguments()
     {
         return $this->arguments;
+    }
+
+    public function hasReturnType()
+    {
+        return null !== $this->returnType;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setReturnType($type = null)
+    {
+        switch ($type) {
+            case null:
+            case '':
+                $this->returnType = null;
+                break;
+
+            case 'string';
+            case 'float':
+            case 'int':
+            case 'bool':
+            case 'array':
+            case 'callable':
+                $this->returnType = $type;
+                break;
+
+            default:
+                $this->returnType = '\\' . ltrim($type, '\\');
+        }
+    }
+
+    public function getReturnType()
+    {
+        return $this->returnType;
     }
 
     /**
