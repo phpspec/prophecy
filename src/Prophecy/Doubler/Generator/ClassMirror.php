@@ -186,6 +186,10 @@ class ClassMirror
             return 'callable';
         }
 
+        if (version_compare(PHP_VERSION, '7.0', '>=') && true === $parameter->hasType()) {
+            return $parameter->getType();
+        }
+
         return null;
     }
 
