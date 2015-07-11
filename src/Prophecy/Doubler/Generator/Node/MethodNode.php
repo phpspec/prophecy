@@ -126,6 +126,19 @@ class MethodNode
                 $this->returnType = $type;
                 break;
 
+            case 'double':
+            case 'real':
+                $this->returnType = 'float';
+                break;
+
+            case 'boolean':
+                $this->returnType = 'bool';
+                break;
+
+            case 'integer':
+                $this->returnType = 'int';
+                break;
+
             default:
                 $this->returnType = '\\' . ltrim($type, '\\');
         }
