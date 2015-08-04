@@ -23,7 +23,7 @@ class ClassNode
     private $parentClass = 'stdClass';
     private $interfaces  = array();
     private $properties  = array();
-    protected $unextendableMethods = array();
+    private $unextendableMethods = array();
 
     /**
      * @var MethodNode[]

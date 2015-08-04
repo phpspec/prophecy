@@ -31,7 +31,7 @@ class DisableConstructorPatch implements ClassPatchInterface
      */
     public function supports(ClassNode $node)
     {
-        return true;
+        return $node->isExtendable('__construct');
     }
 
     /**
@@ -42,10 +42,7 @@ class DisableConstructorPatch implements ClassPatchInterface
     public function apply(ClassNode $node)
     {
         if (!$node->hasMethod('__construct')) {
-            if($node->isExtendable('__construct'))
-            {
-                $node->addMethod(new MethodNode('__construct', ''));
-            }
+            $node->addMethod(new MethodNode('__construct', ''));
 
             return;
         }

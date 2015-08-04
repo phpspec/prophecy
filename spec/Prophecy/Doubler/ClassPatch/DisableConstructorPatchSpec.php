@@ -20,9 +20,19 @@ class DisableConstructorPatchSpec extends ObjectBehavior
     /**
      * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
-    function it_supports_anything($node)
+    function it_supports_a_default_node($node)
     {
+        $node->isExtendable('__construct')->willReturn(true);
         $this->supports($node)->shouldReturn(true);
+    }
+
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
+     */
+    function it_does_not_support_a_node_with_a_constructor_that_cant_be_extended($node)
+    {
+        $node->isExtendable('__construct')->willReturn(false);
+        $this->supports($node)->shouldReturn(false);
     }
 
     /**
@@ -51,22 +61,8 @@ class DisableConstructorPatchSpec extends ObjectBehavior
     function it_creates_new_constructor_if_object_has_none($class)
     {
         $class->hasMethod('__construct')->willReturn(false);
-        $class->isExtendable('__construct')->willReturn(true);
         $class->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))
             ->shouldBeCalled();
-
-        $this->apply($class);
-    }
-
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $class
-     */
-    function it_does_not_create_a_new_constructor_if_it_is_unextendable($class)
-    {
-        $class->hasMethod('__construct')->willReturn(false);
-        $class->isExtendable('__construct')->willReturn(false);
-        $class->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))
-            ->shouldNotBeCalled();
 
         $this->apply($class);
     }
