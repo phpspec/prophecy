@@ -51,8 +51,22 @@ class DisableConstructorPatchSpec extends ObjectBehavior
     function it_creates_new_constructor_if_object_has_none($class)
     {
         $class->hasMethod('__construct')->willReturn(false);
+        $class->isExtendable('__construct')->willReturn(true);
         $class->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))
             ->shouldBeCalled();
+
+        $this->apply($class);
+    }
+
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $class
+     */
+    function it_does_not_create_a_new_constructor_if_it_is_unextendable($class)
+    {
+        $class->hasMethod('__construct')->willReturn(false);
+        $class->isExtendable('__construct')->willReturn(false);
+        $class->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))
+            ->shouldNotBeCalled();
 
         $this->apply($class);
     }

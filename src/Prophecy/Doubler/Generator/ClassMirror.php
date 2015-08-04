@@ -109,6 +109,7 @@ class ClassMirror
             }
 
             if (true === $method->isFinal()) {
+                $node->addUnextendableMethod($method->getName());
                 continue;
             }
 

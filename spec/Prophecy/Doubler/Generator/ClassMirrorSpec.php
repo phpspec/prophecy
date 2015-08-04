@@ -367,6 +367,26 @@ class ClassMirrorSpec extends ObjectBehavior
     }
 
     /**
+     * @param ReflectionClass  $class
+     * @param ReflectionMethod $method
+     */
+    function it_marks_final_methods_as_unextendable($class, $method)
+    {
+        $class->getName()->willReturn('Custom\ClassName');
+        $class->isInterface()->willReturn(false);
+        $class->isFinal()->willReturn(false);
+        $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
+        $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array($method));
+
+        $method->isFinal()->willReturn(true);
+        $method->getName()->willReturn('finalImplementation');
+
+        $classNode = $this->reflect($class, array());
+        $classNode->getUnextendableMethods()->shouldHaveCount(1);
+        $classNode->isExtendable('finalImplementation')->shouldReturn(false);
+    }
+
+    /**
      * @param ReflectionClass $interface
      */
     function it_throws_an_exception_if_interface_provided_instead_of_class($interface)

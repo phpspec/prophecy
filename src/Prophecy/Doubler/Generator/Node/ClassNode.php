@@ -23,6 +23,7 @@ class ClassNode
     private $parentClass = 'stdClass';
     private $interfaces  = array();
     private $properties  = array();
+    protected $unextendableMethods = [];
 
     /**
      * @var MethodNode[]
@@ -100,6 +101,12 @@ class ClassNode
 
     public function addMethod(MethodNode $method)
     {
+        if(!$this->isExtendable($method->getName()))
+        {
+            throw new \InvalidArgumentException(sprintf(
+                'Method `%s` is not extendable, so can not be added.', $method->getName()
+            ));
+        }
         $this->methods[$method->getName()] = $method;
     }
 
@@ -126,5 +133,34 @@ class ClassNode
     public function hasMethod($name)
     {
         return isset($this->methods[$name]);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getUnextendableMethods()
+    {
+        return $this->unextendableMethods;
+    }
+
+    /**
+     * @param string $unextendableMethod
+     */
+    public function addUnextendableMethod($unextendableMethod)
+    {
+        if(!$this->isExtendable($unextendableMethod))
+        {
+            return;
+        }
+        $this->unextendableMethods[] = $unextendableMethod;
+    }
+
+	/**
+     * @param string $method
+     * @return bool
+     */
+    public function isExtendable($method)
+    {
+        return !in_array($method, $this->unextendableMethods);
     }
 }
