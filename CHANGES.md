@@ -1,3 +1,10 @@
+1.5.0 / 2015-04-27
+==================
+
+  * Add support for PHP7 scalar type hints (thanks @trowski)
+  * Add support for PHP7 return types (thanks @trowski)
+  * Update internal test suite to support PHP7
+
 1.4.1 / 2015-04-27
 ==================
 
