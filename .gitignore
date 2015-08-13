@@ -2,4 +2,3 @@
 *.phar
 bin
 vendor
-composer.lock
