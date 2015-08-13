@@ -8,11 +8,18 @@ use Prophecy\Argument\ArgumentsWildcard;
 
 class CallCenterSpec extends ObjectBehavior
 {
-    function let(ObjectProphecy $objectProphecy)
+    /**
+     * @param \Prophecy\Prophecy\ObjectProphecy $objectProphecy
+     */
+    function let($objectProphecy)
     {
     }
 
-    function it_records_calls_made_through_makeCall_method(ObjectProphecy $objectProphecy, ArgumentsWildcard $wildcard)
+    /**
+     * @param \Prophecy\Prophecy\ObjectProphecy    $objectProphecy
+     * @param \Prophecy\Argument\ArgumentsWildcard $wildcard
+     */
+    function it_records_calls_made_through_makeCall_method($objectProphecy, $wildcard)
     {
         $wildcard->scoreArguments(array(5, 2, 3))->willReturn(10);
         $objectProphecy->getMethodProphecies()->willReturn(array());

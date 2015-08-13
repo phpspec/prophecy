@@ -4,6 +4,11 @@ namespace spec\Prophecy\Prophecy;
 
 use PhpSpec\ObjectBehavior;
 
+class ClassWithFinalMethod
+{
+    final public function finalMethod() {}
+}
+
 class MethodProphecySpec extends ObjectBehavior
 {
     /**
@@ -29,7 +34,10 @@ class MethodProphecySpec extends ObjectBehavior
         );
     }
 
-    function its_constructor_throws_MethodProphecyException_for_final_methods($objectProphecy, ClassWithFinalMethod $subject)
+    /**
+     * @param ClassWithFinalMethod $subject
+     */
+    function its_constructor_throws_MethodProphecyException_for_final_methods($objectProphecy, $subject)
     {
         $objectProphecy->reveal()->willReturn($subject);
 
@@ -373,9 +381,4 @@ class MethodProphecySpec extends ObjectBehavior
     {
         $this->shouldThrow('Prophecy\Exception\InvalidArgumentException')->duringWithArguments(42);
     }
-}
-
-class ClassWithFinalMethod
-{
-    final public function finalMethod() {}
 }
