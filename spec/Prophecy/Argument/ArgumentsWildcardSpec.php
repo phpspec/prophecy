@@ -35,7 +35,10 @@ class ArgumentsWildcardSpec extends ObjectBehavior
         $this->__toString()->shouldReturn('token_1, token_2, token_3');
     }
 
-    function it_exposes_list_of_tokens(TokenInterface $token)
+    /**
+     * @param \Prophecy\Argument\Token\TokenInterface $token
+     */
+    function it_exposes_list_of_tokens($token)
     {
         $this->beConstructedWith(array($token));
 
