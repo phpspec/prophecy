@@ -20,19 +20,9 @@ class DisableConstructorPatchSpec extends ObjectBehavior
     /**
      * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
-    function it_supports_a_default_node($node)
+    function it_supports_anything($node)
     {
-        $node->isExtendable('__construct')->willReturn(true);
         $this->supports($node)->shouldReturn(true);
-    }
-
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_does_not_support_a_node_with_a_constructor_that_cant_be_extended($node)
-    {
-        $node->isExtendable('__construct')->willReturn(false);
-        $this->supports($node)->shouldReturn(false);
     }
 
     /**

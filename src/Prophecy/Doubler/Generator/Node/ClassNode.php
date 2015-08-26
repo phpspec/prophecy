@@ -11,6 +11,7 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
+use Prophecy\Exception\Doubler\MethodNotExtendableException;
 use Prophecy\Exception\InvalidArgumentException;
 
 /**
@@ -101,11 +102,11 @@ class ClassNode
 
     public function addMethod(MethodNode $method)
     {
-        if(!$this->isExtendable($method->getName()))
-        {
-            throw new \InvalidArgumentException(sprintf(
+        if (!$this->isExtendable($method->getName())){
+            $message = sprintf(
                 'Method `%s` is not extendable, so can not be added.', $method->getName()
-            ));
+            );
+            throw new MethodNotExtendableException($message, $this->getParentClass(), $method->getName());
         }
         $this->methods[$method->getName()] = $method;
     }
@@ -148,14 +149,13 @@ class ClassNode
      */
     public function addUnextendableMethod($unextendableMethod)
     {
-        if(!$this->isExtendable($unextendableMethod))
-        {
+        if (!$this->isExtendable($unextendableMethod)){
             return;
         }
         $this->unextendableMethods[] = $unextendableMethod;
     }
 
-	/**
+    /**
      * @param string $method
      * @return bool
      */

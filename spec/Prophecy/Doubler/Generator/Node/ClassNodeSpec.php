@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Doubler\Generator\Node;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Exception\Doubler\MethodNotExtendableException;
 
 class ClassNodeSpec extends ObjectBehavior
 {
@@ -188,6 +189,12 @@ class ClassNodeSpec extends ObjectBehavior
     {
         $this->addUnextendableMethod('testMethod');
         $method->getName()->willReturn('testMethod');
-        $this->shouldThrow('InvalidArgumentException')->duringAddMethod($method);
+
+        $expectedException = new MethodNotExtendableException(
+            "Method `testMethod` is not extendable, so can not be added.",
+            "stdClass",
+            "testMethod"
+        );
+        $this->shouldThrow($expectedException)->duringAddMethod($method);
     }
 }
