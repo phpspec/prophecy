@@ -178,6 +178,92 @@ class ClassMirrorSpec extends ObjectBehavior
     }
 
     /**
+     * @param ReflectionClass  $class
+     * @param ReflectionMethod $constructMethod
+     * @param ReflectionMethod $destructMethod
+     * @param ReflectionMethod $sleepMethod
+     * @param ReflectionMethod $wakeupMethod
+     * @param ReflectionMethod $toStringMethod
+     * @param ReflectionMethod $callMethod
+     * @param ReflectionMethod $invokeMethod
+     */
+    function it_reflects_allowed_magic_methods($class, $constructMethod, $destructMethod, $sleepMethod, $wakeupMethod, $toStringMethod, $callMethod, $invokeMethod)
+    {
+        $class->getName()->willReturn('Custom\ClassName');
+        $class->isInterface()->willReturn(false);
+        $class->isFinal()->willReturn(false);
+        $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
+        $class->getMethods(ReflectionMethod::IS_PUBLIC)->willReturn(array(
+            $constructMethod, $destructMethod, $sleepMethod, $wakeupMethod, $toStringMethod, $callMethod, $invokeMethod
+        ));
+
+        $constructMethod->getName()->willReturn('__construct');
+        $destructMethod->getName()->willReturn('__destruct');
+        $sleepMethod->getName()->willReturn('__sleep');
+        $wakeupMethod->getName()->willReturn('__wakeup');
+        $toStringMethod->getName()->willReturn('__toString');
+        $callMethod->getName()->willReturn('__call');
+        $invokeMethod->getName()->willReturn('__invoke');
+
+        $constructMethod->isFinal()->willReturn(false);
+        $destructMethod->isFinal()->willReturn(false);
+        $sleepMethod->isFinal()->willReturn(false);
+        $wakeupMethod->isFinal()->willReturn(false);
+        $toStringMethod->isFinal()->willReturn(false);
+        $callMethod->isFinal()->willReturn(false);
+        $invokeMethod->isFinal()->willReturn(false);
+
+        $constructMethod->isProtected()->willReturn(false);
+        $destructMethod->isProtected()->willReturn(false);
+        $sleepMethod->isProtected()->willReturn(false);
+        $wakeupMethod->isProtected()->willReturn(false);
+        $toStringMethod->isProtected()->willReturn(false);
+        $callMethod->isProtected()->willReturn(false);
+        $invokeMethod->isProtected()->willReturn(false);
+
+        $constructMethod->isStatic()->willReturn(false);
+        $destructMethod->isStatic()->willReturn(false);
+        $sleepMethod->isStatic()->willReturn(false);
+        $wakeupMethod->isStatic()->willReturn(false);
+        $toStringMethod->isStatic()->willReturn(false);
+        $callMethod->isStatic()->willReturn(false);
+        $invokeMethod->isStatic()->willReturn(false);
+
+        $constructMethod->returnsReference()->willReturn(false);
+        $destructMethod->returnsReference()->willReturn(false);
+        $sleepMethod->returnsReference()->willReturn(false);
+        $wakeupMethod->returnsReference()->willReturn(false);
+        $toStringMethod->returnsReference()->willReturn(false);
+        $callMethod->returnsReference()->willReturn(false);
+        $invokeMethod->returnsReference()->willReturn(false);
+
+        $constructMethod->getParameters()->willReturn(array());
+        $destructMethod->getParameters()->willReturn(array());
+        $sleepMethod->getParameters()->willReturn(array());
+        $wakeupMethod->getParameters()->willReturn(array());
+        $toStringMethod->getParameters()->willReturn(array());
+        $callMethod->getParameters()->willReturn(array());
+        $invokeMethod->getParameters()->willReturn(array());
+
+        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+            $constructMethod->hasReturnType()->willReturn(false);
+            $destructMethod->hasReturnType()->willReturn(false);
+            $sleepMethod->hasReturnType()->willReturn(false);
+            $wakeupMethod->hasReturnType()->willReturn(false);
+            $toStringMethod->hasReturnType()->willReturn(false);
+            $callMethod->hasReturnType()->willReturn(false);
+            $invokeMethod->hasReturnType()->willReturn(false);
+        }
+
+        $classNode   = $this->reflect($class, array());
+        $classNode->shouldBeAnInstanceOf('Prophecy\Doubler\Generator\Node\ClassNode');
+        $classNode->getParentClass()->shouldReturn('Custom\ClassName');
+
+        $methodNodes = $classNode->getMethods();
+        $methodNodes->shouldHaveCount(7);
+    }
+
+    /**
      * @param ReflectionClass     $class
      * @param ReflectionMethod    $method
      * @param ReflectionParameter $param1
