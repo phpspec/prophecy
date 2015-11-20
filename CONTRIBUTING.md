@@ -2,7 +2,7 @@ Contributing
 ------------
 
 Prophecy is an open source, community-driven project. If you'd like to contribute,
-feel free to do this, but remember to follow this few simple rules:
+feel free to do this, but remember to follow these few simple rules:
 
 - Make your feature addition or bug fix,
 - Add either specs or examples for any changes you're making (bugfixes or additions)
@@ -16,6 +16,6 @@ Running tests
 Make sure that you don't break anything with your changes by running:
 
 ```bash
-$> composer install --dev --prefer-dist
+$> composer install --prefer-dist
 $> vendor/bin/phpspec run
 ```
