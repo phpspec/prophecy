@@ -11,6 +11,9 @@
 
 namespace Prophecy\Argument\Token;
 
+use Prophecy\Doubler\LazyDouble;
+use Prophecy\Prophecy\ProphecyInterface;
+use Prophecy\Prophet;
 use SebastianBergmann\Comparator\ComparisonFailure;
 use Prophecy\Comparator\Factory as ComparatorFactory;
 use Prophecy\Util\StringUtil;

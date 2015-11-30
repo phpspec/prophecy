@@ -30,6 +30,7 @@ final class Factory extends BaseFactory
         parent::__construct();
 
         $this->register(new ClosureComparator());
+        $this->register(new ProphecyComparator());
     }
 
     /**
