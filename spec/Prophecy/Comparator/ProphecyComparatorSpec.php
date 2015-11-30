@@ -4,7 +4,6 @@ namespace spec\Prophecy\Comparator;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
 
 class ProphecyComparatorSpec extends ObjectBehavior
@@ -24,14 +23,16 @@ class ProphecyComparatorSpec extends ObjectBehavior
         $this->accepts(function(){}, (object)array())->shouldReturn(false);
         $this->accepts(function(){}, function(){})->shouldReturn(false);
 
-        $prophecy = (new Prophet())->prophesize(ObjectProphecy::class);
+        $prophet = new Prophet();
+        $prophecy = $prophet->prophesize('Prophecy\Prophecy\ObjectProphecy');
 
         $this->accepts($prophecy, $prophecy)->shouldReturn(true);
     }
 
     function it_asserts_that_an_object_is_equal_to_its_revealed_prophecy()
     {
-        $prophecy = (new Prophet())->prophesize(ObjectProphecy::class);
+        $prophet = new Prophet();
+        $prophecy = $prophet->prophesize('Prophecy\Prophecy\ObjectProphecy');
 
         $this->shouldNotThrow()->duringAssertEquals($prophecy->reveal(), $prophecy);
     }
