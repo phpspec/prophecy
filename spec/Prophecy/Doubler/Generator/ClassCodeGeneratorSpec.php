@@ -64,7 +64,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $argument12->isPassedByReference()->willReturn(false);
 
         $argument21->getName()->willReturn('default');
-        $argument21->getTypeHint()->willReturn(null);
+        $argument21->getTypeHint()->willReturn('string');
         $argument21->isOptional()->willReturn(true);
         $argument21->getDefault()->willReturn('ever.zet@gmail.com');
         $argument21->isPassedByReference()->willReturn(false);
@@ -85,7 +85,7 @@ private $email;
 public static function getName(array $fullname = NULL, \ReflectionClass $class): string {
 return $this->name;
 }
-protected  function getEmail( $default = 'ever.zet@gmail.com') {
+protected  function getEmail(string $default = 'ever.zet@gmail.com') {
 return $this->email;
 }
 public  function &getRefValue( $refValue) {

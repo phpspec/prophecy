@@ -73,10 +73,18 @@ class ClassCodeGenerator
             $php = '';
 
             if ($hint = $argument->getTypeHint()) {
-                if ('array' === $hint || 'callable' === $hint) {
-                    $php .= $hint;
-                } else {
-                    $php .= '\\'.$hint;
+                switch ($hint) {
+                    case 'array':
+                    case 'callable':
+                    case 'string':
+                    case 'int':
+                    case 'float':
+                    case 'bool':
+                        $php .= $hint;
+                        break;
+
+                    default:
+                        $php .= '\\'.$hint;
                 }
             }
 
