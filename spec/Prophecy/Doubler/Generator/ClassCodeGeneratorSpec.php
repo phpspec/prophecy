@@ -76,7 +76,9 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $argument31->isPassedByReference()->willReturn(false);
 
         $code = $this->generate('CustomClass', $class);
-        $expected = <<<'PHP'
+
+        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+            $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
 public $name;
@@ -95,6 +97,27 @@ return $this->refValue;
 }
 }
 PHP;
+        } else {
+            $expected = <<<'PHP'
+namespace  {
+class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
+public $name;
+private $email;
+
+public static function getName(array $fullname = NULL, \ReflectionClass $class) {
+return $this->name;
+}
+protected  function getEmail(\string $default = 'ever.zet@gmail.com') {
+return $this->email;
+}
+public  function &getRefValue( $refValue) {
+return $this->refValue;
+}
+
+}
+}
+PHP;
+        }
         $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
         $code->shouldBe($expected);
     }
