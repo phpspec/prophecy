@@ -195,4 +195,18 @@ class Argument
     {
         return new Token\IdenticalValueToken($value);
     }
+
+    /**
+     * Check that argument is same value when rounding to the
+     * given precision.
+     *
+     * @param float $value
+     * @param float $precision
+     *
+     * @return Token\ApproximateValueToken
+     */
+    public static function approximate($value, $precision = 0)
+    {
+        return new Token\ApproximateValueToken($value, $precision);
+    }
 }
