@@ -170,8 +170,19 @@ class MethodNode
     {
         $this->code = sprintf(
             'return parent::%s(%s);', $this->getName(), implode(', ',
-                array_map(function (ArgumentNode $arg) { return '$'.$arg->getName(); }, $this->arguments)
+                array_map(array($this, 'generateArgument'), $this->arguments)
             )
         );
+    }
+
+    private function generateArgument(ArgumentNode $arg)
+    {
+        $argument = '$'.$arg->getName();
+
+        if ($arg->isVariadic()) {
+            $argument = '...'.$argument;
+        }
+
+        return $argument;
     }
 }
