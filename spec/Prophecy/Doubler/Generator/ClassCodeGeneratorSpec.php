@@ -54,20 +54,20 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
 
         $argument11->getName()->willReturn('fullname');
         $argument11->getTypeHint()->willReturn('array');
-        $argument11->hasDefault()->willReturn(true);
+        $argument11->isOptional()->willReturn(true);
         $argument11->getDefault()->willReturn(null);
         $argument11->isPassedByReference()->willReturn(false);
         $argument11->isVariadic()->willReturn(false);
 
         $argument12->getName()->willReturn('class');
         $argument12->getTypeHint()->willReturn('ReflectionClass');
-        $argument12->hasDefault()->willReturn(false);
+        $argument12->isOptional()->willReturn(false);
         $argument12->isPassedByReference()->willReturn(false);
         $argument12->isVariadic()->willReturn(false);
 
         $argument21->getName()->willReturn('default');
         $argument21->getTypeHint()->willReturn(null);
-        $argument21->hasDefault()->willReturn(true);
+        $argument21->isOptional()->willReturn(true);
         $argument21->getDefault()->willReturn('ever.zet@gmail.com');
         $argument21->isPassedByReference()->willReturn(false);
         $argument21->isVariadic()->willReturn(false);
@@ -77,6 +77,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $argument31->isOptional()->willReturn(false);
         $argument31->getDefault()->willReturn();
         $argument31->isPassedByReference()->willReturn(false);
+        $argument31->isVariadic()->willReturn(false);
 
         $code = $this->generate('CustomClass', $class);
         $expected = <<<'PHP'
@@ -127,49 +128,57 @@ PHP;
 
         $method1->getName()->willReturn('variadic');
         $method1->getVisibility()->willReturn('public');
+        $method1->returnsReference()->willReturn(false);
         $method1->isStatic()->willReturn(false);
         $method1->getArguments()->willReturn(array($argument1));
+        $method1->hasReturnType()->willReturn(false);
         $method1->getCode()->willReturn('');
 
         $method2->getName()->willReturn('variadicByRef');
         $method2->getVisibility()->willReturn('public');
+        $method2->returnsReference()->willReturn(false);
         $method2->isStatic()->willReturn(false);
         $method2->getArguments()->willReturn(array($argument2));
+        $method2->hasReturnType()->willReturn(false);
         $method2->getCode()->willReturn('');
 
         $method3->getName()->willReturn('variadicWithType');
         $method3->getVisibility()->willReturn('public');
+        $method3->returnsReference()->willReturn(false);
         $method3->isStatic()->willReturn(false);
         $method3->getArguments()->willReturn(array($argument3));
+        $method3->hasReturnType()->willReturn(false);
         $method3->getCode()->willReturn('');
 
         $method4->getName()->willReturn('variadicWithTypeByRef');
         $method4->getVisibility()->willReturn('public');
+        $method4->returnsReference()->willReturn(false);
         $method4->isStatic()->willReturn(false);
         $method4->getArguments()->willReturn(array($argument4));
+        $method4->hasReturnType()->willReturn(false);
         $method4->getCode()->willReturn('');
 
         $argument1->getName()->willReturn('args');
         $argument1->getTypeHint()->willReturn(null);
-        $argument1->hasDefault()->willReturn(false);
+        $argument1->isOptional()->willReturn(false);
         $argument1->isPassedByReference()->willReturn(false);
         $argument1->isVariadic()->willReturn(true);
 
         $argument2->getName()->willReturn('args');
         $argument2->getTypeHint()->willReturn(null);
-        $argument2->hasDefault()->willReturn(false);
+        $argument2->isOptional()->willReturn(false);
         $argument2->isPassedByReference()->willReturn(true);
         $argument2->isVariadic()->willReturn(true);
 
         $argument3->getName()->willReturn('args');
         $argument3->getTypeHint()->willReturn('\ReflectionClass');
-        $argument3->hasDefault()->willReturn(false);
+        $argument3->isOptional()->willReturn(false);
         $argument3->isPassedByReference()->willReturn(false);
         $argument3->isVariadic()->willReturn(true);
 
         $argument4->getName()->willReturn('args');
         $argument4->getTypeHint()->willReturn('\ReflectionClass');
-        $argument4->hasDefault()->willReturn(false);
+        $argument4->isOptional()->willReturn(false);
         $argument4->isPassedByReference()->willReturn(true);
         $argument4->isVariadic()->willReturn(true);
 
@@ -222,7 +231,7 @@ PHP;
 
         $argument->getName()->willReturn('fullname');
         $argument->getTypeHint()->willReturn('array');
-        $argument->hasDefault()->willReturn(true);
+        $argument->isOptional()->willReturn(true);
         $argument->getDefault()->willReturn(null);
         $argument->isPassedByReference()->willReturn(true);
         $argument->isVariadic()->willReturn(false);

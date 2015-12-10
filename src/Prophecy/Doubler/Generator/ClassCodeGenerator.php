@@ -67,57 +67,30 @@ class ClassCodeGenerator
         return $php.'}';
     }
 
-    private function generateArguments(Node\MethodNode $method)
+    private function generateArguments(array $arguments)
     {
-        return implode(', ', array_map(
-            array($this, 'generateArgument'),
-            $method->getArguments()
-        ));
-    }
+        return array_map(function (Node\ArgumentNode $argument) {
+            $php = '';
 
-    private function generateArgument(Node\ArgumentNode $argument)
-    {
-        return $this->generateArgumentTypeHint($argument)
-            . $this->generateArgumentPrefix($argument)
-            . '$' . $argument->getName()
-            . $this->generateArgumentDefault($argument)
-        ;
-    }
+            if ($hint = $argument->getTypeHint()) {
+                if ('array' === $hint || 'callable' === $hint) {
+                    $php .= $hint;
+                } else {
+                    $php .= '\\'.$hint;
+                }
+            }
 
-    private function generateArgumentTypeHint(Node\ArgumentNode $argument)
-    {
-        if (!($hint = $argument->getTypeHint())) {
-            return '';
-        }
+            $php .= ' '.($argument->isPassedByReference() ? '&' : '');
 
-        if ('array' === $hint || 'callable' === $hint) {
-            return $hint;
-        }
+            $php .= $argument->isVariadic() ? '...' : '';
 
-        return '\\'.$hint;
-    }
+            $php .= '$'.$argument->getName();
 
-    private function generateArgumentPrefix(Node\ArgumentNode $argument)
-    {
-        $prefix = ' ';
+            if ($argument->isOptional()) {
+                $php .= ' = '.var_export($argument->getDefault(), true);
+            }
 
-        if ($argument->isPassedByReference()) {
-            $prefix .= '&';
-        }
-
-        if ($argument->isVariadic()) {
-            $prefix .= '...';
-        }
-
-        return $prefix;
-    }
-
-    private function generateArgumentDefault(Node\ArgumentNode $argument)
-    {
-        if (!$argument->hasDefault()) {
-            return '';
-        }
-
-        return ' = '.var_export($argument->getDefault(), true);
+            return $php;
+        }, $arguments);
     }
 }
