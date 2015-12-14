@@ -60,7 +60,9 @@ class ClassCodeGenerator
             $method->returnsReference() ? '&':'',
             $method->getName(),
             implode(', ', $this->generateArguments($method->getArguments())),
-            $method->hasReturnType() ? sprintf(': %s', $method->getReturnType()) : ''
+            version_compare(PHP_VERSION, '7.0', '>=') && $method->hasReturnType()
+                ? sprintf(': %s', $method->getReturnType())
+                : ''
         );
         $php .= $method->getCode()."\n";
 
@@ -73,10 +75,24 @@ class ClassCodeGenerator
             $php = '';
 
             if ($hint = $argument->getTypeHint()) {
-                if ('array' === $hint || 'callable' === $hint) {
-                    $php .= $hint;
-                } else {
-                    $php .= '\\'.$hint;
+                switch ($hint) {
+                    case 'array':
+                    case 'callable':
+                        $php .= $hint;
+                        break;
+
+                    case 'string':
+                    case 'int':
+                    case 'float':
+                    case 'bool':
+                        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+                            $php .= $hint;
+                            break;
+                        }
+                        // Fall-through to default case for PHP 5.x
+
+                    default:
+                        $php .= '\\'.$hint;
                 }
             }
 
