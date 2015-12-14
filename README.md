@@ -1,5 +1,6 @@
 # Prophecy
 
+[![Stable release](https://poser.pugx.org/phpspec/prophecy/version.svg)](https://packagist.org/packages/phpspec/prophecy)
 [![Build Status](https://travis-ci.org/phpspec/prophecy.svg?branch=master)](https://travis-ci.org/phpspec/prophecy)
 
 Prophecy is a highly opinionated yet very powerful and flexible PHP object mocking
