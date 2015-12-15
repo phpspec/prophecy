@@ -18,7 +18,6 @@ class ProphecyComparator extends ObjectComparator
 {
     public function accepts($expected, $actual)
     {
-
         return is_object($expected) && is_object($actual) && $actual instanceof ProphecyInterface;
     }
 
