@@ -46,13 +46,13 @@ class ThrowPromise implements PromiseInterface
              && !is_subclass_of($exception, 'Exception')) {
                 throw new InvalidArgumentException(sprintf(
                     'Exception class or instance expected as argument to ThrowPromise, but got %s.',
-                    gettype($exception)
+                    $exception
                 ));
             }
         } elseif (!$exception instanceof \Exception) {
             throw new InvalidArgumentException(sprintf(
                 'Exception class or instance expected as argument to ThrowPromise, but got %s.',
-                gettype($exception)
+                is_object($exception) ? get_class($exception) : gettype($exception)
             ));
         }
 
