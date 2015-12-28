@@ -157,7 +157,7 @@ This promise will cause any call to our double's `read()` method with exactly on
 argument - `'123'` to always return `'value'`. But that's only for this
 promise, there's plenty others you can use:
 
-- `ReturnPromise` or `->willReturn(1)` - returns a value from a method call
+- `ReturnPromise` or `->willReturn(1)` - returns a value from a method call; use `->willReturn(1, 2, 3)` to return multiple values one after another on each call, the last one being used after that if there are more calls
 - `ReturnArgumentPromise` or `->willReturnArgument($index)` - returns the nth method argument from call
 - `ThrowPromise` or `->willThrow` - causes the method to throw specific exception
 - `CallbackPromise` or `->will($callback)` - gives you a quick way to define your own custom logic
