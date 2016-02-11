@@ -2,9 +2,8 @@
 
 namespace spec\Prophecy\Doubler\Generator;
 
-use PhpSpec\ObjectBehavior;
 use I\Simply;
-
+use PhpSpec\ObjectBehavior;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -13,15 +12,17 @@ class ClassMirrorSpec extends ObjectBehavior
 {
     /**
      * @param ReflectionClass  $class
+     * @param ReflectionClass  $parent
      * @param ReflectionMethod $method1
      * @param ReflectionMethod $method2
      * @param ReflectionMethod $method3
      */
     function it_reflects_a_class_by_mirroring_all_its_public_methods(
-        $class, $method1, $method2, $method3
+        $class, $parent, $method1, $method2, $method3
     )
     {
         $class->getName()->willReturn('Custom\ClassName');
+        $class->getParentClass()->willReturn($parent);
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
         $class->getMethods(ReflectionMethod::IS_ABSTRACT)->willReturn(array());
@@ -29,9 +30,15 @@ class ClassMirrorSpec extends ObjectBehavior
             $method1, $method2, $method3
         ));
 
+        $parent->getName()->willReturn('Custom\ParentClassName');
+
+        $method1->getDeclaringClass()->willReturn($class);
+        $method2->getDeclaringClass()->willReturn($class);
+        $method3->getDeclaringClass()->willReturn($class);
+
         $method1->getName()->willReturn('getName');
-        $method2->getName()->willReturn('isPublic');
-        $method3->getName()->willReturn('isAbstract');
+        $method2->getName()->willReturn('getSelf');
+        $method3->getName()->willReturn('getParent');
 
         $method1->isFinal()->willReturn(false);
         $method2->isFinal()->willReturn(false);
@@ -54,9 +61,12 @@ class ClassMirrorSpec extends ObjectBehavior
         $method3->getParameters()->willReturn(array());
 
         if (version_compare(PHP_VERSION, '7.0', '>=')) {
-            $method1->hasReturnType()->willReturn(false);
-            $method2->hasReturnType()->willReturn(false);
-            $method3->hasReturnType()->willReturn(false);
+            $method1->hasReturnType()->willReturn(true);
+            $method1->getReturnType()->willReturn('string');
+            $method2->hasReturnType()->willReturn(true);
+            $method2->getReturnType()->willReturn('self');
+            $method3->hasReturnType()->willReturn(true);
+            $method3->getReturnType()->willReturn('parent');
         }
 
         $classNode   = $this->reflect($class, array());
@@ -67,8 +77,14 @@ class ClassMirrorSpec extends ObjectBehavior
         $methodNodes->shouldHaveCount(3);
 
         $classNode->hasMethod('getName')->shouldReturn(true);
-        $classNode->hasMethod('isPublic')->shouldReturn(true);
-        $classNode->hasMethod('isAbstract')->shouldReturn(true);
+        $classNode->hasMethod('getSelf')->shouldReturn(true);
+        $classNode->hasMethod('getParent')->shouldReturn(true);
+
+        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+            $classNode->getMethod('getName')->getReturnType()->shouldReturn('string');
+            $classNode->getMethod('getSelf')->getReturnType()->shouldReturn('\Custom\ClassName');
+            $classNode->getMethod('getParent')->getReturnType()->shouldReturn('\Custom\ParentClassName');
+        }
     }
 
     /**
