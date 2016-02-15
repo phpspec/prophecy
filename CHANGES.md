@@ -1,3 +1,21 @@
+1.6.0 / 2016-02-15
+==================
+
+  * Add Variadics support (thanks @pamil)
+  * Add ProphecyComparator for comparing objects that need revealing (thanks @jon-acker)
+  * Add ApproximateValueToken (thanks @dantleech)
+  * Add support for 'self' and 'parent' return type (thanks @bendavies)
+  * Add __invoke to allowed reflectable methods list (thanks @ftrrtf)
+  * Updated ExportUtil to reflect the latest changes by Sebastian (thanks @jakari)
+  * Specify the required php version for composer (thanks @jakzal)
+  * Exclude 'args' in the generated backtrace (thanks @oradwell)
+  * Fix code generation for scalar parameters (thanks @trowski)
+  * Fix missing sprintf in InvalidArgumentException __construct call (thanks @emmanuelballery)
+  * Fix phpdoc for magic methods (thanks @Tobion)
+  * Fix PhpDoc for interfaces usage (thanks @ImmRanneft)
+  * Prevent final methods from being manually extended (thanks @kamioftea)
+  * Enhance exception for invalid argument to ThrowPromise (thanks @Tobion)
+
 1.5.0 / 2015-04-27
 ==================
 
