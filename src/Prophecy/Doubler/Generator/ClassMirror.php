@@ -143,7 +143,17 @@ class ClassMirror
         }
 
         if (version_compare(PHP_VERSION, '7.0', '>=') && true === $method->hasReturnType()) {
-            $node->setReturnType((string) $method->getReturnType());
+            $returnType = (string) $method->getReturnType();
+            $returnTypeLower = strtolower($returnType);
+
+            if ('self' === $returnTypeLower) {
+                $returnType = $method->getDeclaringClass()->getName();
+            }
+            if ('parent' === $returnTypeLower) {
+                $returnType = $method->getDeclaringClass()->getParentClass()->getName();
+            }
+
+            $node->setReturnType($returnType);
         }
 
         if (is_array($params = $method->getParameters()) && count($params)) {
