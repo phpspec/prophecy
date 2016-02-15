@@ -57,23 +57,27 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $argument11->isOptional()->willReturn(true);
         $argument11->getDefault()->willReturn(null);
         $argument11->isPassedByReference()->willReturn(false);
+        $argument11->isVariadic()->willReturn(false);
 
         $argument12->getName()->willReturn('class');
         $argument12->getTypeHint()->willReturn('ReflectionClass');
         $argument12->isOptional()->willReturn(false);
         $argument12->isPassedByReference()->willReturn(false);
+        $argument12->isVariadic()->willReturn(false);
 
         $argument21->getName()->willReturn('default');
         $argument21->getTypeHint()->willReturn('string');
         $argument21->isOptional()->willReturn(true);
         $argument21->getDefault()->willReturn('ever.zet@gmail.com');
         $argument21->isPassedByReference()->willReturn(false);
+        $argument21->isVariadic()->willReturn(false);
 
         $argument31->getName()->willReturn('refValue');
         $argument31->getTypeHint()->willReturn(null);
         $argument31->isOptional()->willReturn(false);
         $argument31->getDefault()->willReturn();
         $argument31->isPassedByReference()->willReturn(false);
+        $argument31->isVariadic()->willReturn(false);
 
         $code = $this->generate('CustomClass', $class);
 
@@ -124,6 +128,110 @@ PHP;
 
     /**
      * @param \Prophecy\Doubler\Generator\Node\ClassNode    $class
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method1
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method2
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method3
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method4
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument1
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument2
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument3
+     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument4
+     */
+    function it_generates_proper_php_code_for_variadics(
+        $class, $method1, $method2, $method3, $method4, $argument1, $argument2,
+        $argument3, $argument4
+    )
+    {
+        $class->getParentClass()->willReturn('stdClass');
+        $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
+        $class->getProperties()->willReturn(array());
+        $class->getMethods()->willReturn(array(
+            $method1, $method2, $method3, $method4
+        ));
+
+        $method1->getName()->willReturn('variadic');
+        $method1->getVisibility()->willReturn('public');
+        $method1->returnsReference()->willReturn(false);
+        $method1->isStatic()->willReturn(false);
+        $method1->getArguments()->willReturn(array($argument1));
+        $method1->hasReturnType()->willReturn(false);
+        $method1->getCode()->willReturn('');
+
+        $method2->getName()->willReturn('variadicByRef');
+        $method2->getVisibility()->willReturn('public');
+        $method2->returnsReference()->willReturn(false);
+        $method2->isStatic()->willReturn(false);
+        $method2->getArguments()->willReturn(array($argument2));
+        $method2->hasReturnType()->willReturn(false);
+        $method2->getCode()->willReturn('');
+
+        $method3->getName()->willReturn('variadicWithType');
+        $method3->getVisibility()->willReturn('public');
+        $method3->returnsReference()->willReturn(false);
+        $method3->isStatic()->willReturn(false);
+        $method3->getArguments()->willReturn(array($argument3));
+        $method3->hasReturnType()->willReturn(false);
+        $method3->getCode()->willReturn('');
+
+        $method4->getName()->willReturn('variadicWithTypeByRef');
+        $method4->getVisibility()->willReturn('public');
+        $method4->returnsReference()->willReturn(false);
+        $method4->isStatic()->willReturn(false);
+        $method4->getArguments()->willReturn(array($argument4));
+        $method4->hasReturnType()->willReturn(false);
+        $method4->getCode()->willReturn('');
+
+        $argument1->getName()->willReturn('args');
+        $argument1->getTypeHint()->willReturn(null);
+        $argument1->isOptional()->willReturn(false);
+        $argument1->isPassedByReference()->willReturn(false);
+        $argument1->isVariadic()->willReturn(true);
+
+        $argument2->getName()->willReturn('args');
+        $argument2->getTypeHint()->willReturn(null);
+        $argument2->isOptional()->willReturn(false);
+        $argument2->isPassedByReference()->willReturn(true);
+        $argument2->isVariadic()->willReturn(true);
+
+        $argument3->getName()->willReturn('args');
+        $argument3->getTypeHint()->willReturn('\ReflectionClass');
+        $argument3->isOptional()->willReturn(false);
+        $argument3->isPassedByReference()->willReturn(false);
+        $argument3->isVariadic()->willReturn(true);
+
+        $argument4->getName()->willReturn('args');
+        $argument4->getTypeHint()->willReturn('\ReflectionClass');
+        $argument4->isOptional()->willReturn(false);
+        $argument4->isPassedByReference()->willReturn(true);
+        $argument4->isVariadic()->willReturn(true);
+
+        $code = $this->generate('CustomClass', $class);
+        $expected = <<<'PHP'
+namespace  {
+class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
+
+public  function variadic( ...$args) {
+
+}
+public  function variadicByRef( &...$args) {
+
+}
+public  function variadicWithType(\\ReflectionClass ...$args) {
+
+}
+public  function variadicWithTypeByRef(\\ReflectionClass &...$args) {
+
+}
+
+}
+}
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $code->shouldBe($expected);
+    }
+
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode    $class
      * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method
      * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument
      */
@@ -149,6 +257,7 @@ PHP;
         $argument->isOptional()->willReturn(true);
         $argument->getDefault()->willReturn(null);
         $argument->isPassedByReference()->willReturn(true);
+        $argument->isVariadic()->willReturn(false);
 
         $code = $this->generate('CustomClass', $class);
         $expected =<<<'PHP'

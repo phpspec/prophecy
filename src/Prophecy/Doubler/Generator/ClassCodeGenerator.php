@@ -96,9 +96,13 @@ class ClassCodeGenerator
                 }
             }
 
-            $php .= ' '.($argument->isPassedByReference() ? '&' : '').'$'.$argument->getName();
+            $php .= ' '.($argument->isPassedByReference() ? '&' : '');
 
-            if ($argument->isOptional()) {
+            $php .= $argument->isVariadic() ? '...' : '';
+
+            $php .= '$'.$argument->getName();
+
+            if ($argument->isOptional() && !$argument->isVariadic()) {
                 $php .= ' = '.var_export($argument->getDefault(), true);
             }
 
