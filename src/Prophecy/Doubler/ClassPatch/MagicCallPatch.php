@@ -57,6 +57,10 @@ class MagicCallPatch implements ClassPatchInterface
         foreach($tagList as $tag) {
             $methodName = $tag->getMethodName();
 
+            if (empty($methodName)) {
+                continue;
+            }
+
             if (!$reflectionClass->hasMethod($methodName)) {
                 $methodNode = new MethodNode($tag->getMethodName());
                 $methodNode->setStatic($tag->isStatic());
