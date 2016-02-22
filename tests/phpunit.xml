@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit convertErrorsToExceptions="true" colors="true">
+
+    <testsuites>
+        <testsuite name="All">
+            <directory>ProphecyTest</directory>
+        </testsuite>
+    </testsuites>
+
+</phpunit>
