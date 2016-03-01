@@ -11,7 +11,10 @@
 
 namespace Prophecy\Doubler\ClassPatch;
 
-use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\DocBlock\Tags\Method;
+use phpDocumentor\Reflection\DocBlockFactory;
+use phpDocumentor\Reflection\DocBlockFactoryInterface;
+use phpDocumentor\Reflection\Types\ContextFactory;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 
@@ -19,9 +22,19 @@ use Prophecy\Doubler\Generator\Node\MethodNode;
  * Discover Magical API using "@method" PHPDoc format.
  *
  * @author Thomas Tourlourat <thomas@tourlourat.com>
+ * @author Kévin Dunglas <dunglas@gmail.com>
  */
 class MagicCallPatch implements ClassPatchInterface
 {
+    private $docBlockFactory;
+    private $contextFactory;
+
+    public function __construct()
+    {
+        $this->docBlockFactory = DocBlockFactory::createInstance();
+        $this->contextFactory = new ContextFactory();
+    }
+
     /**
      * Support any class
      *
@@ -44,14 +57,22 @@ class MagicCallPatch implements ClassPatchInterface
         $parentClass = $node->getParentClass();
         $reflectionClass = new \ReflectionClass($parentClass);
 
-        $phpdoc = new DocBlock($reflectionClass->getDocComment());
-
-        $tagList = $phpdoc->getTagsByName('method');
+        try {
+            $phpdoc = $this->docBlockFactory->create($reflectionClass, $this->contextFactory->createFromReflector($reflectionClass));
+            $tagList = $phpdoc->getTagsByName('method');
+        } catch (\InvalidArgumentException $e) {
+            // No DocBlock
+            $tagList = array();
+        }
 
         $interfaces = $reflectionClass->getInterfaces();
         foreach($interfaces as $interface) {
-            $phpdoc = new DocBlock($interface);
-            $tagList = array_merge($tagList, $phpdoc->getTagsByName('method'));
+            try {
+                $phpdoc = $this->docBlockFactory->create($interface, $this->contextFactory->createFromReflector($interface));
+                $tagList = array_merge($tagList, $phpdoc->getTagsByName('method'));
+            } catch (\InvalidArgumentException $e) {
+                // No DocBlock
+            }
         }
 
         foreach($tagList as $tag) {
