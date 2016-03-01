@@ -59,14 +59,11 @@ class MagicCallPatch implements ClassPatchInterface
 
         try {
             $phpdoc = $this->docBlockFactory->create($reflectionClass, $this->contextFactory->createFromReflector($reflectionClass));
+            $tagList = $phpdoc->getTagsByName('method');
         } catch (\InvalidArgumentException $e) {
             // No DocBlock
+            $tagList = array();
         }
-
-        /**
-         * @var Method[] $tagList
-         */
-        $tagList = isset($phpdoc) ? $phpdoc->getTagsByName('method') : array();
 
         $interfaces = $reflectionClass->getInterfaces();
         foreach($interfaces as $interface) {
@@ -80,6 +77,10 @@ class MagicCallPatch implements ClassPatchInterface
 
         foreach($tagList as $tag) {
             $methodName = $tag->getMethodName();
+
+            if (empty($methodName)) {
+                continue;
+            }
 
             if (!$reflectionClass->hasMethod($methodName)) {
                 $methodNode = new MethodNode($tag->getMethodName());
