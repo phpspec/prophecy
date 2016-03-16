@@ -11,6 +11,10 @@
 
 namespace Prophecy\Doubler\ClassPatch;
 
+use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\DocBlock\Tag;
+use phpDocumentor\Reflection\DocBlock\Tag as LegacyTag;
+use phpDocumentor\Reflection\DocBlock\Tag\MethodTag as LegacyMethodTag;
 use phpDocumentor\Reflection\DocBlock\Tags\Method;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\DocBlockFactoryInterface;
@@ -23,16 +27,26 @@ use Prophecy\Doubler\Generator\Node\MethodNode;
  *
  * @author Thomas Tourlourat <thomas@tourlourat.com>
  * @author Kévin Dunglas <dunglas@gmail.com>
+ * @author Théo FIDRY <theo.fidry@gmail.com>
  */
 class MagicCallPatch implements ClassPatchInterface
 {
+    /**
+     * @var DocBlockFactory|null
+     */
     private $docBlockFactory;
+
+    /**
+     * @var ContextFactory|null
+     */
     private $contextFactory;
 
     public function __construct()
     {
-        $this->docBlockFactory = DocBlockFactory::createInstance();
-        $this->contextFactory = new ContextFactory();
+        if (class_exists('phpDocumentor\Reflection\DocBlockFactory') && class_exists('phpDocumentor\Reflection\Types\ContextFactory')) {
+            $this->docBlockFactory = DocBlockFactory::createInstance();
+            $this->contextFactory = new ContextFactory();
+        }
     }
 
     /**
@@ -57,25 +71,13 @@ class MagicCallPatch implements ClassPatchInterface
         $parentClass = $node->getParentClass();
         $reflectionClass = new \ReflectionClass($parentClass);
 
-        try {
-            $phpdoc = $this->docBlockFactory->create($reflectionClass, $this->contextFactory->createFromReflector($reflectionClass));
-            $tagList = $phpdoc->getTagsByName('method');
-        } catch (\InvalidArgumentException $e) {
-            // No DocBlock
-            $tagList = array();
-        }
-
-        $interfaces = $reflectionClass->getInterfaces();
-        foreach($interfaces as $interface) {
-            try {
-                $phpdoc = $this->docBlockFactory->create($interface, $this->contextFactory->createFromReflector($interface));
-                $tagList = array_merge($tagList, $phpdoc->getTagsByName('method'));
-            } catch (\InvalidArgumentException $e) {
-                // No DocBlock
-            }
-        }
+        $tagList = array_merge(
+            $this->getClassTagList($reflectionClass),
+            $this->getClassInterfacesTagList($reflectionClass)
+        );
 
         foreach($tagList as $tag) {
+            /* @var LegacyMethodTag|Method $tag */
             $methodName = $tag->getMethodName();
 
             if (empty($methodName)) {
@@ -83,7 +85,7 @@ class MagicCallPatch implements ClassPatchInterface
             }
 
             if (!$reflectionClass->hasMethod($methodName)) {
-                $methodNode = new MethodNode($tag->getMethodName());
+                $methodNode = new MethodNode($methodName);
                 $methodNode->setStatic($tag->isStatic());
 
                 $node->addMethod($methodNode);
@@ -99,6 +101,42 @@ class MagicCallPatch implements ClassPatchInterface
     public function getPriority()
     {
         return 50;
+    }
+
+    /**
+     * @param \ReflectionClass $reflectionClass
+     *
+     * @return LegacyTag[]
+     */
+    private function getClassInterfacesTagList(\ReflectionClass $reflectionClass)
+    {
+        $interfaces = $reflectionClass->getInterfaces();
+        $tagList = array();
+
+        foreach($interfaces as $interface) {
+            $tagList = array_merge($tagList, $this->getClassTagList($interface));
+        }
+
+        return $tagList;
+    }
+
+    /**
+     * @param \ReflectionClass $reflectionClass
+     *
+     * @return LegacyMethodTag[]|Method[]
+     */
+    private function getClassTagList(\ReflectionClass $reflectionClass)
+    {
+        try {
+            $phpdoc = (null === $this->docBlockFactory || null === $this->contextFactory)
+                ? new DocBlock($reflectionClass->getDocComment())
+                : $this->docBlockFactory->create($reflectionClass, $this->contextFactory->createFromReflector($reflectionClass))
+            ;
+
+            return $phpdoc->getTagsByName('method');
+        } catch (\InvalidArgumentException $e) {
+            return array();
+        }
     }
 }
 
