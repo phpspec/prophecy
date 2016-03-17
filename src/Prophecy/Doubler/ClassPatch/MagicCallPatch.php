@@ -11,16 +11,10 @@
 
 namespace Prophecy\Doubler\ClassPatch;
 
-use phpDocumentor\Reflection\DocBlock;
-use phpDocumentor\Reflection\DocBlock\Tag;
-use phpDocumentor\Reflection\DocBlock\Tag as LegacyTag;
-use phpDocumentor\Reflection\DocBlock\Tag\MethodTag as LegacyMethodTag;
-use phpDocumentor\Reflection\DocBlock\Tags\Method;
-use phpDocumentor\Reflection\DocBlockFactory;
-use phpDocumentor\Reflection\DocBlockFactoryInterface;
-use phpDocumentor\Reflection\Types\ContextFactory;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\PhpDocumentor\ClassAndInterfaceTagRetriever;
+use Prophecy\PhpDocumentor\MethodTagRetrieverInterface;
 
 /**
  * Discover Magical API using "@method" PHPDoc format.
@@ -31,22 +25,11 @@ use Prophecy\Doubler\Generator\Node\MethodNode;
  */
 class MagicCallPatch implements ClassPatchInterface
 {
-    /**
-     * @var DocBlockFactory|null
-     */
-    private $docBlockFactory;
+    private $tagRetriever;
 
-    /**
-     * @var ContextFactory|null
-     */
-    private $contextFactory;
-
-    public function __construct()
+    public function __construct(MethodTagRetrieverInterface $tagRetriever = null)
     {
-        if (class_exists('phpDocumentor\Reflection\DocBlockFactory') && class_exists('phpDocumentor\Reflection\Types\ContextFactory')) {
-            $this->docBlockFactory = DocBlockFactory::createInstance();
-            $this->contextFactory = new ContextFactory();
-        }
+        $this->tagRetriever = (null === $tagRetriever) ? new ClassAndInterfaceTagRetriever() : $tagRetriever;
     }
 
     /**
@@ -71,13 +54,9 @@ class MagicCallPatch implements ClassPatchInterface
         $parentClass = $node->getParentClass();
         $reflectionClass = new \ReflectionClass($parentClass);
 
-        $tagList = array_merge(
-            $this->getClassTagList($reflectionClass),
-            $this->getClassInterfacesTagList($reflectionClass)
-        );
+        $tagList = $this->tagRetriever->getTagList($reflectionClass);
 
         foreach($tagList as $tag) {
-            /* @var LegacyMethodTag|Method $tag */
             $methodName = $tag->getMethodName();
 
             if (empty($methodName)) {
@@ -101,42 +80,6 @@ class MagicCallPatch implements ClassPatchInterface
     public function getPriority()
     {
         return 50;
-    }
-
-    /**
-     * @param \ReflectionClass $reflectionClass
-     *
-     * @return LegacyTag[]
-     */
-    private function getClassInterfacesTagList(\ReflectionClass $reflectionClass)
-    {
-        $interfaces = $reflectionClass->getInterfaces();
-        $tagList = array();
-
-        foreach($interfaces as $interface) {
-            $tagList = array_merge($tagList, $this->getClassTagList($interface));
-        }
-
-        return $tagList;
-    }
-
-    /**
-     * @param \ReflectionClass $reflectionClass
-     *
-     * @return LegacyMethodTag[]|Method[]
-     */
-    private function getClassTagList(\ReflectionClass $reflectionClass)
-    {
-        try {
-            $phpdoc = (null === $this->docBlockFactory || null === $this->contextFactory)
-                ? new DocBlock($reflectionClass->getDocComment())
-                : $this->docBlockFactory->create($reflectionClass, $this->contextFactory->createFromReflector($reflectionClass))
-            ;
-
-            return $phpdoc->getTagsByName('method');
-        } catch (\InvalidArgumentException $e) {
-            return array();
-        }
     }
 }
 
