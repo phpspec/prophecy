@@ -19,9 +19,6 @@ use phpDocumentor\Reflection\DocBlock\Tags\Method;
  */
 final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
 {
-    /**
-     * @var MethodTagRetrieverInterface
-     */
     private $classRetriever;
 
     public function __construct(MethodTagRetrieverInterface $classRetriever = null)
@@ -32,7 +29,7 @@ final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
             return;
         }
 
-        $this->classRetriever = (class_exists('phpDocumentor\Reflection\DocBlockFactory') && class_exists('phpDocumentor\Reflection\Types\ContextFactory'))
+        $this->classRetriever = class_exists('phpDocumentor\Reflection\DocBlockFactory') && class_exists('phpDocumentor\Reflection\Types\ContextFactory')
             ? new ClassTagRetriever()
             : new LegacyClassTagRetriever()
         ;
@@ -46,7 +43,7 @@ final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
     public function getTagList(\ReflectionClass $reflectionClass)
     {
         return array_merge(
-            $this->getTagList($reflectionClass),
+            $this->classRetriever->getTagList($reflectionClass),
             $this->getInterfacesTagList($reflectionClass)
         );
     }
@@ -62,7 +59,7 @@ final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
         $tagList = array();
 
         foreach($interfaces as $interface) {
-            $tagList = array_merge($tagList, $this->getTagList($interface));
+            $tagList = array_merge($tagList, $this->classRetriever->getTagList($interface));
         }
 
         return $tagList;
