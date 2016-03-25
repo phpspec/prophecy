@@ -29,7 +29,7 @@ class MagicCallPatch implements ClassPatchInterface
 
     public function __construct(MethodTagRetrieverInterface $tagRetriever = null)
     {
-        $this->tagRetriever = (null === $tagRetriever) ? new ClassAndInterfaceTagRetriever() : $tagRetriever;
+        $this->tagRetriever = null === $tagRetriever ? new ClassAndInterfaceTagRetriever() : $tagRetriever;
     }
 
     /**
