@@ -1,10 +1,4 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: jeff
-     * Date: 25/08/2015
-     * Time: 19:14
-     */
 
     namespace Prophecy\Exception\Doubler;
 
