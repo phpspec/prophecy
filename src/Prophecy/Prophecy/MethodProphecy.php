@@ -86,6 +86,7 @@ class MethodProphecy
                     case 'Traversable':
                     case 'Generator':
                         // Remove eval() when minimum version >=5.5
+                        /** @var callable $generator */
                         $generator = eval('return function () { yield; };');
                         return $generator();
 
