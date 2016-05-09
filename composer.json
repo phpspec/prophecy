@@ -25,12 +25,19 @@
     },
 
     "require-dev": {
-        "phpspec/phpspec": "~2.0"
+        "phpspec/phpspec": "~2.0",
+        "phpunit/phpunit": "*"
     },
 
     "autoload": {
         "psr-0": {
             "Prophecy\\": "src/"
+        }
+    },
+
+    "autoload-dev": {
+        "psr-0": {
+            "ProphecyTest\\Examples\\": "tests/examples/src/"
         }
     },
 
