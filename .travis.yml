@@ -26,4 +26,6 @@ before_script:
     fi;
   - travis_retry composer update --no-interaction
 
-script: vendor/bin/phpspec run -fpretty -v
+script:
+  - vendor/bin/phpspec run -fpretty -v
+  - vendor/bin/phpunit

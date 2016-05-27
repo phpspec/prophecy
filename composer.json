@@ -26,12 +26,19 @@
     },
 
     "require-dev": {
-        "phpspec/phpspec": "^2.0"
+        "phpspec/phpspec": "^2.0",
+        "phpunit/phpunit": "^4.8 || ^5"
     },
 
     "autoload": {
         "psr-0": {
             "Prophecy\\": "src/"
+        }
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "Fixtures\\Prophecy\\": "fixtures"
         }
     },
 
