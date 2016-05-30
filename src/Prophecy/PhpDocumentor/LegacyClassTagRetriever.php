@@ -16,6 +16,8 @@ use phpDocumentor\Reflection\DocBlock\Tag\MethodTag as LegacyMethodTag;
 
 /**
  * @author Théo FIDRY <theo.fidry@gmail.com>
+ *
+ * @internal
  */
 final class LegacyClassTagRetriever implements MethodTagRetrieverInterface
 {

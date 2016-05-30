@@ -17,6 +17,8 @@ use phpDocumentor\Reflection\Types\ContextFactory;
 
 /**
  * @author Théo FIDRY <theo.fidry@gmail.com>
+ *
+ * @internal
  */
 final class ClassTagRetriever implements MethodTagRetrieverInterface
 {

@@ -16,6 +16,8 @@ use phpDocumentor\Reflection\DocBlock\Tags\Method;
 
 /**
  * @author Théo FIDRY <theo.fidry@gmail.com>
+ *
+ * @internal
  */
 interface MethodTagRetrieverInterface
 {
