@@ -18,7 +18,7 @@ matrix:
   fast_finish: true
   include:
     - php: '7.0'
-      env: PHPDOCUMENTOR_REFLECTION_DOCBLOCK="~2.0"
+      env: PHPDOCUMENTOR_REFLECTION_DOCBLOCK="^2.0"
 
 before_script:
   - if [ -n "$PHPDOCUMENTOR_REFLECTION_DOCBLOCK" ]; then
