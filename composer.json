@@ -16,16 +16,17 @@
             "email":     "marcello.duarte@gmail.com"
         }
     ],
+
     "require": {
         "php":                               "^5.3|^7.0",
-        "phpdocumentor/reflection-docblock": "~2.0",
-        "sebastian/comparator":              "~1.1",
+        "phpdocumentor/reflection-docblock": "^2.0|^3.0.2",
+        "sebastian/comparator":              "^1.1",
         "doctrine/instantiator":             "^1.0.2",
-        "sebastian/recursion-context":       "~1.0"
+        "sebastian/recursion-context":       "^1.0"
     },
 
     "require-dev": {
-        "phpspec/phpspec": "~2.0"
+        "phpspec/phpspec": "^2.0"
     },
 
     "autoload": {

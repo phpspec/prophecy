@@ -14,6 +14,16 @@ branches:
     - /^feature\/.*$/
     - /^optimization\/.*$/
 
-before_script: travis_retry composer install --no-interaction
+matrix:
+  fast_finish: true
+  include:
+    - php: '7.0'
+      env: PHPDOCUMENTOR_REFLECTION_DOCBLOCK="^2.0"
+
+before_script:
+  - if [ -n "$PHPDOCUMENTOR_REFLECTION_DOCBLOCK" ]; then
+      composer require "phpdocumentor/reflection-docblock:${PHPDOCUMENTOR_REFLECTION_DOCBLOCK}" --no-update;
+    fi;
+  - travis_retry composer update --no-interaction
 
 script: vendor/bin/phpspec run -fpretty -v
