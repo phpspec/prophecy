@@ -1,3 +1,10 @@
+1.6.1 / 2016-06-07
+==================
+
+  * Ignored empty method names in invalid `@method` phpdoc
+  * Fixed the mocking of SplFileObject
+  * Added compatibility with phpdocumentor/reflection-docblock 3
+
 1.6.0 / 2016-02-15
 ==================
 
