@@ -166,7 +166,23 @@ class ClassMirrorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($argNodes[0]->isOptional());
         $this->assertFalse($argNodes[0]->isPassedByReference());
         $this->assertTrue($argNodes[0]->isVariadic());
+    }
 
+    /**
+     * @test
+     * @requires PHP 5.6
+     */
+    public function it_properly_reads_methods_typehinted_variadic_arguments()
+    {
+        if (defined('HHVM_VERSION_ID')) {
+            $this->markTestSkipped('HHVM does not support typehints on variadic arguments.');
+        }
+
+        $class = new \ReflectionClass('Fixtures\Prophecy\WithTypehintedVariadicArgument');
+
+        $mirror = new ClassMirror();
+
+        $classNode = $mirror->reflect($class, array());
         $methodNode = $classNode->getMethod('methodWithTypeHintedArgs');
         $argNodes = $methodNode->getArguments();
 
