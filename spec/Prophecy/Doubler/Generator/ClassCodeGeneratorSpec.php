@@ -2,24 +2,25 @@
 
 namespace spec\Prophecy\Doubler\Generator;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Method;
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
+use Prophecy\Doubler\Generator\Node\ArgumentNode;
+use Prophecy\Doubler\Generator\Node\ClassNode;
+use Prophecy\Doubler\Generator\Node\MethodNode;
 
 class ClassCodeGeneratorSpec extends ObjectBehavior
 {
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode    $class
-     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method1
-     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method2
-     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method3
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument11
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument12
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument21
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument31
-     */
     function it_generates_proper_php_code_for_specific_ClassNode(
-        $class, $method1, $method2, $method3, $argument11, $argument12, $argument21, $argument31
-    )
-    {
+        ClassNode $class,
+        MethodNode $method1,
+        MethodNode $method2,
+        MethodNode $method3,
+        ArgumentNode $argument11,
+        ArgumentNode $argument12,
+        ArgumentNode $argument21,
+        ArgumentNode $argument31
+    ) {
         $class->getParentClass()->willReturn('RuntimeException');
         $class->getInterfaces()->willReturn(array(
             'Prophecy\Doubler\Generator\MirroredInterface', 'ArrayAccess', 'ArrayIterator'
@@ -126,22 +127,17 @@ PHP;
         $code->shouldBe($expected);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode    $class
-     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method1
-     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method2
-     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method3
-     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method4
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument1
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument2
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument3
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument4
-     */
     function it_generates_proper_php_code_for_variadics(
-        $class, $method1, $method2, $method3, $method4, $argument1, $argument2,
-        $argument3, $argument4
-    )
-    {
+        ClassNode $class,
+        MethodNode $method1,
+        MethodNode $method2,
+        MethodNode $method3,
+        MethodNode $method4,
+        ArgumentNode $argument1,
+        ArgumentNode $argument2,
+        ArgumentNode $argument3,
+        ArgumentNode $argument4
+    ) {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
         $class->getProperties()->willReturn(array());
@@ -230,15 +226,11 @@ PHP;
         $code->shouldBe($expected);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode    $class
-     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument
-     */
     function it_overrides_properly_methods_with_args_passed_by_reference(
-        $class, $method, $argument
-    )
-    {
+        ClassNode $class,
+        MethodNode $method,
+        ArgumentNode $argument
+    ) {
         $class->getParentClass()->willReturn('RuntimeException');
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
         $class->getProperties()->willReturn(array());
@@ -275,10 +267,7 @@ PHP;
         $code->shouldBe($expected);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $class
-     */
-    function it_generates_empty_class_for_empty_ClassNode($class)
+    function it_generates_empty_class_for_empty_ClassNode(ClassNode $class)
     {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
@@ -298,10 +287,7 @@ PHP;
         $code->shouldBe($expected);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $class
-     */
-    function it_wraps_class_in_namespace_if_it_is_namespaced($class)
+    function it_wraps_class_in_namespace_if_it_is_namespaced(ClassNode $class)
     {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));

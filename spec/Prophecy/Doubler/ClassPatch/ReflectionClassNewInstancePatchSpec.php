@@ -4,6 +4,9 @@ namespace spec\Prophecy\Doubler\ClassPatch;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Prophecy\Doubler\Generator\Node\ArgumentNode;
+use Prophecy\Doubler\Generator\Node\ClassNode;
+use Prophecy\Doubler\Generator\Node\MethodNode;
 
 class ReflectionClassNewInstancePatchSpec extends ObjectBehavior
 {
@@ -17,11 +20,7 @@ class ReflectionClassNewInstancePatchSpec extends ObjectBehavior
         $this->getPriority()->shouldReturn(50);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $reflectionClassNode
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $anotherClassNode
-     */
-    function it_supports_ReflectionClass_only($reflectionClassNode, $anotherClassNode)
+    function it_supports_ReflectionClass_only(ClassNode $reflectionClassNode, ClassNode $anotherClassNode)
     {
         $reflectionClassNode->getParentClass()->willReturn('ReflectionClass');
         $anotherClassNode->getParentClass()->willReturn('stdClass');
@@ -30,14 +29,11 @@ class ReflectionClassNewInstancePatchSpec extends ObjectBehavior
         $this->supports($anotherClassNode)->shouldReturn(false);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode    $class
-     * @param \Prophecy\Doubler\Generator\Node\MethodNode   $method
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $arg1
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $arg2
-     */
-    function it_makes_all_newInstance_arguments_optional($class, $method, $arg1, $arg2)
-    {
+    function it_makes_all_newInstance_arguments_optional(
+        ClassNode $class,
+        MethodNode $method,
+        ArgumentNode $arg1
+    ) {
         $class->getMethod('newInstance')->willReturn($method);
         $method->getArguments()->willReturn(array($arg1));
         $arg1->setDefault(null)->shouldBeCalled();

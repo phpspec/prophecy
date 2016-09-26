@@ -3,15 +3,13 @@
 namespace spec\Prophecy\Exception\Prophecy;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Prophecy\MethodProphecy;
+use Prophecy\Prophecy\ObjectProphecy;
 use spec\Prophecy\Exception\Prophecy;
 
 class MethodProphecyExceptionSpec extends ObjectBehavior
 {
-    /**
-     * @param \Prophecy\Prophecy\ObjectProphecy $objectProphecy
-     * @param \Prophecy\Prophecy\MethodProphecy $methodProphecy
-     */
-    function let($objectProphecy, $methodProphecy)
+    function let(ObjectProphecy $objectProphecy, MethodProphecy $methodProphecy)
     {
         $methodProphecy->getObjectProphecy()->willReturn($objectProphecy);
 

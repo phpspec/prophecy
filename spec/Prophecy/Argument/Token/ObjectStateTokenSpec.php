@@ -21,20 +21,14 @@ class ObjectStateTokenSpec extends ObjectBehavior
         $this->shouldNotBeLast();
     }
 
-    /**
-     * @param \ReflectionClass $reflection
-     */
-    function it_scores_8_if_argument_object_has_specific_method_state($reflection)
+    function it_scores_8_if_argument_object_has_specific_method_state(\ReflectionClass $reflection)
     {
         $reflection->getName()->willReturn('stdClass');
 
         $this->scoreArgument($reflection)->shouldReturn(8);
     }
 
-    /**
-     * @param \stdClass $class
-     */
-    function it_scores_8_if_argument_object_has_specific_property_state($class)
+    function it_scores_8_if_argument_object_has_specific_property_state(\stdClass $class)
     {
         $class->getName = 'stdClass';
 
@@ -50,20 +44,14 @@ class ObjectStateTokenSpec extends ObjectBehavior
         $this->scoreArgument($value2)->shouldReturn(false);
     }
 
-    /**
-     * @param \stdClass $class
-     */
-    function it_does_not_score_if_argument_property_state_does_not_match($class)
+    function it_does_not_score_if_argument_property_state_does_not_match(\stdClass $class)
     {
         $class->getName = 'SplFileInfo';
 
         $this->scoreArgument($class)->shouldReturn(false);
     }
 
-    /**
-     * @param \spec\Prophecy\Argument\Token\ObjectStateTokenFixtureA $class
-     */
-    function it_does_not_score_if_argument_object_does_not_have_method_or_property($class)
+    function it_does_not_score_if_argument_object_does_not_have_method_or_property(ObjectStateTokenFixtureA $class)
     {
         $this->scoreArgument($class)->shouldReturn(false);
     }
