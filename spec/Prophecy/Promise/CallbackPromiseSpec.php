@@ -3,6 +3,8 @@
 namespace spec\Prophecy\Promise;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Prophecy\MethodProphecy;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class CallbackPromiseSpec extends ObjectBehavior
 {
@@ -16,11 +18,7 @@ class CallbackPromiseSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('Prophecy\Promise\PromiseInterface');
     }
 
-    /**
-     * @param \Prophecy\Prophecy\ObjectProphecy $object
-     * @param \Prophecy\Prophecy\MethodProphecy $method
-     */
-    function it_should_execute_closure_callback($object, $method)
+    function it_should_execute_closure_callback(ObjectProphecy $object, MethodProphecy $method)
     {
         $firstArgumentCallback = function ($args) {
             return $args[0];
@@ -31,11 +29,7 @@ class CallbackPromiseSpec extends ObjectBehavior
         $this->execute(array('one', 'two'), $object, $method)->shouldReturn('one');
     }
 
-    /**
-     * @param \Prophecy\Prophecy\ObjectProphecy $object
-     * @param \Prophecy\Prophecy\MethodProphecy $method
-     */
-    function it_should_execute_static_array_callback($object, $method)
+    function it_should_execute_static_array_callback(ObjectProphecy $object, MethodProphecy $method)
     {
         $firstArgumentCallback = array('spec\Prophecy\Promise\ClassCallback', 'staticCallbackMethod');
 
@@ -44,11 +38,7 @@ class CallbackPromiseSpec extends ObjectBehavior
         $this->execute(array('one', 'two'), $object, $method)->shouldReturn('one');
     }
 
-    /**
-     * @param \Prophecy\Prophecy\ObjectProphecy $object
-     * @param \Prophecy\Prophecy\MethodProphecy $method
-     */
-    function it_should_execute_instance_array_callback($object, $method)
+    function it_should_execute_instance_array_callback(ObjectProphecy $object, MethodProphecy $method)
     {
         $class = new ClassCallback();
         $firstArgumentCallback = array($class, 'callbackMethod');
@@ -58,11 +48,7 @@ class CallbackPromiseSpec extends ObjectBehavior
         $this->execute(array('one', 'two'), $object, $method)->shouldReturn('one');
     }
 
-    /**
-     * @param \Prophecy\Prophecy\ObjectProphecy $object
-     * @param \Prophecy\Prophecy\MethodProphecy $method
-     */
-    function it_should_execute_string_function_callback($object, $method)
+    function it_should_execute_string_function_callback(ObjectProphecy $object, MethodProphecy $method)
     {
         $firstArgumentCallback = 'spec\Prophecy\Promise\functionCallbackFirstArgument';
 

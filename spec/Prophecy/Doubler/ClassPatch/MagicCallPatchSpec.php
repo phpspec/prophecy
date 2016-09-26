@@ -4,6 +4,7 @@ namespace spec\Prophecy\Doubler\ClassPatch;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 
 class MagicCallPatchSpec extends ObjectBehavior
@@ -13,18 +14,12 @@ class MagicCallPatchSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('Prophecy\Doubler\ClassPatch\ClassPatchInterface');
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_supports_anything($node)
+    function it_supports_anything(ClassNode $node)
     {
         $this->supports($node)->shouldReturn(true);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_discovers_api_using_phpdoc($node)
+    function it_discovers_api_using_phpdoc(ClassNode $node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApi');
 
@@ -33,10 +28,7 @@ class MagicCallPatchSpec extends ObjectBehavior
         $this->apply($node);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_ignores_existing_methods($node)
+    function it_ignores_existing_methods(ClassNode $node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiExtended');
 
@@ -46,10 +38,7 @@ class MagicCallPatchSpec extends ObjectBehavior
         $this->apply($node);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_ignores_empty_methods_from_phpdoc($node)
+    function it_ignores_empty_methods_from_phpdoc(ClassNode $node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiInvalidMethodDefinition');
 
@@ -58,10 +47,7 @@ class MagicCallPatchSpec extends ObjectBehavior
         $this->apply($node);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_discovers_api_using_phpdoc_from_interface($node)
+    function it_discovers_api_using_phpdoc_from_interface(ClassNode $node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiImplemented');
 

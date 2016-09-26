@@ -10,17 +10,13 @@ use ReflectionParameter;
 
 class ClassMirrorSpec extends ObjectBehavior
 {
-    /**
-     * @param ReflectionClass  $class
-     * @param ReflectionClass  $parent
-     * @param ReflectionMethod $method1
-     * @param ReflectionMethod $method2
-     * @param ReflectionMethod $method3
-     */
     function it_reflects_a_class_by_mirroring_all_its_public_methods(
-        $class, $parent, $method1, $method2, $method3
-    )
-    {
+        \ReflectionClass $class,
+        \ReflectionClass $parent,
+        \ReflectionMethod $method1,
+        \ReflectionMethod $method2,
+        \ReflectionMethod $method3
+    ) {
         $class->getName()->willReturn('Custom\ClassName');
         $class->getParentClass()->willReturn($parent);
         $class->isInterface()->willReturn(false);
@@ -87,13 +83,11 @@ class ClassMirrorSpec extends ObjectBehavior
         }
     }
 
-    /**
-     * @param ReflectionClass     $class
-     * @param ReflectionMethod    $method
-     * @param ReflectionParameter $parameter
-     */
-    function it_changes_argument_names_if_they_are_varying($class, $method, $parameter)
-    {
+    function it_changes_argument_names_if_they_are_varying(
+        \ReflectionClass $class,
+        \ReflectionMethod $method,
+        \ReflectionParameter $parameter
+    ) {
 
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
@@ -131,11 +125,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $argumentNode->getName()->shouldReturn('__dot_dot_dot__');
     }
 
-    /**
-     * @param ReflectionClass  $class
-     * @param ReflectionMethod $method
-     */
-    function it_reflects_protected_abstract_methods($class, $method)
+    function it_reflects_protected_abstract_methods(\ReflectionClass $class, \ReflectionMethod $method)
     {
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
@@ -163,11 +153,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $methodNodes['innerDetail']->getVisibility()->shouldReturn('protected');
     }
 
-    /**
-     * @param ReflectionClass  $class
-     * @param ReflectionMethod $method
-     */
-    function it_reflects_public_static_methods($class, $method)
+    function it_reflects_public_static_methods(\ReflectionClass $class, \ReflectionMethod $method)
     {
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
@@ -196,18 +182,16 @@ class ClassMirrorSpec extends ObjectBehavior
         $methodNodes['innerDetail']->isStatic()->shouldReturn(true);
     }
 
-    /**
-     * @param ReflectionClass  $class
-     * @param ReflectionMethod $constructMethod
-     * @param ReflectionMethod $destructMethod
-     * @param ReflectionMethod $sleepMethod
-     * @param ReflectionMethod $wakeupMethod
-     * @param ReflectionMethod $toStringMethod
-     * @param ReflectionMethod $callMethod
-     * @param ReflectionMethod $invokeMethod
-     */
-    function it_reflects_allowed_magic_methods($class, $constructMethod, $destructMethod, $sleepMethod, $wakeupMethod, $toStringMethod, $callMethod, $invokeMethod)
-    {
+    function it_reflects_allowed_magic_methods(
+        \ReflectionClass $class,
+        \ReflectionMethod $constructMethod,
+        \ReflectionMethod $destructMethod,
+        \ReflectionMethod $sleepMethod,
+        \ReflectionMethod $wakeupMethod,
+        \ReflectionMethod $toStringMethod,
+        \ReflectionMethod $callMethod,
+        \ReflectionMethod $invokeMethod
+    ) {
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
@@ -282,19 +266,15 @@ class ClassMirrorSpec extends ObjectBehavior
         $methodNodes->shouldHaveCount(7);
     }
 
-    /**
-     * @param ReflectionClass     $class
-     * @param ReflectionMethod    $method
-     * @param ReflectionParameter $param1
-     * @param ReflectionParameter $param2
-     * @param ReflectionClass     $typeHint
-     * @param ReflectionParameter $param3
-     * @param ReflectionParameter $param4
-     */
     function it_properly_reads_methods_arguments_with_types(
-        $class, $method, $param1, $param2, $typeHint, $param3, $param4
-    )
-    {
+        \ReflectionClass $class,
+        \ReflectionMethod $method,
+        \ReflectionParameter $param1,
+        \ReflectionParameter $param2,
+        \ReflectionClass $typeHint,
+        \ReflectionParameter $param3,
+        \ReflectionParameter $param4
+    ) {
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
@@ -388,15 +368,11 @@ class ClassMirrorSpec extends ObjectBehavior
         }
     }
 
-    /**
-     * @param ReflectionClass     $class
-     * @param ReflectionMethod    $method
-     * @param ReflectionParameter $param1
-     */
     function it_marks_required_args_without_types_as_not_optional(
-        $class, $method, $param1
-    )
-    {
+        \ReflectionClass $class,
+        \ReflectionMethod $method,
+        \ReflectionParameter $param1
+    ) {
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
@@ -443,18 +419,14 @@ class ClassMirrorSpec extends ObjectBehavior
         $argNodes[0]->isOptional()->shouldReturn(false);
     }
 
-    /**
-     * @param ReflectionClass     $class
-     * @param ReflectionMethod    $method
-     * @param ReflectionParameter $param1
-     * @param ReflectionParameter $param2
-     * @param ReflectionParameter $param3
-     * @param ReflectionClass     $typeHint
-     */
     function it_marks_passed_by_reference_args_as_passed_by_reference(
-        $class, $method, $param1, $param2, $param3, $typeHint
-    )
-    {
+        \ReflectionClass $class,
+        \ReflectionMethod $method,
+        \ReflectionParameter $param1,
+        \ReflectionParameter $param2,
+        \ReflectionParameter $param3,
+        \ReflectionClass $typeHint
+    ) {
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
@@ -532,10 +504,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $argNodes[2]->isPassedByReference()->shouldReturn(true);
     }
 
-    /**
-     * @param ReflectionClass $class
-     */
-    function it_throws_an_exception_if_class_is_final($class)
+    function it_throws_an_exception_if_class_is_final(\ReflectionClass $class)
     {
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(true);
@@ -545,11 +514,7 @@ class ClassMirrorSpec extends ObjectBehavior
              ->duringReflect($class, array());
     }
 
-    /**
-     * @param ReflectionClass  $class
-     * @param ReflectionMethod $method
-     */
-    function it_ignores_final_methods($class, $method)
+    function it_ignores_final_methods(\ReflectionClass $class, \ReflectionMethod $method)
     {
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
@@ -564,11 +529,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $classNode->getMethods()->shouldHaveCount(0);
     }
 
-    /**
-     * @param ReflectionClass  $class
-     * @param ReflectionMethod $method
-     */
-    function it_marks_final_methods_as_unextendable($class, $method)
+    function it_marks_final_methods_as_unextendable(\ReflectionClass $class, \ReflectionMethod $method)
     {
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
@@ -584,10 +545,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $classNode->isExtendable('finalImplementation')->shouldReturn(false);
     }
 
-    /**
-     * @param ReflectionClass $interface
-     */
-    function it_throws_an_exception_if_interface_provided_instead_of_class($interface)
+    function it_throws_an_exception_if_interface_provided_instead_of_class(\ReflectionClass $interface)
     {
         $interface->isInterface()->willReturn(true);
         $interface->getName()->willReturn('Custom\ClassName');
@@ -596,17 +554,13 @@ class ClassMirrorSpec extends ObjectBehavior
              ->duringReflect($interface, array());
     }
 
-    /**
-     * @param ReflectionClass  $interface1
-     * @param ReflectionClass  $interface2
-     * @param ReflectionMethod $method1
-     * @param ReflectionMethod $method2
-     * @param ReflectionMethod $method3
-     */
     function it_reflects_all_interfaces_methods(
-        $interface1, $interface2, $method1, $method2, $method3
-    )
-    {
+        \ReflectionClass $interface1,
+        \ReflectionClass  $interface2,
+        \ReflectionMethod $method1,
+        \ReflectionMethod $method2,
+        \ReflectionMethod $method3
+    ) {
         $interface1->getName()->willReturn('MyInterface1');
         $interface2->getName()->willReturn('MyInterface2');
 
@@ -658,14 +612,12 @@ class ClassMirrorSpec extends ObjectBehavior
         $classNode->hasMethod('isAbstract')->shouldReturn(true);
     }
 
-    /**
-     * @param ReflectionClass  $class
-     * @param ReflectionMethod $method1
-     * @param ReflectionMethod $method2
-     * @param ReflectionMethod $method3
-     */
-    function it_ignores_virtually_private_methods($class, $method1, $method2, $method3)
-    {
+    function it_ignores_virtually_private_methods(
+        \ReflectionClass $class,
+        \ReflectionMethod $method1,
+        \ReflectionMethod $method2,
+        \ReflectionMethod $method3
+    ) {
         $class->getName()->willReturn('SomeClass');
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
@@ -709,11 +661,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $classNode->hasMethod('isAbstract')->shouldReturn(true);
     }
 
-    /**
-     * @param ReflectionClass  $class
-     * @param ReflectionMethod $method
-     */
-    function it_does_not_throw_exception_for_virtually_private_finals($class, $method)
+    function it_does_not_throw_exception_for_virtually_private_finals(\ReflectionClass $class, \ReflectionMethod $method)
     {
         $class->getName()->willReturn('SomeClass');
         $class->isInterface()->willReturn(false);
@@ -727,10 +675,7 @@ class ClassMirrorSpec extends ObjectBehavior
         $this->shouldNotThrow()->duringReflect($class, array());
     }
 
-    /**
-     * @param ReflectionClass $class
-     */
-    function it_throws_an_exception_if_class_provided_in_interfaces_list($class)
+    function it_throws_an_exception_if_class_provided_in_interfaces_list(\ReflectionClass $class)
     {
         $class->getName()->willReturn('MyClass');
         $class->isInterface()->willReturn(false);

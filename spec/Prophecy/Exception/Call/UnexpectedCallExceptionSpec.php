@@ -3,14 +3,12 @@
 namespace spec\Prophecy\Exception\Call;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Prophecy\ObjectProphecy;
 use spec\Prophecy\Exception\Prophecy\Prophecy;
 
 class UnexpectedCallExceptionSpec extends ObjectBehavior
 {
-    /**
-     * @param \Prophecy\Prophecy\ObjectProphecy $objectProphecy
-     */
-    function let($objectProphecy)
+    function let(ObjectProphecy $objectProphecy)
     {
         $this->beConstructedWith('msg', $objectProphecy, 'getName', array('arg1', 'arg2'));
     }

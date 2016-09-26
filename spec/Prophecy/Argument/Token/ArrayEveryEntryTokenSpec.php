@@ -3,14 +3,11 @@
 namespace spec\Prophecy\Argument\Token;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use Prophecy\Argument\Token\TokenInterface;
 
 class ArrayEveryEntryTokenSpec extends ObjectBehavior
 {
-    /**
-     * @param \Prophecy\Argument\Token\TokenInterface $value
-     */
-    function let($value)
+    function let(TokenInterface $value)
     {
         $this->beConstructedWith($value);
     }
@@ -36,10 +33,7 @@ class ArrayEveryEntryTokenSpec extends ObjectBehavior
         $this->__toString()->shouldBe('[value, ..., value]');
     }
 
-    /**
-     * @param \stdClass $stdClass
-     */
-    function it_wraps_non_token_value_into_ExactValueToken($stdClass)
+    function it_wraps_non_token_value_into_ExactValueToken(\stdClass $stdClass)
     {
         $this->beConstructedWith($stdClass);
         $this->getValue()->shouldHaveType('Prophecy\Argument\Token\ExactValueToken');
@@ -56,10 +50,7 @@ class ArrayEveryEntryTokenSpec extends ObjectBehavior
         $this->scoreArgument(array())->shouldBe(false);
     }
 
-    /**
-     * @param \Iterator $object
-     */
-    function it_does_not_score_traversable_object_without_entries($object)
+    function it_does_not_score_traversable_object_without_entries(\Iterator $object)
     {
         $object->rewind()->willReturn(null);
         $object->next()->willReturn(null);
@@ -88,11 +79,7 @@ class ArrayEveryEntryTokenSpec extends ObjectBehavior
         $this->scoreArgument(array('key' => 'value'))->shouldBe(6);
     }
 
-    /**
-     * @param \Prophecy\Argument\Token\TokenInterface $value
-     * @param \Iterator                               $object
-     */
-    function it_scores_traversable_object_from_value_token($value, $object)
+    function it_scores_traversable_object_from_value_token(TokenInterface $value, \Iterator $object)
     {
         $object->current()->will(function ($args, $object) {
             $object->valid()->willReturn(false);

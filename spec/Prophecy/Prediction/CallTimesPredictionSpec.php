@@ -3,6 +3,10 @@
 namespace spec\Prophecy\Prediction;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument\ArgumentsWildcard;
+use Prophecy\Call\Call;
+use Prophecy\Prophecy\MethodProphecy;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class CallTimesPredictionSpec extends ObjectBehavior
 {
@@ -16,29 +20,21 @@ class CallTimesPredictionSpec extends ObjectBehavior
         $this->shouldHaveType('Prophecy\Prediction\PredictionInterface');
     }
 
-    /**
-     * @param \Prophecy\Prophecy\ObjectProphecy $object
-     * @param \Prophecy\Prophecy\MethodProphecy $method
-     * @param \Prophecy\Call\Call               $call1
-     * @param \Prophecy\Call\Call               $call2
-     */
     function it_does_nothing_if_there_were_exact_amount_of_calls_being_made(
-        $object, $method, $call1, $call2
-    )
-    {
+        ObjectProphecy $object,
+        MethodProphecy $method,
+        Call $call1,
+        Call $call2
+    ) {
         $this->check(array($call1, $call2), $object, $method)->shouldReturn(null);
     }
 
-    /**
-     * @param \Prophecy\Prophecy\ObjectProphecy    $object
-     * @param \Prophecy\Prophecy\MethodProphecy    $method
-     * @param \Prophecy\Call\Call                  $call
-     * @param \Prophecy\Argument\ArgumentsWildcard $arguments
-     */
     function it_throws_UnexpectedCallsCountException_if_calls_found(
-        $object, $method, $call, $arguments
-    )
-    {
+        ObjectProphecy $object,
+        MethodProphecy $method,
+        Call $call,
+        ArgumentsWildcard $arguments
+    ) {
         $method->getObjectProphecy()->willReturn($object);
         $method->getMethodName()->willReturn('getName');
         $method->getArgumentsWildcard()->willReturn($arguments);
