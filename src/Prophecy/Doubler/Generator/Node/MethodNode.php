@@ -122,6 +122,7 @@ class MethodNode
             case 'bool':
             case 'array':
             case 'callable':
+            case 'void':
                 $this->returnType = $type;
                 break;
 
@@ -161,6 +162,10 @@ class MethodNode
         if ($this->returnsReference)
         {
             return "throw new \Prophecy\Exception\Doubler\ReturnByReferenceException('Returning by reference not supported', get_class(\$this), '{$this->name}');";
+        }
+
+        if ($this->returnType === 'void') {
+            return substr((string) $this->code, 7);
         }
 
         return (string) $this->code;
