@@ -2,7 +2,10 @@
 
 namespace spec\Prophecy\Promise;
 
+use PhpSpec\Exception\Example\SkippingException;
 use PhpSpec\ObjectBehavior;
+use Prophecy\Prophecy\MethodProphecy;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class ThrowPromiseSpec extends ObjectBehavior
 {
@@ -47,6 +50,17 @@ class ThrowPromiseSpec extends ObjectBehavior
     function it_throws_provided_exception($object, $method)
     {
         $this->beConstructedWith($exc = new \RuntimeException('Some exception'));
+
+        $this->shouldThrow($exc)->duringExecute(array(), $object, $method);
+    }
+
+    function it_throws_errors(ObjectProphecy $object, MethodProphecy $method)
+    {
+        if (!class_exists('\Error')) {
+            throw new SkippingException('The class Error, introduced in PHP 7, does not exist');
+        }
+
+        $this->beConstructedWith($exc = new \Error('Error exception'));
 
         $this->shouldThrow($exc)->duringExecute(array(), $object, $method);
     }
