@@ -3,21 +3,17 @@
 namespace spec\Prophecy\Doubler\Generator;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Doubler\Generator\ClassCodeGenerator;
+use Prophecy\Doubler\Generator\Node\ClassNode;
 
 class ClassCreatorSpec extends ObjectBehavior
 {
-    /**
-     * @param \Prophecy\Doubler\Generator\ClassCodeGenerator $generator
-     */
-    function let($generator)
+    function let(ClassCodeGenerator $generator)
     {
         $this->beConstructedWith($generator);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $class
-     */
-    function it_evaluates_code_generated_by_ClassCodeGenerator($generator, $class)
+    function it_evaluates_code_generated_by_ClassCodeGenerator($generator, ClassNode $class)
     {
         $generator->generate('stdClass', $class)->shouldBeCalled()->willReturn(
             'return 42;'
@@ -26,10 +22,7 @@ class ClassCreatorSpec extends ObjectBehavior
         $this->create('stdClass', $class)->shouldReturn(42);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $class
-     */
-    function it_throws_an_exception_if_class_does_not_exist_after_evaluation($generator, $class)
+    function it_throws_an_exception_if_class_does_not_exist_after_evaluation($generator, ClassNode $class)
     {
         $generator->generate('CustomClass', $class)->shouldBeCalled()->willReturn(
             'return 42;'

@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Doubler\Generator\Node;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Doubler\Generator\Node\ArgumentNode;
 
 class MethodNodeSpec extends ObjectBehavior
 {
@@ -60,11 +61,7 @@ class MethodNodeSpec extends ObjectBehavior
         $this->getVisibility()->shouldReturn('public');
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument1
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument2
-     */
-    function its_useParentCode_causes_method_to_call_parent($argument1, $argument2)
+    function its_useParentCode_causes_method_to_call_parent(ArgumentNode $argument1, ArgumentNode $argument2)
     {
         $argument1->getName()->willReturn('objectName');
         $argument2->getName()->willReturn('default');
@@ -112,11 +109,7 @@ class MethodNodeSpec extends ObjectBehavior
         $this->getArguments()->shouldHaveCount(0);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument1
-     * @param \Prophecy\Doubler\Generator\Node\ArgumentNode $argument2
-     */
-    function it_supports_adding_arguments($argument1, $argument2)
+    function it_supports_adding_arguments(ArgumentNode $argument1, ArgumentNode $argument2)
     {
         $this->addArgument($argument1);
         $this->addArgument($argument2);

@@ -123,10 +123,7 @@ class ExactValueTokenSpec extends ObjectBehavior
         $this->__toString()->shouldReturn('exact(stream:'.$resource.')');
     }
 
-    /**
-     * @param \stdClass $object
-     */
-    function it_generates_proper_string_representation_for_object($object)
+    function it_generates_proper_string_representation_for_object(\stdClass $object)
     {
         $objHash = sprintf('%s:%s',
             get_class($object->getWrappedObject()),

@@ -4,6 +4,7 @@ namespace spec\Prophecy\Doubler\ClassPatch;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Prophecy\Doubler\Generator\Node\ClassNode;
 
 class TraversablePatchSpec extends ObjectBehavior
 {
@@ -12,30 +13,21 @@ class TraversablePatchSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('Prophecy\Doubler\ClassPatch\ClassPatchInterface');
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_supports_class_that_implements_only_Traversable($node)
+    function it_supports_class_that_implements_only_Traversable(ClassNode $node)
     {
         $node->getInterfaces()->willReturn(array('Traversable'));
 
         $this->supports($node)->shouldReturn(true);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_does_not_support_class_that_implements_Iterator($node)
+    function it_does_not_support_class_that_implements_Iterator(ClassNode $node)
     {
         $node->getInterfaces()->willReturn(array('Traversable', 'Iterator'));
 
         $this->supports($node)->shouldReturn(false);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_does_not_support_class_that_implements_IteratorAggregate($node)
+    function it_does_not_support_class_that_implements_IteratorAggregate(ClassNode $node)
     {
         $node->getInterfaces()->willReturn(array('Traversable', 'IteratorAggregate'));
 
@@ -47,10 +39,7 @@ class TraversablePatchSpec extends ObjectBehavior
         $this->getPriority()->shouldReturn(100);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_forces_node_to_implement_IteratorAggregate($node)
+    function it_forces_node_to_implement_IteratorAggregate(ClassNode $node)
     {
         $node->addInterface('Iterator')->shouldBeCalled();
 
