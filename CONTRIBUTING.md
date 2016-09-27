@@ -18,4 +18,5 @@ Make sure that you don't break anything with your changes by running:
 ```bash
 $> composer install --prefer-dist
 $> vendor/bin/phpspec run
+$> vendor/bin/phpunit
 ```
