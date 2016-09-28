@@ -75,6 +75,7 @@ class MethodProphecy
 
             if ('void' === $type) {
                 $this->voidReturnType = true;
+                return;
             }
 
             $this->will(function () use ($type) {
@@ -84,7 +85,6 @@ class MethodProphecy
                     case 'int':    return 0;
                     case 'bool':   return false;
                     case 'array':  return array();
-                    case 'void':   return;
 
                     case 'callable':
                     case 'Closure':
