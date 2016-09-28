@@ -441,6 +441,14 @@ class MethodProphecy
         return $this->argumentsWildcard;
     }
 
+    /**
+     * @return bool
+     */
+    public function hasReturnVoid()
+    {
+        return $this->voidReturnType;
+    }
+
     private function bindToObjectProphecy()
     {
         if ($this->bound) {
