@@ -27,6 +27,7 @@ class MagicCallPatchSpec extends ObjectBehavior
     function it_discovers_api_using_phpdoc($node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApi');
+        $node->getInterfaces()->willReturn(array());
 
         $node->addMethod(new MethodNode('undefinedMethod'))->shouldBeCalled();
 
@@ -39,6 +40,7 @@ class MagicCallPatchSpec extends ObjectBehavior
     function it_ignores_existing_methods($node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiExtended');
+        $node->getInterfaces()->willReturn(array());
 
         $node->addMethod(new MethodNode('undefinedMethod'))->shouldBeCalled();
         $node->addMethod(new MethodNode('definedMethod'))->shouldNotBeCalled();
@@ -52,6 +54,7 @@ class MagicCallPatchSpec extends ObjectBehavior
     function it_ignores_empty_methods_from_phpdoc($node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiInvalidMethodDefinition');
+        $node->getInterfaces()->willReturn(array());
 
         $node->addMethod(new MethodNode(''))->shouldNotBeCalled();
 
@@ -61,15 +64,41 @@ class MagicCallPatchSpec extends ObjectBehavior
     /**
      * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
      */
-    function it_discovers_api_using_phpdoc_from_interface($node)
+    function it_discovers_api_using_phpdoc_from_implemented_interfaces($node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiImplemented');
+        $node->getInterfaces()->willReturn(array());
 
         $node->addMethod(new MethodNode('implementedMethod'))->shouldBeCalled();
 
         $this->apply($node);
     }
 
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
+     */
+    function it_discovers_api_using_phpdoc_from_own_interfaces($node)
+    {
+        $node->getParentClass()->willReturn('stdClass');
+        $node->getInterfaces()->willReturn(array('spec\Prophecy\Doubler\ClassPatch\MagicalApiImplemented'));
+
+        $node->addMethod(new MethodNode('implementedMethod'))->shouldBeCalled();
+
+        $this->apply($node);
+    }
+
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
+     */
+    function it_discovers_api_using_phpdoc_from_extended_parent_interfaces($node)
+    {
+        $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiImplementedExtended');
+        $node->getInterfaces()->willReturn(array());
+
+        $node->addMethod(new MethodNode('implementedMethod'))->shouldBeCalled();
+
+        $this->apply($node);
+    }
 
     function it_has_50_priority()
     {
@@ -114,6 +143,12 @@ class MagicalApiExtended extends MagicalApi
 class MagicalApiImplemented implements MagicalApiInterface
 {
 
+}
+
+/**
+ */
+class MagicalApiImplementedExtended extends MagicalApiImplemented
+{
 }
 
 /**
