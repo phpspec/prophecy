@@ -94,6 +94,6 @@ class ThrowPromise implements PromiseInterface
      */
     private function isAValidThrowable($exception)
     {
-        return is_a($exception, 'Exception') || is_subclass_of($exception, 'Throwable');
+        return is_a($exception, 'Exception', true) || is_subclass_of($exception, 'Throwable', true);
     }
 }
