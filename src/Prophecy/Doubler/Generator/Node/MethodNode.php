@@ -26,6 +26,7 @@ class MethodNode
     private $static = false;
     private $returnsReference = false;
     private $returnType;
+    private $nullableReturnType = false;
 
     /**
      * @var ArgumentNode[]
@@ -147,6 +148,22 @@ class MethodNode
     public function getReturnType()
     {
         return $this->returnType;
+    }
+
+    /**
+     * @param bool $bool
+     */
+    public function setNullableReturnType($bool)
+    {
+        $this->nullableReturnType = (bool) $bool;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNullableReturnType()
+    {
+        return $this->nullableReturnType;
     }
 
     /**
