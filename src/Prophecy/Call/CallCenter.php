@@ -109,7 +109,7 @@ class CallCenter
         }
 
         if ($methodProphecy->hasReturnVoid() && $returnValue !== null) {
-            throw new MethodProphecyException('This method has a void return type', $methodProphecy);
+            throw new MethodProphecyException("The method \"$methodName\" has a void return type", $methodProphecy);
         }
 
         $this->recordedCalls[] = new Call(
