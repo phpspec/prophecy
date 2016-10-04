@@ -297,7 +297,7 @@ class MethodProphecy
             ));
         }
 
-        if (null === $this->promise) {
+        if (null === $this->promise && !$this->voidReturnType) {
             $this->willReturn();
         }
 
