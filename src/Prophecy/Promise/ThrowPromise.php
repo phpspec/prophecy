@@ -41,7 +41,7 @@ class ThrowPromise implements PromiseInterface
     public function __construct($exception)
     {
         if (is_string($exception)) {
-            if (!class_exists($exception) || $this->isNotAValidThrowable($exception)) {
+            if (!class_exists($exception) || !$this->isAValidThrowable($exception)) {
                 throw new InvalidArgumentException(sprintf(
                     'Exception / Throwable class or instance expected as argument to ThrowPromise, but got %s.',
                     $exception
@@ -87,8 +87,13 @@ class ThrowPromise implements PromiseInterface
         throw $this->exception;
     }
 
-    private function isNotAValidThrowable($exception)
+    /**
+     * @param string $exception
+     *
+     * @return bool
+     */
+    private function isAValidThrowable($exception)
     {
-        return 'Exception' !== ltrim($exception, '\\') && !is_subclass_of($exception, 'Exception') && !is_subclass_of($exception, 'Throwable');
+        return is_a($exception, 'Exception') || is_subclass_of($exception, 'Throwable');
     }
 }
