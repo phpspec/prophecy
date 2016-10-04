@@ -35,6 +35,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method1->getArguments()->willReturn(array($argument11, $argument12));
         $method1->hasReturnType()->willReturn(true);
         $method1->getReturnType()->willReturn('string');
+        $method1->hasNullableReturnType()->willReturn(false);
         $method1->getCode()->willReturn('return $this->name;');
 
         $method2->getName()->willReturn('getEmail');
