@@ -34,7 +34,7 @@ class ThrowPromise implements PromiseInterface
     /**
      * Initializes promise.
      *
-     * @param string|\Exception $exception Exception class name or instance
+     * @param string|\Exception|\Throwable $exception Exception class name or instance
      *
      * @throws \Prophecy\Exception\InvalidArgumentException
      */
