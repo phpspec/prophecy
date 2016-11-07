@@ -17,7 +17,7 @@ class ClassMirrorTest extends \PHPUnit_Framework_TestCase
 
         $node = $mirror->reflect($class, array());
 
-        $this->assertCount(7, $node->getMethods());
+        $this->assertCount(8, $node->getMethods());
     }
 
     /**
