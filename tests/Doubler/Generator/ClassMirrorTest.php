@@ -9,20 +9,6 @@ class ClassMirrorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_reflects_allowed_magic_methods()
-    {
-        $class = new \ReflectionClass('Fixtures\Prophecy\SpecialMethods');
-
-        $mirror = new ClassMirror();
-
-        $node = $mirror->reflect($class, array());
-
-        $this->assertCount(7, $node->getMethods());
-    }
-
-    /**
-     * @test
-     */
     public function it_reflects_protected_abstract_methods()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithProtectedAbstractMethod');
@@ -296,23 +282,6 @@ class ClassMirrorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($classNode->hasMethod('getName'));
         $this->assertTrue($classNode->hasMethod('isAbstract'));
         $this->assertTrue($classNode->hasMethod('getVisibility'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_ignores_virtually_private_methods()
-    {
-        $class = new \ReflectionClass('Fixtures\Prophecy\WithVirtuallyPrivateMethod');
-
-        $mirror = new ClassMirror();
-
-        $classNode = $mirror->reflect($class, array());
-
-        $this->assertCount(2, $classNode->getMethods());
-        $this->assertTrue($classNode->hasMethod('isAbstract'));
-        $this->assertTrue($classNode->hasMethod('__toString'));
-        $this->assertFalse($classNode->hasMethod('_getName'));
     }
 
     /**

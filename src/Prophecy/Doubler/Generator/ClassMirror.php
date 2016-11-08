@@ -25,16 +25,6 @@ use ReflectionParameter;
  */
 class ClassMirror
 {
-    private static $reflectableMethods = array(
-        '__construct',
-        '__destruct',
-        '__sleep',
-        '__wakeup',
-        '__toString',
-        '__call',
-        '__invoke'
-    );
-
     /**
      * Reflects provided arguments into class node.
      *
@@ -104,11 +94,6 @@ class ClassMirror
         }
 
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            if (0 === strpos($method->getName(), '_')
-                && !in_array($method->getName(), self::$reflectableMethods)) {
-                continue;
-            }
-
             if (true === $method->isFinal()) {
                 $node->addUnextendableMethod($method->getName());
                 continue;
