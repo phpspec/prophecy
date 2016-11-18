@@ -171,7 +171,10 @@ class MethodProphecy
     public function willReturn()
     {
         if ($this->voidReturnType) {
-            throw new MethodProphecyException("The method \"$this->methodName\" has a void return type", $this);
+            throw new MethodProphecyException(
+                "The method \"$this->methodName\" has a void return type, and so cannot return anything",
+                $this
+            );
         }
 
         return $this->will(new Promise\ReturnPromise(func_get_args()));

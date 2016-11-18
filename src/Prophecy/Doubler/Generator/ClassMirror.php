@@ -143,7 +143,7 @@ class ClassMirror
             $node->setReturnsReference();
         }
 
-        if (version_compare(PHP_VERSION, '7.0', '>=') && true === $method->hasReturnType()) {
+        if (version_compare(PHP_VERSION, '7.0', '>=') && $method->hasReturnType()) {
             $returnType = (string) $method->getReturnType();
             $returnTypeLower = strtolower($returnType);
 
