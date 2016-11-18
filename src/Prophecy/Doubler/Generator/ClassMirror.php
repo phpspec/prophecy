@@ -156,7 +156,7 @@ class ClassMirror
 
             $node->setReturnType($returnType);
 
-            if (version_compare(PHP_VERSION, '7.1', '>=') && true === $method->getReturnType()->allowsNull()) {
+            if (version_compare(PHP_VERSION, '7.1', '>=') && $method->getReturnType()->allowsNull()) {
                 $node->setNullableReturnType(true);
             }
         }
