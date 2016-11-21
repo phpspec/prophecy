@@ -1,3 +1,11 @@
+1.6.2 / 2016-11-21
+==================
+
+* Added support for detecting @method on interfaces that the class itself implements, or when the stubbed class is an interface itself (thanks @Seldaek)
+* Added support for sebastian/recursion-context 2 (thanks @sebastianbergmann)
+* Added testing on PHP 7.1 on Travis (thanks @danizord)
+* Fixed the usage of the phpunit comparator (thanks @Anyqax)
+
 1.6.1 / 2016-06-07
 ==================
 
