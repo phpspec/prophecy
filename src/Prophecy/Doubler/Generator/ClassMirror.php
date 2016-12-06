@@ -32,7 +32,19 @@ class ClassMirror
         '__wakeup',
         '__toString',
         '__call',
-        '__invoke'
+        '__invoke',
+        // \SoapClient's non-magic methods that look like they are magic.
+        '__doRequest',
+        '__getFunctions',
+        '__getLastRequest',
+        '__getLastRequestHeaders',
+        '__getLastResponse',
+        '__getLastResponseHeaders',
+        '__getTypes',
+        '__setCookie',
+        '__setLocation',
+        '__setSoapHeaders',
+        '__soapCall',
     );
 
     /**
