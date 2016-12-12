@@ -11,7 +11,6 @@ cache:
 branches:
   except:
     - /^bugfix\/.*$/
-    - /^feature\/.*$/
     - /^optimization\/.*$/
 
 matrix:
@@ -26,10 +25,10 @@ matrix:
       env: PHPDOCUMENTOR_REFLECTION_DOCBLOCK="^2.0"
 
 before_script:
+  - travis_retry composer update --no-interaction
   - if [ -n "$PHPDOCUMENTOR_REFLECTION_DOCBLOCK" ]; then
       composer require "phpdocumentor/reflection-docblock:${PHPDOCUMENTOR_REFLECTION_DOCBLOCK}" --no-update;
     fi;
-  - travis_retry composer update --no-interaction
 
 script:
   - vendor/bin/phpspec run -fpretty -v
