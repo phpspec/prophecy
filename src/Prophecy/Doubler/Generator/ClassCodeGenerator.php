@@ -82,7 +82,9 @@ class ClassCodeGenerator
         return array_map(function (Node\ArgumentNode $argument) {
             $php = '';
 
-            $php .= $argument->isNullable() ? '?' : '';
+            if (version_compare(PHP_VERSION, '7.1', '>=')) {
+                $php .= $argument->isNullable() ? '?' : '';
+            }
 
             if ($hint = $argument->getTypeHint()) {
                 switch ($hint) {
