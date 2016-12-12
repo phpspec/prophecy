@@ -52,8 +52,8 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method3->returnsReference()->willReturn(true);
         $method3->isStatic()->willReturn(false);
         $method3->getArguments()->willReturn(array($argument31));
-        $method1->hasReturnType()->willReturn(true);
-        $method1->getReturnType()->willReturn('void');
+        $method3->hasReturnType()->willReturn(true);
+        $method3->getReturnType()->willReturn('void');
         $method3->hasNullableReturnType()->willReturn(false);
         $method3->getCode()->willReturn('return $this->refValue;');
 
