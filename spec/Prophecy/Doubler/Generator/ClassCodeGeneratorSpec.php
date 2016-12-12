@@ -123,7 +123,7 @@ return $this->name;
 protected  function getEmail(string $default = 'ever.zet@gmail.com') {
 return $this->email;
 }
-public  function &getRefValue( $refValue) {
+public  function &getRefValue( $refValue): void {
 return $this->refValue;
 }
 
