@@ -76,11 +76,24 @@ class ClassCodeGenerator
         return array_map(function (Node\ArgumentNode $argument) {
             $php = '';
 
+            if (version_compare(PHP_VERSION, '7.1', '>=')) {
+                $php .= $argument->isNullable() ? '?' : '';
+            }
+
             if ($hint = $argument->getTypeHint()) {
                 switch ($hint) {
                     case 'array':
                     case 'callable':
                         $php .= $hint;
+                        break;
+
+                    case 'iterable':
+                        if (version_compare(PHP_VERSION, '7.1', '>=')) {
+                            $php .= $hint;
+                            break;
+                        }
+
+                        $php .= '\\'.$hint;
                         break;
 
                     case 'string':
