@@ -29,7 +29,10 @@ before_script:
   - if [ -n "$PHPDOCUMENTOR_REFLECTION_DOCBLOCK" ]; then
       composer require "phpdocumentor/reflection-docblock:${PHPDOCUMENTOR_REFLECTION_DOCBLOCK}" --no-update;
     fi;
+
+install:
   - travis_retry composer update --no-interaction
+  - composer show --installed
 
 script:
   - vendor/bin/phpspec run -fpretty -v
