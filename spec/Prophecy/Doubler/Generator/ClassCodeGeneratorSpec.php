@@ -35,7 +35,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method1->getArguments()->willReturn(array($argument11, $argument12));
         $method1->hasReturnType()->willReturn(true);
         $method1->getReturnType()->willReturn('string');
-        $method1->hasNullableReturnType()->willReturn(false);
+        $method1->hasNullableReturnType()->willReturn(true);
         $method1->getCode()->willReturn('return $this->name;');
 
         $method2->getName()->willReturn('getEmail');
@@ -44,6 +44,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method2->isStatic()->willReturn(false);
         $method2->getArguments()->willReturn(array($argument21));
         $method2->hasReturnType()->willReturn(false);
+        $method2->hasNullableReturnType()->willReturn(true);
         $method2->getCode()->willReturn('return $this->email;');
 
         $method3->getName()->willReturn('getRefValue');
@@ -51,7 +52,9 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method3->returnsReference()->willReturn(true);
         $method3->isStatic()->willReturn(false);
         $method3->getArguments()->willReturn(array($argument31));
-        $method3->hasReturnType()->willReturn(false);
+        $method3->hasReturnType()->willReturn(true);
+        $method3->getReturnType()->willReturn('void');
+        $method3->hasNullableReturnType()->willReturn(false);
         $method3->getCode()->willReturn('return $this->refValue;');
 
         $argument11->getName()->willReturn('fullname');
@@ -60,12 +63,14 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $argument11->getDefault()->willReturn(null);
         $argument11->isPassedByReference()->willReturn(false);
         $argument11->isVariadic()->willReturn(false);
+        $argument11->isNullable()->willReturn(false);
 
         $argument12->getName()->willReturn('class');
         $argument12->getTypeHint()->willReturn('ReflectionClass');
         $argument12->isOptional()->willReturn(false);
         $argument12->isPassedByReference()->willReturn(false);
         $argument12->isVariadic()->willReturn(false);
+        $argument12->isNullable()->willReturn(false);
 
         $argument21->getName()->willReturn('default');
         $argument21->getTypeHint()->willReturn('string');
@@ -73,6 +78,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $argument21->getDefault()->willReturn('ever.zet@gmail.com');
         $argument21->isPassedByReference()->willReturn(false);
         $argument21->isVariadic()->willReturn(false);
+        $argument21->isNullable()->willReturn(true);
 
         $argument31->getName()->willReturn('refValue');
         $argument31->getTypeHint()->willReturn(null);
@@ -80,10 +86,31 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $argument31->getDefault()->willReturn();
         $argument31->isPassedByReference()->willReturn(false);
         $argument31->isVariadic()->willReturn(false);
+        $argument31->isNullable()->willReturn(false);
 
         $code = $this->generate('CustomClass', $class);
 
-        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+        if (version_compare(PHP_VERSION, '7.1', '>=')) {
+            $expected = <<<'PHP'
+namespace  {
+class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
+public $name;
+private $email;
+
+public static function getName(array $fullname = NULL, \ReflectionClass $class): ?string {
+return $this->name;
+}
+protected  function getEmail(?string $default = 'ever.zet@gmail.com') {
+return $this->email;
+}
+public  function &getRefValue( $refValue): void {
+return $this->refValue;
+}
+
+}
+}
+PHP;
+        } elseif (version_compare(PHP_VERSION, '7.0', '>=')) {
             $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
@@ -183,24 +210,28 @@ PHP;
         $argument1->isOptional()->willReturn(false);
         $argument1->isPassedByReference()->willReturn(false);
         $argument1->isVariadic()->willReturn(true);
+        $argument1->isNullable()->willReturn(false);
 
         $argument2->getName()->willReturn('args');
         $argument2->getTypeHint()->willReturn(null);
         $argument2->isOptional()->willReturn(false);
         $argument2->isPassedByReference()->willReturn(true);
         $argument2->isVariadic()->willReturn(true);
+        $argument2->isNullable()->willReturn(false);
 
         $argument3->getName()->willReturn('args');
         $argument3->getTypeHint()->willReturn('\ReflectionClass');
         $argument3->isOptional()->willReturn(false);
         $argument3->isPassedByReference()->willReturn(false);
         $argument3->isVariadic()->willReturn(true);
+        $argument3->isNullable()->willReturn(false);
 
         $argument4->getName()->willReturn('args');
         $argument4->getTypeHint()->willReturn('\ReflectionClass');
         $argument4->isOptional()->willReturn(false);
         $argument4->isPassedByReference()->willReturn(true);
         $argument4->isVariadic()->willReturn(true);
+        $argument4->isNullable()->willReturn(false);
 
         $code = $this->generate('CustomClass', $class);
         $expected = <<<'PHP'
@@ -251,6 +282,7 @@ PHP;
         $argument->getDefault()->willReturn(null);
         $argument->isPassedByReference()->willReturn(true);
         $argument->isVariadic()->willReturn(false);
+        $argument->isNullable()->willReturn(false);
 
         $code = $this->generate('CustomClass', $class);
         $expected =<<<'PHP'

@@ -123,6 +123,7 @@ class MethodNode
             case 'bool':
             case 'array':
             case 'callable':
+            case 'iterable':
             case 'void':
                 $this->returnType = $type;
                 break;
@@ -153,7 +154,7 @@ class MethodNode
     /**
      * @param bool $bool
      */
-    public function setNullableReturnType($bool)
+    public function setNullableReturnType($bool = true)
     {
         $this->nullableReturnType = (bool) $bool;
     }
