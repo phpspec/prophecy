@@ -14,10 +14,6 @@ branches:
     - /^feature\/.*$/
     - /^optimization\/.*$/
 
-env:
-  global:
-    - COMPOSER_ARGS="--prefer-stable --no-interaction"
-
 matrix:
   fast_finish: true
   include:
@@ -30,7 +26,7 @@ matrix:
       env: PHPDOCUMENTOR_REFLECTION_DOCBLOCK="^2.0"
     - php: 7.1
       env:
-        - COMPOSER_ARGS="--prefer-stable --prefer-lowest --no-interaction"
+        - COMPOSER_ARGS="--prefer-lowest --no-interaction"
 
 before_install:
   - phpenv config-rm xdebug.ini || return 0
