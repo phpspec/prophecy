@@ -14,51 +14,19 @@ branches:
 
 env:
   global:
-    - COMPOSER_ARGS="--prefer-stable --no-interaction"
+    - COMPOSER_ARGS="--no-interaction"
+    - DEPS=latest
 
 matrix:
   fast_finish: true
   include:
     - php: 5.3
-      env:
-        - DEPS=lowest
-    - php: 5.3
-      env:
-        - DEPS=latest
     - php: 5.4
-      env:
-        - DEPS=lowest
-    - php: 5.4
-      env:
-        - DEPS=latest
     - php: 5.5
-      env:
-        - DEPS=lowest
-    - php: 5.5
-      env:
-        - DEPS=latest
     - php: 5.6
-      env:
-        - DEPS=lowest
-    - php: 5.6
-      env:
-        - DEPS=latest
     - php: 7.0
-      env:
-        - DEPS=lowest
-    - php: 7.0
-      env:
-        - DEPS=latest
     - php: 7.1
-      env:
-        - DEPS=lowest
     - php: 7.1
-      env:
-        - DEPS=latest
-    - php: hhvm
-      sudo: required
-      dist: trusty
-      group: edge
       env:
         - DEPS=lowest
     - php: hhvm
@@ -68,10 +36,13 @@ matrix:
       env:
         - DEPS=latest
 
+before_install:
+  - phpenv config-rm xdebug.ini || return 0
+  - composer self-update
+
 install:
-  - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
-  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest $COMPOSER_ARGS ; fi
-  - travis_retry composer install $COMPOSER_ARGS
+  - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --prefer-stable $COMPOSER_ARGS ; fi
+  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-stable --prefer-lowest $COMPOSER_ARGS ; fi
 
 script:
   - vendor/bin/phpspec run -fpretty -v
