@@ -14,8 +14,7 @@ branches:
 
 env:
   global:
-    - COMPOSER_ARGS="--no-interaction"
-    - DEPS=latest
+    - COMPOSER_ARGS="--prefer-stable --no-interaction"
 
 matrix:
   fast_finish: true
@@ -28,21 +27,18 @@ matrix:
     - php: 7.1
     - php: 7.1
       env:
-        - DEPS=lowest
+        - COMPOSER_ARGS="--prefer-stable --prefer-lowest --no-interaction"
     - php: hhvm
+      # Use the newer stack for HHVM as HHVM does not support Precise anymore since a long time and so Precise has an outdated version
       sudo: required
       dist: trusty
       group: edge
-      env:
-        - DEPS=latest
 
 before_install:
   - phpenv config-rm xdebug.ini || return 0
-  - composer self-update
 
 install:
-  - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --prefer-stable $COMPOSER_ARGS ; fi
-  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-stable --prefer-lowest $COMPOSER_ARGS ; fi
+  - travis_retry composer update $COMPOSER_ARGS
 
 script:
   - vendor/bin/phpspec run -fpretty -v
