@@ -61,8 +61,7 @@ class KeywordPatch implements ClassPatchInterface
      * @return array
      */
     private function getKeywords() {
-
-        return array(
+        $keywords = array(
             '__halt_compiler',
             'abstract',
             'and',
@@ -108,7 +107,6 @@ class KeywordPatch implements ClassPatchInterface
             'insteadof',
             'interface',
             'isset',
-            'list',
             'namespace',
             'new',
             'or',
@@ -131,5 +129,19 @@ class KeywordPatch implements ClassPatchInterface
             'xor',
             'yield',
         );
+
+        /*
+         * Starting from PHP 7.0, some keywords can be used
+         * So we exclude from list of keywords, and only add
+         * when PHP version < 7.0
+         *
+         * https://wiki.php.net/rfc/context_sensitive_lexer
+         */
+        if(version_compare(PHP_VERSION, '7.0', '<'))
+        {
+            $keywords[] = 'list';
+        }
+
+        return $keywords;
     }
 }
