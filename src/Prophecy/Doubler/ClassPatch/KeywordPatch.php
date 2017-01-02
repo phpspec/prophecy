@@ -61,87 +61,84 @@ class KeywordPatch implements ClassPatchInterface
      * @return array
      */
     private function getKeywords() {
-        $keywords = array(
-            '__halt_compiler'
-        );
-
         /*
          * Starting from PHP 7.0, almost keywords can be used
-         * So we exclude from list of keywords, and only add
-         * when PHP version < 7.0
          *
          * https://wiki.php.net/rfc/context_sensitive_lexer
          */
-        if(version_compare(PHP_VERSION, '7.0', '<'))
-        {
-            $keywords[] = 'abstract';
-            $keywords[] = 'and';
-            $keywords[] = 'array';
-            $keywords[] = 'as';
-            $keywords[] = 'break';
-            $keywords[] = 'callable';
-            $keywords[] = 'case';
-            $keywords[] = 'catch';
-            $keywords[] = 'class';
-            $keywords[] = 'clone';
-            $keywords[] = 'const';
-            $keywords[] = 'continue';
-            $keywords[] = 'declare';
-            $keywords[] = 'default';
-            $keywords[] = 'die';
-            $keywords[] = 'do';
-            $keywords[] = 'echo';
-            $keywords[] = 'else';
-            $keywords[] = 'elseif';
-            $keywords[] = 'empty';
-            $keywords[] = 'enddeclare';
-            $keywords[] = 'endfor';
-            $keywords[] = 'endforeach';
-            $keywords[] = 'endif';
-            $keywords[] = 'endswitch';
-            $keywords[] = 'endwhile';
-            $keywords[] = 'eval';
-            $keywords[] = 'exit';
-            $keywords[] = 'extends';
-            $keywords[] = 'final';
-            $keywords[] = 'finally';
-            $keywords[] = 'for';
-            $keywords[] = 'foreach';
-            $keywords[] = 'function';
-            $keywords[] = 'global';
-            $keywords[] = 'goto';
-            $keywords[] = 'if';
-            $keywords[] = 'implements';
-            $keywords[] = 'include';
-            $keywords[] = 'include_once';
-            $keywords[] = 'instanceof';
-            $keywords[] = 'insteadof';
-            $keywords[] = 'interface';
-            $keywords[] = 'isset';
-            $keywords[] = 'list';
-            $keywords[] = 'namespace';
-            $keywords[] = 'new';
-            $keywords[] = 'or';
-            $keywords[] = 'print';
-            $keywords[] = 'private';
-            $keywords[] = 'protected';
-            $keywords[] = 'public';
-            $keywords[] = 'require';
-            $keywords[] = 'require_once';
-            $keywords[] = 'return';
-            $keywords[] = 'static';
-            $keywords[] = 'switch';
-            $keywords[] = 'throw';
-            $keywords[] = 'trait';
-            $keywords[] = 'try';
-            $keywords[] = 'unset';
-            $keywords[] = 'use';
-            $keywords[] = 'var';
-            $keywords[] = 'while';
-            $keywords[] = 'xor';
-            $keywords[] = 'yield';
+        
+        if (\PHP_VERSION_ID >= 70000) {
+            return array('__halt_compiler');
         }
 
-        return $keywords;
+        return array(
+            '__halt_compiler',
+            'abstract',
+            'and',
+            'array',
+            'as',
+            'break',
+            'callable',
+            'case',
+            'catch',
+            'class',
+            'clone',
+            'const',
+            'continue',
+            'declare',
+            'default',
+            'die',
+            'do',
+            'echo',
+            'else',
+            'elseif',
+            'empty',
+            'enddeclare',
+            'endfor',
+            'endforeach',
+            'endif',
+            'endswitch',
+            'endwhile',
+            'eval',
+            'exit',
+            'extends',
+            'final',
+            'finally',
+            'for',
+            'foreach',
+            'function',
+            'global',
+            'goto',
+            'if',
+            'implements',
+            'include',
+            'include_once',
+            'instanceof',
+            'insteadof',
+            'interface',
+            'isset',
+            'list',
+            'namespace',
+            'new',
+            'or',
+            'print',
+            'private',
+            'protected',
+            'public',
+            'require',
+            'require_once',
+            'return',
+            'static',
+            'switch',
+            'throw',
+            'trait',
+            'try',
+            'unset',
+            'use',
+            'var',
+            'while',
+            'xor',
+            'yield',
+	    );
     }
 }
