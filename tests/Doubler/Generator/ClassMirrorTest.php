@@ -331,14 +331,12 @@ class ClassMirrorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @requires PHP 7
+     * @requires PHP 7.1
      */
-    public function it_reflects_return_typehints()
+    public function it_reflects_return_nullable_typehints()
     {
-        $class = new \ReflectionClass('Fixtures\Prophecy\WithReturnTypehints');
-
+        $class = new \ReflectionClass('Fixtures\Prophecy\WithNullableReturnTypes');
         $mirror = new ClassMirror();
-
         $classNode = $mirror->reflect($class, array());
 
         $this->assertCount(3, $classNode->getMethods());
@@ -347,7 +345,36 @@ class ClassMirrorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($classNode->hasMethod('getParent'));
 
         $this->assertEquals('string', $classNode->getMethod('getName')->getReturnType());
-        $this->assertEquals('\Fixtures\Prophecy\WithReturnTypehints', $classNode->getMethod('getSelf')->getReturnType());
+        $this->assertTrue($classNode->getMethod('getName')->isReturnTypeNullable());
+        $this->assertEquals(
+            '\Fixtures\Prophecy\WithNullableReturnTypes',
+            $classNode->getMethod('getSelf')->getReturnType()
+        );
+        $this->assertTrue($classNode->getMethod('getSelf')->isReturnTypeNullable());
+        $this->assertEquals('\Fixtures\Prophecy\EmptyClass', $classNode->getMethod('getParent')->getReturnType());
+        $this->assertTrue($classNode->getMethod('getParent')->isReturnTypeNullable());
+    }
+
+    /**
+     * @test
+     * @requires PHP 7
+     */
+    public function it_reflects_return_typehints()
+    {
+        $class = new \ReflectionClass('Fixtures\Prophecy\WithReturnTypehints');
+        $mirror = new ClassMirror();
+        $classNode = $mirror->reflect($class, array());
+
+        $this->assertCount(3, $classNode->getMethods());
+        $this->assertTrue($classNode->hasMethod('getName'));
+        $this->assertTrue($classNode->hasMethod('getSelf'));
+        $this->assertTrue($classNode->hasMethod('getParent'));
+
+        $this->assertEquals('string', $classNode->getMethod('getName')->getReturnType());
+        $this->assertEquals(
+            '\Fixtures\Prophecy\WithReturnTypehints',
+            $classNode->getMethod('getSelf')->getReturnType()
+        );
         $this->assertEquals('\Fixtures\Prophecy\EmptyClass', $classNode->getMethod('getParent')->getReturnType());
     }
 

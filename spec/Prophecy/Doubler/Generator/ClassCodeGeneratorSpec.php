@@ -2,9 +2,7 @@
 
 namespace spec\Prophecy\Doubler\Generator;
 
-use phpDocumentor\Reflection\DocBlock\Tags\Method;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
@@ -16,6 +14,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         MethodNode $method1,
         MethodNode $method2,
         MethodNode $method3,
+        MethodNode $method4,
         ArgumentNode $argument11,
         ArgumentNode $argument12,
         ArgumentNode $argument21,
@@ -26,7 +25,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
             'Prophecy\Doubler\Generator\MirroredInterface', 'ArrayAccess', 'ArrayIterator'
         ));
         $class->getProperties()->willReturn(array('name' => 'public', 'email' => 'private'));
-        $class->getMethods()->willReturn(array($method1, $method2, $method3));
+        $class->getMethods()->willReturn(array($method1, $method2, $method3, $method4));
 
         $method1->getName()->willReturn('getName');
         $method1->getVisibility()->willReturn('public');
@@ -34,6 +33,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method1->isStatic()->willReturn(true);
         $method1->getArguments()->willReturn(array($argument11, $argument12));
         $method1->hasReturnType()->willReturn(true);
+        $method1->isReturnTypeNullable()->willReturn(false);
         $method1->getReturnType()->willReturn('string');
         $method1->getCode()->willReturn('return $this->name;');
 
@@ -43,6 +43,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method2->isStatic()->willReturn(false);
         $method2->getArguments()->willReturn(array($argument21));
         $method2->hasReturnType()->willReturn(false);
+        $method2->isReturnTypeNullable()->shouldNotBeCalled();
         $method2->getCode()->willReturn('return $this->email;');
 
         $method3->getName()->willReturn('getRefValue');
@@ -51,7 +52,18 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method3->isStatic()->willReturn(false);
         $method3->getArguments()->willReturn(array($argument31));
         $method3->hasReturnType()->willReturn(false);
+        $method3->isReturnTypeNullable()->shouldNotBeCalled();
         $method3->getCode()->willReturn('return $this->refValue;');
+
+        $method4->getName()->willReturn('getAge');
+        $method4->getVisibility()->willReturn('private');
+        $method4->returnsReference()->willReturn(false);
+        $method4->isStatic()->willReturn(false);
+        $method4->getArguments()->willReturn(array());
+        $method4->hasReturnType()->willReturn(true);
+        $method4->isReturnTypeNullable()->willReturn(true);
+        $method4->getReturnType()->willReturn('int');
+        $method4->getCode()->willReturn('return 25;');
 
         $argument11->getName()->willReturn('fullname');
         $argument11->getTypeHint()->willReturn('array');
@@ -82,7 +94,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
 
         $code = $this->generate('CustomClass', $class);
 
-        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+        if (version_compare(PHP_VERSION, '7.0', '>=') && version_compare(PHP_VERSION, '7.1', '<')) {
             $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
@@ -97,6 +109,32 @@ return $this->email;
 }
 public  function &getRefValue( $refValue) {
 return $this->refValue;
+}
+private  function getAge(): int {
+return 25;
+}
+
+}
+}
+PHP;
+        } elseif (version_compare(PHP_VERSION, '7.1', '>=')) {
+            $expected = <<<'PHP'
+namespace  {
+class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
+public $name;
+private $email;
+
+public static function getName(array $fullname = NULL, \ReflectionClass $class): string {
+return $this->name;
+}
+protected  function getEmail(string $default = 'ever.zet@gmail.com') {
+return $this->email;
+}
+public  function &getRefValue( $refValue) {
+return $this->refValue;
+}
+private  function getAge(): ?int {
+return 25;
 }
 
 }
@@ -117,6 +155,9 @@ return $this->email;
 }
 public  function &getRefValue( $refValue) {
 return $this->refValue;
+}
+private  function getAge() {
+return 25;
 }
 
 }
