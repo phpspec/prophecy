@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Call;
 
 use PhpSpec\ObjectBehavior;
+use stdClass;
 
 class CallSpec extends ObjectBehavior
 {
@@ -47,5 +48,15 @@ class CallSpec extends ObjectBehavior
         $this->beConstructedWith('setValues', array(), 0, null, null, null);
 
         $this->getCallPlace()->shouldReturn('unknown');
+    }
+
+    public function it_breaks_external_references_to_arguments()
+    {
+        $arguments = array(new stdClass());
+
+        $this->beConstructedWith('setValues', $arguments, 0, null, null, null);
+
+        $this->getArguments()->shouldBeLike($arguments);
+        $this->getArguments()->shouldNotBe($arguments);
     }
 }

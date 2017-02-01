@@ -41,7 +41,7 @@ class Call
                                 Exception $exception = null, $file, $line)
     {
         $this->methodName  = $methodName;
-        $this->arguments   = $arguments;
+        $this->arguments   = unserialize(serialize($arguments));
         $this->returnValue = $returnValue;
         $this->exception   = $exception;
 
