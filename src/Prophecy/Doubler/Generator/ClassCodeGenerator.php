@@ -60,13 +60,24 @@ class ClassCodeGenerator
             $method->returnsReference() ? '&':'',
             $method->getName(),
             implode(', ', $this->generateArguments($method->getArguments())),
-            version_compare(PHP_VERSION, '7.0', '>=') && $method->hasReturnType()
-                ? sprintf(': %s', $method->getReturnType())
-                : ''
+            $this->generateMethodReturnType($method)
         );
         $php .= $method->getCode()."\n";
 
         return $php.'}';
+    }
+
+    private function generateMethodReturnType(Node\MethodNode $method)
+    {
+        if (version_compare(PHP_VERSION, '7.0', '<') || !$method->hasReturnType()) {
+            return '';
+        }
+
+        return sprintf(
+            ': %s%s',
+            version_compare(PHP_VERSION, '7.1', '>=') && $method->isReturnTypeNullable() ? '?' : '',
+            $method->getReturnType()
+        );
     }
 
     private function generateArguments(array $arguments)

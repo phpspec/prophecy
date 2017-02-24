@@ -131,4 +131,13 @@ class MethodNodeSpec extends ObjectBehavior
         $this->hasReturnType()->shouldReturn(true);
         $this->getReturnType()->shouldReturn($returnType);
     }
+
+    function it_setReturnTypeNullable_set_return_type_nullable()
+    {
+        $this->isReturnTypeNullable()->shouldBe(false);
+        $this->setReturnTypeNullable(true);
+        $this->isReturnTypeNullable()->shouldBe(true);
+        $this->setReturnTypeNullable(false);
+        $this->isReturnTypeNullable()->shouldBe(false);
+    }
 }
