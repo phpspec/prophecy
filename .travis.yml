@@ -22,14 +22,20 @@ matrix:
       sudo: required
       dist: trusty
       group: edge
-    - php: '7.0'
+    - php: 7.0
       env: PHPDOCUMENTOR_REFLECTION_DOCBLOCK="^2.0"
+    - php: 7.1
+      env:
+        - COMPOSER_ARGS="--prefer-lowest --no-interaction"
+
+before_install:
+  - phpenv config-rm xdebug.ini || return 0
 
 before_script:
   - if [ -n "$PHPDOCUMENTOR_REFLECTION_DOCBLOCK" ]; then
       composer require "phpdocumentor/reflection-docblock:${PHPDOCUMENTOR_REFLECTION_DOCBLOCK}" --no-update;
     fi;
-  - travis_retry composer update --no-interaction
+  - travis_retry composer update $COMPOSER_ARGS
 
 script:
   - vendor/bin/phpspec run -fpretty -v
