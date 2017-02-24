@@ -22,7 +22,7 @@
         "phpdocumentor/reflection-docblock": "^2.0|^3.0.2",
         "sebastian/comparator":              "^1.1|^2.0",
         "doctrine/instantiator":             "^1.0.2",
-        "sebastian/recursion-context":       "^1.0|^2.0"
+        "sebastian/recursion-context":       "^1.0|^2.0|^3.0"
     },
 
     "require-dev": {
