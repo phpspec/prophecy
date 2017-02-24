@@ -49,14 +49,17 @@ class CallCenterSpec extends ObjectBehavior
         ArgumentsWildcard $arguments3,
         PromiseInterface $promise
     ) {
+        $method1->hasVoidReturnType()->willReturn(false);
         $method1->getMethodName()->willReturn('getName');
         $method1->getArgumentsWildcard()->willReturn($arguments1);
         $arguments1->scoreArguments(array('world', 'everything'))->willReturn(false);
 
+        $method2->hasVoidReturnType()->willReturn(false);
         $method2->getMethodName()->willReturn('setTitle');
         $method2->getArgumentsWildcard()->willReturn($arguments2);
         $arguments2->scoreArguments(array('world', 'everything'))->willReturn(false);
 
+        $method3->hasVoidReturnType()->willReturn(false);
         $method3->getMethodName()->willReturn('getName');
         $method3->getArgumentsWildcard()->willReturn($arguments3);
         $method3->getPromise()->willReturn($promise);

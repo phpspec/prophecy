@@ -33,6 +33,7 @@ class MethodProphecy
     private $prediction;
     private $checkedPredictions = array();
     private $bound = false;
+    private $voidReturnType = false;
 
     /**
      * Initializes method prophecy.
@@ -71,6 +72,12 @@ class MethodProphecy
 
         if (version_compare(PHP_VERSION, '7.0', '>=') && true === $reflectedMethod->hasReturnType()) {
             $type = (string) $reflectedMethod->getReturnType();
+
+            if ('void' === $type) {
+                $this->voidReturnType = true;
+                return;
+            }
+
             $this->will(function () use ($type) {
                 switch ($type) {
                     case 'string': return '';
@@ -160,9 +167,15 @@ class MethodProphecy
      * @see Prophecy\Promise\ReturnPromise
      *
      * @return $this
+     *
+     * @throws MethodProphecyException
      */
     public function willReturn()
     {
+        if ($this->voidReturnType) {
+            throw new MethodProphecyException('This method has a void return type', $this);
+        }
+
         return $this->will(new Promise\ReturnPromise(func_get_args()));
     }
 
@@ -174,9 +187,15 @@ class MethodProphecy
      * @see Prophecy\Promise\ReturnArgumentPromise
      *
      * @return $this
+     *
+     * @throws MethodProphecyException
      */
     public function willReturnArgument($index = 0)
     {
+        if ($this->voidReturnType) {
+            throw new MethodProphecyException('This method has a void return type', $this);
+        }
+
         return $this->will(new Promise\ReturnArgumentPromise($index));
     }
 
@@ -282,7 +301,7 @@ class MethodProphecy
             ));
         }
 
-        if (null === $this->promise) {
+        if (null === $this->promise && !$this->hasVoidReturnType()) {
             $this->willReturn();
         }
 
@@ -434,5 +453,13 @@ class MethodProphecy
 
         $this->getObjectProphecy()->addMethodProphecy($this);
         $this->bound = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasVoidReturnType()
+    {
+        return $this->voidReturnType;
     }
 }

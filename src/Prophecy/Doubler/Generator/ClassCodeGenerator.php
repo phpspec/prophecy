@@ -54,15 +54,23 @@ class ClassCodeGenerator
 
     private function generateMethod(Node\MethodNode $method)
     {
+        $returnType = '';
+
+        if (version_compare(PHP_VERSION, '7.0', '>=') && $method->hasReturnType()) {
+            if (version_compare(PHP_VERSION, '7.1', '>=') && $method->hasNullableReturnType()) {
+                $returnType = sprintf(': ?%s', $method->getReturnType());
+            } else {
+                $returnType = sprintf(': %s', $method->getReturnType());
+            }
+        }
+
         $php = sprintf("%s %s function %s%s(%s)%s {\n",
             $method->getVisibility(),
             $method->isStatic() ? 'static' : '',
             $method->returnsReference() ? '&':'',
             $method->getName(),
             implode(', ', $this->generateArguments($method->getArguments())),
-            version_compare(PHP_VERSION, '7.0', '>=') && $method->hasReturnType()
-                ? sprintf(': %s', $method->getReturnType())
-                : ''
+            $returnType
         );
         $php .= $method->getCode()."\n";
 
@@ -74,11 +82,24 @@ class ClassCodeGenerator
         return array_map(function (Node\ArgumentNode $argument) {
             $php = '';
 
+            if (version_compare(PHP_VERSION, '7.1', '>=')) {
+                $php .= $argument->isNullable() ? '?' : '';
+            }
+
             if ($hint = $argument->getTypeHint()) {
                 switch ($hint) {
                     case 'array':
                     case 'callable':
                         $php .= $hint;
+                        break;
+
+                    case 'iterable':
+                        if (version_compare(PHP_VERSION, '7.1', '>=')) {
+                            $php .= $hint;
+                            break;
+                        }
+
+                        $php .= '\\'.$hint;
                         break;
 
                     case 'string':
@@ -96,7 +117,9 @@ class ClassCodeGenerator
                 }
             }
 
-            $php .= ' '.($argument->isPassedByReference() ? '&' : '');
+            $php .= ' ';
+
+            $php .= $argument->isPassedByReference() ? '&' : '';
 
             $php .= $argument->isVariadic() ? '...' : '';
 
