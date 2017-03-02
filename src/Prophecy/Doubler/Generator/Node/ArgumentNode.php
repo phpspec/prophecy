@@ -24,6 +24,7 @@ class ArgumentNode
     private $optional    = false;
     private $byReference = false;
     private $isVariadic  = false;
+    private $isNullable  = false;
 
     /**
      * @param string $name
@@ -87,5 +88,15 @@ class ArgumentNode
     public function isVariadic()
     {
         return $this->isVariadic;
+    }
+
+    public function isNullable()
+    {
+        return $this->isNullable;
+    }
+
+    public function setAsNullable($isNullable = true)
+    {
+        $this->isNullable = $isNullable;
     }
 }

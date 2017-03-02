@@ -55,6 +55,10 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         $method2->getName()->willReturn('method2');
         $method3->getName()->willReturn('method3');
 
+        $method1->getReturnType()->willReturn('int');
+        $method2->getReturnType()->willReturn('int');
+        $method3->getReturnType()->willReturn('void');
+
         $node->getMethods()->willReturn(array(
             'method1' => $method1,
             'method2' => $method2,
@@ -67,7 +71,7 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
             ->shouldBeCalled();
         $method2->setCode('return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
             ->shouldBeCalled();
-        $method3->setCode('return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
+        $method3->setCode('$this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
             ->shouldBeCalled();
 
         $this->apply($node);
