@@ -1,3 +1,13 @@
+1.7.0 / 2017-03-02
+==================
+
+* Add full PHP 7.1 Support (thanks @prolic)
+* Allow `sebastian/comparator ^2.0` (thanks @sebastianbergmann)
+* Allow `sebastian/recursion-context ^3.0` (thanks @sebastianbergmann)
+* Allow `\Error` instances in `ThrowPromise` (thanks @jameshalsall)
+* Support `phpspec/phpspect ^3.2` (thanks @Sam-Burns)
+* Fix failing builds (thanks @Sam-Burns)
+
 1.6.2 / 2016-11-21
 ==================
 
