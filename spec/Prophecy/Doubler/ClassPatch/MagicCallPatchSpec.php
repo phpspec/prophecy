@@ -60,10 +60,7 @@ class MagicCallPatchSpec extends ObjectBehavior
         $this->apply($node);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_discovers_api_using_phpdoc_from_own_interfaces($node)
+    function it_discovers_api_using_phpdoc_from_own_interfaces(ClassNode $node)
     {
         $node->getParentClass()->willReturn('stdClass');
         $node->getInterfaces()->willReturn(array('spec\Prophecy\Doubler\ClassPatch\MagicalApiImplemented'));
@@ -73,10 +70,7 @@ class MagicCallPatchSpec extends ObjectBehavior
         $this->apply($node);
     }
 
-    /**
-     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
-     */
-    function it_discovers_api_using_phpdoc_from_extended_parent_interfaces($node)
+    function it_discovers_api_using_phpdoc_from_extended_parent_interfaces(ClassNode $node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiImplementedExtended');
         $node->getInterfaces()->willReturn(array());
