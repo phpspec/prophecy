@@ -16,6 +16,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         MethodNode $method1,
         MethodNode $method2,
         MethodNode $method3,
+        MethodNode $method4,
         ArgumentNode $argument11,
         ArgumentNode $argument12,
         ArgumentNode $argument21,
@@ -26,7 +27,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
             'Prophecy\Doubler\Generator\MirroredInterface', 'ArrayAccess', 'ArrayIterator'
         ));
         $class->getProperties()->willReturn(array('name' => 'public', 'email' => 'private'));
-        $class->getMethods()->willReturn(array($method1, $method2, $method3));
+        $class->getMethods()->willReturn(array($method1, $method2, $method3, $method4));
 
         $method1->getName()->willReturn('getName');
         $method1->getVisibility()->willReturn('public');
@@ -53,9 +54,19 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method3->isStatic()->willReturn(false);
         $method3->getArguments()->willReturn(array($argument31));
         $method3->hasReturnType()->willReturn(true);
-        $method3->getReturnType()->willReturn('void');
+        $method3->getReturnType()->willReturn('string');
         $method3->hasNullableReturnType()->willReturn(false);
         $method3->getCode()->willReturn('return $this->refValue;');
+
+        $method4->getName()->willReturn('doSomething');
+        $method4->getVisibility()->willReturn('public');
+        $method4->returnsReference()->willReturn(false);
+        $method4->isStatic()->willReturn(false);
+        $method4->getArguments()->willReturn(array());
+        $method4->hasReturnType()->willReturn(true);
+        $method4->getReturnType()->willReturn('void');
+        $method4->hasNullableReturnType()->willReturn(false);
+        $method4->getCode()->willReturn('return;');
 
         $argument11->getName()->willReturn('fullname');
         $argument11->getTypeHint()->willReturn('array');
@@ -103,8 +114,11 @@ return $this->name;
 protected  function getEmail(?string $default = 'ever.zet@gmail.com') {
 return $this->email;
 }
-public  function &getRefValue( $refValue): void {
+public  function &getRefValue( $refValue): string {
 return $this->refValue;
+}
+public  function doSomething(): void {
+return;
 }
 
 }
@@ -123,8 +137,11 @@ return $this->name;
 protected  function getEmail(string $default = 'ever.zet@gmail.com') {
 return $this->email;
 }
-public  function &getRefValue( $refValue) {
+public  function &getRefValue( $refValue): string {
 return $this->refValue;
+}
+public  function doSomething() {
+return;
 }
 
 }
@@ -145,6 +162,9 @@ return $this->email;
 }
 public  function &getRefValue( $refValue) {
 return $this->refValue;
+}
+public  function doSomething() {
+return;
 }
 
 }
