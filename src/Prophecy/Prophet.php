@@ -58,6 +58,7 @@ class Prophet
             $doubler->registerClassPatch(new ClassPatch\HhvmExceptionPatch());
             $doubler->registerClassPatch(new ClassPatch\MagicCallPatch);
             $doubler->registerClassPatch(new ClassPatch\KeywordPatch);
+            $doubler->registerClassPatch(new ClassPatch\UploadedFilePatch);
         }
 
         $this->doubler  = $doubler;

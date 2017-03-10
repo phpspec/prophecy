@@ -23,7 +23,7 @@ use Prophecy\Doubler\Generator\Node\MethodNode;
 class SplFileInfoPatch implements ClassPatchInterface
 {
     /**
-     * Supports everything that extends SplFileInfo.
+     * Supports everything SplFileInfo subclass that has one and only required constructor argument
      *
      * @param ClassNode $node
      *
@@ -35,9 +35,18 @@ class SplFileInfoPatch implements ClassPatchInterface
             return false;
         }
 
-        return 'SplFileInfo' === $node->getParentClass()
-            || is_subclass_of($node->getParentClass(), 'SplFileInfo')
-        ;
+
+        if ('SplFileInfo' !== $node->getParentClass() && !is_subclass_of($node->getParentClass(), 'SplFileInfo')) {
+            return false;
+        }
+
+        $reflClass = new \ReflectionClass($node->getParentClass());
+        $reflMethod = $reflClass->getMethod('__construct');
+        if (1 < $reflMethod->getNumberOfRequiredParameters()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
