@@ -117,7 +117,7 @@ class MethodNode
                 $this->returnType = null;
                 break;
 
-            case 'string';
+            case 'string':
             case 'float':
             case 'int':
             case 'bool':
