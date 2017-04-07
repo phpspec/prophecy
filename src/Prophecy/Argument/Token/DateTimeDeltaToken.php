@@ -10,7 +10,7 @@ class DateTimeDeltaToken implements TokenInterface
     /** @var integer */
     private $delta;
 
-    public function __construct(\DateTimeInterface $value, $delta)
+    public function __construct(\DateTime $value, $delta)
     {
         $this->value = $value;
         $this->delta = $delta;
@@ -25,7 +25,7 @@ class DateTimeDeltaToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
-        if (!$argument instanceof \DateTimeInterface) {
+        if (!$argument instanceof \DateTime) {
             return false;
         }
 

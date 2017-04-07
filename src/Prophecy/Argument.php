@@ -214,12 +214,12 @@ class Argument
      * Check that the argument is matched on the seconds delta of the
      * datetime object compared in the tests.
      *
-     * @param \DateTimeInterface $dateTime
+     * @param \DateTime $dateTime
      * @param int $precision
      *
      * @return Token\DateTimeDeltaToken
      */
-    public static function dateInDelta(\DateTimeInterface $dateTime, $precision = 0)
+    public static function dateInDelta(\DateTime $dateTime, $precision = 0)
     {
         return new Token\DateTimeDeltaToken($dateTime, $precision);
     }
