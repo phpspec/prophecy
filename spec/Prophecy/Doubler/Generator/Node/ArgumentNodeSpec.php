@@ -16,6 +16,14 @@ class ArgumentNodeSpec extends ObjectBehavior
         $this->shouldNotBePassedByReference();
     }
 
+    function it_allows_manipulating_the_name()
+    {
+        $this->beConstructedWith('old-name');
+        $this->setName('new-name');
+
+        $this->getName()->shouldReturn('new-name');
+    }
+
     function it_is_passed_by_reference_if_marked()
     {
         $this->setAsPassedByReference();
