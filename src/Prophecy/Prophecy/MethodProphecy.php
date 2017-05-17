@@ -164,7 +164,7 @@ class MethodProphecy
     /**
      * Sets return promise to the prophecy.
      *
-     * @see Prophecy\Promise\ReturnPromise
+     * @see \Prophecy\Promise\ReturnPromise
      *
      * @return $this
      */
@@ -185,7 +185,7 @@ class MethodProphecy
      *
      * @param int $index The zero-indexed number of the argument to return
      *
-     * @see Prophecy\Promise\ReturnArgumentPromise
+     * @see \Prophecy\Promise\ReturnArgumentPromise
      *
      * @return $this
      */
@@ -201,7 +201,7 @@ class MethodProphecy
     /**
      * Sets throw promise to the prophecy.
      *
-     * @see Prophecy\Promise\ThrowPromise
+     * @see \Prophecy\Promise\ThrowPromise
      *
      * @param string|\Exception $exception Exception class or instance
      *
@@ -243,7 +243,7 @@ class MethodProphecy
     /**
      * Sets call prediction to the prophecy.
      *
-     * @see Prophecy\Prediction\CallPrediction
+     * @see \Prophecy\Prediction\CallPrediction
      *
      * @return $this
      */
@@ -255,7 +255,7 @@ class MethodProphecy
     /**
      * Sets no calls prediction to the prophecy.
      *
-     * @see Prophecy\Prediction\NoCallsPrediction
+     * @see \Prophecy\Prediction\NoCallsPrediction
      *
      * @return $this
      */
@@ -267,7 +267,7 @@ class MethodProphecy
     /**
      * Sets call times prediction to the prophecy.
      *
-     * @see Prophecy\Prediction\CallTimesPrediction
+     * @see \Prophecy\Prediction\CallTimesPrediction
      *
      * @param $count
      *
@@ -324,7 +324,7 @@ class MethodProphecy
     /**
      * Checks call prediction.
      *
-     * @see Prophecy\Prediction\CallPrediction
+     * @see \Prophecy\Prediction\CallPrediction
      *
      * @return $this
      */
@@ -336,7 +336,7 @@ class MethodProphecy
     /**
      * Checks no calls prediction.
      *
-     * @see Prophecy\Prediction\NoCallsPrediction
+     * @see \Prophecy\Prediction\NoCallsPrediction
      *
      * @return $this
      */
@@ -348,7 +348,7 @@ class MethodProphecy
     /**
      * Checks no calls prediction.
      *
-     * @see Prophecy\Prediction\NoCallsPrediction
+     * @see \Prophecy\Prediction\NoCallsPrediction
      * @deprecated
      *
      * @return $this
@@ -361,7 +361,7 @@ class MethodProphecy
     /**
      * Checks call times prediction.
      *
-     * @see Prophecy\Prediction\CallTimesPrediction
+     * @see \Prophecy\Prediction\CallTimesPrediction
      *
      * @param int $count
      *
