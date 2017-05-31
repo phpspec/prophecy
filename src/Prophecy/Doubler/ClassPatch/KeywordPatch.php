@@ -61,6 +61,15 @@ class KeywordPatch implements ClassPatchInterface
      * @return array
      */
     private function getKeywords() {
+        /*
+         * Starting from PHP 7.0, almost all keywords can be used
+         *
+         * https://wiki.php.net/rfc/context_sensitive_lexer
+         */
+        
+        if (\PHP_VERSION_ID >= 70000) {
+            return array('__halt_compiler');
+        }
 
         return array(
             '__halt_compiler',
@@ -129,7 +138,7 @@ class KeywordPatch implements ClassPatchInterface
             'var',
             'while',
             'xor',
-            'yield',
-        );
+            'yield'
+	);
     }
 }
