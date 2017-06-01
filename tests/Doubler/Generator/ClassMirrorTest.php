@@ -300,37 +300,6 @@ class ClassMirrorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     */
-    public function it_ignores_virtually_private_methods()
-    {
-        $class = new \ReflectionClass('Fixtures\Prophecy\WithVirtuallyPrivateMethod');
-
-        $mirror = new ClassMirror();
-
-        $classNode = $mirror->reflect($class, array());
-
-        $this->assertCount(2, $classNode->getMethods());
-        $this->assertTrue($classNode->hasMethod('isAbstract'));
-        $this->assertTrue($classNode->hasMethod('__toString'));
-        $this->assertFalse($classNode->hasMethod('_getName'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_not_throw_exception_for_virtually_private_finals()
-    {
-        $class = new \ReflectionClass('Fixtures\Prophecy\WithFinalVirtuallyPrivateMethod');
-
-        $mirror = new ClassMirror();
-
-        $classNode = $mirror->reflect($class, array());
-
-        $this->assertCount(0, $classNode->getMethods());
-    }
-
-    /**
-     * @test
      * @requires PHP 7
      */
     public function it_reflects_return_typehints()
