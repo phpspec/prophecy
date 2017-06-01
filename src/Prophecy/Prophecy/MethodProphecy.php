@@ -181,6 +181,18 @@ class MethodProphecy
     }
 
     /**
+     * Sets return self promise to the prophecy.
+     *
+     * @see Prophecy\Promise\ReturnSelfPromise
+     *
+     * @return $this
+     */
+    public function willReturnSelf()
+    {
+        return $this->will(new Promise\ReturnSelfPromise());
+    }
+
+    /**
      * Sets return argument promise to the prophecy.
      *
      * @param int $index The zero-indexed number of the argument to return
