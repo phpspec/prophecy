@@ -2,6 +2,7 @@
 
 namespace spec\Prophecy\Doubler\ClassPatch;
 
+use PhpSpec\Exception\Example\SkippingException;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ClassNode;
@@ -25,6 +26,8 @@ class KeywordPatchSpec extends ObjectBehavior
         MethodNode $method2,
         MethodNode $method3
     ) {
+        $this->skipIfPhp7();
+
         $node->removeMethod('eval')->shouldBeCalled();
         $node->removeMethod('echo')->shouldBeCalled();
 
@@ -39,5 +42,12 @@ class KeywordPatchSpec extends ObjectBehavior
         ));
 
         $this->apply($node);
+    }
+
+    private function skipIfPhp7()
+    {
+        if (\PHP_VERSION_ID >= 70000) {
+            throw new SkippingException('Reserved keywords list in PHP 7 does not include most of PHP 5.6 keywords');
+        }
     }
 }
