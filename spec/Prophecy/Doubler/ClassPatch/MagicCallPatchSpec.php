@@ -29,6 +29,17 @@ class MagicCallPatchSpec extends ObjectBehavior
         $this->apply($node);
     }
 
+    function it_discovers_api_using_phpdocs_of_parent_classes(ClassNode $node)
+    {
+        $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiChild');
+        $node->getInterfaces()->willReturn(array());
+
+        $node->addMethod(new MethodNode('undefinedMethod'))->shouldBeCalled();
+        $node->addMethod(new MethodNode('undefinedMethodChild'))->shouldBeCalled();
+
+        $this->apply($node);
+    }
+
     function it_ignores_existing_methods(ClassNode $node)
     {
         $node->getParentClass()->willReturn('spec\Prophecy\Doubler\ClassPatch\MagicalApiExtended');
@@ -116,6 +127,13 @@ class MagicalApiInvalidMethodDefinition
 class MagicalApiExtended extends MagicalApi
 {
 
+}
+
+/**
+ * @method void undefinedMethodChild()
+ */
+class MagicalApiChild extends MagicalApi
+{
 }
 
 /**
