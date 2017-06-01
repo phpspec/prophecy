@@ -33,4 +33,8 @@ class SpecialMethods
     {
     }
 
+    function __soapCall($function_name, array $arguments, array $options = null, $input_headers = null, array &$output_headers = null)
+    {
+    }
+
 }
