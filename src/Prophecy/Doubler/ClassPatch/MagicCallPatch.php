@@ -63,17 +63,17 @@ class MagicCallPatch implements ClassPatchInterface
                 $tagList = $this->tagRetriever->getTagList($reflectionClass);
 
                 foreach ($tagList as $tag) {
-                  $methodName = $tag->getMethodName();
+                    $methodName = $tag->getMethodName();
 
-                  if (empty($methodName)) {
-                    continue;
-                  }
+                    if (empty($methodName)) {
+                        continue;
+                    }
 
-                  if (!$reflectionClass->hasMethod($methodName)) {
-                    $methodNode = new MethodNode($methodName);
-                    $methodNode->setStatic($tag->isStatic());
-                    $node->addMethod($methodNode);
-                  }
+                    if (!$reflectionClass->hasMethod($methodName)) {
+                        $methodNode = new MethodNode($methodName);
+                        $methodNode->setStatic($tag->isStatic());
+                        $node->addMethod($methodNode);
+                    }
                 }
 
                 $reflectionClass = $reflectionClass->getParentClass();
