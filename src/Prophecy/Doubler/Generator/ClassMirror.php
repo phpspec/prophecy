@@ -16,6 +16,7 @@ use Prophecy\Exception\Doubler\ClassMirrorException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
+use ReflectionType;
 
 /**
  * Class mirror.
@@ -177,6 +178,10 @@ class ClassMirror
 
         $node->setTypeHint($this->getTypeHint($parameter));
 
+        if ($this->isNullableTypeHint($parameter)) {
+            $node->setAsNullable();
+        }
+
         if ($this->isVariadic($parameter)) {
             $node->setAsVariadic();
         }
@@ -243,6 +248,11 @@ class ClassMirror
     private function isNullable(ReflectionParameter $parameter)
     {
         return $parameter->allowsNull() && null !== $this->getTypeHint($parameter);
+    }
+
+    private function isNullableTypeHint(ReflectionParameter $parameter)
+    {
+        return version_compare(PHP_VERSION, '7.1', '>=') && true === $parameter->hasType() && true === $parameter->getType()->allowsNull();
     }
 
     private function getParameterClassName(ReflectionParameter $parameter)
