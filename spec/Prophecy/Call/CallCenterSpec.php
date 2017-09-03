@@ -3,10 +3,12 @@
 namespace spec\Prophecy\Call;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
+use Prophecy\Argument\ArgumentsWildcard;
+use Prophecy\Call\Call;
 use Prophecy\Promise\PromiseInterface;
 use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Prophecy\ObjectProphecy;
-use Prophecy\Argument\ArgumentsWildcard;
 
 class CallCenterSpec extends ObjectBehavior
 {
@@ -63,6 +65,11 @@ class CallCenterSpec extends ObjectBehavior
         $method3->getMethodName()->willReturn('getName');
         $method3->getArgumentsWildcard()->willReturn($arguments3);
         $method3->getPromise()->willReturn($promise);
+        $method3->addCall(Argument::that(function (Call $call) {
+            return 'getName' === $call->getMethodName()
+                && array('world', 'everything') === $call->getArguments()
+                && 42 === $call->getReturnValue();
+        }))->willReturn($method3);
         $arguments3->scoreArguments(array('world', 'everything'))->willReturn(200);
 
         $objectProphecy->getMethodProphecies()->willReturn(array(
@@ -77,8 +84,7 @@ class CallCenterSpec extends ObjectBehavior
         $this->makeCall($objectProphecy, 'getName', array('world', 'everything'))->shouldReturn(42);
 
         $calls = $this->findCalls('getName', $arguments3);
-        $calls->shouldHaveCount(1);
-        $calls[0]->getReturnValue()->shouldReturn(42);
+        $calls->shouldHaveCount(0);
     }
 
     function it_executes_promise_of_method_prophecy_that_matches_with_highest_score_to_makeCall(
@@ -100,6 +106,11 @@ class CallCenterSpec extends ObjectBehavior
         $method2->getMethodName()->willReturn('getName');
         $method2->getArgumentsWildcard()->willReturn($arguments2);
         $method2->getPromise()->willReturn($promise);
+        $method2->addCall(Argument::that(function (Call $call) {
+            return 'getName' === $call->getMethodName()
+                && array('world', 'everything') === $call->getArguments()
+                && 'second' === $call->getReturnValue();
+        }))->willReturn($method2);
         $arguments2->scoreArguments(array('world', 'everything'))->willReturn(300);
 
         $method3->hasReturnVoid()->willReturn(false);
@@ -149,6 +160,11 @@ class CallCenterSpec extends ObjectBehavior
         $method->getMethodName()->willReturn('getName');
         $method->getArgumentsWildcard()->willReturn($arguments);
         $method->getPromise()->willReturn(null);
+        $method->addCall(Argument::that(function (Call $call) {
+            return 'getName' === $call->getMethodName()
+                && array('world', 'everything') === $call->getArguments()
+                && null === $call->getReturnValue();
+        }))->willReturn($method);
         $arguments->scoreArguments(array('world', 'everything'))->willReturn(100);
 
         $objectProphecy->getMethodProphecies()->willReturn(array($method));
