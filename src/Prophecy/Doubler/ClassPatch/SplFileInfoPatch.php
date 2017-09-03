@@ -61,7 +61,8 @@ class SplFileInfoPatch implements ClassPatchInterface
         }
 
         if ($this->nodeIsSplFileObject($node)) {
-            $constructor->setCode('return parent::__construct("' . __FILE__ .'");');
+            $filePath = str_replace('\\','\\\\',__FILE__);
+            $constructor->setCode('return parent::__construct("' . $filePath .'");');
 
             return;
         }
