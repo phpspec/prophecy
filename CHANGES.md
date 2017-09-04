@@ -1,3 +1,8 @@
+1.7.2 / 2017-10-04
+==================
+
+* Reverted "check method predictions only once" due to it breaking Spies
+
 1.7.1 / 2017-10-03
 ==================
 
