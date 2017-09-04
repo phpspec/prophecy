@@ -12,13 +12,12 @@
 namespace Prophecy\Prophecy;
 
 use Prophecy\Argument;
-use Prophecy\Call\Call;
+use Prophecy\Prophet;
+use Prophecy\Promise;
+use Prophecy\Prediction;
 use Prophecy\Exception\Doubler\MethodNotFoundException;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Prophecy\MethodProphecyException;
-use Prophecy\Prediction;
-use Prophecy\Promise;
-use Prophecy\Prophet;
 
 /**
  * Method prophecy.
@@ -35,7 +34,6 @@ class MethodProphecy
     private $checkedPredictions = array();
     private $bound = false;
     private $voidReturnType = false;
-    private $calls = array();
 
     /**
      * Initializes method prophecy.
@@ -306,10 +304,10 @@ class MethodProphecy
             $this->willReturn();
         }
 
-        $calls = array_merge($this->calls, $this->getObjectProphecy()->findProphecyMethodCalls(
+        $calls = $this->getObjectProphecy()->findProphecyMethodCalls(
             $this->getMethodName(),
             $this->getArgumentsWildcard()
-        ));
+        );
 
         try {
             $prediction->check($calls, $this->getObjectProphecy(), $this);
@@ -384,20 +382,6 @@ class MethodProphecy
         }
 
         $this->shouldHave($this->prediction);
-    }
-
-    /**
-     * Adds a call made to this prophecy.
-     *
-     * @param Call $call
-     *
-     * @return $this
-     */
-    public function addCall(Call $call)
-    {
-        $this->calls[] = $call;
-
-        return $this;
     }
 
     /**
