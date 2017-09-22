@@ -96,6 +96,7 @@ class CallCenter
         // Sort matches by their score value
         @usort($matches, function ($match1, $match2) { return $match2[0] - $match1[0]; });
 
+        $score = $matches[0][0];
         // If Highest rated method prophecy has a promise - execute it or return null instead
         $methodProphecy = $matches[0][1];
         $returnValue = null;
@@ -115,9 +116,10 @@ class CallCenter
             );
         }
 
-        $this->recordedCalls[] = new Call(
+        $this->recordedCalls[] = $call = new Call(
             $methodName, $arguments, $returnValue, $exception, $file, $line
         );
+        $call->addScore($methodProphecy->getArgumentsWildcard(), $score);
 
         if (null !== $exception) {
             throw $exception;
@@ -139,7 +141,7 @@ class CallCenter
         return array_values(
             array_filter($this->recordedCalls, function (Call $call) use ($methodName, $wildcard) {
                 return $methodName === $call->getMethodName()
-                    && 0 < $wildcard->scoreArguments($call->getArguments())
+                    && 0 < $call->getScore($wildcard)
                 ;
             })
         );
