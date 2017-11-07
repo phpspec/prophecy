@@ -2,9 +2,10 @@
 
 namespace Tests\Prophecy\Doubler\Generator;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\Generator\ClassMirror;
 
-class ClassMirrorTest extends \PHPUnit_Framework_TestCase
+class ClassMirrorTest extends TestCase
 {
     /**
      * @test
