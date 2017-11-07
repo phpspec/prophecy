@@ -118,6 +118,50 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
+     */
+    public function it_properly_reads_methods_nullable_arguments_with_types()
+    {
+        $this->prophesize('Fixtures\Prophecy\WithNullableArguments');
+        $class = new \ReflectionClass('Fixtures\Prophecy\WithNullableArguments');
+
+        $mirror = new ClassMirror();
+
+        $classNode = $mirror->reflect($class, array());
+        $methodNode = $classNode->getMethod('methodWithArgs');
+        $argNodes = $methodNode->getArguments();
+
+        $this->assertCount(4, $argNodes);
+
+        $this->assertEquals('arg_1', $argNodes[0]->getName());
+        $this->assertEquals('bool', $argNodes[0]->getTypeHint());
+        $this->assertTrue($argNodes[0]->isOptional());
+        $this->assertEquals(true, $argNodes[0]->getDefault());
+        $this->assertFalse($argNodes[0]->isPassedByReference());
+        $this->assertFalse($argNodes[0]->isVariadic());
+
+        $this->assertEquals('arg_2', $argNodes[1]->getName());
+        $this->assertEquals('bool', $argNodes[1]->getTypeHint());
+        $this->assertTrue($argNodes[1]->isOptional());
+
+        $this->assertEquals('arg_3', $argNodes[2]->getName());
+        $this->assertEquals('bool', $argNodes[2]->getTypeHint());
+        $this->assertTrue($argNodes[2]->isOptional());
+        $this->assertTrue($argNodes[2]->isNullable());
+        $this->assertEquals(true, $argNodes[2]->getDefault());
+        $this->assertFalse($argNodes[2]->isPassedByReference());
+        $this->assertFalse($argNodes[2]->isVariadic());
+
+        $this->assertEquals('arg_4', $argNodes[3]->getName());
+        $this->assertEquals('bool', $argNodes[3]->getTypeHint());
+        $this->assertTrue($argNodes[3]->isOptional());
+        $this->assertTrue($argNodes[3]->isNullable());
+        $this->assertNull($argNodes[3]->getDefault());
+        $this->assertFalse($argNodes[3]->isPassedByReference());
+        $this->assertFalse($argNodes[3]->isVariadic());
+    }
+
+    /**
+     * @test
      * @requires PHP 5.4
      */
     public function it_properly_reads_methods_arguments_with_callable_types()
@@ -429,6 +473,7 @@ class ClassMirrorTest extends TestCase
         $class = $this->prophesize('ReflectionClass');
         $method = $this->prophesize('ReflectionMethod');
         $parameter = $this->prophesize('ReflectionParameter');
+        $type = $this->prophesize('ReflectionType');
 
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
@@ -450,10 +495,17 @@ class ClassMirrorTest extends TestCase
         $parameter->getName()->willReturn('...');
         $parameter->isDefaultValueAvailable()->willReturn(true);
         $parameter->getDefaultValue()->willReturn(null);
+        $parameter->isOptional()->willReturn(false);
+        $parameter->allowsNull()->willReturn(false);
         $parameter->isPassedByReference()->willReturn(false);
         $parameter->getClass()->willReturn($class);
         if (version_compare(PHP_VERSION, '5.6', '>=')) {
             $parameter->isVariadic()->willReturn(false);
+        }
+        if (version_compare(PHP_VERSION, '7.1', '>=')) {
+            $parameter->hasType()->willReturn(true);
+            $parameter->getType()->willReturn($type);
+            $type->allowsNull()->willReturn(true);
         }
 
         $mirror = new ClassMirror();
