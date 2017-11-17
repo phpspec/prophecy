@@ -6,6 +6,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Exception\Doubler\MethodNotFoundException;
 
 class ProphecySubjectPatchSpec extends ObjectBehavior
 {
@@ -35,6 +36,60 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))->willReturn(null);
 
         $this->apply($node);
+    }
+
+    function it_adds_a_magic_call_implementation(ClassNode $node)
+    {
+        $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->shouldBeCalled();
+
+        $node->addProperty('objectProphecy', 'private')->willReturn(null);
+        $node->getMethods()->willReturn(array());
+        $node->hasMethod(Argument::any())->willReturn(false);
+        $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))->willReturn(null);
+        $this->apply($node);
+        $node->addMethod(Argument::which('getName', '__call'))->shouldBeCalled();
+        $node->addMethod(Argument::that(function ($method) {
+            return strpos($method->getCode(), 'not found') !== false;
+        }))->shouldBeCalled();
+    }
+
+    function it_adds_a_magic_call_implementation_that_instantiates_method_not_found_properly(ClassNode $node)
+    {
+        $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->shouldBeCalled();
+
+        $node->addProperty('objectProphecy', 'private')->willReturn(null);
+        $node->getMethods()->willReturn(array());
+        $node->hasMethod(Argument::any())->willReturn(false);
+        $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'))->willReturn(null);
+        $this->apply($node);
+        $node->addMethod(Argument::that(function ($method) {
+            if ($method->getName() !== '__call') {
+                return false;
+            }
+            eval(sprintf(
+                <<<'CODE'
+namespace spec\Prophecy\Doubler\ClassPatch;
+
+class Whatever
+{
+    function __call($method, $arguments)
+    {
+        %s
+    }
+}
+CODE
+                ,
+                $method->getCode()
+            ));
+            try {
+                $object = new Whatever;
+                $object->magicCall('some', 'args');
+            } catch (MethodNotFoundException $e) {
+                if (is_string($e->getClassname())) {
+                    return true;
+                }
+            }
+        }))->shouldBeCalled();
     }
 
     function it_forces_all_class_methods_except_constructor_to_proxy_calls_into_prophecy_makeCall(
