@@ -82,4 +82,17 @@ class SplFileInfoPatchSpec extends ObjectBehavior
 
         $this->apply($node);
     }
+
+    function it_should_supply_a_file_for_a_symfony_spl_file_info(ClassNode $node, MethodNode $method)
+    {
+        $node->hasMethod('__construct')->willReturn(true);
+        $node->getMethod('__construct')->willReturn($method);
+        $node->getParentClass()->willReturn('Symfony\\Component\\Finder\\SplFileInfo');
+
+        $method->setCode(Argument::that(function($value) {
+            return strpos($value, '.php') !== false;
+        }))->shouldBeCalled();
+
+        $this->apply($node);
+    }
 }
