@@ -409,6 +409,7 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
+     * @requires PHP 7.1
      */
     public function it_doesnt_fail_on_array_nullable_parameter_with_not_null_default_value()
     {
