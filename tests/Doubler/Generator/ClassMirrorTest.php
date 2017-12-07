@@ -410,6 +410,20 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    public function it_doesnt_fail_on_array_nullable_parameter_with_not_null_default_value()
+    {
+        $mirror = new ClassMirror();
+
+        $classNode = $mirror->reflect(new \ReflectionClass('Fixtures\Prophecy\NullableArrayParameter'), array());
+        $method = $classNode->getMethod('iHaveNullableArrayParameterWithNotNullDefaultValue');
+        $arguments = $method->getArguments();
+        $this->assertSame('array', $arguments[0]->getTypeHint());
+        $this->assertTrue($arguments[0]->isNullable());
+    }
+
+    /**
+     * @test
+     */
     public function it_doesnt_fail_to_typehint_nonexistent_RQCN()
     {
         $mirror = new ClassMirror();
