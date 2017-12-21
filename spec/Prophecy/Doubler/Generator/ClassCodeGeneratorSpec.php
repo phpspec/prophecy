@@ -2,9 +2,7 @@
 
 namespace spec\Prophecy\Doubler\Generator;
 
-use phpDocumentor\Reflection\DocBlock\Tags\Method;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;

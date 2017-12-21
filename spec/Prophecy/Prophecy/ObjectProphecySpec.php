@@ -2,7 +2,6 @@
 
 namespace spec\Prophecy\Prophecy;
 
-use phpDocumentor\Reflection\DocBlock\Tags\Method;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Argument\ArgumentsWildcard;
