@@ -45,6 +45,20 @@ class AggregateExceptionSpec extends ObjectBehavior
 
         $this->append($exception);
 
-        $this->getMessage()->shouldReturn("  Exception #1");
+        $this->getMessage()->shouldReturn('Exception #1');
+    }
+
+    function it_should_update_message_during_append_more_exceptions(
+        PredictionException $exception1,
+        PredictionException $exception2
+    ) {
+        $exception1->getMessage()->willReturn('Exception #1');
+        $exception2->getMessage()->willReturn('Exception #2');
+
+        $this->append($exception1);
+        $this->getMessage()->shouldReturn('Exception #1');
+
+        $this->append($exception2);
+        $this->getMessage()->shouldReturn("Exception #1\nException #2");
     }
 }
