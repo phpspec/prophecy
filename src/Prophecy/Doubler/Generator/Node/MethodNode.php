@@ -137,6 +137,13 @@ class MethodNode
                 $type = 'int';
                 // intentional fall through
 
+            case 'object':
+                if (version_compare(PHP_VERSION, '7.2', '>=')) {
+                    $this->returnType = $type;
+                    break;
+                }
+                // Fall-through to default case for PHP < 7.2
+
             default:
                 if ($this->typeHintReference->isBuiltInReturnTypeHint($type)) {
                     $this->returnType = $type;

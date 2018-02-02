@@ -17,6 +17,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         MethodNode $method2,
         MethodNode $method3,
         MethodNode $method4,
+        MethodNode $method5,
         ArgumentNode $argument11,
         ArgumentNode $argument12,
         ArgumentNode $argument13,
@@ -28,7 +29,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
             'Prophecy\Doubler\Generator\MirroredInterface', 'ArrayAccess', 'ArrayIterator'
         ));
         $class->getProperties()->willReturn(array('name' => 'public', 'email' => 'private'));
-        $class->getMethods()->willReturn(array($method1, $method2, $method3, $method4));
+        $class->getMethods()->willReturn(array($method1, $method2, $method3, $method4, $method5));
 
         $method1->getName()->willReturn('getName');
         $method1->getVisibility()->willReturn('public');
@@ -68,6 +69,16 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method4->getReturnType()->willReturn('void');
         $method4->hasNullableReturnType()->willReturn(false);
         $method4->getCode()->willReturn('return;');
+
+        $method5->getName()->willReturn('returnObject');
+        $method5->getVisibility()->willReturn('public');
+        $method5->returnsReference()->willReturn(false);
+        $method5->isStatic()->willReturn(false);
+        $method5->getArguments()->willReturn(array());
+        $method5->hasReturnType()->willReturn(true);
+        $method5->getReturnType()->willReturn(version_compare(PHP_VERSION, '7.2', '>=') ? 'object' : '\object');
+        $method5->hasNullableReturnType()->willReturn(false);
+        $method5->getCode()->willReturn('return;');
 
         $argument11->getName()->willReturn('fullname');
         $argument11->getTypeHint()->willReturn('array');
@@ -128,6 +139,9 @@ return $this->refValue;
 public  function doSomething(): void {
 return;
 }
+public  function returnObject(): object {
+return;
+}
 
 }
 }
@@ -149,6 +163,9 @@ public  function &getRefValue( $refValue): string {
 return $this->refValue;
 }
 public  function doSomething(): void {
+return;
+}
+public  function returnObject(): \object {
 return;
 }
 
@@ -174,6 +191,9 @@ return $this->refValue;
 public  function doSomething() {
 return;
 }
+public  function returnObject(): \object {
+return;
+}
 
 }
 }
@@ -195,6 +215,9 @@ public  function &getRefValue( $refValue) {
 return $this->refValue;
 }
 public  function doSomething() {
+return;
+}
+public  function returnObject() {
 return;
 }
 
