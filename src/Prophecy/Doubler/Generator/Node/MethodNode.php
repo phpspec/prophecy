@@ -11,6 +11,7 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
+use Prophecy\Doubler\Generator\TypeHintReference;
 use Prophecy\Exception\InvalidArgumentException;
 
 /**
@@ -34,13 +35,19 @@ class MethodNode
     private $arguments = array();
 
     /**
+     * @var TypeHintReference
+     */
+    private $typeHintReference;
+
+    /**
      * @param string $name
      * @param string $code
      */
-    public function __construct($name, $code = null)
+    public function __construct($name, $code = null, TypeHintReference $typeHintReference = null)
     {
         $this->name = $name;
         $this->code = $code;
+        $this->typeHintReference = $typeHintReference ?: new TypeHintReference();
     }
 
     public function getVisibility()
@@ -117,32 +124,25 @@ class MethodNode
                 $this->returnType = null;
                 break;
 
-            case 'string':
-            case 'float':
-            case 'int':
-            case 'bool':
-            case 'array':
-            case 'callable':
-            case 'iterable':
-            case 'void':
-                $this->returnType = $type;
-                break;
-
             case 'double':
             case 'real':
-                $this->returnType = 'float';
-                break;
+                $type = 'float';
+                // intentional fall through
 
             case 'boolean':
-                $this->returnType = 'bool';
-                break;
+                $type = 'bool';
+                // intentional fall through
 
             case 'integer':
-                $this->returnType = 'int';
-                break;
+                $type = 'int';
+                // intentional fall through
 
             default:
-                $this->returnType = '\\' . ltrim($type, '\\');
+                if ($this->typeHintReference->isBuiltInReturnTypeHint($type)) {
+                    $this->returnType = $type;
+                } else {
+                    $this->returnType = '\\' . ltrim($type, '\\');
+                }
         }
     }
 

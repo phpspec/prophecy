@@ -124,7 +124,7 @@ class MethodNodeSpec extends ObjectBehavior
 
     function it_setReturnType_sets_return_type()
     {
-        $returnType = 'string';
+        $returnType = 'array';
 
         $this->setReturnType($returnType);
 
