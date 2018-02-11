@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Prediction;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Call\Call;
 use Prophecy\Prophecy\MethodProphecy;
@@ -35,6 +36,8 @@ class CallTimesPredictionSpec extends ObjectBehavior
         Call $call,
         ArgumentsWildcard $arguments
     ) {
+        $object->reveal()->willReturn(new \stdClass());
+        $object->findProphecyMethodCalls('getName', Argument::any())->willReturn(array());
         $method->getObjectProphecy()->willReturn($object);
         $method->getMethodName()->willReturn('getName');
         $method->getArgumentsWildcard()->willReturn($arguments);

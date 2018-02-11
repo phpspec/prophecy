@@ -33,6 +33,7 @@ class ProphecyComparatorSpec extends ObjectBehavior
     {
         $prophet = new Prophet();
         $prophecy = $prophet->prophesize('Prophecy\Prophecy\ObjectProphecy');
+        $prophecy->__call('reveal', array())->willReturn(new \stdClass());
 
         $this->shouldNotThrow()->duringAssertEquals($prophecy->reveal(), $prophecy);
     }
