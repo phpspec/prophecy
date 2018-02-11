@@ -26,6 +26,7 @@ class NoCallsPredictionSpec extends ObjectBehavior
         Call $call,
         ArgumentsWildcard $arguments
     ) {
+        $object->reveal()->willReturn(new \stdClass);
         $method->getObjectProphecy()->willReturn($object);
         $method->getMethodName()->willReturn('getName');
         $method->getArgumentsWildcard()->willReturn($arguments);
