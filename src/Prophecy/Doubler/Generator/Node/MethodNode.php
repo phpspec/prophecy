@@ -141,6 +141,13 @@ class MethodNode
                 $this->returnType = 'int';
                 break;
 
+            case 'object':
+                if (version_compare(PHP_VERSION, '7.2', '>=')) {
+                    $this->returnType = $type;
+                    break;
+                }
+                // Fall-through to default case for PHP < 7.2
+
             default:
                 $this->returnType = '\\' . ltrim($type, '\\');
         }

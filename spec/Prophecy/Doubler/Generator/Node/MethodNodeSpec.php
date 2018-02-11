@@ -42,7 +42,7 @@ class MethodNodeSpec extends ObjectBehavior
     {
         $this->setReturnsReference();
         $this->returnsReference()->shouldReturn(true);
-    } 
+    }
 
     function it_should_be_settable_as_static_through_setter()
     {
@@ -130,5 +130,11 @@ class MethodNodeSpec extends ObjectBehavior
 
         $this->hasReturnType()->shouldReturn(true);
         $this->getReturnType()->shouldReturn($returnType);
+    }
+
+    function its_handles_object_return_type()
+    {
+        $this->setReturnType('object');
+        $this->getReturnType()->shouldReturn(version_compare(PHP_VERSION, '7.2', '>=') ? 'object' : '\object');
     }
 }
