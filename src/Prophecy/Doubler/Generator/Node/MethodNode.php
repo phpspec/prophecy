@@ -145,11 +145,9 @@ class MethodNode
                 // Fall-through to default case for PHP < 7.2
 
             default:
-                if ($this->typeHintReference->isBuiltInReturnTypeHint($type)) {
-                    $this->returnType = $type;
-                } else {
-                    $this->returnType = '\\' . ltrim($type, '\\');
-                }
+                $this->returnType = $this->typeHintReference->isBuiltInReturnTypeHint($type) ?
+                    $type :
+                    '\\' . ltrim($type, '\\');
         }
     }
 

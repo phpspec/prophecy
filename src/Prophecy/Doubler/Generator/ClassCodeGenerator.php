@@ -110,11 +110,7 @@ class ClassCodeGenerator
             }
 
             if ($hint = $argument->getTypeHint()) {
-                if ($typeHintReference->isBuiltInParamTypeHint($hint)) {
-                    $php .= $hint;
-                } else {
-                    $php .= '\\'.$hint;
-                }
+                $php .= $typeHintReference->isBuiltInParamTypeHint($hint) ? $hint : '\\'.$hint;
             }
 
             $php .= ' '.($argument->isPassedByReference() ? '&' : '');
