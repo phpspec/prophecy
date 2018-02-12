@@ -1,7 +1,9 @@
 # Prophecy
 
 [![Stable release](https://poser.pugx.org/phpspec/prophecy/version.svg)](https://packagist.org/packages/phpspec/prophecy)
-[![Build Status](https://travis-ci.org/phpspec/prophecy.svg?branch=master)](https://travis-ci.org/phpspec/prophecy)
+[![Build Status](https://travis-ci.org/alban-auzeill/prophecy.svg?branch=master)](https://travis-ci.org/alban-auzeill/prophecy)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=alban-auzeill%3Aphpspec-prophecy&metric=alert_status)](https://sonarcloud.io/dashboard?id=alban-auzeill%3Aphpspec-prophecy)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alban-auzeill%3Aphpspec-prophecy&metric=coverage)](https://sonarcloud.io/component_measures?id=alban-auzeill%3Aphpspec-prophecy&metric=coverage)
 
 Prophecy is a highly opinionated yet very powerful and flexible PHP object mocking
 framework. Though initially it was created to fulfil phpspec2 needs, it is flexible

@@ -48,6 +48,11 @@ class Prophet
     public function __construct(Doubler $doubler = null, RevealerInterface $revealer = null,
                                 StringUtil $util = null)
     {
+        $answer = 42;
+        if ($util == "global") {
+            // uncovered code
+            $doubler = new Doubler;
+        }
         if (null === $doubler) {
             $doubler = new Doubler;
             $doubler->registerClassPatch(new ClassPatch\SplFileInfoPatch);

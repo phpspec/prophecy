@@ -5,28 +5,11 @@ sudo: false
 cache:
   directories:
     - $HOME/.composer/cache
-
-branches:
-  except:
-    - /^bugfix\/.*$/
-    - /^feature\/.*$/
-    - /^optimization\/.*$/
+    - $HOME/.sonar/cache
 
 matrix:
   include:
-    - php: 5.4
-    - php: 5.5
-    - php: 5.6
-      env: DEPENDENCIES='low'
-    - php: 5.6
-    - php: 7.0
     - php: 7.1
-    - php: 7.2
-    - php: 5.3
-      dist: precise
-    # Use the newer stack for HHVM as HHVM does not support Precise anymore since a long time and so Precise has an outdated version
-    - php: hhvm
-      dist: trusty
   fast_finish: true
 
 install:
@@ -34,6 +17,18 @@ install:
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" == "low" ]; then composer update --prefer-lowest; fi;
 
+addons:
+  sonarcloud:
+    organization: "alban-auzeill-github"
+    token:
+      secure: "FlIgXSyDcbY2loyxfSE1SG+Kxmvun317KSPEbe6GZJeTDwpJFrUVNQ5qW3nM0tvVrGpLL4mbzBbGe3GdpY9oaeDd/93EvvX3xBhZhnvuvPKD6F/gA0xHCguHdi6d7IaCY1DyTT5CLTjoS/dL9u4PB4SlleX+T+46AEvDnV+oRZXXTmZR5nRlc0vMzoysy2Hd6PByhVfTWx/MFvwvZY6PCPKYfJhvgpbM07RKtMg87mS0bJw5oZ3HjgyPbSAi2IstVyuYWGfyPOIHNWpt3fFkbDt4fmVcl0MfCqDxMD0tdc3XSfN0UTtEpSv6Hd2Ngg4CNtNqz1FZ6VFKBCvMvFhMBWk9kAc3KFvpJqySdH6EdKdfG8dOtYyYZ0/H1ML/BKutzaALiJd/0phbc84ayU/hV350kyWBx3hIKzkTs8lm7olKZpbgeey9HJ/y2sB7v7XCRwuXoukyVzRL/2l3ZRUMJEMJoQ2YZZgY8FlSD5X6JXdvCN5SsMRk6NEtKbG+qt9a7UsDDCSuCcFFC2tltyjI/OYCkH9lvH3aCSrFoQVMlu8GiAHZ0M7YRBCvdUfQb/h1GYxfhZKNQ5OkO3Va09In9YAcuG/UgezZC2GZHXaD1pDp5L1n5PcTSvRzDa+hT1e7ZIbR3MkKr8cUzzSHgYw31i4z3jcogBvcPhRZ6zd+m2o="
+    github_token:
+      secure: "FpeSMyvOe1l10yv9ZrsUiawTf+GB9qSXa4OlxLcxgWIUwA1ZC+M4xI6SH+sqbZP7xYINfm+5R90Axm/wm2R4J225mU0vMwM79eNM2mhbCpb6o0cF7kezZHZD17gy7i8OxaXPxjco6wSOQ+8LSnPVB2Es8HmWH/OehxZodowa+z9gmLz3XNdn9c4BzhIZqagH9J6nxx1aRceee64n1NRJqBW5q0PigZDXH98JOIAGDR7cxEbc2nn5BKOcaIF/4qzR+pFozVfJhc5cy2HeOgPCxKQVAbSHOWl+tJQa24UpXfgarE+OZ/qS0SA6pKtEuV62U1CNtr37IfAWYSRYrBsvNhHW7m9Nu8Z+aMjH3kmqN9LojTC+hr4D+06P266NscD7s3LWuxOZYYcNt/GV+MR+ek5V5T/154jjrWuCDV3gP7eSHREjGKdX819SBGCEqz5bpStuLNx2vc3jD8PY93VpvC8yoC72rjBUy7IlgRitHDZuNNW6Q28OKVpVqgqEoOZt0a9SnmB0WBpFX13n8Gt2CBkxp6XjEVIU5fCP81h6vGcID0vwzC2XYxZu1SOtzQF+YQBgVNEsjgPeOKQGjrz5M/hZoJve+Kftg0RVcketEUlyUW9fMgJOJdnE2R3vxX/Hb4FkiOw8y+gSjaLUc5g8AJBw6za40sQNhmPiRgJF7Jk="
+
+jdk:
+  - oraclejdk8
+
 script:
   - vendor/bin/phpspec run -fpretty -v
   - vendor/bin/phpunit
+  - sonar-scanner
