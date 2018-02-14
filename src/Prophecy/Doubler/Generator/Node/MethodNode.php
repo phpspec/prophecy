@@ -119,36 +119,22 @@ class MethodNode
      */
     public function setReturnType($type = null)
     {
-        switch ($type) {
-            case '':
-                $this->returnType = null;
-                break;
-
-            case 'double':
-            case 'real':
-                $type = 'float';
-                // intentional fall through
-
-            case 'boolean':
-                $type = 'bool';
-                // intentional fall through
-
-            case 'integer':
-                $type = 'int';
-                // intentional fall through
-
-            case 'object':
-                if (version_compare(PHP_VERSION, '7.2', '>=')) {
-                    $this->returnType = $type;
-                    break;
-                }
-                // Fall-through to default case for PHP < 7.2
-
-            default:
-                $this->returnType = $this->typeHintReference->isBuiltInReturnTypeHint($type) ?
-                    $type :
-                    '\\' . ltrim($type, '\\');
+        if ($type === '' || $type === null) {
+            $this->returnType = null;
+            return;
         }
+        $typeMap = array(
+            'double' => 'float',
+            'real' => 'float',
+            'boolean' => 'bool',
+            'integer' => 'int',
+        );
+        if (isset($typeMap[$type])) {
+            $type = $typeMap[$type];
+        }
+        $this->returnType = $this->typeHintReference->isBuiltInReturnTypeHint($type) ?
+            $type :
+            '\\' . ltrim($type, '\\');
     }
 
     public function getReturnType()
