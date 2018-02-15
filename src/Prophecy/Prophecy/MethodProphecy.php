@@ -279,6 +279,18 @@ class MethodProphecy
     }
 
     /**
+     * Sets call times prediction to the prophecy.
+     *
+     * @see \Prophecy\Prediction\CallTimesPrediction
+     *
+     * @return $this
+     */
+    public function shouldBeCalledOnce()
+    {
+        return $this->shouldBeCalledTimes(1);
+    }
+
+    /**
      * Checks provided prediction immediately.
      *
      * @param callable|Prediction\PredictionInterface $prediction
@@ -370,6 +382,18 @@ class MethodProphecy
     public function shouldHaveBeenCalledTimes($count)
     {
         return $this->shouldHave(new Prediction\CallTimesPrediction($count));
+    }
+
+    /**
+     * Checks call times prediction.
+     *
+     * @see \Prophecy\Prediction\CallTimesPrediction
+     *
+     * @return $this
+     */
+    public function shouldHaveBeenCalledOnce()
+    {
+        return $this->shouldHaveBeenCalledTimes(1);
     }
 
     /**
