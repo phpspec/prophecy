@@ -42,7 +42,7 @@ class MethodNodeSpec extends ObjectBehavior
     {
         $this->setReturnsReference();
         $this->returnsReference()->shouldReturn(true);
-    } 
+    }
 
     function it_should_be_settable_as_static_through_setter()
     {
@@ -124,11 +124,38 @@ class MethodNodeSpec extends ObjectBehavior
 
     function it_setReturnType_sets_return_type()
     {
-        $returnType = 'string';
+        $returnType = 'array';
 
         $this->setReturnType($returnType);
 
         $this->hasReturnType()->shouldReturn(true);
         $this->getReturnType()->shouldReturn($returnType);
+    }
+
+    function it_handles_object_return_type()
+    {
+        $this->setReturnType('object');
+        $this->getReturnType()->shouldReturn(version_compare(PHP_VERSION, '7.2', '>=') ? 'object' : '\object');
+    }
+
+    function it_handles_type_aliases()
+    {
+        $this->setReturnType('double');
+        $this->getReturnType()->shouldReturn(version_compare(PHP_VERSION, '7.0', '>=') ? 'float' : '\float');
+
+        $this->setReturnType('real');
+        $this->getReturnType()->shouldReturn(version_compare(PHP_VERSION, '7.0', '>=') ? 'float' : '\float');
+
+        $this->setReturnType('boolean');
+        $this->getReturnType()->shouldReturn(version_compare(PHP_VERSION, '7.0', '>=') ? 'bool' : '\bool');
+
+        $this->setReturnType('integer');
+        $this->getReturnType()->shouldReturn(version_compare(PHP_VERSION, '7.0', '>=') ? 'int' : '\int');
+    }
+
+    function it_handles_null_return_type()
+    {
+        $this->setReturnType(null);
+        $this->getReturnType()->shouldReturn(null);
     }
 }
