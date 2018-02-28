@@ -68,7 +68,7 @@ class CallCenter
         }
 
         $file = $line = null;
-        if (isset($backtrace[2]) && isset($backtrace[2]['file'])) {
+        if (isset($backtrace[2], $backtrace[2]['file'])) {
             $file = $backtrace[2]['file'];
             $line = $backtrace[2]['line'];
         }
