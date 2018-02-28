@@ -3,7 +3,6 @@
 namespace spec\Prophecy\Argument\Token;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Prophecy\Argument\Token\ExactValueToken;
 use Prophecy\Argument\Token\TokenInterface;
 use Prophecy\Exception\InvalidArgumentException;

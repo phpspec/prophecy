@@ -3,7 +3,6 @@
 namespace spec\Prophecy\Comparator;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class FactorySpec extends ObjectBehavior
 {
