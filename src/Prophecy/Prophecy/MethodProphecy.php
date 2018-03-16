@@ -213,6 +213,25 @@ class MethodProphecy
     }
 
     /**
+     * Shorthand for willReturn()->shouldBeCalled()
+     *
+     * Sets return promise to the prophecy.
+     * Sets call prediction to the prophecy.
+     *
+     * @see \Prophecy\Promise\ReturnPromise
+     * @see \Prophecy\Prediction\CallPrediction
+     *
+     * @return $this
+     */
+     public function mustReturn()
+     {
+         /** @var self $promise */
+         $promise = call_user_func_array(array($this, 'willReturn'), func_get_args());
+
+         return $promise->shouldBeCalled();
+     }
+
+    /**
      * Sets custom prediction to the prophecy.
      *
      * @param callable|Prediction\PredictionInterface $prediction

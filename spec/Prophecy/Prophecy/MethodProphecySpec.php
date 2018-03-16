@@ -78,6 +78,17 @@ class MethodProphecySpec extends ObjectBehavior
         $this->will($promise);
     }
 
+    function it_adds_ReturnPromise_and_CallPrediction_during_mustReturn_call($objectProphecy)
+    {
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+
+        $this->mustReturn(42);
+        $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\ReturnPromise');
+
+        $this->callOnWrappedObject('shouldBeCalled', array());
+        $this->getPrediction()->shouldBeAnInstanceOf('Prophecy\Prediction\CallPrediction');
+    }
+
     function it_adds_ReturnPromise_during_willReturn_call($objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
