@@ -49,7 +49,9 @@ class DisableConstructorPatch implements ClassPatchInterface
 
         $constructor = $node->getMethod('__construct');
         foreach ($constructor->getArguments() as $argument) {
-            $argument->setDefault(null);
+            if (!$argument->isOptional()) {
+                $argument->setDefault(null);
+            }
         }
 
         $constructor->setCode(<<<PHP

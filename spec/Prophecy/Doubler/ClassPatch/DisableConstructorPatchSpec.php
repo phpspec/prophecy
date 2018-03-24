@@ -35,8 +35,27 @@ class DisableConstructorPatchSpec extends ObjectBehavior
         $class->getMethod('__construct')->willReturn($method);
         $method->getArguments()->willReturn(array($arg1, $arg2));
 
+        $arg1->isOptional()->willReturn(false);
         $arg1->setDefault(null)->shouldBeCalled();
+        $arg2->isOptional()->willReturn(false);
         $arg2->setDefault(null)->shouldBeCalled();
+
+        $method->setCode(Argument::type('string'))->shouldBeCalled();
+
+        $this->apply($class);
+    }
+
+    function it_does_not_redefine_already_optional_arguments(
+        ClassNode $class,
+        MethodNode $method,
+        ArgumentNode $arg
+    ) {
+        $class->hasMethod('__construct')->willReturn(true);
+        $class->getMethod('__construct')->willReturn($method);
+        $method->getArguments()->willReturn(array($arg));
+
+        $arg->isOptional()->shouldBeCalled()->willReturn(true);
+        $arg->setDefault(Argument::any())->shouldNotBeCalled();
 
         $method->setCode(Argument::type('string'))->shouldBeCalled();
 
