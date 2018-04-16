@@ -21,6 +21,7 @@ use Prophecy\Util\StringUtil;
 class IdenticalValueToken implements TokenInterface
 {
     private $value;
+    private $hash;
     private $string;
     private $util;
 
@@ -34,6 +35,10 @@ class IdenticalValueToken implements TokenInterface
     {
         $this->value = $value;
         $this->util  = $util ?: new StringUtil();
+
+        if (is_object($value)) {
+            $this->hash = spl_object_hash($value);
+        }
     }
 
     /**
