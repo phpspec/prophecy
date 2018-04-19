@@ -24,9 +24,6 @@ matrix:
     - php: 7.2
     - php: 5.3
       dist: precise
-    # Use the newer stack for HHVM as HHVM does not support Precise anymore since a long time and so Precise has an outdated version
-    - php: hhvm
-      dist: trusty
   fast_finish: true
 
 install:
