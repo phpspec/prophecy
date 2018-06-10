@@ -3,9 +3,11 @@
 namespace spec\Prophecy\Prophecy;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Call\Call;
 use Prophecy\Prediction\PredictionInterface;
+use Prophecy\Promise\CallbackPromise;
 use Prophecy\Promise\PromiseInterface;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -61,6 +63,51 @@ class MethodProphecySpec extends ObjectBehavior
 
         $wildcard = $this->getArgumentsWildcard();
         $wildcard->shouldBe(null);
+    }
+
+    function its_constructor_records_default_callback_promise_for_return_type_hinted_methods(
+        $objectProphecy, ClassWithVoidTypeHintedMethods $subject
+    )
+    {
+        // Return void type hint language feature only introduced in >=7.1
+        if (version_compare(PHP_VERSION, '7.1', '>='))
+        {
+            $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
+            $objectProphecy->reveal()->willReturn($subject);
+
+            $this->beConstructedWith($objectProphecy, 'getVoid');
+            $this->getPromise()->shouldBeAnInstanceOf(CallbackPromise::class);
+        }
+    }
+
+    function its_constructor_records_promise_that_returns_null_for_void_type_hinted_methods(
+        $objectProphecy, ClassWithVoidTypeHintedMethods $subject
+    )
+    {
+        // Return void type hint language feature only introduced in >=7.1
+        if (version_compare(PHP_VERSION, '7.1', '>='))
+        {
+            $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
+            $objectProphecy->reveal()->willReturn($subject);
+
+            $this->beConstructedWith($objectProphecy, 'getVoid');
+            $this->getPromise()->execute([], $objectProphecy, $this)->shouldBeNull();
+        }
+    }
+
+    function its_constructor_adds_itself_to_ObjectProphecy_for_return_type_hinted_methods(
+        $objectProphecy, ClassWithVoidTypeHintedMethods $subject
+    )
+    {
+        // Return void type hint language feature only introduced in >=7.1
+        if (version_compare(PHP_VERSION, '7.1', '>='))
+        {
+            $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
+            $objectProphecy->reveal()->willReturn($subject);
+
+            $this->beConstructedWith($objectProphecy, 'getVoid');
+            $objectProphecy->addMethodProphecy($this)->shouldHaveBeenCalled();
+        }
     }
 
     function it_records_promise_through_will_method(PromiseInterface $promise, $objectProphecy)
@@ -338,5 +385,19 @@ class MethodProphecySpec extends ObjectBehavior
     function its_withArguments_throws_exception_if_wrong_arguments_provided()
     {
         $this->shouldThrow('Prophecy\Exception\InvalidArgumentException')->duringWithArguments(42);
+    }
+}
+
+// Return void type hint language feature only introduced in >=7.1
+if (version_compare(PHP_VERSION, '7.1', '>=')) {
+    class ClassWithVoidTypeHintedMethods
+    {
+        public function getVoid(): void
+        {
+        }
+    }
+} else {
+    class ClassWithVoidTypeHintedMethods
+    {
     }
 }
