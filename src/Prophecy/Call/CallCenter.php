@@ -149,23 +149,66 @@ class CallCenter
                                                    array $arguments)
     {
         $classname = get_class($prophecy->reveal());
-        $argstring = implode(', ', array_map(array($this->util, 'stringify'), $arguments));
-        $expected  = implode("\n", array_map(function (MethodProphecy $methodProphecy) {
-            return sprintf('  - %s(%s)',
-                $methodProphecy->getMethodName(),
-                $methodProphecy->getArgumentsWildcard()
-            );
-        }, call_user_func_array('array_merge', $prophecy->getMethodProphecies())));
+        $indentationLength = 8; // looks good
+        $argstring = implode(
+            ",\n",
+            $this->indentArguments(
+                array_map(array($this->util, 'stringify'), $arguments),
+                $indentationLength
+            )
+        );
+
+        $expected = implode(
+            "\n",
+            array_map(
+                function (MethodProphecy $methodProphecy) use ($indentationLength) {
+                    return sprintf(
+                        "  - %s(\n".
+                        "%s\n".
+                        "    )",
+                        $methodProphecy->getMethodName(),
+                        implode(
+                            ",\n",
+                            $this->indentArguments(
+                                array_map(
+                                    function ($token) {
+                                        return (string) $token;
+                                    },
+                                    $methodProphecy->getArgumentsWildcard()->getTokens()
+                                ),
+                                $indentationLength
+                            )
+                        )
+                    );
+                },
+                call_user_func_array('array_merge', $prophecy->getMethodProphecies())
+            )
+        );
 
         return new UnexpectedCallException(
             sprintf(
-                "Method call:\n".
-                "  - %s(%s)\n".
-                "on %s was not expected, expected calls were:\n%s",
+                "Unexpected method call on %s:\n".
+                "  - %s(\n".
+                "%s\n".
+                "    )\n".
+                "expected calls were:\n".
+                "%s",
 
-                $methodName, $argstring, $classname, $expected
+                $classname, $methodName, $argstring, $expected
             ),
             $prophecy, $methodName, $arguments
+
+        );
+    }
+
+    private function indentArguments(array $arguments, $indentationLength)
+    {
+        return preg_replace_callback(
+            '/^/m',
+            function () use ($indentationLength) {
+                return str_repeat(' ', $indentationLength);
+            },
+            $arguments
         );
     }
 }
