@@ -82,7 +82,7 @@ class ThrowablePatch implements ClassPatchInterface
     private function checkItCanBeDoubled(ClassNode $node)
     {
         $className = $node->getParentClass();
-        if ($className != 'stdClass') {
+        if ($className !== 'stdClass') {
             throw new ClassCreatorException(
                 sprintf(
                     'Cannot double concrete class %s as well as implement Traversable',
