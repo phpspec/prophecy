@@ -1,7 +1,12 @@
-1.7.5 / 2018/04/18
+1.7.6 / 2018/04/18
 ==================
 
 * Allow sebastian/comparator ^3.0 (@sebastianbergmann)
+
+1.7.5 / 2018/02/11
+==================
+
+* Support for object return type hints (thanks @greg0ire)
 
 1.7.4 / 2018/02/11
 ==================
