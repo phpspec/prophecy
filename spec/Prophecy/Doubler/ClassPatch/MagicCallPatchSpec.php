@@ -110,7 +110,6 @@ class MagicalApiInvalidMethodDefinition
 }
 
 /**
- * @method void undefinedMethod()
  * @method void definedMethod()
  */
 class MagicalApiExtended extends MagicalApi
