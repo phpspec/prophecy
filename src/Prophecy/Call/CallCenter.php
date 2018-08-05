@@ -149,23 +149,79 @@ class CallCenter
                                                    array $arguments)
     {
         $classname = get_class($prophecy->reveal());
-        $argstring = implode(', ', array_map(array($this->util, 'stringify'), $arguments));
-        $expected  = implode("\n", array_map(function (MethodProphecy $methodProphecy) {
-            return sprintf('  - %s(%s)',
+        $indentationLength = 8; // looks good
+        $argstring = implode(
+            ",\n",
+            $this->indentArguments(
+                array_map(array($this->util, 'stringify'), $arguments),
+                $indentationLength
+            )
+        );
+
+        $expected = array();
+
+        foreach (call_user_func_array('array_merge', $prophecy->getMethodProphecies()) as $methodProphecy) {
+            $expected[] = sprintf(
+                "  - %s(\n" .
+                "%s\n" .
+                "    )",
                 $methodProphecy->getMethodName(),
-                $methodProphecy->getArgumentsWildcard()
+                implode(
+                    ",\n",
+                    $this->indentArguments(
+                        array_map('strval', $methodProphecy->getArgumentsWildcard()->getTokens()),
+                        $indentationLength
+                    )
+                )
             );
-        }, call_user_func_array('array_merge', $prophecy->getMethodProphecies())));
+        }
 
         return new UnexpectedCallException(
             sprintf(
-                "Method call:\n".
-                "  - %s(%s)\n".
-                "on %s was not expected, expected calls were:\n%s",
+                "Unexpected method call on %s:\n".
+                "  - %s(\n".
+                "%s\n".
+                "    )\n".
+                "expected calls were:\n".
+                "%s",
 
-                $methodName, $argstring, $classname, $expected
+                $classname, $methodName, $argstring, implode("\n", $expected)
             ),
             $prophecy, $methodName, $arguments
+
+        );
+    }
+
+    private function formatExceptionMessage(MethodProphecy $methodProphecy)
+    {
+        return sprintf(
+            "  - %s(\n".
+            "%s\n".
+            "    )",
+            $methodProphecy->getMethodName(),
+            implode(
+                ",\n",
+                $this->indentArguments(
+                    array_map(
+                        function ($token) {
+                            return (string) $token;
+                        },
+                        $methodProphecy->getArgumentsWildcard()->getTokens()
+                    ),
+                    $indentationLength
+                )
+            )
+        );
+    }
+
+    private function indentArguments(array $arguments, $indentationLength)
+    {
+        return preg_replace_callback(
+            '/^/m',
+            function () use ($indentationLength) {
+                return str_repeat(' ', $indentationLength);
+            },
+            $arguments
         );
     }
 }
