@@ -418,6 +418,25 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
+     * @requires PHP 7.2
+     */
+    function it_doesnt_fail_when_method_is_extended_with_more_params()
+    {
+        $mirror = new ClassMirror();
+
+        $classNode = $mirror->reflect(
+            new \ReflectionClass('Fixtures\Prophecy\MethodWithAdditionalParam'),
+            array(new \ReflectionClass('Fixtures\Prophecy\Named'))
+        );
+        $method = $classNode->getMethod('getName');
+        $this->assertCount(1, $method->getArguments());
+
+        $method = $classNode->getMethod('methodWithoutTypeHints');
+        $this->assertCount(2, $method->getArguments());
+    }
+
+    /**
+     * @test
      */
     function it_changes_argument_names_if_they_are_varying()
     {
