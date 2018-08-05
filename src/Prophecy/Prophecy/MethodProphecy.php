@@ -75,11 +75,11 @@ class MethodProphecy
 
             if ('void' === $type) {
                 $this->voidReturnType = true;
-                return;
             }
 
             $this->will(function () use ($type) {
                 switch ($type) {
+                    case 'void': return;
                     case 'string': return '';
                     case 'float':  return 0.0;
                     case 'int':    return 0;
