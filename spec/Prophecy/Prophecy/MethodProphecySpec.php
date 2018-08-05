@@ -218,6 +218,14 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPrediction()->shouldBeAnInstanceOf('Prophecy\Prediction\CallTimesPrediction');
     }
 
+    function it_adds_CallTimesPrediction_during_shouldBeCalledOnce_call($objectProphecy)
+    {
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+
+        $this->callOnWrappedObject('shouldBeCalledOnce');
+        $this->getPrediction()->shouldBeAnInstanceOf('Prophecy\Prediction\CallTimesPrediction');
+    }
+
     function it_checks_prediction_via_shouldHave_method_call(
         $objectProphecy,
         ArgumentsWildcard $arguments,
