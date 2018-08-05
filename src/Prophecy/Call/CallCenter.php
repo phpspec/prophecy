@@ -158,32 +158,23 @@ class CallCenter
             )
         );
 
-        $expected = implode(
-            "\n",
-            array_map(
-                function (MethodProphecy $methodProphecy) use ($indentationLength) {
-                    return sprintf(
-                        "  - %s(\n".
-                        "%s\n".
-                        "    )",
-                        $methodProphecy->getMethodName(),
-                        implode(
-                            ",\n",
-                            $this->indentArguments(
-                                array_map(
-                                    function ($token) {
-                                        return (string) $token;
-                                    },
-                                    $methodProphecy->getArgumentsWildcard()->getTokens()
-                                ),
-                                $indentationLength
-                            )
-                        )
-                    );
-                },
-                call_user_func_array('array_merge', $prophecy->getMethodProphecies())
-            )
-        );
+        $expected = array();
+
+        foreach (call_user_func_array('array_merge', $prophecy->getMethodProphecies()) as $methodProphecy) {
+            $expected[] = sprintf(
+                "  - %s(\n" .
+                "%s\n" .
+                "    )",
+                $methodProphecy->getMethodName(),
+                implode(
+                    ",\n",
+                    $this->indentArguments(
+                        array_map('strval', $methodProphecy->getArgumentsWildcard()->getTokens()),
+                        $indentationLength
+                    )
+                )
+            );
+        }
 
         return new UnexpectedCallException(
             sprintf(
@@ -194,10 +185,32 @@ class CallCenter
                 "expected calls were:\n".
                 "%s",
 
-                $classname, $methodName, $argstring, $expected
+                $classname, $methodName, $argstring, implode("\n", $expected)
             ),
             $prophecy, $methodName, $arguments
 
+        );
+    }
+
+    private function formatExceptionMessage(MethodProphecy $methodProphecy)
+    {
+        return sprintf(
+            "  - %s(\n".
+            "%s\n".
+            "    )",
+            $methodProphecy->getMethodName(),
+            implode(
+                ",\n",
+                $this->indentArguments(
+                    array_map(
+                        function ($token) {
+                            return (string) $token;
+                        },
+                        $methodProphecy->getArgumentsWildcard()->getTokens()
+                    ),
+                    $indentationLength
+                )
+            )
         );
     }
 
