@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Call;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument\ArgumentsWildcard;
 
 class CallSpec extends ObjectBehavior
 {
@@ -47,5 +48,18 @@ class CallSpec extends ObjectBehavior
         $this->beConstructedWith('setValues', array(), 0, null, null, null);
 
         $this->getCallPlace()->shouldReturn('unknown');
+    }
+
+    function it_adds_wildcard_match_score(ArgumentsWildcard $wildcard)
+    {
+        $this->addScore($wildcard, 99)->shouldReturn($this);
+        $this->getScore($wildcard)->shouldReturn(99);
+    }
+
+    function it_caches_and_returns_wildcard_match_score(ArgumentsWildcard $wildcard)
+    {
+        $wildcard->scoreArguments(array(5, 2))->willReturn(13)->shouldBeCalledTimes(1);
+        $this->getScore($wildcard)->shouldReturn(13);
+        $this->getScore($wildcard)->shouldReturn(13);
     }
 }
