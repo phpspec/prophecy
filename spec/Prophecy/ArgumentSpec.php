@@ -104,4 +104,16 @@ class ArgumentSpec extends ObjectBehavior
         $token = $this->approximate(10);
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\ApproximateValueToken');
     }
+
+    function it_has_a_shortcut_for_array_entries_have_all_values()
+    {
+        $token = $this->withAllEntries(array('key1' => 'value1', 'key2' => 'value2'));
+        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\LogicalAndToken');
+    }
+
+    function it_has_a_shortcut_for_array_entries_have_all_key_value_pairs()
+    {
+        $token = $this->containingAllOf('value1', 'value2');
+        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\LogicalAndToken');
+    }
 }

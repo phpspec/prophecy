@@ -209,4 +209,38 @@ class Argument
     {
         return new Token\ApproximateValueToken($value, $precision);
     }
+
+    /**
+     * Check that argument contains all (key, value) pairs
+     *
+     * @param mixed $values
+     *
+     * @return Token\LogicalAndToken
+     */
+    public static function withAllEntries($values)
+    {
+        $entries = array();
+        foreach ($values as $key => $value) {
+            $entries[] = new Token\ArrayEntryToken($key, $value);
+        }
+
+        return new Token\LogicalAndToken($entries);
+    }
+
+    /**
+     * Check that argument contains all of the values
+     *
+     * @param mixed ... a list of values
+     *
+     * @return Token\LogicalAndToken
+     */
+    public static function containingAllOf()
+    {
+        $entries = array();
+        foreach (func_get_args() as $value) {
+            $entries[] = new Token\ArrayEntryToken(self::any(), $value);
+        }
+
+        return new Token\LogicalAndToken($entries);
+    }
 }
