@@ -28,7 +28,7 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
     {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->shouldBeCalled();
 
-        $node->addProperty('objectProphecy', 'private')->willReturn(null);
+        $node->addProperty('objectProphecyClosure', 'private')->willReturn(null);
         $node->getMethods()->willReturn(array());
         $node->hasMethod(Argument::any())->willReturn(false);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);
@@ -45,7 +45,7 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         MethodNode $method3
     ) {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->willReturn(null);
-        $node->addProperty('objectProphecy', 'private')->willReturn(null);
+        $node->addProperty('objectProphecyClosure', 'private')->willReturn(null);
         $node->hasMethod(Argument::any())->willReturn(false);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);

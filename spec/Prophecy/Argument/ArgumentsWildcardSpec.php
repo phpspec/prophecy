@@ -14,7 +14,10 @@ class ArgumentsWildcardSpec extends ObjectBehavior
         $class = get_class($object->getWrappedObject());
         $hash  = spl_object_hash($object->getWrappedObject());
 
-        $this->__toString()->shouldReturn("exact(42), exact(\"zet\"), exact($class:$hash Object (\n    'objectProphecy' => Prophecy\Prophecy\ObjectProphecy Object (*Prophecy*)\n))");
+        $objHash = "exact(42), exact(\"zet\"), exact($class:$hash Object (\n    'objectProphecyClosure' => Closure:%s Object (\n        0 => Closure:%s Object\n    )\n))";
+
+        $hashRegexExpr = '[a-f0-9]{32}';
+        $this->__toString()->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $hashRegexExpr, $hashRegexExpr)));
     }
 
     function it_generates_string_representation_from_all_tokens_imploded(
