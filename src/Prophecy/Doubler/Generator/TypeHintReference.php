@@ -16,7 +16,7 @@ final class TypeHintReference
                 return true;
 
             case 'callable':
-                return PHP_VERSION_ID >= 50400;
+                return true;
 
             case 'bool':
             case 'float':

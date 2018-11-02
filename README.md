@@ -44,7 +44,7 @@ class UserTest extends PHPUnit_Framework_TestCase
 
 ### Prerequisites
 
-Prophecy requires PHP 5.3.3 or greater.
+Prophecy requires PHP 5.6 or greater.
 
 ### Setup through composer
 
@@ -187,14 +187,9 @@ you'll use promises for that:
 ```php
 $user->getName()->willReturn(null);
 
-// For PHP 5.4
+// For PHP 5.6
 $user->setName('everzet')->will(function () {
     $this->getName()->willReturn('everzet');
-});
-
-// For PHP 5.3
-$user->setName('everzet')->will(function ($args, $user) {
-    $user->getName()->willReturn('everzet');
 });
 
 // Or
@@ -256,14 +251,9 @@ use Prophecy\Argument;
 
 $user->getName()->willReturn(null);
 
-// For PHP 5.4
+// For PHP 5.6
 $user->setName(Argument::type('string'))->will(function ($args) {
     $this->getName()->willReturn($args[0]);
-});
-
-// For PHP 5.3
-$user->setName(Argument::type('string'))->will(function ($args, $user) {
-    $user->getName()->willReturn($args[0]);
 });
 
 // Or
@@ -283,14 +273,9 @@ use Prophecy\Argument;
 
 $user->getName()->willReturn(null);
 
-// For PHP 5.4
+// For PHP 5.6
 $user->setName(Argument::type('string'))->will(function ($args) {
     $this->getName()->willReturn($args[0]);
-});
-
-// For PHP 5.3
-$user->setName(Argument::type('string'))->will(function ($args, $user) {
-    $user->getName()->willReturn($args[0]);
 });
 
 // Or

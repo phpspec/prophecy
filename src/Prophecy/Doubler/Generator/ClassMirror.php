@@ -239,7 +239,7 @@ class ClassMirror
 
     private function isVariadic(ReflectionParameter $parameter)
     {
-        return PHP_VERSION_ID >= 50600 && $parameter->isVariadic();
+        return $parameter->isVariadic();
     }
 
     private function isNullable(ReflectionParameter $parameter)
