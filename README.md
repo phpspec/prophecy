@@ -12,7 +12,7 @@ enough to be used inside any testing framework out there with minimal effort.
 ```php
 <?php
 
-class UserTest extends PHPUnit_Framework_TestCase
+class UserTest extends PHPUnit\Framework\TestCase
 {
     private $prophet;
 
@@ -28,7 +28,7 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('hashed_pass', $user->getPassword());
     }
 
-    protected function setup()
+    protected function setUp()
     {
         $this->prophet = new \Prophecy\Prophet;
     }
