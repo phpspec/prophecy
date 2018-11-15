@@ -51,8 +51,16 @@ class CachedDoubler extends Doubler
         foreach ($interfaces as $interface) {
             $parts[] = $interface->getName();
         }
+        foreach ($this->getClassPatches() as $patch) {
+            $parts[] = get_class($patch);
+        }
         sort($parts);
 
         return md5(implode('', $parts));
+    }
+
+    public function resetCache()
+    {
+        self::$classes = array();
     }
 }
