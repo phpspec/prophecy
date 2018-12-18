@@ -31,8 +31,8 @@
     },
 
     "autoload": {
-        "psr-0": {
-            "Prophecy\\": "src/"
+        "psr-4": {
+            "Prophecy\\": "src/Prophecy"
         }
     },
 
