@@ -84,6 +84,28 @@ class ThrowPromiseSpec extends ObjectBehavior
 
         $this->shouldNotThrow('Prophecy\Exception\InvalidArgumentException')->duringInstantiation();
     }
+
+    function it_throws_an_extension_of_throwable_by_class_name()
+    {
+        if (!interface_exists('\Throwable')) {
+            throw new SkippingException('The interface Throwable, introduced in PHP 7, does not exist');
+        }
+
+        $this->beConstructedWith('\Fixtures\Prophecy\ThrowableInterface');
+
+        $this->shouldNotThrow('Prophecy\Exception\InvalidArgumentException')->duringInstantiation();
+    }
+
+    function it_throws_a_throwable_by_class_name()
+    {
+        if (!interface_exists('\Throwable')) {
+            throw new SkippingException('The interface Throwable, introduced in PHP 7, does not exist');
+        }
+
+        $this->beConstructedWith('\Throwable');
+
+        $this->shouldNotThrow('Prophecy\Exception\InvalidArgumentException')->duringInstantiation();
+    }
 }
 
 class RequiredArgumentException extends \Exception
