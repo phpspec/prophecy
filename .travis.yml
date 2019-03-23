@@ -44,6 +44,10 @@ jobs:
       script:
         - composer require --dev phpstan/phpstan phpstan/phpstan-phpunit
         - composer phpstan
+        -
+    # This stage will fail for now, and it's fine
+    # It's an attempt to get roave/no-leaks works with prophecy
+    # See https://github.com/Roave/no-leaks/pull/14
     - stage: No-leaks
       php: 7.3
       env: XDEBUG=true
