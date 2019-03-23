@@ -48,11 +48,8 @@
             "@test:phpspec",
             "@test:phpunit"
         ],
-        "qa": [
-            "@phpstan"
-        ],
         "test:phpunit": "vendor/bin/phpunit",
-        "test:phpspec": "ph",
+        "test:phpspec": "vendor/bin/phpspec run -fpretty -v",
         "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon src tests"
     },
 
