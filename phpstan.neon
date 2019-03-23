@@ -2,12 +2,19 @@ includes:
 	- vendor/phpstan/phpstan-phpunit/extension.neon
 	- vendor/phpstan/phpstan-phpunit/rules.neon
 parameters:
-	level: 2
+	level: 3
 	fileExtensions:
 		- php
 	reportUnmatchedIgnoredErrors: true
 	ignoreErrors:
+
+		# By design
+		-
+			message: '#Method Prophecy\\Doubler\\Doubler::double\(\) should return Prophecy\\Doubler\\DoubleInterface but returns object#'
+			path: src/Prophecy/Doubler/Doubler.php
+
 		# For legacy compat
+
 		-
 			message: '#Return typehint of method Prophecy\\PhpDocumentor\\ClassAndInterfaceTagRetriever::getTagList\(\) has invalid type phpDocumentor\\Reflection\\DocBlock\\Tag\\MethodTag.#'
 			path: src/Prophecy/PhpDocumentor/ClassAndInterfaceTagRetriever.php
