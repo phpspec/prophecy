@@ -44,6 +44,12 @@ jobs:
       script:
         - composer require --dev phpstan/phpstan phpstan/phpstan-unit
         - composer phpstan
+    - stage: No-leaks
+      php: 7.3
+      env: XDEBUG=true
+      script:
+          - composer require --dev roave/no-leaks
+          - vendor/bin/roave-no-leaks
     - stage: Tests PHP 7.2
       php: 7.2
       env: XDEBUG=true
