@@ -110,7 +110,7 @@ class ArrayEntryToken implements TokenInterface
     /**
      * Wraps non token $value into ExactValueToken
      *
-     * @param $value
+     * @param mixed $value
      * @return TokenInterface
      */
     private function wrapIntoExactValueToken($value)

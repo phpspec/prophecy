@@ -45,7 +45,7 @@ class ExactValueToken implements TokenInterface
     /**
      * Scores 10 if argument matches preset value.
      *
-     * @param $argument
+     * @param mixed $argument
      *
      * @return bool|int
      */

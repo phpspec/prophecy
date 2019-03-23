@@ -39,7 +39,7 @@ class IdenticalValueToken implements TokenInterface
     /**
      * Scores 11 if argument matches preset value.
      *
-     * @param $argument
+     * @param mixed $argument
      *
      * @return bool|int
      */

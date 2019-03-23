@@ -268,7 +268,7 @@ class MethodProphecy
      *
      * @see \Prophecy\Prediction\CallTimesPrediction
      *
-     * @param $count
+     * @param int $count
      *
      * @return $this
      */

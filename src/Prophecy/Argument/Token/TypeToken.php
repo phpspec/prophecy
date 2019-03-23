@@ -40,7 +40,7 @@ class TypeToken implements TokenInterface
     /**
      * Scores 5 if argument has the same type this token was constructed with.
      *
-     * @param $argument
+     * @param mixed $argument
      *
      * @return bool|int
      */

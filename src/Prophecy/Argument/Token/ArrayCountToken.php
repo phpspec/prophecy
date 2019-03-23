@@ -32,7 +32,7 @@ class ArrayCountToken implements TokenInterface
     /**
      * Scores 6 when argument has preset number of elements.
      *
-     * @param $argument
+     * @param mixed $argument
      *
      * @return bool|int
      */
@@ -64,7 +64,7 @@ class ArrayCountToken implements TokenInterface
     /**
      * Returns true if object is either array or instance of \Countable
      *
-     * @param $argument
+     * @param mixed $argument
      * @return bool
      */
     private function isCountable($argument)
