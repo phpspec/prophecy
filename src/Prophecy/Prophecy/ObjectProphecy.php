@@ -158,9 +158,9 @@ class ObjectProphecy implements ProphecyInterface
     /**
      * Returns either all or related to single method prophecies.
      *
-     * @param null|string $methodName
+     * @param null|string $methodName if null returns all method prophecies
      *
-     * @return MethodProphecy[]
+     * @return MethodProphecy[][]|MethodProphecy[]
      */
     public function getMethodProphecies($methodName = null)
     {
