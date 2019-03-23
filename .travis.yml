@@ -12,26 +12,83 @@ branches:
     - /^feature\/.*$/
     - /^optimization\/.*$/
 
-matrix:
-  include:
-    - php: 5.4
-    - php: 5.5
-    - php: 5.6
-      env: DEPENDENCIES='low'
-    - php: 5.6
-    - php: 7.0
-    - php: 7.1
-    - php: 7.2
-    - php: 7.3
-    - php: 5.3
-      dist: precise
-  fast_finish: true
+before_install:
+  - |
+    if [ "x$XDEBUG" != "xyes" ]; then
+      mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || true
+    fi
 
 install:
-  - export COMPOSER_ROOT_VERSION=dev-master
-  - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
-  - if [ "$DEPENDENCIES" == "low" ]; then composer update --prefer-lowest; fi;
+  - |
+    if [[ "x$DEPS" == "xlowest" ]]; then
+      travis_retry composer -n update --prefer-dist --prefer-lowest --prefer-stable --no-interaction $COMPOSER_ARGS;
+    else
+      travis_retry composer -n update --prefer-dist --no-interaction $COMPOSER_ARGS;
+    fi
 
-script:
-  - vendor/bin/phpspec run -fpretty -v
-  - vendor/bin/phpunit
+jobs:
+  allow_failures:
+    - php: nightly
+    - stage: No-leaks
+
+  include:
+    - stage: Tests PHP 7.3
+      php: 7.3
+      env: XDEBUG=yes
+      script:
+        - vendor/bin/phpspec run -fpretty -v
+        - vendor/bin/phpunit
+    - stage: PHPStan
+      php: 7.3
+      env: XDEBUG=false
+      script:
+        - composer require --dev phpstan/phpstan phpstan/phpstan-unit
+        - composer phpstan
+    - stage: Tests PHP 7.2
+      php: 7.2
+      env: XDEBUG=true
+      script:
+        - vendor/bin/phpspec run -fpretty -v
+        - vendor/bin/phpunit
+    - stage: Tests PHP 7.1
+      php: 7.1
+      env: XDEBUG=true
+      script:
+        - vendor/bin/phpspec run -fpretty -v
+        - vendor/bin/phpunit
+    - stage: Tests PHP 7.1 (lowest)
+      php: 7.1
+      env: XDEBUG=true DEPS=lowest
+      script:
+        - vendor/bin/phpspec run -fpretty -v
+        - vendor/bin/phpunit
+
+    # End of life versions
+
+    - stage: Tests PHP 7.0
+      php: 7.0
+      env: XDEBUG=true
+      script:
+        - vendor/bin/phpspec run -fpretty -v
+        - vendor/bin/phpunit
+    - stage: Tests PHP 5.6
+      php: 5.6
+      env: XDEBUG=true
+      script:
+        - vendor/bin/phpspec run -fpretty -v
+        - vendor/bin/phpunit
+    - stage: Tests PHP 5.6 (lowest deps)
+      php: 5.6
+      env: XDEBUG=true DEPS=lowest
+      script:
+        - vendor/bin/phpspec run -fpretty -v
+        - vendor/bin/phpunit
+
+    # Nightly builds
+
+    - stage: Nightlty
+      php: nightly
+      env: XDEBUG=false COMPOSER_ARGS=--ignore-platform-reqs
+      script:
+        - vendor/bin/phpspec run -fpretty -v
+        - vendor/bin/phpunit
