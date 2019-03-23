@@ -32,67 +32,74 @@ jobs:
     - stage: No-leaks
 
   include:
-    - stage: Tests PHP 7.3
+
+    # All spec/unit tests for supported versions
+
+    - stage: Tests
       php: 7.3
       env: XDEBUG=yes
       script:
         - vendor/bin/phpspec run -fpretty -v
         - vendor/bin/phpunit
+
+    - stage: Tests
+      php: 7.2
+      env: XDEBUG=false
+      script:
+          - vendor/bin/phpspec run -fpretty -v
+          - vendor/bin/phpunit
+
+    - stage: Tests
+      php: 7.1
+      env: XDEBUG=false
+      script:
+          - vendor/bin/phpspec run -fpretty -v
+          - vendor/bin/phpunit
+
+    - stage: Tests
+      php: 7.1
+      env: XDEBUG=false DEPS=lowest
+      script:
+          - vendor/bin/phpspec run -fpretty -v
+          - vendor/bin/phpunit
+
+    - stage: Tests
+      php: nightly
+      env: XDEBUG=false COMPOSER_ARGS=--ignore-platform-reqs
+      script:
+          - vendor/bin/phpspec run -fpretty -v
+          - vendor/bin/phpunit
+
+    # Static analysis
+
     - stage: PHPStan
       php: 7.3
       env: XDEBUG=false
       script:
         - composer require --dev phpstan/phpstan phpstan/phpstan-phpunit
         - composer phpstan
-        -
-    - stage: Tests PHP 7.2
-      php: 7.2
-      env: XDEBUG=false
-      script:
-        - vendor/bin/phpspec run -fpretty -v
-        - vendor/bin/phpunit
-    - stage: Tests PHP 7.1
-      php: 7.1
-      env: XDEBUG=false
-      script:
-        - vendor/bin/phpspec run -fpretty -v
-        - vendor/bin/phpunit
-    - stage: Tests PHP 7.1 (lowest)
-      php: 7.1
-      env: XDEBUG=false DEPS=lowest
-      script:
-        - vendor/bin/phpspec run -fpretty -v
-        - vendor/bin/phpunit
 
-    # End of life versions
+    # Tests for end of life versions (can be allowed to fail at once)
 
-    - stage: Tests PHP 7.0
+    - stage: Tests EOL
       php: 7.0
       env: XDEBUG=false
       script:
         - vendor/bin/phpspec run -fpretty -v
         - vendor/bin/phpunit
-    - stage: Tests PHP 5.6
+    - stage: Tests EOL
       php: 5.6
       env: XDEBUG=false
       script:
         - vendor/bin/phpspec run -fpretty -v
         - vendor/bin/phpunit
-    - stage: Tests PHP 5.6 (lowest deps)
+    - stage: Tests EOL
       php: 5.6
       env: XDEBUG=false DEPS=lowest
       script:
         - vendor/bin/phpspec run -fpretty -v
         - vendor/bin/phpunit
 
-    # Nightly builds
-
-    - stage: Nightlty
-      php: nightly
-      env: XDEBUG=false COMPOSER_ARGS=--ignore-platform-reqs
-      script:
-        - vendor/bin/phpspec run -fpretty -v
-        - vendor/bin/phpunit
 
     # [Experimental ] No-leaks stage
     # This stage will fail for now, and it's fine
