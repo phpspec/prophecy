@@ -1,0 +1,22 @@
+includes:
+	- vendor/phpstan/phpstan-phpunit/extension.neon
+	- vendor/phpstan/phpstan-phpunit/rules.neon
+parameters:
+	level: 1
+	fileExtensions:
+		- php
+	reportUnmatchedIgnoredErrors: true
+	ignoreErrors:
+		# For legacy compat
+		-
+			message: '#Return typehint of method Prophecy\\PhpDocumentor\\ClassAndInterfaceTagRetriever::getTagList\(\) has invalid type phpDocumentor\\Reflection\\DocBlock\\Tag\\MethodTag.#'
+			path: src/Prophecy/PhpDocumentor/ClassAndInterfaceTagRetriever.php
+		-
+			message: '#Return typehint of method Prophecy\\PhpDocumentor\\LegacyClassTagRetriever::getTagList\(\) has invalid type phpDocumentor\\Reflection\\DocBlock\\Tag\\MethodTag.#'
+			path: src/Prophecy/PhpDocumentor/LegacyClassTagRetriever.php
+		-
+			message: '#Return typehint of method Prophecy\\PhpDocumentor\\MethodTagRetrieverInterface::getTagList\(\) has invalid type phpDocumentor\\Reflection\\DocBlock\\Tag\\MethodTag.#'
+			path: src/Prophecy/PhpDocumentor/MethodTagRetrieverInterface.php
+		-
+			message: '#Return typehint of method Prophecy\\PhpDocumentor\\ClassAndInterfaceTagRetriever::getInterfacesTagList\(\) has invalid type phpDocumentor\\Reflection\\DocBlock\\Tag\\MethodTag.#'
+			path: src/Prophecy/PhpDocumentor/ClassAndInterfaceTagRetriever.php
