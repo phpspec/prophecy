@@ -201,7 +201,7 @@ class Argument
      * given precision.
      *
      * @param float $value
-     * @param float $precision
+     * @param int $precision
      *
      * @return Token\ApproximateValueToken
      */
