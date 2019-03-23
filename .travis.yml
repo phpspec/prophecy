@@ -42,7 +42,7 @@ jobs:
       php: 7.3
       env: XDEBUG=false
       script:
-        - composer require --dev phpstan/phpstan phpstan/phpstan-unit
+        - composer require --dev phpstan/phpstan phpstan/phpstan-phpunit
         - composer phpstan
     - stage: No-leaks
       php: 7.3
