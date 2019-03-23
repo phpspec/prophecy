@@ -89,6 +89,7 @@ class Doubler
      * @return DoubleInterface
      *
      * @throws \Prophecy\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function double(ReflectionClass $class = null, array $interfaces, array $args = null)
     {
