@@ -26,6 +26,13 @@ install:
       travis_retry composer -n update --prefer-dist --no-interaction $COMPOSER_ARGS;
     fi
 
+after_script:
+    - |
+      if [ "x$PHPSTAN" != "xyes" ]; then
+        travis_retry composer require --dev phpstan/phpstan phpstan/phpstan-phpunit
+        composer phpstan
+      fi
+
 jobs:
   allow_failures:
     - php: nightly
@@ -37,7 +44,7 @@ jobs:
 
     - stage: Tests
       php: 7.3
-      env: XDEBUG=yes
+      env: XDEBUG=yes PHPSTAN=yes
       script:
         - vendor/bin/phpspec run -fpretty -v
         - vendor/bin/phpunit
@@ -58,7 +65,7 @@ jobs:
 
     - stage: Tests
       php: 7.1
-      env: XDEBUG=false DEPS=lowest
+      env: XDEBUG=false DEPS=lowest PHPSTAN=yes
       script:
           - vendor/bin/phpspec run -fpretty -v
           - vendor/bin/phpunit
@@ -69,15 +76,6 @@ jobs:
       script:
           - vendor/bin/phpspec run -fpretty -v
           - vendor/bin/phpunit
-
-    # Static analysis
-
-    - stage: PHPStan
-      php: 7.3
-      env: XDEBUG=false
-      script:
-        - composer require --dev phpstan/phpstan phpstan/phpstan-phpunit
-        - composer phpstan
 
     # Tests for end of life versions (can be allowed to fail at once)
 
