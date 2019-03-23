@@ -37,7 +37,7 @@ jobs:
 
     - stage: Tests
       php: 7.3
-      env: XDEBUG=yes PHPSTAN=yes
+      env: XDEBUG=yes
       script:
         - vendor/bin/phpspec run -fpretty -v
         - vendor/bin/phpunit
@@ -58,7 +58,7 @@ jobs:
 
     - stage: Tests
       php: 7.1
-      env: XDEBUG=false DEPS=lowest PHPSTAN=yes
+      env: XDEBUG=false DEPS=lowest
       script:
           - vendor/bin/phpspec run -fpretty -v
           - vendor/bin/phpunit
