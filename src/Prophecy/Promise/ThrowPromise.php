@@ -64,7 +64,7 @@ class ThrowPromise implements PromiseInterface
      * @param ObjectProphecy $object
      * @param MethodProphecy $method
      *
-     * @throws object
+     * @throws \Exception
      */
     public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
     {
