@@ -97,8 +97,8 @@ jobs:
       php: 7.1
       env: XDEBUG=false LABEL=phpstan
       script:
-          composer require --dev phpstan/phpstan phpstan/phpstan-phpunit
-          composer phpstan
+        - composer require --dev phpstan/phpstan phpstan/phpstan-phpunit
+        - composer phpstan
 
     # [Experimental ] No-leaks stage
     # This stage will fail for now, and it's fine
