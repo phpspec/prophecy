@@ -29,7 +29,7 @@ install:
 jobs:
   allow_failures:
     - php: nightly
-    - stage: No-leaks
+    - stage: roave/no-leaks
 
   include:
 
@@ -100,9 +100,9 @@ jobs:
     # It's an attempt to get roave/no-leaks works with prophecy
     # See https://github.com/Roave/no-leaks/pull/14
 
-    - stage: roave/no-leaks (experimental)
+    - stage: roave/no-leaks
       php: 7.3
-      env: XDEBUG=yes
+      env: XDEBUG=yes LABEL="experimental - can fail"
       script:
           - composer require --dev roave/no-leaks
           - vendor/bin/roave-no-leaks
