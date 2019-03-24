@@ -15,7 +15,7 @@ branches:
 before_install:
   - |
     if [ "x$XDEBUG" != "xyes" ]; then
-      mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || true
+       phpenv config-rm xdebug.ini || true
     fi
 
 install:
