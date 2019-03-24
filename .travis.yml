@@ -37,35 +37,32 @@ jobs:
 
     - stage: Tests
       php: 7.3
-      env: XDEBUG=yes
       script:
         - vendor/bin/phpspec run -fpretty -v
         - vendor/bin/phpunit
 
     - stage: Tests
       php: 7.2
-      env: XDEBUG=false
       script:
           - vendor/bin/phpspec run -fpretty -v
           - vendor/bin/phpunit
 
     - stage: Tests
       php: 7.1
-      env: XDEBUG=false
       script:
           - vendor/bin/phpspec run -fpretty -v
           - vendor/bin/phpunit
 
     - stage: Tests
       php: 7.1
-      env: XDEBUG=false DEPS=lowest
+      env: DEPS=lowest
       script:
           - vendor/bin/phpspec run -fpretty -v
           - vendor/bin/phpunit
 
     - stage: Tests
       php: nightly
-      env: XDEBUG=false COMPOSER_ARGS=--ignore-platform-reqs
+      env: COMPOSER_ARGS=--ignore-platform-reqs
       script:
           - vendor/bin/phpspec run -fpretty -v
           - vendor/bin/phpunit
@@ -74,28 +71,26 @@ jobs:
 
     - stage: Tests
       php: 7.0
-      env: XDEBUG=false
       script:
         - vendor/bin/phpspec run -fpretty -v
         - vendor/bin/phpunit
         -
     - stage: Tests
       php: 5.6
-      env: XDEBUG=false
       script:
         - vendor/bin/phpspec run -fpretty -v
         - vendor/bin/phpunit
 
     - stage: Tests
       php: 5.6
-      env: XDEBUG=false DEPS=lowest
+      env: DEPS=lowest
       script:
         - vendor/bin/phpspec run -fpretty -v
         - vendor/bin/phpunit
 
     - stage: Static analysis
       php: 7.1
-      env: XDEBUG=false LABEL=phpstan
+      env: LABEL=phpstan
       script:
         - composer require --dev phpstan/phpstan phpstan/phpstan-phpunit
         - composer phpstan
@@ -105,9 +100,9 @@ jobs:
     # It's an attempt to get roave/no-leaks works with prophecy
     # See https://github.com/Roave/no-leaks/pull/14
 
-    - stage: No-leaks
+    - stage: roave/no-leaks (experimental)
       php: 7.3
-      env: XDEBUG=true
+      env: XDEBUG=yes
       script:
           - composer require --dev roave/no-leaks
           - vendor/bin/roave-no-leaks
