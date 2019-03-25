@@ -67,7 +67,7 @@ jobs:
           - vendor/bin/phpspec run -fpretty -v
           - vendor/bin/phpunit
 
-    # Tests for end of life versions (can be allowed to fail at once)
+    # Tests for end of life versions
 
     - stage: Tests
       php: 7.0
