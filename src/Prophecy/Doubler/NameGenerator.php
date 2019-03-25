@@ -21,6 +21,9 @@ use ReflectionClass;
  */
 class NameGenerator
 {
+    /**
+     * @var int
+     */
     private static $counter = 1;
 
     /**
