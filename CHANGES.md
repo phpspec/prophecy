@@ -4,7 +4,7 @@
 * [fixed] Minor typehint fixes [#430](https://github.com/phpspec/prophecy/pull/430).
 * [fixed] Minor: autoload-dev includes 'Tests' and 'specs' directories [#430](https://github.com/phpspec/prophecy/pull/430).
 * [added] Deps: support for phpunit 8.0 *(with few warnings till we drop support for PHP5)* [#430](https://github.com/phpspec/prophecy/pull/430).
-* [added] Dev: convenience composer script 'composer test`, will run phpspec and phpunit [#430](https://github.com/phpspec/prophecy/pull/430). 
+* [added] Dev: convenience composer script `composer test`, will run phpspec and phpunit [#430](https://github.com/phpspec/prophecy/pull/430). 
 * [added] Dev: phpstan level 4 + `composer phpstan` convenience script [#430](https://github.com/phpspec/prophecy/pull/430).
 * [improved] func_get_args calls by varadic args: `Argument::allOf(...$tokenList)` [#430](https://github.com/phpspec/prophecy/pull/430).
 * [improved] Removed obsolete eval() code for generators in `MethodProphecy` [#430](https://github.com/phpspec/prophecy/pull/430).
