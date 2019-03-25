@@ -26,8 +26,19 @@ use ReflectionClass;
  */
 class Doubler
 {
+    /**
+     * @var ClassMirror
+     */
     private $mirror;
+
+    /**
+     * @var ClassCreator
+     */
     private $creator;
+
+    /**
+     * @var NameGenerator
+     */
     private $namer;
 
     /**
