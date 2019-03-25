@@ -49,9 +49,9 @@
             "@test:phpspec",
             "@test:phpunit"
         ],
-        "test:phpunit": "vendor/bin/phpunit",
-        "test:phpspec": "vendor/bin/phpspec run -fpretty -v",
-        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon src tests"
+        "test:phpunit": "phpunit",
+        "test:phpspec": "phpspec run -fpretty -v",
+        "phpstan": "phpstan analyse -c phpstan.neon src tests"
     },
 
     "extra": {
