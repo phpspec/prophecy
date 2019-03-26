@@ -4,6 +4,7 @@ namespace Tests\Prophecy\Doubler\Generator;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\Generator\ClassMirror;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class ClassMirrorTest extends TestCase
 {
@@ -456,9 +457,21 @@ class ClassMirrorTest extends TestCase
     function it_changes_argument_names_if_they_are_varying()
     {
         // Use test doubles in this test, as arguments named ... in the Reflection API can only happen for internal classes
-        $class = $this->prophesize('ReflectionClass');
-        $method = $this->prophesize('ReflectionMethod');
-        $parameter = $this->prophesize('ReflectionParameter');
+
+        /**
+         * @var ObjectProphecy&\ReflectionClass $class
+         */
+        $class = $this->prophesize(\ReflectionClass::class);
+
+        /**
+         * @var ObjectProphecy&\ReflectionMethod $method
+         */
+        $method = $this->prophesize(\ReflectionMethod::class);
+
+        /**
+         * @var ObjectProphecy&\ReflectionParameter $parameter
+         */
+        $parameter = $this->prophesize(\ReflectionParameter::class);
 
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);

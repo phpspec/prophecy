@@ -92,9 +92,7 @@ class MethodProphecy
 
                     case 'Traversable':
                     case 'Generator':
-                        // Remove eval() when minimum version >=5.5
-                        /** @var callable $generator */
-                        $generator = eval('return function () { yield; };');
+                        $generator = function () { yield; };
                         return $generator();
 
                     default:
@@ -269,7 +267,7 @@ class MethodProphecy
      *
      * @see \Prophecy\Prediction\CallTimesPrediction
      *
-     * @param $count
+     * @param int $count
      *
      * @return $this
      */

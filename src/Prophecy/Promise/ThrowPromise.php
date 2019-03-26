@@ -64,7 +64,7 @@ class ThrowPromise implements PromiseInterface
      * @param ObjectProphecy $object
      * @param MethodProphecy $method
      *
-     * @throws object
+     * @throws \Exception
      */
     public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
     {
@@ -73,7 +73,7 @@ class ThrowPromise implements PromiseInterface
             $reflection  = new ReflectionClass($classname);
             $constructor = $reflection->getConstructor();
 
-            if ($constructor->isPublic() && 0 == $constructor->getNumberOfRequiredParameters()) {
+            if ($constructor->isPublic() && 0 === $constructor->getNumberOfRequiredParameters()) {
                 throw $reflection->newInstance();
             }
 

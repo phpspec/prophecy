@@ -36,7 +36,7 @@ class LogicalAndToken implements TokenInterface
     /**
      * Scores maximum score from scores returned by tokens for this argument if all of them score.
      *
-     * @param $argument
+     * @param mixed $argument
      *
      * @return bool|int
      */

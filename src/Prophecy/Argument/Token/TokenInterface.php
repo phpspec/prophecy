@@ -21,7 +21,7 @@ interface TokenInterface
     /**
      * Calculates token match score for provided argument.
      *
-     * @param $argument
+     * @param mixed $argument
      *
      * @return bool|int
      */

@@ -11,6 +11,8 @@
 
 namespace Prophecy\Exception\Doubler;
 
+use Prophecy\Argument\ArgumentsWildcard;
+
 class MethodNotFoundException extends DoubleException
 {
     /**
@@ -32,7 +34,7 @@ class MethodNotFoundException extends DoubleException
      * @param string $message
      * @param string|object $classname
      * @param string $methodName
-     * @param null|Argument\ArgumentsWildcard|array $arguments
+     * @param null|ArgumentsWildcard|array $arguments
      */
     public function __construct($message, $classname, $methodName, $arguments = null)
     {

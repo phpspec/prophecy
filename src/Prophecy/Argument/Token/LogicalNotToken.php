@@ -32,7 +32,7 @@ class LogicalNotToken implements TokenInterface
     /**
      * Scores 4 when preset token does not match the argument.
      *
-     * @param $argument
+     * @param mixed $argument
      *
      * @return bool|int
      */

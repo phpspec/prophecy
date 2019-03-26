@@ -26,8 +26,19 @@ use ReflectionClass;
  */
 class Doubler
 {
+    /**
+     * @var ClassMirror
+     */
     private $mirror;
+
+    /**
+     * @var ClassCreator
+     */
     private $creator;
+
+    /**
+     * @var NameGenerator
+     */
     private $namer;
 
     /**
@@ -89,6 +100,7 @@ class Doubler
      * @return DoubleInterface
      *
      * @throws \Prophecy\Exception\InvalidArgumentException
+     * @throws \ReflectionException
      */
     public function double(ReflectionClass $class = null, array $interfaces, array $args = null)
     {
