@@ -20,11 +20,16 @@ before_install:
 
 install:
   - |
-    if [[ "x$DEPS" == "xlowest" ]]; then
+    if [ "x$DEPS" == "xlowest" ]; then
       travis_retry composer -n update --prefer-dist --prefer-lowest --prefer-stable --no-interaction $COMPOSER_ARGS;
     else
       travis_retry composer -n update --prefer-dist --no-interaction $COMPOSER_ARGS;
     fi
+
+# Default scripts for all stages (can be overridden)
+script:
+  - vendor/bin/phpspec run -fpretty -v
+  - vendor/bin/phpunit
 
 jobs:
   allow_failures:
@@ -37,56 +42,34 @@ jobs:
 
     - stage: Tests
       php: 7.3
-      script:
-        - vendor/bin/phpspec run -fpretty -v
-        - vendor/bin/phpunit
 
     - stage: Tests
       php: 7.2
-      script:
-          - vendor/bin/phpspec run -fpretty -v
-          - vendor/bin/phpunit
 
     - stage: Tests
       php: 7.1
-      script:
-          - vendor/bin/phpspec run -fpretty -v
-          - vendor/bin/phpunit
 
     - stage: Tests
       php: 7.1
       env: DEPS=lowest
-      script:
-          - vendor/bin/phpspec run -fpretty -v
-          - vendor/bin/phpunit
 
     - stage: Tests
       php: nightly
       env: COMPOSER_ARGS=--ignore-platform-reqs
-      script:
-          - vendor/bin/phpspec run -fpretty -v
-          - vendor/bin/phpunit
 
     # Tests for end of life versions
 
     - stage: Tests
       php: 7.0
-      script:
-        - vendor/bin/phpspec run -fpretty -v
-        - vendor/bin/phpunit
-        -
+
     - stage: Tests
       php: 5.6
-      script:
-        - vendor/bin/phpspec run -fpretty -v
-        - vendor/bin/phpunit
 
     - stage: Tests
       php: 5.6
       env: DEPS=lowest
-      script:
-        - vendor/bin/phpspec run -fpretty -v
-        - vendor/bin/phpunit
+
+    # Stage for static analysis
 
     - stage: Static analysis
       php: 7.1
