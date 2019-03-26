@@ -1,24 +1,24 @@
-1.?.? / 2019/??/?? (NOT RELEASED)
+1.9.? / 2019/xx/xx (unreleased)
 ==================
 
-Minimum supported PHP version is now 5.6 *(5.3, 5.4 and 5.5 dropped)* and removed support 
+Minimum supported PHP version is now 5.6 and dropped compatibility 
 for `phpdocumentor/reflection-docblock: ^2.0` *(minimum is now ^3.1)*, 
-`sebastian/recursion-context: ^1.0` *(minimum is ^2.0)* and `sebastian/comparator: ^1.1` *(now ^1.2)*. 
+`sebastian/recursion-context: ^1.0` *(minimum is ^2.0)* and `sebastian/comparator: ^1.1` *(now ^1.2)*.
+See [#430](https://github.com/phpspec/prophecy/pull/430). 
 
-* [improved] func_get_args calls by variadic args: `Argument::allOf(...$tokenList)` [#430](https://github.com/phpspec/prophecy/pull/430).
-* [improved] Removed obsolete eval() code for generators in `MethodProphecy` [#430](https://github.com/phpspec/prophecy/pull/430).
-* [added] Deps: support for phpunit 8.0 *(with few warnings till we drop support for PHP5)* [#430](https://github.com/phpspec/prophecy/pull/430).
-* [added] Dev: convenience composer script `composer test`, will run phpspec and phpunit [#430](https://github.com/phpspec/prophecy/pull/430). 
-* [added] Dev: phpstan level 4 + `composer phpstan` convenience script [#430](https://github.com/phpspec/prophecy/pull/430).
+* [removed] Support for PHP5.3, 5.4 and PHP5.5 have been dropped (@belgattitude).
+* [removed] Deps: `phpdocumentor/reflection-docblock: ^2.0` and increased minimum version to ^3.1 (@belgattitude).
+* [removed] Deps: `sebastian/recursion-context: ^1.0` and increased minimum version to ^2.0 (@belgattitude).
+* [removed] Deps: `sebastian/comparator: ^1.1` and increased minimum version to ^1.2 (@belgattitude).
+
 * [fixed] Minor typehint fixes [#430](https://github.com/phpspec/prophecy/pull/430).
-* [fixed] Minor: autoload-dev includes `Tests' and 'spec' namespaces [#430](https://github.com/phpspec/prophecy/pull/430).
-* [removed] Support support for PHP5.3, 5.4 and 5.5 (minimum version is now 5.6) [#430](https://github.com/phpspec/prophecy/pull/430).
-* [removed] Unused private method `CallCenter::formatExceptionMessage()` [#430](https://github.com/phpspec/prophecy/pull/430).
-* [removed] Deps: `phpdocumentor/reflection-docblock: ^2.0` and increased minimum version to ^3.1 [#430](https://github.com/phpspec/prophecy/pull/430).
-* [removed] Deps: `sebastian/recursion-context: ^1.0` and increased minimum version to ^2.0 [#430](https://github.com/phpspec/prophecy/pull/430).
-* [removed] Deps: `sebastian/comparator: ^1.1` and increased minimum version to ^1.2 [#430](https://github.com/phpspec/prophecy/pull/430).
-* [removed] Deps: removed `phpunit ^4.6` [#430](https://github.com/phpspec/prophecy/pull/430).
-* [q&a] Travis stages update [#430](https://github.com/phpspec/prophecy/pull/430).
+
+* [improved] func_get_args calls by variadic args: `Argument::allOf(...$tokenList)` (@belgattitude).
+* [improved] Removed obsolete eval() code for generators in `MethodProphecy` (@belgattitude).
+
+* [q&a] Dev: phpstan level 3 + `composer phpstan` convenience script (@belgattitude).
+* [q&a] Dev: convenience composer script `composer test`, will run phpspec and phpunit (@belgattitude). 
+
 
 1.8.0 / 2018/08/05
 ==================
