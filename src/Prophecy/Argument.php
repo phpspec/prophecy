@@ -92,7 +92,7 @@ class Argument
     /**
      * Checks that argument matches all tokens
      *
-     * @param Token\TokenInterface|Token\ExactValueToken ...$tokenList a list of tokens
+     * @param Token\TokenInterface|mixed ...$tokenList a list of tokens
      *
      * @return Token\LogicalAndToken
      */
