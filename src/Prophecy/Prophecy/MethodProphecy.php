@@ -92,7 +92,6 @@ class MethodProphecy
 
                     case 'Traversable':
                     case 'Generator':
-                        /** @var callable $generator */
                         $generator = function () { yield; };
                         return $generator();
 
