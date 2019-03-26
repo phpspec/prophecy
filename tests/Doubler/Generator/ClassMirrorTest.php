@@ -461,17 +461,17 @@ class ClassMirrorTest extends TestCase
         /**
          * @var ObjectProphecy&\ReflectionClass $class
          */
-        $class = $this->prophesize(\ReflectionClass::class);
+        $class = $this->prophesize('ReflectionClass');
 
         /**
          * @var ObjectProphecy&\ReflectionMethod $method
          */
-        $method = $this->prophesize(\ReflectionMethod::class);
+        $method = $this->prophesize('ReflectionMethod');
 
         /**
          * @var ObjectProphecy&\ReflectionParameter $parameter
          */
-        $parameter = $this->prophesize(\ReflectionParameter::class);
+        $parameter = $this->prophesize('ReflectionParameter');
 
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
