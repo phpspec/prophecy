@@ -181,6 +181,40 @@ class MethodProphecy
     }
 
     /**
+     * @param array $items
+     *
+     * @return $this
+     *
+     * @throws \Prophecy\Exception\InvalidArgumentException
+     */
+    public function willYield($items)
+    {
+        if ($this->voidReturnType) {
+            throw new MethodProphecyException(
+                "The method \"$this->methodName\" has a void return type, and so cannot yield anything",
+                $this
+            );
+        }
+
+        if (!is_array($items)) {
+            throw new InvalidArgumentException(sprintf(
+                'Expected array, but got %s.',
+                gettype($items)
+            ));
+        }
+
+        // Remove eval() when minimum version >=5.5
+        /** @var callable $generator */
+        $generator = eval('return function() use ($items) {
+            foreach ($items as $key => $value) {
+                yield $key => $value;
+            }
+        };');
+
+        return $this->will($generator);
+    }
+
+    /**
      * Sets return argument promise to the prophecy.
      *
      * @param int $index The zero-indexed number of the argument to return

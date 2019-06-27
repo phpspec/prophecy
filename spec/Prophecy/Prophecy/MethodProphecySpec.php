@@ -143,6 +143,42 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\ReturnPromise');
     }
 
+    function it_adds_CallbackPromise_during_willYield_call(ObjectProphecy $objectProphecy)
+    {
+        if (PHP_VERSION_ID < 50500) {
+            throw new SkippingException('Yield language feature was introduced in >=5.5');
+        }
+
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+
+        $this->willYield(array('foo', 'bar'));
+        $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\CallbackPromise');
+    }
+
+    function it_yields_elements_configured_in_willYield(ObjectProphecy $objectProphecy)
+    {
+        if (PHP_VERSION_ID < 70000) {
+            throw new SkippingException('Yield language feature was introduced in >=5.5 but shouldYield matcher only available in >=7.0');
+        }
+
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+
+        $this->willYield(array('foo', 'bar'));
+        $this->getPromise()->execute(array(), $objectProphecy, $this)->shouldYield(array('foo', 'bar'));
+    }
+
+    function it_yields_key_value_paris_configured_in_willYield(ObjectProphecy $objectProphecy)
+    {
+        if (PHP_VERSION_ID < 70000) {
+            throw new SkippingException('Yield language feature was introduced in >=5.5 but shouldYield matcher only available in >=7.0');
+        }
+
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+
+        $this->willYield(array(10 => 'foo', 11 => 'bar'));
+        $this->getPromise()->execute(array(), $objectProphecy, $this)->shouldYield(array(10 => 'foo', 11 => 'bar'));
+    }
+
     function it_adds_ThrowPromise_during_willThrow_call(ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
