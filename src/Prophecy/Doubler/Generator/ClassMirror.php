@@ -144,7 +144,12 @@ class ClassMirror
         }
 
         if (version_compare(PHP_VERSION, '7.0', '>=') && $method->hasReturnType()) {
-            $returnType = (string) $method->getReturnType();
+            if (version_compare(PHP_VERSION, '7.1', '>=')) {
+                $returnType = $method->getReturnType()->getName();
+            } else {
+                $returnType = (string) $method->getReturnType();
+            }
+
             $returnTypeLower = strtolower($returnType);
 
             if ('self' === $returnTypeLower) {
