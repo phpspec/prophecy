@@ -2,6 +2,7 @@
 
 namespace spec\Prophecy\Prophecy;
 
+use PhpSpec\Exception\Example\SkippingException;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Argument\ArgumentsWildcard;
@@ -10,15 +11,12 @@ use Prophecy\Prediction\PredictionInterface;
 use Prophecy\Promise\CallbackPromise;
 use Prophecy\Promise\PromiseInterface;
 use Prophecy\Prophecy\ObjectProphecy;
-
-class ClassWithFinalMethod
-{
-    final public function finalMethod() {}
-}
+use ReflectionClass;
+use RuntimeException;
 
 class MethodProphecySpec extends ObjectBehavior
 {
-    function let(ObjectProphecy $objectProphecy, \ReflectionClass $reflection)
+    function let(ObjectProphecy $objectProphecy, ReflectionClass $reflection)
     {
         $objectProphecy->reveal()->willReturn($reflection);
 
@@ -30,16 +28,24 @@ class MethodProphecySpec extends ObjectBehavior
         $this->shouldHaveType('Prophecy\Prophecy\MethodProphecy');
     }
 
-    function its_constructor_throws_MethodNotFoundException_for_unexisting_method($objectProphecy)
-    {
-        $this->shouldThrow('Prophecy\Exception\Doubler\MethodNotFoundException')->during(
-            '__construct', array($objectProphecy, 'getUnexisting', null)
-        );
+    function its_constructor_throws_MethodNotFoundException_for_unexisting_method(
+        ObjectProphecy $objectProphecy,
+        ObjectProphecy $objectProphecyInner,
+        ReflectionClass $reflection
+    ) {
+        $objectProphecy->reveal()->willReturn($objectProphecyInner);
+        $objectProphecyInner->reveal()->willReturn($reflection);
+        $this->beConstructedWith($objectProphecy, 'getUnexisting', null);
+        $this->shouldThrow('Prophecy\Exception\Doubler\MethodNotFoundException')->duringInstantiation();
     }
 
-    function its_constructor_throws_MethodProphecyException_for_final_methods($objectProphecy, ClassWithFinalMethod $subject)
-    {
-        $objectProphecy->reveal()->willReturn($subject);
+    function its_constructor_throws_MethodProphecyException_for_final_methods(
+        ObjectProphecy $objectProphecy,
+        ObjectProphecy $objectProphecyInner,
+        ClassWithFinalMethod $subject
+    ) {
+        $objectProphecy->reveal()->willReturn($objectProphecyInner);
+        $objectProphecyInner->reveal()->willReturn($subject);
 
         $this->shouldThrow('Prophecy\Exception\Prophecy\MethodProphecyException')->during(
             '__construct', array($objectProphecy, 'finalMethod', null)
@@ -47,9 +53,8 @@ class MethodProphecySpec extends ObjectBehavior
     }
 
     function its_constructor_transforms_array_passed_as_3rd_argument_to_ArgumentsWildcard(
-        $objectProphecy
-    )
-    {
+        ObjectProphecy $objectProphecy
+    ) {
         $this->beConstructedWith($objectProphecy, 'getName', array(42, 33));
 
         $wildcard = $this->getArgumentsWildcard();
@@ -57,7 +62,7 @@ class MethodProphecySpec extends ObjectBehavior
         $wildcard->__toString()->shouldReturn('exact(42), exact(33)');
     }
 
-    function its_constructor_does_not_touch_third_argument_if_it_is_null($objectProphecy)
+    function its_constructor_does_not_touch_third_argument_if_it_is_null(ObjectProphecy $objectProphecy)
     {
         $this->beConstructedWith($objectProphecy, 'getName', null);
 
@@ -66,51 +71,54 @@ class MethodProphecySpec extends ObjectBehavior
     }
 
     function its_constructor_records_default_callback_promise_for_return_type_hinted_methods(
-        $objectProphecy, ClassWithVoidTypeHintedMethods $subject
-    )
-    {
-        // Return void type hint language feature only introduced in >=7.1
-        if (version_compare(PHP_VERSION, '7.1', '>='))
-        {
-            $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
-            $objectProphecy->reveal()->willReturn($subject);
-
-            $this->beConstructedWith($objectProphecy, 'getVoid');
-            $this->getPromise()->shouldBeAnInstanceOf(CallbackPromise::class);
+        ObjectProphecy $objectProphecy,
+        $subject
+    ) {
+        if (PHP_VERSION_ID < 70100) {
+            throw new SkippingException('Return void type hint language feature only introduced in >=7.1');
         }
+
+        $subject->beADoubleOf('spec\Prophecy\Prophecy\ClassWithVoidTypeHintedMethods');
+        $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
+        $objectProphecy->reveal()->willReturn($subject);
+
+        $this->beConstructedWith($objectProphecy, 'getVoid');
+        $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\CallbackPromise');
     }
 
     function its_constructor_records_promise_that_returns_null_for_void_type_hinted_methods(
-        $objectProphecy, ClassWithVoidTypeHintedMethods $subject
-    )
-    {
-        // Return void type hint language feature only introduced in >=7.1
-        if (version_compare(PHP_VERSION, '7.1', '>='))
-        {
-            $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
-            $objectProphecy->reveal()->willReturn($subject);
-
-            $this->beConstructedWith($objectProphecy, 'getVoid');
-            $this->getPromise()->execute([], $objectProphecy, $this)->shouldBeNull();
+        ObjectProphecy $objectProphecy,
+        $subject
+    ) {
+        if (PHP_VERSION_ID < 70100) {
+            throw new SkippingException('Return void type hint language feature only introduced in >=7.1');
         }
+
+        $subject->beADoubleOf('spec\Prophecy\Prophecy\ClassWithVoidTypeHintedMethods');
+        $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
+        $objectProphecy->reveal()->willReturn($subject);
+
+        $this->beConstructedWith($objectProphecy, 'getVoid');
+        $this->getPromise()->execute(array(), $objectProphecy, $this)->shouldBeNull();
     }
 
     function its_constructor_adds_itself_to_ObjectProphecy_for_return_type_hinted_methods(
-        $objectProphecy, ClassWithVoidTypeHintedMethods $subject
-    )
-    {
-        // Return void type hint language feature only introduced in >=7.1
-        if (version_compare(PHP_VERSION, '7.1', '>='))
-        {
-            $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
-            $objectProphecy->reveal()->willReturn($subject);
-
-            $this->beConstructedWith($objectProphecy, 'getVoid');
-            $objectProphecy->addMethodProphecy($this)->shouldHaveBeenCalled();
+        ObjectProphecy $objectProphecy,
+        $subject
+    ) {
+        if (PHP_VERSION_ID < 70100) {
+            throw new SkippingException('Return void type hint language feature only introduced in >=7.1');
         }
+
+        $subject->beADoubleOf('spec\Prophecy\Prophecy\ClassWithVoidTypeHintedMethods');
+        $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
+        $objectProphecy->reveal()->willReturn($subject);
+
+        $this->beConstructedWith($objectProphecy, 'getVoid');
+        $objectProphecy->addMethodProphecy($this)->shouldHaveBeenCalled();
     }
 
-    function it_records_promise_through_will_method(PromiseInterface $promise, $objectProphecy)
+    function it_records_promise_through_will_method(PromiseInterface $promise, ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
@@ -118,14 +126,16 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPromise()->shouldReturn($promise);
     }
 
-    function it_adds_itself_to_ObjectProphecy_during_call_to_will(PromiseInterface $objectProphecy, $promise)
-    {
+    function it_adds_itself_to_ObjectProphecy_during_call_to_will(
+        ObjectProphecy $objectProphecy,
+        PromiseInterface $promise
+    ) {
         $objectProphecy->addMethodProphecy($this)->shouldBeCalled();
 
         $this->will($promise);
     }
 
-    function it_adds_ReturnPromise_during_willReturn_call($objectProphecy)
+    function it_adds_ReturnPromise_during_willReturn_call(ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
@@ -133,7 +143,7 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\ReturnPromise');
     }
 
-    function it_adds_ThrowPromise_during_willThrow_call($objectProphecy)
+    function it_adds_ThrowPromise_during_willThrow_call(ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
@@ -141,7 +151,7 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\ThrowPromise');
     }
 
-    function it_adds_ReturnArgumentPromise_during_willReturnArgument_call($objectProphecy)
+    function it_adds_ReturnArgumentPromise_during_willReturnArgument_call(ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
@@ -149,8 +159,9 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\ReturnArgumentPromise');
     }
 
-    function it_adds_ReturnArgumentPromise_during_willReturnArgument_call_with_index_argument($objectProphecy)
-    {
+    function it_adds_ReturnArgumentPromise_during_willReturnArgument_call_with_index_argument(
+        ObjectProphecy $objectProphecy
+    ) {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
         $this->willReturnArgument(1);
@@ -159,7 +170,7 @@ class MethodProphecySpec extends ObjectBehavior
         $promise->execute(array('one', 'two'), $objectProphecy, $this)->shouldReturn('two');
     }
 
-    function it_adds_CallbackPromise_during_will_call_with_callback_argument($objectProphecy)
+    function it_adds_CallbackPromise_during_will_call_with_callback_argument(ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
@@ -169,15 +180,17 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\CallbackPromise');
     }
 
-    function it_records_prediction_through_should_method(PredictionInterface $prediction, $objectProphecy)
-    {
+    function it_records_prediction_through_should_method(
+        PredictionInterface $prediction,
+        ObjectProphecy $objectProphecy
+    ) {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
         $this->callOnWrappedObject('should', array($prediction));
         $this->getPrediction()->shouldReturn($prediction);
     }
 
-    function it_adds_CallbackPrediction_during_should_call_with_callback_argument($objectProphecy)
+    function it_adds_CallbackPrediction_during_should_call_with_callback_argument(ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
@@ -187,8 +200,10 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPrediction()->shouldBeAnInstanceOf('Prophecy\Prediction\CallbackPrediction');
     }
 
-    function it_adds_itself_to_ObjectProphecy_during_call_to_should($objectProphecy, PredictionInterface $prediction)
-    {
+    function it_adds_itself_to_ObjectProphecy_during_call_to_should(
+        ObjectProphecy $objectProphecy,
+        PredictionInterface $prediction
+    ) {
         $objectProphecy->addMethodProphecy($this)->shouldBeCalled();
 
         $this->callOnWrappedObject('should', array($prediction));
@@ -202,7 +217,7 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPrediction()->shouldBeAnInstanceOf('Prophecy\Prediction\CallPrediction');
     }
 
-    function it_adds_NoCallsPrediction_during_shouldNotBeCalled_call($objectProphecy)
+    function it_adds_NoCallsPrediction_during_shouldNotBeCalled_call(ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
@@ -210,7 +225,7 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPrediction()->shouldBeAnInstanceOf('Prophecy\Prediction\NoCallsPrediction');
     }
 
-    function it_adds_CallTimesPrediction_during_shouldBeCalledTimes_call($objectProphecy)
+    function it_adds_CallTimesPrediction_during_shouldBeCalledTimes_call(ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
@@ -218,7 +233,7 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPrediction()->shouldBeAnInstanceOf('Prophecy\Prediction\CallTimesPrediction');
     }
 
-    function it_adds_CallTimesPrediction_during_shouldBeCalledOnce_call($objectProphecy)
+    function it_adds_CallTimesPrediction_during_shouldBeCalledOnce_call(ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
@@ -227,7 +242,7 @@ class MethodProphecySpec extends ObjectBehavior
     }
 
     function it_checks_prediction_via_shouldHave_method_call(
-        $objectProphecy,
+        ObjectProphecy $objectProphecy,
         ArgumentsWildcard $arguments,
         PredictionInterface $prediction,
         Call $call1,
@@ -242,7 +257,7 @@ class MethodProphecySpec extends ObjectBehavior
     }
 
     function it_sets_return_promise_during_shouldHave_call_if_none_was_set_before(
-        $objectProphecy,
+        ObjectProphecy $objectProphecy,
         ArgumentsWildcard $arguments,
         PredictionInterface $prediction,
         Call $call1,
@@ -259,7 +274,7 @@ class MethodProphecySpec extends ObjectBehavior
     }
 
     function it_does_not_set_return_promise_during_shouldHave_call_if_it_was_set_before(
-        $objectProphecy,
+        ObjectProphecy $objectProphecy,
         ArgumentsWildcard $arguments,
         PredictionInterface $prediction,
         Call $call1,
@@ -278,7 +293,7 @@ class MethodProphecySpec extends ObjectBehavior
     }
 
     function it_records_checked_predictions(
-        $objectProphecy,
+        ObjectProphecy $objectProphecy,
         ArgumentsWildcard $arguments,
         PredictionInterface $prediction1,
         PredictionInterface $prediction2,
@@ -300,7 +315,7 @@ class MethodProphecySpec extends ObjectBehavior
     }
 
     function it_records_even_failed_checked_predictions(
-        $objectProphecy,
+        ObjectProphecy $objectProphecy,
         ArgumentsWildcard $arguments,
         PredictionInterface $prediction,
         Call $call1,
@@ -308,7 +323,7 @@ class MethodProphecySpec extends ObjectBehavior
         PromiseInterface $promise
     ) {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
-        $prediction->check(array($call1, $call2), $objectProphecy->getWrappedObject(), $this)->willThrow(new \RuntimeException());
+        $prediction->check(array($call1, $call2), $objectProphecy->getWrappedObject(), $this)->willThrow(new RuntimeException());
         $objectProphecy->findProphecyMethodCalls('getName', $arguments)->willReturn(array($call1, $call2));
 
         $this->will($promise);
@@ -322,13 +337,13 @@ class MethodProphecySpec extends ObjectBehavior
     }
 
     function it_checks_prediction_via_shouldHave_method_call_with_callback(
-        $objectProphecy,
+        ObjectProphecy $objectProphecy,
         ArgumentsWildcard $arguments,
         Call $call1,
         Call $call2
     ) {
         $callback = function ($calls, $object, $method) {
-            throw new \RuntimeException;
+            throw new RuntimeException;
         };
         $objectProphecy->findProphecyMethodCalls('getName', $arguments)->willReturn(array($call1, $call2));
 
@@ -342,7 +357,7 @@ class MethodProphecySpec extends ObjectBehavior
     }
 
     function it_checks_set_prediction_during_checkPrediction(
-        $objectProphecy,
+        ObjectProphecy $objectProphecy,
         ArgumentsWildcard $arguments,
         PredictionInterface $prediction,
         Call $call1,
@@ -357,7 +372,7 @@ class MethodProphecySpec extends ObjectBehavior
         $this->checkPrediction();
     }
 
-    function it_links_back_to_ObjectProphecy_through_getter($objectProphecy)
+    function it_links_back_to_ObjectProphecy_through_getter(ObjectProphecy $objectProphecy)
     {
         $this->getObjectProphecy()->shouldReturn($objectProphecy);
     }
@@ -367,8 +382,10 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getMethodName()->shouldReturn('getName');
     }
 
-    function it_contains_ArgumentsWildcard_it_was_constructed_with($objectProphecy, ArgumentsWildcard $wildcard)
-    {
+    function it_contains_ArgumentsWildcard_it_was_constructed_with(
+        ObjectProphecy $objectProphecy,
+        ArgumentsWildcard $wildcard
+    ) {
         $this->beConstructedWith($objectProphecy, 'getName', $wildcard);
 
         $this->getArgumentsWildcard()->shouldReturn($wildcard);
@@ -396,16 +413,12 @@ class MethodProphecySpec extends ObjectBehavior
     }
 }
 
+class ClassWithFinalMethod
+{
+    final public function finalMethod() {}
+}
+
 // Return void type hint language feature only introduced in >=7.1
-if (version_compare(PHP_VERSION, '7.1', '>=')) {
-    class ClassWithVoidTypeHintedMethods
-    {
-        public function getVoid(): void
-        {
-        }
-    }
-} else {
-    class ClassWithVoidTypeHintedMethods
-    {
-    }
+if (PHP_VERSION_ID >= 70100) {
+    require_once __DIR__ . DIRECTORY_SEPARATOR . 'ClassWithVoidTypeHintedMethods.php';
 }
