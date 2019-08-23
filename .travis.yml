@@ -23,9 +23,12 @@ matrix:
     - php: 7.1
     - php: 7.2
     - php: 7.3
+    - php: 7.4snapshot
     - php: 5.3
       dist: precise
   fast_finish: true
+  allow_failures:
+    - php: 7.4snapshot
 
 install:
   - export COMPOSER_ROOT_VERSION=dev-master
