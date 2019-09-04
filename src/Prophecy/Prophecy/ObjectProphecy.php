@@ -168,11 +168,18 @@ class ObjectProphecy implements ProphecyInterface
             return $this->methodProphecies;
         }
 
-        if (!isset($this->methodProphecies[$methodName])) {
-            return array();
+        $lowerMethodName = strtolower($methodName);
+
+        $result = array();
+        foreach ($this->methodProphecies as $name => $prophecies) {
+            if (strtolower($name) === $lowerMethodName) {
+                foreach ($prophecies as $prophecy) {
+                    $result[] = $prophecy;
+                }
+            }
         }
 
-        return $this->methodProphecies[$methodName];
+        return $result;
     }
 
     /**

@@ -74,7 +74,7 @@ class CallCenter
         }
 
         // If no method prophecies defined, then it's a dummy, so we'll just return null
-        if ('__destruct' === $methodName || 0 == count($prophecy->getMethodProphecies())) {
+        if ('__destruct' === strtolower($methodName) || 0 == count($prophecy->getMethodProphecies())) {
             $this->recordedCalls[] = new Call($methodName, $arguments, null, null, $file, $line);
 
             return null;
@@ -138,9 +138,11 @@ class CallCenter
      */
     public function findCalls($methodName, ArgumentsWildcard $wildcard)
     {
+        $lowerMethodName = strtolower($methodName);
+
         return array_values(
-            array_filter($this->recordedCalls, function (Call $call) use ($methodName, $wildcard) {
-                return $methodName === $call->getMethodName()
+            array_filter($this->recordedCalls, function (Call $call) use ($lowerMethodName, $wildcard) {
+                return $lowerMethodName === strtolower($call->getMethodName())
                     && 0 < $call->getScore($wildcard)
                 ;
             })
