@@ -12,7 +12,6 @@
 namespace Prophecy\Call;
 
 use Prophecy\Exception\Prophecy\MethodProphecyException;
-use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Util\StringUtil;
@@ -191,28 +190,6 @@ class CallCenter
             ),
             $prophecy, $methodName, $arguments
 
-        );
-    }
-
-    private function formatExceptionMessage(MethodProphecy $methodProphecy)
-    {
-        return sprintf(
-            "  - %s(\n".
-            "%s\n".
-            "    )",
-            $methodProphecy->getMethodName(),
-            implode(
-                ",\n",
-                $this->indentArguments(
-                    array_map(
-                        function ($token) {
-                            return (string) $token;
-                        },
-                        $methodProphecy->getArgumentsWildcard()->getTokens()
-                    ),
-                    $indentationLength
-                )
-            )
         );
     }
 
