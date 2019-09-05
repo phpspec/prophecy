@@ -125,7 +125,7 @@ class ObjectProphecySpec extends ObjectBehavior
         $this->addMethodProphecy($methodProphecy);
 
         $this->getMethodProphecies()->shouldReturn(array(
-            'getUsername' => array($methodProphecy)
+            'getusername' => array($methodProphecy)
         ));
     }
 
@@ -145,7 +145,30 @@ class ObjectProphecySpec extends ObjectBehavior
         $this->addMethodProphecy($methodProphecy2);
 
         $this->getMethodProphecies()->shouldReturn(array(
-            'getUsername' => array(
+            'getusername' => array(
+                $methodProphecy1,
+                $methodProphecy2,
+            )
+        ));
+    }
+
+    function its_addMethodProphecy_handles_prophecies_for_caseinsensitive_method_names(
+        MethodProphecy $methodProphecy1,
+        MethodProphecy $methodProphecy2,
+        ArgumentsWildcard $argumentsWildcard1,
+        ArgumentsWildcard $argumentsWildcard2
+    ) {
+        $methodProphecy1->getArgumentsWildcard()->willReturn($argumentsWildcard1);
+        $methodProphecy1->getMethodName()->willReturn('getUsername');
+
+        $methodProphecy2->getArgumentsWildcard()->willReturn($argumentsWildcard2);
+        $methodProphecy2->getMethodName()->willReturn('getUserName');
+
+        $this->addMethodProphecy($methodProphecy1);
+        $this->addMethodProphecy($methodProphecy2);
+
+        $this->getMethodProphecies()->shouldReturn(array(
+            'getusername' => array(
                 $methodProphecy1,
                 $methodProphecy2,
             )
@@ -168,10 +191,10 @@ class ObjectProphecySpec extends ObjectBehavior
         $this->addMethodProphecy($methodProphecy2);
 
         $this->getMethodProphecies()->shouldReturn(array(
-            'getUsername' => array(
+            'getusername' => array(
                 $methodProphecy1
             ),
-            'isUsername' => array(
+            'isusername' => array(
                 $methodProphecy2
             )
         ));

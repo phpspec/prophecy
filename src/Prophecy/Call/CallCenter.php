@@ -138,11 +138,11 @@ class CallCenter
      */
     public function findCalls($methodName, ArgumentsWildcard $wildcard)
     {
-        $lowerMethodName = strtolower($methodName);
+        $methodName = strtolower($methodName);
 
         return array_values(
-            array_filter($this->recordedCalls, function (Call $call) use ($lowerMethodName, $wildcard) {
-                return $lowerMethodName === strtolower($call->getMethodName())
+            array_filter($this->recordedCalls, function (Call $call) use ($methodName, $wildcard) {
+                return $methodName === strtolower($call->getMethodName())
                     && 0 < $call->getScore($wildcard)
                 ;
             })

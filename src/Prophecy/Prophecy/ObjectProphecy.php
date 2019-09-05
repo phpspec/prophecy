@@ -146,7 +146,7 @@ class ObjectProphecy implements ProphecyInterface
             ), $methodProphecy);
         }
 
-        $methodName = $methodProphecy->getMethodName();
+        $methodName = strtolower($methodProphecy->getMethodName());
 
         if (!isset($this->methodProphecies[$methodName])) {
             $this->methodProphecies[$methodName] = array();
@@ -168,18 +168,13 @@ class ObjectProphecy implements ProphecyInterface
             return $this->methodProphecies;
         }
 
-        $lowerMethodName = strtolower($methodName);
+        $methodName = strtolower($methodName);
 
-        $result = array();
-        foreach ($this->methodProphecies as $name => $prophecies) {
-            if (strtolower($name) === $lowerMethodName) {
-                foreach ($prophecies as $prophecy) {
-                    $result[] = $prophecy;
-                }
-            }
+        if (!isset($this->methodProphecies[$methodName])) {
+            return array();
         }
 
-        return $result;
+        return $this->methodProphecies[$methodName];
     }
 
     /**
