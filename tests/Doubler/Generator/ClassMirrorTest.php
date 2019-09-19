@@ -457,20 +457,8 @@ class ClassMirrorTest extends TestCase
     function it_changes_argument_names_if_they_are_varying()
     {
         // Use test doubles in this test, as arguments named ... in the Reflection API can only happen for internal classes
-
-        /**
-         * @var ObjectProphecy&\ReflectionClass $class
-         */
         $class = $this->prophesize(\ReflectionClass::class);
-
-        /**
-         * @var ObjectProphecy&\ReflectionMethod $method
-         */
         $method = $this->prophesize(\ReflectionMethod::class);
-
-        /**
-         * @var ObjectProphecy&\ReflectionParameter $parameter
-         */
         $parameter = $this->prophesize(\ReflectionParameter::class);
 
         $class->getName()->willReturn('Custom\ClassName');

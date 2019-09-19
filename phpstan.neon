@@ -19,7 +19,6 @@ parameters:
 			path: src/Prophecy/Promise/ThrowPromise.php
 
 		# For legacy compat
-
 		-
 			message: '#Return typehint of method Prophecy\\PhpDocumentor\\ClassAndInterfaceTagRetriever::getTagList\(\) has invalid type phpDocumentor\\Reflection\\DocBlock\\Tag\\MethodTag.#'
 			path: src/Prophecy/PhpDocumentor/ClassAndInterfaceTagRetriever.php
@@ -32,3 +31,8 @@ parameters:
 		-
 			message: '#Return typehint of method Prophecy\\PhpDocumentor\\ClassAndInterfaceTagRetriever::getInterfacesTagList\(\) has invalid type phpDocumentor\\Reflection\\DocBlock\\Tag\\MethodTag.#'
 			path: src/Prophecy/PhpDocumentor/ClassAndInterfaceTagRetriever.php
+
+		# Exclude test issues
+		-
+			message: '#Call to an undefined method#'
+			path: tests/Doubler/Generator/ClassMirrorTest.php
