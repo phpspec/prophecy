@@ -13,6 +13,11 @@ parameters:
 			message: '#Method Prophecy\\Doubler\\Doubler::double\(\) should return Prophecy\\Doubler\\DoubleInterface but returns object#'
 			path: src/Prophecy/Doubler/Doubler.php
 
+		# This issue should be fixed in the implementation
+		-
+			message: '#PHPDoc tag @throws with type object is not subtype of Throwable#'
+			path: src/Prophecy/Promise/ThrowPromise.php
+
 		# For legacy compat
 
 		-
