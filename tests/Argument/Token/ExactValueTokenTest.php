@@ -75,9 +75,9 @@ class ExactValueTokenTest extends TestCase {
 
 class ParentClass {
 
-	public $children = [];
+	public $children = array();
 
-	public function addChild(ChildClass $child) {
+	public function addChild($child) {
 		$this->children[] = $child;
 	}
 }
@@ -87,7 +87,7 @@ class ChildClass {
 	public $parent = null;
 	public $name = null;
 
-	public function __construct(string $name, ParentClass $parent) {
+	public function __construct($name, $parent) {
 		$this->name = $name;
 		$this->parent = $parent;
 		$this->parent->addChild($this);
