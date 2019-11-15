@@ -175,7 +175,7 @@ class ClassMirrorTest extends TestCase
      */
     public function it_properly_reads_methods_typehinted_variadic_arguments()
     {
-        if (defined('HHVM_VERSION_ID')) {
+        if (\defined('HHVM_VERSION_ID')) {
             $this->markTestSkipped('HHVM does not support typehints on variadic arguments.');
         }
 
@@ -473,7 +473,7 @@ class ClassMirrorTest extends TestCase
         $method->isStatic()->willReturn(false);
         $method->returnsReference()->willReturn(false);
 
-        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+        if (\version_compare(PHP_VERSION, '7.0', '>=')) {
             $method->hasReturnType()->willReturn(false);
         }
 
@@ -483,7 +483,7 @@ class ClassMirrorTest extends TestCase
         $parameter->isPassedByReference()->willReturn(false);
         $parameter->allowsNull()->willReturn(true);
         $parameter->getClass()->willReturn($class);
-        if (version_compare(PHP_VERSION, '5.6', '>=')) {
+        if (\version_compare(PHP_VERSION, '5.6', '>=')) {
             $parameter->isVariadic()->willReturn(false);
         }
 

@@ -47,10 +47,10 @@ class MethodProphecy
     public function __construct(ObjectProphecy $objectProphecy, $methodName, $arguments = null)
     {
         $double = $objectProphecy->reveal();
-        if (!method_exists($double, $methodName)) {
-            throw new MethodNotFoundException(sprintf(
-                'Method `%s::%s()` is not defined.', get_class($double), $methodName
-            ), get_class($double), $methodName, $arguments);
+        if (!\method_exists($double, $methodName)) {
+            throw new MethodNotFoundException(\sprintf(
+                'Method `%s::%s()` is not defined.', \get_class($double), $methodName
+            ), \get_class($double), $methodName, $arguments);
         }
 
         $this->objectProphecy = $objectProphecy;
@@ -58,10 +58,10 @@ class MethodProphecy
 
         $reflectedMethod = new \ReflectionMethod($double, $methodName);
         if ($reflectedMethod->isFinal()) {
-            throw new MethodProphecyException(sprintf(
+            throw new MethodProphecyException(\sprintf(
                 "Can not add prophecy for a method `%s::%s()`\n".
                 "as it is a final method.",
-                get_class($double),
+                \get_class($double),
                 $methodName
             ), $this);
         }
@@ -70,7 +70,7 @@ class MethodProphecy
             $this->withArguments($arguments);
         }
 
-        if (version_compare(PHP_VERSION, '7.0', '>=') && true === $reflectedMethod->hasReturnType()) {
+        if (\version_compare(PHP_VERSION, '7.0', '>=') && true === $reflectedMethod->hasReturnType()) {
             $type = PHP_VERSION_ID >= 70100 ? $reflectedMethod->getReturnType()->getName() : (string) $reflectedMethod->getReturnType();
 
             if ('void' === $type) {
@@ -116,15 +116,15 @@ class MethodProphecy
      */
     public function withArguments($arguments)
     {
-        if (is_array($arguments)) {
+        if (\is_array($arguments)) {
             $arguments = new Argument\ArgumentsWildcard($arguments);
         }
 
         if (!$arguments instanceof Argument\ArgumentsWildcard) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 "Either an array or an instance of ArgumentsWildcard expected as\n".
                 'a `MethodProphecy::withArguments()` argument, but got %s.',
-                gettype($arguments)
+                \gettype($arguments)
             ));
         }
 
@@ -144,14 +144,14 @@ class MethodProphecy
      */
     public function will($promise)
     {
-        if (is_callable($promise)) {
+        if (\is_callable($promise)) {
             $promise = new Promise\CallbackPromise($promise);
         }
 
         if (!$promise instanceof Promise\PromiseInterface) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 'Expected callable or instance of PromiseInterface, but got %s.',
-                gettype($promise)
+                \gettype($promise)
             ));
         }
 
@@ -177,7 +177,7 @@ class MethodProphecy
             );
         }
 
-        return $this->will(new Promise\ReturnPromise(func_get_args()));
+        return $this->will(new Promise\ReturnPromise(\func_get_args()));
     }
 
     /**
@@ -196,10 +196,10 @@ class MethodProphecy
             );
         }
 
-        if (!is_array($items)) {
-            throw new InvalidArgumentException(sprintf(
+        if (!\is_array($items)) {
+            throw new InvalidArgumentException(\sprintf(
                 'Expected array, but got %s.',
-                gettype($items)
+                \gettype($items)
             ));
         }
 
@@ -257,14 +257,14 @@ class MethodProphecy
      */
     public function should($prediction)
     {
-        if (is_callable($prediction)) {
+        if (\is_callable($prediction)) {
             $prediction = new Prediction\CallbackPrediction($prediction);
         }
 
         if (!$prediction instanceof Prediction\PredictionInterface) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 'Expected callable or instance of PredictionInterface, but got %s.',
-                gettype($prediction)
+                \gettype($prediction)
             ));
         }
 
@@ -335,14 +335,14 @@ class MethodProphecy
      */
     public function shouldHave($prediction)
     {
-        if (is_callable($prediction)) {
+        if (\is_callable($prediction)) {
             $prediction = new Prediction\CallbackPrediction($prediction);
         }
 
         if (!$prediction instanceof Prediction\PredictionInterface) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 'Expected callable or instance of PredictionInterface, but got %s.',
-                gettype($prediction)
+                \gettype($prediction)
             ));
         }
 

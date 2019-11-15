@@ -58,7 +58,7 @@ class ArrayCountToken implements TokenInterface
      */
     public function __toString()
     {
-        return sprintf('count(%s)', $this->count);
+        return \sprintf('count(%s)', $this->count);
     }
 
     /**
@@ -69,7 +69,7 @@ class ArrayCountToken implements TokenInterface
      */
     private function isCountable($argument)
     {
-        return (is_array($argument) || $argument instanceof \Countable);
+        return (\is_array($argument) || $argument instanceof \Countable);
     }
 
     /**
@@ -81,6 +81,6 @@ class ArrayCountToken implements TokenInterface
      */
     private function hasProperCount($argument)
     {
-        return $this->count === count($argument);
+        return $this->count === \count($argument);
     }
 }

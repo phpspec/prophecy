@@ -36,8 +36,8 @@ class ReturnArgumentPromise implements PromiseInterface
      */
     public function __construct($index = 0)
     {
-        if (!is_int($index) || $index < 0) {
-            throw new InvalidArgumentException(sprintf(
+        if (!\is_int($index) || $index < 0) {
+            throw new InvalidArgumentException(\sprintf(
                 'Zero-based index expected as argument to ReturnArgumentPromise, but got %s.',
                 $index
             ));
@@ -56,6 +56,6 @@ class ReturnArgumentPromise implements PromiseInterface
      */
     public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
     {
-        return count($args) > $this->index ? $args[$this->index] : null;
+        return \count($args) > $this->index ? $args[$this->index] : null;
     }
 }

@@ -49,11 +49,11 @@ class ArgumentsWildcard
      */
     public function scoreArguments(array $arguments)
     {
-        if (0 == count($arguments) && 0 == count($this->tokens)) {
+        if (0 == \count($arguments) && 0 == \count($this->tokens)) {
             return 1;
         }
 
-        $arguments  = array_values($arguments);
+        $arguments  = \array_values($arguments);
         $totalScore = 0;
         foreach ($this->tokens as $i => $token) {
             $argument = isset($arguments[$i]) ? $arguments[$i] : null;
@@ -68,7 +68,7 @@ class ArgumentsWildcard
             }
         }
 
-        if (count($arguments) > count($this->tokens)) {
+        if (\count($arguments) > \count($this->tokens)) {
             return false;
         }
 
@@ -83,7 +83,7 @@ class ArgumentsWildcard
     public function __toString()
     {
         if (null === $this->string) {
-            $this->string = implode(', ', array_map(function ($token) {
+            $this->string = \implode(', ', \array_map(function ($token) {
                 return (string) $token;
             }, $this->tokens));
         }

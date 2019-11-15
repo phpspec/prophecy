@@ -53,7 +53,7 @@ class NameGeneratorSpec extends ObjectBehavior
     {
         return array(
             'startWith' => function ($subject, $string) {
-                return 0 === strpos($subject, $string);
+                return 0 === \strpos($subject, $string);
             },
         );
     }

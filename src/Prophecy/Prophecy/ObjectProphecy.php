@@ -138,10 +138,10 @@ class ObjectProphecy implements ProphecyInterface
     {
         $argumentsWildcard = $methodProphecy->getArgumentsWildcard();
         if (null === $argumentsWildcard) {
-            throw new MethodProphecyException(sprintf(
+            throw new MethodProphecyException(\sprintf(
                 "Can not add prophecy for a method `%s::%s()`\n".
                 "as you did not specify arguments wildcard for it.",
-                get_class($this->reveal()),
+                \get_class($this->reveal()),
                 $methodProphecy->getMethodName()
             ), $methodProphecy);
         }
@@ -211,7 +211,7 @@ class ObjectProphecy implements ProphecyInterface
      */
     public function checkProphecyMethodsPredictions()
     {
-        $exception = new AggregateException(sprintf("%s:\n", get_class($this->reveal())));
+        $exception = new AggregateException(\sprintf("%s:\n", \get_class($this->reveal())));
         $exception->setObjectProphecy($this);
 
         foreach ($this->methodProphecies as $prophecies) {
@@ -224,7 +224,7 @@ class ObjectProphecy implements ProphecyInterface
             }
         }
 
-        if (count($exception->getExceptions())) {
+        if (\count($exception->getExceptions())) {
             throw $exception;
         }
     }

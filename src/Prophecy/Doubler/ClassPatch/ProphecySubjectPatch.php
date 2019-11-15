@@ -46,7 +46,7 @@ class ProphecySubjectPatch implements ClassPatchInterface
         $node->addProperty('objectProphecy', 'private');
 
         foreach ($node->getMethods() as $name => $method) {
-            if ('__construct' === strtolower($name)) {
+            if ('__construct' === \strtolower($name)) {
                 continue;
             }
 

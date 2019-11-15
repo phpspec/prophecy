@@ -28,8 +28,8 @@ class TypeToken implements TokenInterface
     public function __construct($type)
     {
         $checker = "is_{$type}";
-        if (!function_exists($checker) && !interface_exists($type) && !class_exists($type)) {
-            throw new InvalidArgumentException(sprintf(
+        if (!\function_exists($checker) && !\interface_exists($type) && !\class_exists($type)) {
+            throw new InvalidArgumentException(\sprintf(
                 'Type or class name expected as an argument to TypeToken, but got %s.', $type
             ));
         }
@@ -47,8 +47,8 @@ class TypeToken implements TokenInterface
     public function scoreArgument($argument)
     {
         $checker = "is_{$this->type}";
-        if (function_exists($checker)) {
-            return call_user_func($checker, $argument) ? 5 : false;
+        if (\function_exists($checker)) {
+            return \call_user_func($checker, $argument) ? 5 : false;
         }
 
         return $argument instanceof $this->type ? 5 : false;
@@ -71,6 +71,6 @@ class TypeToken implements TokenInterface
      */
     public function __toString()
     {
-        return sprintf('type(%s)', $this->type);
+        return \sprintf('type(%s)', $this->type);
     }
 }

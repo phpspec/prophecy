@@ -66,7 +66,7 @@ class IdenticalValueToken implements TokenInterface
     public function __toString()
     {
         if (null === $this->string) {
-            $this->string = sprintf('identical(%s)', $this->util->stringify($this->value));
+            $this->string = \sprintf('identical(%s)', $this->util->stringify($this->value));
         }
 
         return $this->string;

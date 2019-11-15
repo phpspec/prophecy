@@ -55,8 +55,8 @@ class LazyDouble
         }
 
         if (!$class instanceof ReflectionClass) {
-            if (!class_exists($class)) {
-                throw new ClassNotFoundException(sprintf('Class %s not found.', $class), $class);
+            if (!\class_exists($class)) {
+                throw new ClassNotFoundException(\sprintf('Class %s not found.', $class), $class);
             }
 
             $class = new ReflectionClass($class);
@@ -82,9 +82,9 @@ class LazyDouble
         }
 
         if (!$interface instanceof ReflectionClass) {
-            if (!interface_exists($interface)) {
+            if (!\interface_exists($interface)) {
                 throw new InterfaceNotFoundException(
-                    sprintf('Interface %s not found.', $interface),
+                    \sprintf('Interface %s not found.', $interface),
                     $interface
                 );
             }

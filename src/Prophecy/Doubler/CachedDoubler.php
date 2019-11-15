@@ -61,8 +61,8 @@ class CachedDoubler extends Doubler
         foreach ($interfaces as $interface) {
             $parts[] = $interface->getName();
         }
-        sort($parts);
+        \sort($parts);
 
-        return md5(implode('', $parts));
+        return \md5(\implode('', $parts));
     }
 }

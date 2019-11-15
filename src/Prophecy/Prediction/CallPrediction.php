@@ -49,7 +49,7 @@ class CallPrediction implements PredictionInterface
      */
     public function check(array $calls, ObjectProphecy $object, MethodProphecy $method)
     {
-        if (count($calls)) {
+        if (\count($calls)) {
             return;
         }
 
@@ -58,14 +58,14 @@ class CallPrediction implements PredictionInterface
             new ArgumentsWildcard(array(new AnyValuesToken))
         );
 
-        if (count($methodCalls)) {
-            throw new NoCallsException(sprintf(
+        if (\count($methodCalls)) {
+            throw new NoCallsException(\sprintf(
                 "No calls have been made that match:\n".
                 "  %s->%s(%s)\n".
                 "but expected at least one.\n".
                 "Recorded `%s(...)` calls:\n%s",
 
-                get_class($object->reveal()),
+                \get_class($object->reveal()),
                 $method->getMethodName(),
                 $method->getArgumentsWildcard(),
                 $method->getMethodName(),
@@ -73,12 +73,12 @@ class CallPrediction implements PredictionInterface
             ), $method);
         }
 
-        throw new NoCallsException(sprintf(
+        throw new NoCallsException(\sprintf(
             "No calls have been made that match:\n".
             "  %s->%s(%s)\n".
             "but expected at least one.",
 
-            get_class($object->reveal()),
+            \get_class($object->reveal()),
             $method->getMethodName(),
             $method->getArgumentsWildcard()
         ), $method);

@@ -51,7 +51,7 @@ class ExactValueToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
-        if (is_object($argument) && is_object($this->value)) {
+        if (\is_object($argument) && \is_object($this->value)) {
             $comparator = $this->comparatorFactory->getComparatorFor(
                 $argument, $this->value
             );
@@ -63,17 +63,17 @@ class ExactValueToken implements TokenInterface
         }
 
         // If either one is an object it should be castable to a string
-        if (is_object($argument) xor is_object($this->value)) {
-            if (is_object($argument) && !method_exists($argument, '__toString')) {
+        if (\is_object($argument) xor \is_object($this->value)) {
+            if (\is_object($argument) && !\method_exists($argument, '__toString')) {
                 return false;
             }
 
-            if (is_object($this->value) && !method_exists($this->value, '__toString')) {
+            if (\is_object($this->value) && !\method_exists($this->value, '__toString')) {
                 return false;
             }
-        } elseif (is_numeric($argument) && is_numeric($this->value)) {
+        } elseif (\is_numeric($argument) && \is_numeric($this->value)) {
             // noop
-        } elseif (gettype($argument) !== gettype($this->value)) {
+        } elseif (\gettype($argument) !== \gettype($this->value)) {
             return false;
         }
 
@@ -108,7 +108,7 @@ class ExactValueToken implements TokenInterface
     public function __toString()
     {
         if (null === $this->string) {
-            $this->string = sprintf('exact(%s)', $this->util->stringify($this->value));
+            $this->string = \sprintf('exact(%s)', $this->util->stringify($this->value));
         }
 
         return $this->string;

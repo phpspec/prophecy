@@ -43,10 +43,10 @@ class NameGenerator
             }
         }
 
-        if (!count($parts)) {
+        if (!\count($parts)) {
             $parts[] = 'stdClass';
         }
 
-        return sprintf('Double\%s\P%d', implode('\\', $parts), self::$counter++);
+        return \sprintf('Double\%s\P%d', \implode('\\', $parts), self::$counter++);
     }
 }

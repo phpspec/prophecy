@@ -51,8 +51,8 @@ class MagicCallPatch implements ClassPatchInterface
      */
     public function apply(ClassNode $node)
     {
-        $types = array_filter($node->getInterfaces(), function ($interface) {
-            return 0 !== strpos($interface, 'Prophecy\\');
+        $types = \array_filter($node->getInterfaces(), function ($interface) {
+            return 0 !== \strpos($interface, 'Prophecy\\');
         });
         $types[] = $node->getParentClass();
 

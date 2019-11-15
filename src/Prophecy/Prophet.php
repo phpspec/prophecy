@@ -81,11 +81,11 @@ class Prophet
             $this->revealer
         );
 
-        if ($classOrInterface && class_exists($classOrInterface)) {
+        if ($classOrInterface && \class_exists($classOrInterface)) {
             return $prophecy->willExtend($classOrInterface);
         }
 
-        if ($classOrInterface && interface_exists($classOrInterface)) {
+        if ($classOrInterface && \interface_exists($classOrInterface)) {
             return $prophecy->willImplement($classOrInterface);
         }
 
@@ -128,7 +128,7 @@ class Prophet
             }
         }
 
-        if (count($exception->getExceptions())) {
+        if (\count($exception->getExceptions())) {
             throw $exception;
         }
     }

@@ -44,9 +44,9 @@ class ReturnPromise implements PromiseInterface
      */
     public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
     {
-        $value = array_shift($this->returnValues);
+        $value = \array_shift($this->returnValues);
 
-        if (!count($this->returnValues)) {
+        if (!\count($this->returnValues)) {
             $this->returnValues[] = $value;
         }
 

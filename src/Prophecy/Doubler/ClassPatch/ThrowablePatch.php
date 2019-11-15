@@ -25,7 +25,7 @@ class ThrowablePatch implements ClassPatchInterface
     private function implementsAThrowableInterface(ClassNode $node)
     {
         foreach ($node->getInterfaces() as $type) {
-            if (is_a($type, 'Throwable', true)) {
+            if (\is_a($type, 'Throwable', true)) {
                 return true;
             }
         }
@@ -39,7 +39,7 @@ class ThrowablePatch implements ClassPatchInterface
      */
     private function doesNotExtendAThrowableClass(ClassNode $node)
     {
-        return !is_a($node->getParentClass(), 'Throwable', true);
+        return !\is_a($node->getParentClass(), 'Throwable', true);
     }
 
     /**
@@ -60,7 +60,7 @@ class ThrowablePatch implements ClassPatchInterface
         $className = $node->getParentClass();
         if ($className !== 'stdClass') {
             throw new ClassCreatorException(
-                sprintf(
+                \sprintf(
                     'Cannot double concrete class %s as well as implement Traversable',
                     $className
                 ),

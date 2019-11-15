@@ -29,11 +29,11 @@ class HhvmExceptionPatch implements ClassPatchInterface
      */
     public function supports(ClassNode $node)
     {
-        if (!defined('HHVM_VERSION')) {
+        if (!\defined('HHVM_VERSION')) {
             return false;
         }
 
-        return 'Exception' === $node->getParentClass() || is_subclass_of($node->getParentClass(), 'Exception');
+        return 'Exception' === $node->getParentClass() || \is_subclass_of($node->getParentClass(), 'Exception');
     }
 
     /**

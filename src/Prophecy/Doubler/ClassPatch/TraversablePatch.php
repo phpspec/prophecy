@@ -31,21 +31,21 @@ class TraversablePatch implements ClassPatchInterface
      */
     public function supports(ClassNode $node)
     {
-        if (in_array('Iterator', $node->getInterfaces())) {
+        if (\in_array('Iterator', $node->getInterfaces())) {
             return false;
         }
-        if (in_array('IteratorAggregate', $node->getInterfaces())) {
+        if (\in_array('IteratorAggregate', $node->getInterfaces())) {
             return false;
         }
 
         foreach ($node->getInterfaces() as $interface) {
-            if ('Traversable' !== $interface && !is_subclass_of($interface, 'Traversable')) {
+            if ('Traversable' !== $interface && !\is_subclass_of($interface, 'Traversable')) {
                 continue;
             }
-            if ('Iterator' === $interface || is_subclass_of($interface, 'Iterator')) {
+            if ('Iterator' === $interface || \is_subclass_of($interface, 'Iterator')) {
                 continue;
             }
-            if ('IteratorAggregate' === $interface || is_subclass_of($interface, 'IteratorAggregate')) {
+            if ('IteratorAggregate' === $interface || \is_subclass_of($interface, 'IteratorAggregate')) {
                 continue;
             }
 

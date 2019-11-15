@@ -57,8 +57,8 @@ class ObjectStateToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
-        if (is_object($argument) && method_exists($argument, $this->name)) {
-            $actual = call_user_func(array($argument, $this->name));
+        if (\is_object($argument) && \method_exists($argument, $this->name)) {
+            $actual = \call_user_func(array($argument, $this->name));
 
             $comparator = $this->comparatorFactory->getComparatorFor(
                 $this->value, $actual
@@ -72,7 +72,7 @@ class ObjectStateToken implements TokenInterface
             }
         }
 
-        if (is_object($argument) && property_exists($argument, $this->name)) {
+        if (\is_object($argument) && \property_exists($argument, $this->name)) {
             return $argument->{$this->name} === $this->value ? 8 : false;
         }
 
@@ -96,7 +96,7 @@ class ObjectStateToken implements TokenInterface
      */
     public function __toString()
     {
-        return sprintf('state(%s(), %s)',
+        return \sprintf('state(%s(), %s)',
             $this->name,
             $this->util->stringify($this->value)
         );

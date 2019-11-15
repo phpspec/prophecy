@@ -60,10 +60,10 @@ class MethodNode
      */
     public function setVisibility($visibility)
     {
-        $visibility = strtolower($visibility);
+        $visibility = \strtolower($visibility);
 
-        if (!in_array($visibility, array('public', 'private', 'protected'))) {
-            throw new InvalidArgumentException(sprintf(
+        if (!\in_array($visibility, array('public', 'private', 'protected'))) {
+            throw new InvalidArgumentException(\sprintf(
                 '`%s` method visibility is not supported.', $visibility
             ));
         }
@@ -134,7 +134,7 @@ class MethodNode
         }
         $this->returnType = $this->typeHintReference->isBuiltInReturnTypeHint($type) ?
             $type :
-            '\\' . ltrim($type, '\\');
+            '\\' . \ltrim($type, '\\');
     }
 
     public function getReturnType()
@@ -178,9 +178,9 @@ class MethodNode
 
     public function useParentCode()
     {
-        $this->code = sprintf(
-            'return parent::%s(%s);', $this->getName(), implode(', ',
-                array_map(array($this, 'generateArgument'), $this->arguments)
+        $this->code = \sprintf(
+            'return parent::%s(%s);', $this->getName(), \implode(', ',
+                \array_map(array($this, 'generateArgument'), $this->arguments)
             )
         );
     }

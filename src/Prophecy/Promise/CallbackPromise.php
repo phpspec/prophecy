@@ -34,10 +34,10 @@ class CallbackPromise implements PromiseInterface
      */
     public function __construct($callback)
     {
-        if (!is_callable($callback)) {
-            throw new InvalidArgumentException(sprintf(
+        if (!\is_callable($callback)) {
+            throw new InvalidArgumentException(\sprintf(
                 'Callable expected as an argument to CallbackPromise, but got %s.',
-                gettype($callback)
+                \gettype($callback)
             ));
         }
 
@@ -57,10 +57,10 @@ class CallbackPromise implements PromiseInterface
     {
         $callback = $this->callback;
 
-        if ($callback instanceof Closure && method_exists('Closure', 'bind')) {
+        if ($callback instanceof Closure && \method_exists('Closure', 'bind')) {
             $callback = Closure::bind($callback, $object);
         }
 
-        return call_user_func($callback, $args, $object, $method);
+        return \call_user_func($callback, $args, $object, $method);
     }
 }

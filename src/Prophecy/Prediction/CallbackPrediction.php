@@ -35,10 +35,10 @@ class CallbackPrediction implements PredictionInterface
      */
     public function __construct($callback)
     {
-        if (!is_callable($callback)) {
-            throw new InvalidArgumentException(sprintf(
+        if (!\is_callable($callback)) {
+            throw new InvalidArgumentException(\sprintf(
                 'Callable expected as an argument to CallbackPrediction, but got %s.',
-                gettype($callback)
+                \gettype($callback)
             ));
         }
 
@@ -56,10 +56,10 @@ class CallbackPrediction implements PredictionInterface
     {
         $callback = $this->callback;
 
-        if ($callback instanceof Closure && method_exists('Closure', 'bind')) {
+        if ($callback instanceof Closure && \method_exists('Closure', 'bind')) {
             $callback = Closure::bind($callback, $object);
         }
 
-        call_user_func($callback, $calls, $object, $method);
+        \call_user_func($callback, $calls, $object, $method);
     }
 }

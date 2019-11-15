@@ -47,24 +47,24 @@ class ArrayEntryToken implements TokenInterface
     public function scoreArgument($argument)
     {
         if ($argument instanceof \Traversable) {
-            $argument = iterator_to_array($argument);
+            $argument = \iterator_to_array($argument);
         }
 
         if ($argument instanceof \ArrayAccess) {
             $argument = $this->convertArrayAccessToEntry($argument);
         }
 
-        if (!is_array($argument) || empty($argument)) {
+        if (!\is_array($argument) || empty($argument)) {
             return false;
         }
 
-        $keyScores = array_map(array($this->key,'scoreArgument'), array_keys($argument));
-        $valueScores = array_map(array($this->value,'scoreArgument'), $argument);
+        $keyScores = \array_map(array($this->key,'scoreArgument'), \array_keys($argument));
+        $valueScores = \array_map(array($this->value,'scoreArgument'), $argument);
         $scoreEntry = function ($value, $key) {
-            return $value && $key ? min(8, ($key + $value) / 2) : false;
+            return $value && $key ? \min(8, ($key + $value) / 2) : false;
         };
 
-        return max(array_map($scoreEntry, $valueScores, $keyScores));
+        return \max(\array_map($scoreEntry, $valueScores, $keyScores));
     }
 
     /**
@@ -84,7 +84,7 @@ class ArrayEntryToken implements TokenInterface
      */
     public function __toString()
     {
-        return sprintf('[..., %s => %s, ...]', $this->key, $this->value);
+        return \sprintf('[..., %s => %s, ...]', $this->key, $this->value);
     }
 
     /**
@@ -129,7 +129,7 @@ class ArrayEntryToken implements TokenInterface
     private function convertArrayAccessToEntry(\ArrayAccess $object)
     {
         if (!$this->key instanceof ExactValueToken) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 'You can only use exact value tokens to match key of ArrayAccess object'.PHP_EOL.
                 'But you used `%s`.',
                 $this->key

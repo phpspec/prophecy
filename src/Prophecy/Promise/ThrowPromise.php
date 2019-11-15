@@ -40,17 +40,17 @@ class ThrowPromise implements PromiseInterface
      */
     public function __construct($exception)
     {
-        if (is_string($exception)) {
-            if ((!class_exists($exception) && !interface_exists($exception)) || !$this->isAValidThrowable($exception)) {
-                throw new InvalidArgumentException(sprintf(
+        if (\is_string($exception)) {
+            if ((!\class_exists($exception) && !\interface_exists($exception)) || !$this->isAValidThrowable($exception)) {
+                throw new InvalidArgumentException(\sprintf(
                     'Exception / Throwable class or instance expected as argument to ThrowPromise, but got %s.',
                     $exception
                 ));
             }
         } elseif (!$exception instanceof \Exception && !$exception instanceof \Throwable) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 'Exception / Throwable class or instance expected as argument to ThrowPromise, but got %s.',
-                is_object($exception) ? get_class($exception) : gettype($exception)
+                \is_object($exception) ? \get_class($exception) : \gettype($exception)
             ));
         }
 
@@ -68,7 +68,7 @@ class ThrowPromise implements PromiseInterface
      */
     public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
     {
-        if (is_string($this->exception)) {
+        if (\is_string($this->exception)) {
             $classname   = $this->exception;
             $reflection  = new ReflectionClass($classname);
             $constructor = $reflection->getConstructor();
@@ -94,7 +94,7 @@ class ThrowPromise implements PromiseInterface
      */
     private function isAValidThrowable($exception)
     {
-        return is_a($exception, 'Exception', true)
-            || is_a($exception, 'Throwable', true);
+        return \is_a($exception, 'Exception', true)
+            || \is_a($exception, 'Throwable', true);
     }
 }

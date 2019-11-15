@@ -74,7 +74,7 @@ class Doubler
     {
         $this->patches[] = $patch;
 
-        @usort($this->patches, function (ClassPatchInterface $patch1, ClassPatchInterface $patch2) {
+        @\usort($this->patches, function (ClassPatchInterface $patch1, ClassPatchInterface $patch2) {
             return $patch2->getPriority() - $patch1->getPriority();
         });
     }
@@ -94,10 +94,10 @@ class Doubler
     {
         foreach ($interfaces as $interface) {
             if (!$interface instanceof ReflectionClass) {
-                throw new InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(\sprintf(
                     "[ReflectionClass \$interface1 [, ReflectionClass \$interface2]] array expected as\n".
                     "a second argument to `Doubler::double(...)`, but got %s.",
-                    is_object($interface) ? get_class($interface).' class' : gettype($interface)
+                    \is_object($interface) ? \get_class($interface).' class' : \gettype($interface)
                 ));
             }
         }

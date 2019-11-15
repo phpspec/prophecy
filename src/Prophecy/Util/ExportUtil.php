@@ -51,7 +51,7 @@ class ExportUtil
      */
     public static function toArray($value)
     {
-        if (!is_object($value)) {
+        if (!\is_object($value)) {
             return (array) $value;
         }
 
@@ -62,7 +62,7 @@ class ExportUtil
             // private   $property => "\0Classname\0property"
             // protected $property => "\0*\0property"
             // public    $property => "property"
-            if (preg_match('/^\0.+\0(.+)$/', $key, $matches)) {
+            if (\preg_match('/^\0.+\0(.+)$/', $key, $matches)) {
                 $key = $matches[1];
             }
 
@@ -80,18 +80,18 @@ class ExportUtil
         if ($value instanceof \SplObjectStorage) {
             // However, the fast method does work in HHVM, and exposes the
             // internal implementation. Hide it again.
-            if (property_exists('\SplObjectStorage', '__storage')) {
+            if (\property_exists('\SplObjectStorage', '__storage')) {
                 unset($array['__storage']);
-            } elseif (property_exists('\SplObjectStorage', 'storage')) {
+            } elseif (\property_exists('\SplObjectStorage', 'storage')) {
                 unset($array['storage']);
             }
 
-            if (property_exists('\SplObjectStorage', '__key')) {
+            if (\property_exists('\SplObjectStorage', '__key')) {
                 unset($array['__key']);
             }
 
             foreach ($value as $key => $val) {
-                $array[spl_object_hash($val)] = array(
+                $array[\spl_object_hash($val)] = array(
                     'obj' => $val,
                     'inf' => $value->getInfo(),
                 );
@@ -124,36 +124,36 @@ class ExportUtil
             return 'false';
         }
 
-        if (is_float($value) && floatval(intval($value)) === $value) {
+        if (\is_float($value) && \floatval(\intval($value)) === $value) {
             return "$value.0";
         }
 
-        if (is_resource($value)) {
-            return sprintf(
+        if (\is_resource($value)) {
+            return \sprintf(
                 'resource(%d) of type (%s)',
                 $value,
-                get_resource_type($value)
+                \get_resource_type($value)
             );
         }
 
-        if (is_string($value)) {
+        if (\is_string($value)) {
             // Match for most non printable chars somewhat taking multibyte chars into account
-            if (preg_match('/[^\x09-\x0d\x20-\xff]/', $value)) {
-                return 'Binary String: 0x' . bin2hex($value);
+            if (\preg_match('/[^\x09-\x0d\x20-\xff]/', $value)) {
+                return 'Binary String: 0x' . \bin2hex($value);
             }
 
             return "'" .
-            str_replace(array("\r\n", "\n\r", "\r"), array("\n", "\n", "\n"), $value) .
+            \str_replace(array("\r\n", "\n\r", "\r"), array("\n", "\n", "\n"), $value) .
             "'";
         }
 
-        $whitespace = str_repeat(' ', 4 * $indentation);
+        $whitespace = \str_repeat(' ', 4 * $indentation);
 
         if (!$processed) {
             $processed = new Context;
         }
 
-        if (is_array($value)) {
+        if (\is_array($value)) {
             if (($key = $processed->contains($value)) !== false) {
                 return 'Array &' . $key;
             }
@@ -162,9 +162,9 @@ class ExportUtil
             $key    = $processed->add($value);
             $values = '';
 
-            if (count($array) > 0) {
+            if (\count($array) > 0) {
                 foreach ($array as $k => $v) {
-                    $values .= sprintf(
+                    $values .= \sprintf(
                         '%s    %s => %s' . "\n",
                         $whitespace,
                         self::recursiveExport($k, $indentation),
@@ -175,25 +175,25 @@ class ExportUtil
                 $values = "\n" . $values . $whitespace;
             }
 
-            return sprintf('Array &%s (%s)', $key, $values);
+            return \sprintf('Array &%s (%s)', $key, $values);
         }
 
-        if (is_object($value)) {
-            $class = get_class($value);
+        if (\is_object($value)) {
+            $class = \get_class($value);
 
             if ($value instanceof ProphecyInterface) {
-                return sprintf('%s Object (*Prophecy*)', $class);
+                return \sprintf('%s Object (*Prophecy*)', $class);
             } elseif ($hash = $processed->contains($value)) {
-                return sprintf('%s:%s Object', $class, $hash);
+                return \sprintf('%s:%s Object', $class, $hash);
             }
 
             $hash   = $processed->add($value);
             $values = '';
             $array  = self::toArray($value);
 
-            if (count($array) > 0) {
+            if (\count($array) > 0) {
                 foreach ($array as $k => $v) {
-                    $values .= sprintf(
+                    $values .= \sprintf(
                         '%s    %s => %s' . "\n",
                         $whitespace,
                         self::recursiveExport($k, $indentation),
@@ -204,9 +204,9 @@ class ExportUtil
                 $values = "\n" . $values . $whitespace;
             }
 
-            return sprintf('%s:%s Object (%s)', $class, $hash, $values);
+            return \sprintf('%s:%s Object (%s)', $class, $hash, $values);
         }
 
-        return var_export($value, true);
+        return \var_export($value, true);
     }
 }

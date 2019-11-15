@@ -44,7 +44,7 @@ class ThrowPromiseSpec extends ObjectBehavior
 
     function it_throws_error_instances(ObjectProphecy $object, MethodProphecy $method)
     {
-        if (!class_exists('\Error')) {
+        if (!\class_exists('\Error')) {
             throw new SkippingException('The class Error, introduced in PHP 7, does not exist');
         }
 
@@ -55,7 +55,7 @@ class ThrowPromiseSpec extends ObjectBehavior
 
     function it_throws_errors_by_class_name()
     {
-        if (!class_exists('\Error')) {
+        if (!\class_exists('\Error')) {
             throw new SkippingException('The class Error, introduced in PHP 7, does not exist');
         }
 
@@ -87,7 +87,7 @@ class ThrowPromiseSpec extends ObjectBehavior
 
     function it_throws_an_extension_of_throwable_by_class_name()
     {
-        if (!interface_exists('\Throwable')) {
+        if (!\interface_exists('\Throwable')) {
             throw new SkippingException('The interface Throwable, introduced in PHP 7, does not exist');
         }
 
@@ -98,7 +98,7 @@ class ThrowPromiseSpec extends ObjectBehavior
 
     function it_throws_a_throwable_by_class_name()
     {
-        if (!interface_exists('\Throwable')) {
+        if (!\interface_exists('\Throwable')) {
             throw new SkippingException('The interface Throwable, introduced in PHP 7, does not exist');
         }
 

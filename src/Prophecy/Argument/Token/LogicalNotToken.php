@@ -68,6 +68,6 @@ class LogicalNotToken implements TokenInterface
      */
     public function __toString()
     {
-        return sprintf('not(%s)', $this->token);
+        return \sprintf('not(%s)', $this->token);
     }
 }

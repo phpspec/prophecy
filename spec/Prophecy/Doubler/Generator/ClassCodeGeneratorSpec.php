@@ -76,7 +76,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method5->isStatic()->willReturn(false);
         $method5->getArguments()->willReturn(array());
         $method5->hasReturnType()->willReturn(true);
-        $method5->getReturnType()->willReturn(version_compare(PHP_VERSION, '7.2', '>=') ? 'object' : '\object');
+        $method5->getReturnType()->willReturn(\version_compare(PHP_VERSION, '7.2', '>=') ? 'object' : '\object');
         $method5->hasNullableReturnType()->willReturn(false);
         $method5->getCode()->willReturn('return;');
 
@@ -120,7 +120,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
 
         $code = $this->generate('CustomClass', $class);
 
-        if (version_compare(PHP_VERSION, '7.2', '>=')) {
+        if (\version_compare(PHP_VERSION, '7.2', '>=')) {
             $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
@@ -146,7 +146,7 @@ return;
 }
 }
 PHP;
-        } elseif (version_compare(PHP_VERSION, '7.1', '>=')) {
+        } elseif (\version_compare(PHP_VERSION, '7.1', '>=')) {
             $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
@@ -172,7 +172,7 @@ return;
 }
 }
 PHP;
-        } elseif (version_compare(PHP_VERSION, '7.0', '>=')) {
+        } elseif (\version_compare(PHP_VERSION, '7.0', '>=')) {
             $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
@@ -225,7 +225,7 @@ return;
 }
 PHP;
         }
-        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $expected = \strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
         $code->shouldBe($expected);
     }
 
@@ -328,7 +328,7 @@ public  function variadicWithTypeByRef(\\ReflectionClass &...$args) {
 }
 }
 PHP;
-        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $expected = \strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
         $code->shouldBe($expected);
     }
 
@@ -370,7 +370,7 @@ return $this->name;
 }
 }
 PHP;
-        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $expected = \strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
         $code->shouldBe($expected);
     }
 
@@ -390,7 +390,7 @@ class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\Mirro
 }
 }
 PHP;
-        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $expected = \strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
         $code->shouldBe($expected);
     }
 
@@ -410,7 +410,7 @@ class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\Mirro
 }
 }
 PHP;
-        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $expected = \strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
         $code->shouldBe($expected);
     }
 }

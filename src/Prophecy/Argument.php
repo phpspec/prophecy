@@ -98,7 +98,7 @@ class Argument
      */
     public static function allOf()
     {
-        return new Token\LogicalAndToken(func_get_args());
+        return new Token\LogicalAndToken(\func_get_args());
     }
 
     /**

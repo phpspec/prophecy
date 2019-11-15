@@ -40,7 +40,7 @@ class ArrayEveryEntryToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
-        if (!$argument instanceof \Traversable && !is_array($argument)) {
+        if (!$argument instanceof \Traversable && !\is_array($argument)) {
             return false;
         }
 
@@ -49,11 +49,11 @@ class ArrayEveryEntryToken implements TokenInterface
             $scores[] = $this->value->scoreArgument($argumentEntry);
         }
 
-        if (empty($scores) || in_array(false, $scores, true)) {
+        if (empty($scores) || \in_array(false, $scores, true)) {
             return false;
         }
 
-        return array_sum($scores) / count($scores);
+        return \array_sum($scores) / \count($scores);
     }
 
     /**
@@ -69,7 +69,7 @@ class ArrayEveryEntryToken implements TokenInterface
      */
     public function __toString()
     {
-        return sprintf('[%s, ..., %s]', $this->value, $this->value);
+        return \sprintf('[%s, ..., %s]', $this->value, $this->value);
     }
 
     /**

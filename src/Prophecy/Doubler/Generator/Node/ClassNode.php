@@ -61,7 +61,7 @@ class ClassNode
             return;
         }
 
-        array_unshift($this->interfaces, $interface);
+        \array_unshift($this->interfaces, $interface);
     }
 
     /**
@@ -71,7 +71,7 @@ class ClassNode
      */
     public function hasInterface($interface)
     {
-        return in_array($interface, $this->interfaces);
+        return \in_array($interface, $this->interfaces);
     }
 
     public function getProperties()
@@ -81,10 +81,10 @@ class ClassNode
 
     public function addProperty($name, $visibility = 'public')
     {
-        $visibility = strtolower($visibility);
+        $visibility = \strtolower($visibility);
 
-        if (!in_array($visibility, array('public', 'private', 'protected'))) {
-            throw new InvalidArgumentException(sprintf(
+        if (!\in_array($visibility, array('public', 'private', 'protected'))) {
+            throw new InvalidArgumentException(\sprintf(
                 '`%s` property visibility is not supported.', $visibility
             ));
         }
@@ -103,7 +103,7 @@ class ClassNode
     public function addMethod(MethodNode $method, $force = false)
     {
         if (!$this->isExtendable($method->getName())){
-            $message = sprintf(
+            $message = \sprintf(
                 'Method `%s` is not extendable, so can not be added.', $method->getName()
             );
             throw new MethodNotExtendableException($message, $this->getParentClass(), $method->getName());
@@ -164,6 +164,6 @@ class ClassNode
      */
     public function isExtendable($method)
     {
-        return !in_array($method, $this->unextendableMethods);
+        return !\in_array($method, $this->unextendableMethods);
     }
 }

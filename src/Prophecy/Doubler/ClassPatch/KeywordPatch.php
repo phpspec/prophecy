@@ -39,8 +39,8 @@ class KeywordPatch implements ClassPatchInterface
      */
     public function apply(ClassNode $node)
     {
-        $methodNames = array_keys($node->getMethods());
-        $methodsToRemove = array_intersect($methodNames, $this->getKeywords());
+        $methodNames = \array_keys($node->getMethods());
+        $methodsToRemove = \array_intersect($methodNames, $this->getKeywords());
         foreach ($methodsToRemove as $methodName) {
             $node->removeMethod($methodName);
         }

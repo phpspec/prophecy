@@ -65,15 +65,15 @@ class StringUtilSpec extends ObjectBehavior
 
     function it_generates_proper_string_representation_for_resource()
     {
-        $resource = fopen(__FILE__, 'r');
+        $resource = \fopen(__FILE__, 'r');
         $this->stringify($resource)->shouldReturn('stream:'.$resource);
     }
 
     function it_generates_proper_string_representation_for_object(\stdClass $object)
     {
-        $objHash = sprintf('%s:%s',
-            get_class($object->getWrappedObject()),
-            spl_object_hash($object->getWrappedObject())
+        $objHash = \sprintf('%s:%s',
+            \get_class($object->getWrappedObject()),
+            \spl_object_hash($object->getWrappedObject())
         ) . " Object (\n    'objectProphecy' => Prophecy\Prophecy\ObjectProphecy Object (*Prophecy*)\n)";
 
         $this->stringify($object)->shouldReturn("$objHash");
@@ -81,9 +81,9 @@ class StringUtilSpec extends ObjectBehavior
 
     function it_generates_proper_string_representation_for_object_without_exporting(\stdClass $object)
     {
-        $objHash = sprintf('%s:%s',
-            get_class($object->getWrappedObject()),
-            spl_object_hash($object->getWrappedObject())
+        $objHash = \sprintf('%s:%s',
+            \get_class($object->getWrappedObject()),
+            \spl_object_hash($object->getWrappedObject())
         );
 
         $this->stringify($object, false)->shouldReturn("$objHash");

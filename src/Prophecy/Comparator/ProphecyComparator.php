@@ -18,7 +18,7 @@ class ProphecyComparator extends ObjectComparator
 {
     public function accepts($expected, $actual)
     {
-        return is_object($expected) && is_object($actual) && $actual instanceof ProphecyInterface;
+        return \is_object($expected) && \is_object($actual) && $actual instanceof ProphecyInterface;
     }
 
     public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = array())

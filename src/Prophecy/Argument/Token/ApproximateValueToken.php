@@ -32,7 +32,7 @@ class ApproximateValueToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
-        return round($argument, $this->precision) === round($this->value, $this->precision) ? 10 : false;
+        return \round($argument, $this->precision) === \round($this->value, $this->precision) ? 10 : false;
     }
 
     /**
@@ -50,6 +50,6 @@ class ApproximateValueToken implements TokenInterface
      */
     public function __toString()
     {
-        return sprintf('≅%s', round($this->value, $this->precision));
+        return \sprintf('≅%s', \round($this->value, $this->precision));
     }
 }
