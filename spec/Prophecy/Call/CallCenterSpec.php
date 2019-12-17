@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Call;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Exception\Call\UnexpectedCallException;
 use Prophecy\Promise\PromiseInterface;
 use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -123,23 +124,6 @@ class CallCenterSpec extends ObjectBehavior
             ->shouldReturn('second');
     }
 
-    function it_throws_exception_if_call_does_not_match_any_of_defined_method_prophecies(
-        $objectProphecy,
-        MethodProphecy $method,
-        ArgumentsWildcard $arguments
-    ) {
-        $method->getMethodName()->willReturn('getName');
-        $method->getArgumentsWildcard()->willReturn($arguments);
-        $arguments->scoreArguments(array('world', 'everything'))->willReturn(false);
-        $arguments->__toString()->willReturn('arg1, arg2');
-
-        $objectProphecy->getMethodProphecies()->willReturn(array('method1' => array($method)));
-        $objectProphecy->getMethodProphecies('getName')->willReturn(array($method));
-
-        $this->shouldThrow('Prophecy\Exception\Call\UnexpectedCallException')
-            ->duringMakeCall($objectProphecy, 'getName', array('world', 'everything'));
-    }
-
     function it_returns_null_if_method_prophecy_that_matches_makeCall_arguments_has_no_promise(
         $objectProphecy,
         MethodProphecy $method,
@@ -176,5 +160,26 @@ class CallCenterSpec extends ObjectBehavior
         $calls->shouldHaveCount(1);
         $calls[0]->getMethodName()->shouldReturn('getName');
         $calls[0]->getArguments()->shouldReturn(array('everything'));
+    }
+
+    function it_records_the_error_when_stub_has_got_unexpected_method_calls(
+        $objectProphecy,
+        MethodProphecy $method,
+        ArgumentsWildcard $arguments
+    ) {
+        $method->getMethodName()->willReturn('getName');
+        $method->getArgumentsWildcard()->willReturn($arguments);
+
+        $arguments->getTokens()->willReturn(array());
+
+        $objectProphecy->getMethodProphecies()->willReturn(array('getName' => array($method)));
+        $objectProphecy->getMethodProphecies('getName')->willReturn(array($method));
+        $objectProphecy->getMethodProphecies('method1')->willReturn(array());
+        $objectProphecy->reveal()->willReturn(new \stdClass());
+
+        $this->shouldNotThrow('Prophecy\Exception\Call\UnexpectedCallException')
+             ->duringMakeCall($objectProphecy, 'method1', array());
+
+        $this->shouldThrow('Prophecy\Exception\Call\UnexpectedCallException')->duringCheckUnexpectedCalls();
     }
 }
