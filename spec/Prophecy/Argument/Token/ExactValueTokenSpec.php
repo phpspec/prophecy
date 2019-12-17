@@ -125,13 +125,15 @@ class ExactValueTokenSpec extends ObjectBehavior
 
     function it_generates_proper_string_representation_for_object(\stdClass $object)
     {
-        $objHash = sprintf('%s:%s',
+        $objHash = sprintf('exact(%s:%s',
             get_class($object->getWrappedObject()),
             spl_object_hash($object->getWrappedObject())
-        );
+        ) . " Object (\n    'objectProphecyClosure' => Closure:%s Object (\n        0 => Closure:%s Object\n    )\n))";
 
         $this->beConstructedWith($object);
-        $this->__toString()->shouldReturn("exact($objHash Object (\n    'objectProphecy' => Prophecy\Prophecy\ObjectProphecy Object (*Prophecy*)\n))");
+
+        $hashRegexExpr = '[a-f0-9]{32}';
+        $this->__toString()->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $hashRegexExpr, $hashRegexExpr)));
     }
 }
 
