@@ -49,7 +49,7 @@ class NameGeneratorSpec extends ObjectBehavior
         );
     }
 
-    public function getMatchers()
+    public function getMatchers(): array
     {
         return array(
             'startWith' => function ($subject, $string) {
