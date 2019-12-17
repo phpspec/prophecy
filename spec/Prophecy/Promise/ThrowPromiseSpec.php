@@ -39,7 +39,7 @@ class ThrowPromiseSpec extends ObjectBehavior
     {
         $this->beConstructedWith($exc = new \RuntimeException('Some exception'));
 
-        $this->shouldThrow($exc)->duringExecute(array(), $object, $method);
+        $this->shouldThrow('Error')->duringExecute(array(), $object, $method);
     }
 
     function it_throws_error_instances(ObjectProphecy $object, MethodProphecy $method)
@@ -48,9 +48,9 @@ class ThrowPromiseSpec extends ObjectBehavior
             throw new SkippingException('The class Error, introduced in PHP 7, does not exist');
         }
 
-        $this->beConstructedWith($exc = new \Error('Error exception'));
+        $this->beConstructedWith(new \Error('Error exception'));
 
-        $this->shouldThrow($exc)->duringExecute(array(), $object, $method);
+        $this->shouldThrow('Error')->duringExecute(array(), $object, $method);
     }
 
     function it_throws_errors_by_class_name()
