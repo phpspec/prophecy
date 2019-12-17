@@ -39,7 +39,7 @@ class ThrowPromiseSpec extends ObjectBehavior
     {
         $this->beConstructedWith($exc = new \RuntimeException('Some exception'));
 
-        $this->shouldThrow('Error')->duringExecute(array(), $object, $method);
+        $this->shouldThrow('RuntimeException')->duringExecute(array(), $object, $method);
     }
 
     function it_throws_error_instances(ObjectProphecy $object, MethodProphecy $method)
