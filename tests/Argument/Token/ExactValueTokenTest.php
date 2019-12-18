@@ -70,6 +70,27 @@ class ExactValueTokenTest extends TestCase {
 		self::assertEquals(false, $exactValueToken->scoreArgument(null));
 	}
 
+  /**
+   * @test
+   */
+  public function scores_10_for_identical_closures() {
+    $closure = function() {};
+
+    $exactValueToken = new ExactValueToken($closure);
+    self::assertEquals(10, $exactValueToken->scoreArgument($closure));
+  }
+
+  /**
+   * @test
+   */
+  public function scores_false_for_different_closures() {
+    $closure1 = function() {};
+    $closure2 = function() {};
+
+    $exactValueToken = new ExactValueToken($closure1);
+    self::assertEquals(false, $exactValueToken->scoreArgument($closure2));
+  }
+
 }
 
 

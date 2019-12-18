@@ -29,14 +29,16 @@ final class ClosureComparator extends Comparator
 
     public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = array())
     {
-        throw new ComparisonFailure(
-            $expected,
-            $actual,
-            // we don't need a diff
-            '',
-            '',
-            false,
-            'all closures are born different'
-        );
+        if (spl_object_hash($expected) !== spl_object_hash($actual)) {
+            throw new ComparisonFailure(
+                $expected,
+                $actual,
+                // we don't need a diff
+                '',
+                '',
+                FALSE,
+                'all closures are born different'
+            );
+        }
     }
 }
