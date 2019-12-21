@@ -1,7 +1,5 @@
 language: php
 
-sudo: false
-
 cache:
   directories:
     - $HOME/.composer/cache
@@ -21,13 +19,20 @@ matrix:
     - php: 5.5
       dist: trusty
     - php: 5.6
+      dist: xenial
       env: DEPENDENCIES='low'
     - php: 5.6
+      dist: xenial
     - php: 7.0
+      dist: xenial
     - php: 7.1
+      dist: bionic
     - php: 7.2
+      dist: bionic
     - php: 7.3
-    - php: 7.4snapshot
+      dist: bionic
+    - php: 7.4
+      dist: bionic
   fast_finish: true
 
 install:
