@@ -25,15 +25,15 @@ class ClosureComparatorSpec extends ObjectBehavior
         $this->accepts(function(){}, function(){})->shouldReturn(true);
     }
 
-    function it_asserts_that_all_closures_are_different()
+    function it_asserts_that_different_closures_are_different()
     {
         $this->shouldThrow()->duringAssertEquals(function(){}, function(){});
     }
 
-    function it_asserts_that_all_closures_are_different_even_if_its_the_same_closure()
+    function it_asserts_that_closures_are_equal_if_its_the_same_closure()
     {
         $closure = function(){};
 
-        $this->shouldThrow()->duringAssertEquals($closure, $closure);
+        $this->shouldNotThrow()->duringAssertEquals($closure, $closure);
     }
 }
