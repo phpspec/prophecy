@@ -30,6 +30,16 @@ class ExactValueTokenTest extends TestCase {
 		self::assertEquals(10, $exactValueToken->scoreArgument($child2));
 	}
 
+    /**
+     * @test
+     */
+    public function scores_10_for_matching_callables() {
+        $callable = function() {};
+
+        $exactValueToken = new ExactValueToken($callable);
+        self::assertEquals(10, $exactValueToken->scoreArgument($callable));
+    }
+
 	/**
 	 * @test
 	 */
@@ -69,7 +79,6 @@ class ExactValueTokenTest extends TestCase {
 		$exactValueToken = new ExactValueToken($child1);
 		self::assertEquals(false, $exactValueToken->scoreArgument(null));
 	}
-
 }
 
 
