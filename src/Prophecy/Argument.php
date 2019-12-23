@@ -222,4 +222,18 @@ class Argument
     {
         return new Token\InArrayToken($value);
     }
+
+    /**
+     * Checks that argument is in array.
+     *
+     * @param array $value
+     *
+     * @return Token\InArrayToken
+     */
+
+    public function notIn($value)
+    {
+        return new Token\NotInArrayToken($value);
+    }
+
 }

@@ -110,4 +110,10 @@ class ArgumentSpec extends ObjectBehavior
         $token = $this->in(array(1, 2, 3));
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\InArrayToken');
     }
+
+    function it_has_a_shortcut_for_not_in_token()
+    {
+        $token = $this->notIn(array(1, 2, 3));
+        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\NotInArrayToken');
+    }
 }
