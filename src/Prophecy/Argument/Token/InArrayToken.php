@@ -19,13 +19,16 @@ namespace Prophecy\Argument\Token;
 class InArrayToken implements TokenInterface
 {
     private $token = array();
+    private $strict;
 
     /**
      * @param array $arguments tokens
+     * @param bool $strict
      */
-    public function __construct(array $arguments)
+    public function __construct(array $arguments, $strict = true)
     {
         $this->token = $arguments;
+        $this->strict = $strict;
     }
 
     /**
@@ -41,7 +44,7 @@ class InArrayToken implements TokenInterface
             return false;
         }
 
-        if (in_array($argument, $this->token)) {
+        if (\in_array($argument, $this->token, $this->strict)) {
             return 8;
         }
 
