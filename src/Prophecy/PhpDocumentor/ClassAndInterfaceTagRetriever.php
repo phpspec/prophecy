@@ -12,6 +12,7 @@
 namespace Prophecy\PhpDocumentor;
 
 use phpDocumentor\Reflection\DocBlock\Tag\MethodTag as LegacyMethodTag;
+use phpDocumentor\Reflection\DocBlock\Tags\InvalidTag;
 use phpDocumentor\Reflection\DocBlock\Tags\Method;
 
 /**
@@ -40,7 +41,7 @@ final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
     /**
      * @param \ReflectionClass $reflectionClass
      *
-     * @return LegacyMethodTag[]|Method[]
+     * @return LegacyMethodTag[]|Method[]|InvalidTag[]
      */
     public function getTagList(\ReflectionClass $reflectionClass)
     {
@@ -53,7 +54,7 @@ final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
     /**
      * @param \ReflectionClass $reflectionClass
      *
-     * @return LegacyMethodTag[]|Method[]
+     * @return LegacyMethodTag[]|Method[]|InvalidTag[]
      */
     private function getInterfacesTagList(\ReflectionClass $reflectionClass)
     {

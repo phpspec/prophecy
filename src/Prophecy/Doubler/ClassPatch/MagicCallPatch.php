@@ -11,6 +11,8 @@
 
 namespace Prophecy\Doubler\ClassPatch;
 
+use phpDocumentor\Reflection\DocBlock\Tag\Method as LegacyMethod;
+use phpDocumentor\Reflection\DocBlock\Tags\Method;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 use Prophecy\PhpDocumentor\ClassAndInterfaceTagRetriever;
@@ -63,7 +65,9 @@ class MagicCallPatch implements ClassPatchInterface
                 $tagList = $this->tagRetriever->getTagList($reflectionClass);
 
                 foreach ($tagList as $tag) {
-                    $methodName = $tag->getMethodName();
+                    $methodName = ($tag instanceof Method || $tag instanceof LegacyMethod)
+                        ? $tag->getMethodName()
+                        : null;
 
                     if (empty($methodName)) {
                         continue;
@@ -91,4 +95,3 @@ class MagicCallPatch implements ClassPatchInterface
         return 50;
     }
 }
-
