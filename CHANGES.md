@@ -1,7 +1,12 @@
+1.10.3 / 2020/03/05
+===================
+
+* [fixed] removed fatal error when phpdocumentor/reflection-docblock 5 parses an invalid `@method` tag (@stof)
+
 1.10.2 / 2020/01/20
 ===================
 
-* [added] support for new versions of (@sebastianbergmann)
+* [added] support for new versions of `sebastian/comparator` and `sebastian/recursion-context` (@sebastianbergmann)
 
 1.10.1 / 2019/12/22
 ===================
@@ -14,7 +19,7 @@
 * [added] shouldHaveBeenCalled evaluation happens later so un-stubbed calls don't throw (@elvetemedve)
 * [added] methods can now be doubled case-insensitively to match PHP semantics (@michalbundyra)
 * [fixed] reduced memory usage by optimising CachedDoubler (@DonCallisto)
-* [fixed] removed fatal error nesting level when comparing large objects (@scroach) 
+* [fixed] removed fatal error nesting level when comparing large objects (@scroach)
 
 1.9.0 / 2019/10/03
 ==================
