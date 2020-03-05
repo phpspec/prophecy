@@ -101,8 +101,6 @@ class MagicalApi
 }
 
 /**
- * @method void invalidMethodDefinition
- * @method void
  * @method
  */
 class MagicalApiInvalidMethodDefinition
