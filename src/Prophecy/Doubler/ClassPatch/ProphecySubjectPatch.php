@@ -65,10 +65,17 @@ class ProphecySubjectPatch implements ClassPatchInterface
         $prophecyArgument = new ArgumentNode('prophecy');
         $prophecyArgument->setTypeHint('Prophecy\Prophecy\ProphecyInterface');
         $prophecySetter->addArgument($prophecyArgument);
-        $prophecySetter->setCode('$this->objectProphecyClosure = function () use ($prophecy) { return $prophecy; };');
+        $prophecySetter->setCode(<<<PHP
+if (null === \$this->objectProphecyClosure) {
+    \$this->objectProphecyClosure = static function () use (\$prophecy) {
+        return \$prophecy;
+    };
+}
+PHP
+    );
 
         $prophecyGetter = new MethodNode('getProphecy');
-        $prophecyGetter->setCode('return call_user_func($this->objectProphecyClosure);');
+        $prophecyGetter->setCode('return \call_user_func($this->objectProphecyClosure);');
 
         if ($node->hasMethod('__call')) {
             $__call = $node->getMethod('__call');

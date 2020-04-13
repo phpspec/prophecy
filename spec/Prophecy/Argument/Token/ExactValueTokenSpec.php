@@ -41,6 +41,14 @@ class ExactValueTokenSpec extends ObjectBehavior
         $this->scoreArgument($value2)->shouldReturn(10);
     }
 
+    function it_scores_10_if_value_is_an_double_object_and_equal_to_argument(\stdClass $value)
+    {
+        $value2 = clone $value->getWrappedObject();
+
+        $this->beConstructedWith($value);
+        $this->scoreArgument($value2)->shouldReturn(10);
+    }
+
     function it_does_not_scores_if_value_is_not_equal_to_argument()
     {
         $this->scoreArgument(50)->shouldReturn(false);
