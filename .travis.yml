@@ -33,6 +33,8 @@ matrix:
       dist: bionic
     - php: 7.4
       dist: bionic
+    - php: nightly
+      dist: bionic
   fast_finish: true
 
 install:
