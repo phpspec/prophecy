@@ -313,6 +313,31 @@ class MethodProphecy
     }
 
     /**
+     * Increments the call times prediction for the prophecy.
+     *
+     * If the prediction already exist, it adds the given count to the
+     * prediction's times count.
+     *
+     * If the prediction does not exist, or it is not a call times prediction,
+     * it adds a new call times prediction with the given count.
+     *
+     * @see \Prophecy\Prediction\CallTimesPrediction
+     *
+     * @param $count
+     *
+     * @return $this
+     */
+    public function shouldBeCalledAddTimes($count)
+    {
+        if (!$this->prediction || !$this->prediction instanceof Prediction\CallTimesPrediction) {
+            return $this->shouldBeCalledTimes($count);
+        }
+
+        $times = $this->prediction->getTimes();
+        return $this->should(new Prediction\CallTimesPrediction($times + $count));
+    }
+
+    /**
      * Sets call times prediction to the prophecy.
      *
      * @see \Prophecy\Prediction\CallTimesPrediction
