@@ -33,10 +33,13 @@ matrix:
       dist: bionic
     - php: 7.4
       dist: bionic
+    - php: nightly
+      env: PHP_VERSION_FORCE=7.4.0
   fast_finish: true
 
 install:
   - export COMPOSER_ROOT_VERSION=dev-master
+  - if [ "$PHP_VERSION_FORCE" != "" ]; then composer config platform.php $PHP_VERSION_FORCE; fi;
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" == "low" ]; then composer update --prefer-lowest; fi;
 
