@@ -76,7 +76,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method5->isStatic()->willReturn(false);
         $method5->getArguments()->willReturn(array());
         $method5->hasReturnType()->willReturn(true);
-        $method5->getReturnType()->willReturn(version_compare(PHP_VERSION, '7.2', '>=') ? 'object' : '\object');
+        $method5->getReturnType()->willReturn('object');
         $method5->hasNullableReturnType()->willReturn(false);
         $method5->getCode()->willReturn('return;');
 
@@ -120,8 +120,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
 
         $code = $this->generate('CustomClass', $class);
 
-        if (version_compare(PHP_VERSION, '7.2', '>=')) {
-            $expected = <<<'PHP'
+        $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
 public $name;
@@ -146,85 +145,7 @@ return;
 }
 }
 PHP;
-        } elseif (version_compare(PHP_VERSION, '7.1', '>=')) {
-            $expected = <<<'PHP'
-namespace  {
-class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
-public $name;
-private $email;
 
-public static function getName(array $fullname = NULL, \ReflectionClass $class, \object $instance): ?string {
-return $this->name;
-}
-protected  function getEmail(?string $default = 'ever.zet@gmail.com') {
-return $this->email;
-}
-public  function &getRefValue( $refValue): string {
-return $this->refValue;
-}
-public  function doSomething(): void {
-return;
-}
-public  function returnObject(): \object {
-return;
-}
-
-}
-}
-PHP;
-        } elseif (version_compare(PHP_VERSION, '7.0', '>=')) {
-            $expected = <<<'PHP'
-namespace  {
-class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
-public $name;
-private $email;
-
-public static function getName(array $fullname = NULL, \ReflectionClass $class, \object $instance): string {
-return $this->name;
-}
-protected  function getEmail(string $default = 'ever.zet@gmail.com') {
-return $this->email;
-}
-public  function &getRefValue( $refValue): string {
-return $this->refValue;
-}
-public  function doSomething() {
-return;
-}
-public  function returnObject(): \object {
-return;
-}
-
-}
-}
-PHP;
-        } else {
-            $expected = <<<'PHP'
-namespace  {
-class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
-public $name;
-private $email;
-
-public static function getName(array $fullname = NULL, \ReflectionClass $class, \object $instance) {
-return $this->name;
-}
-protected  function getEmail(\string $default = 'ever.zet@gmail.com') {
-return $this->email;
-}
-public  function &getRefValue( $refValue) {
-return $this->refValue;
-}
-public  function doSomething() {
-return;
-}
-public  function returnObject() {
-return;
-}
-
-}
-}
-PHP;
-        }
         $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
         $code->shouldBe($expected);
     }

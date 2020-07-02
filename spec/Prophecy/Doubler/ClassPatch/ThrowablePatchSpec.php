@@ -17,10 +17,6 @@ class ThrowablePatchSpec extends ObjectBehavior
 
     function it_does_not_support_class_that_does_not_implement_throwable(ClassNode $node)
     {
-        if (\PHP_VERSION_ID < 70000) {
-            throw new SkippingException('Throwable is not defined in PHP 5');
-        }
-
         $node->getInterfaces()->willReturn(array());
         $node->getParentClass()->willReturn('stdClass');
 
@@ -29,10 +25,6 @@ class ThrowablePatchSpec extends ObjectBehavior
 
     function it_supports_class_that_extends_not_throwable_class(ClassNode $node)
     {
-        if (\PHP_VERSION_ID < 70000) {
-            throw new SkippingException('Throwable is not defined in PHP 5');
-        }
-
         $node->getInterfaces()->willReturn(array('Throwable'));
         $node->getParentClass()->willReturn('stdClass');
 
@@ -41,10 +33,6 @@ class ThrowablePatchSpec extends ObjectBehavior
 
     function it_does_not_support_class_that_already_extends_a_throwable_class(ClassNode $node)
     {
-        if (\PHP_VERSION_ID < 70000) {
-            throw new SkippingException('Throwable is not defined in PHP 5');
-        }
-
         $node->getInterfaces()->willReturn(array('Throwable'));
         $node->getParentClass()->willReturn('InvalidArgumentException');
 
@@ -53,10 +41,6 @@ class ThrowablePatchSpec extends ObjectBehavior
 
     function it_supports_class_implementing_interface_that_extends_throwable(ClassNode $node)
     {
-        if (\PHP_VERSION_ID < 70000) {
-            throw new SkippingException('Throwable is not defined in PHP 5');
-        }
-
         $node->getInterfaces()->willReturn(array('Fixtures\Prophecy\ThrowableInterface'));
         $node->getParentClass()->willReturn('stdClass');
 
@@ -65,10 +49,6 @@ class ThrowablePatchSpec extends ObjectBehavior
 
     function it_sets_the_parent_class_to_exception(ClassNode $node)
     {
-        if (\PHP_VERSION_ID < 70000) {
-            throw new SkippingException('Throwable is not defined in PHP 5');
-        }
-
         $node->getParentClass()->willReturn('stdClass');
 
         $node->setParentClass('Exception')->shouldBeCalled();
@@ -87,10 +67,6 @@ class ThrowablePatchSpec extends ObjectBehavior
 
     function it_throws_error_when_trying_to_double_concrete_class_and_throwable_interface(ClassNode $node)
     {
-        if (\PHP_VERSION_ID < 70000) {
-            throw new SkippingException('Throwable is not defined in PHP 5');
-        }
-
         $node->getParentClass()->willReturn('ArrayObject');
 
         $this->shouldThrow('Prophecy\Exception\Doubler\ClassCreatorException')->duringApply($node);

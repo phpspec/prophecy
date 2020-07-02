@@ -143,8 +143,8 @@ class ClassMirror
             $node->setReturnsReference();
         }
 
-        if (version_compare(PHP_VERSION, '7.0', '>=') && $method->hasReturnType()) {
-            $returnType = PHP_VERSION_ID >= 70100 ? $method->getReturnType()->getName() : (string) $method->getReturnType();
+        if ($method->hasReturnType()) {
+            $returnType = $method->getReturnType()->getName();
             $returnTypeLower = strtolower($returnType);
 
             if ('self' === $returnTypeLower) {
@@ -156,7 +156,7 @@ class ClassMirror
 
             $node->setReturnType($returnType);
 
-            if (version_compare(PHP_VERSION, '7.1', '>=') && $method->getReturnType()->allowsNull()) {
+            if ($method->getReturnType()->allowsNull()) {
                 $node->setNullableReturnType(true);
             }
         }
@@ -177,7 +177,7 @@ class ClassMirror
 
         $node->setTypeHint($this->getTypeHint($parameter));
 
-        if ($this->isVariadic($parameter)) {
+        if ($parameter->isVariadic()) {
             $node->setAsVariadic();
         }
 
@@ -196,7 +196,7 @@ class ClassMirror
 
     private function hasDefaultValue(ReflectionParameter $parameter)
     {
-        if ($this->isVariadic($parameter)) {
+        if ($parameter->isVariadic()) {
             return false;
         }
 
@@ -226,20 +226,15 @@ class ClassMirror
             return 'array';
         }
 
-        if (version_compare(PHP_VERSION, '5.4', '>=') && true === $parameter->isCallable()) {
+        if (true === $parameter->isCallable()) {
             return 'callable';
         }
 
-        if (version_compare(PHP_VERSION, '7.0', '>=') && true === $parameter->hasType()) {
-            return PHP_VERSION_ID >= 70100 ? $parameter->getType()->getName() : (string) $parameter->getType();
+        if (true === $parameter->hasType()) {
+            return $parameter->getType()->getName();
         }
 
         return null;
-    }
-
-    private function isVariadic(ReflectionParameter $parameter)
-    {
-        return PHP_VERSION_ID >= 50600 && $parameter->isVariadic();
     }
 
     private function isNullable(ReflectionParameter $parameter)
