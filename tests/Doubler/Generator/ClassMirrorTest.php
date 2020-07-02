@@ -219,10 +219,11 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @expectedException Prophecy\Exception\Doubler\ClassMirrorException
      */
     public function it_throws_an_exception_if_class_is_final()
     {
+        $this->expectException(\Prophecy\Exception\Doubler\ClassMirrorException::class);
+
         $class = new \ReflectionClass('Fixtures\Prophecy\FinalClass');
 
         $mirror = new ClassMirror();
@@ -261,10 +262,11 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @expectedException Prophecy\Exception\InvalidArgumentException
      */
     public function it_throws_an_exception_if_interface_provided_instead_of_class()
     {
+        $this->expectException(\Prophecy\Exception\InvalidArgumentException::class);
+
         $class = new \ReflectionClass('Fixtures\Prophecy\EmptyInterface');
 
         $mirror = new ClassMirror();
@@ -352,10 +354,11 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
      */
     public function it_throws_an_exception_if_class_provided_in_interfaces_list()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $class = new \ReflectionClass('Fixtures\Prophecy\EmptyClass');
 
         $mirror = new ClassMirror();
@@ -365,10 +368,11 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
      */
     public function it_throws_an_exception_if_not_reflection_provided_as_interface()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $mirror = new ClassMirror();
 
         $mirror->reflect(null, array(null));
