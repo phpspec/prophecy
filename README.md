@@ -44,7 +44,7 @@ class UserTest extends PHPUnit\Framework\TestCase
 
 ### Prerequisites
 
-Prophecy requires PHP 7.3.0 or greater.
+Prophecy requires PHP 7.2.0 or greater.
 
 ### Setup through composer
 

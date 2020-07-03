@@ -12,11 +12,13 @@ branches:
 
 matrix:
   include:
-    - php: 7.3
-      dist: bionic
-    - php: 7.3
+    - php: 7.2
       dist: bionic
       env: DEPENDENCIES='low'
+    - php: 7.2
+      dist: bionic
+    - php: 7.3
+      dist: bionic
     - php: 7.4
       dist: bionic
   fast_finish: true

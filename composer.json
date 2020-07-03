@@ -18,16 +18,16 @@
     ],
 
     "require": {
-        "php":                               "^7.3",
+        "php":                               "^7.2",
         "phpdocumentor/reflection-docblock": "^5.0",
-        "sebastian/comparator":              "^4.0",
+        "sebastian/comparator":              "^3.0 || ^4.0",
         "doctrine/instantiator":             "^1.2",
-        "sebastian/recursion-context":       "^4.0"
+        "sebastian/recursion-context":       "^3.0 || ^4.0"
     },
 
     "require-dev": {
         "phpspec/phpspec": "^6.0",
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^8.0"
     },
 
     "autoload": {
