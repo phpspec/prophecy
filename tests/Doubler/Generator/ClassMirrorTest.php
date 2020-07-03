@@ -4,6 +4,8 @@ namespace Tests\Prophecy\Doubler\Generator;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\Generator\ClassMirror;
+use Prophecy\Exception\Doubler\ClassMirrorException;
+use Prophecy\Exception\InvalidArgumentException;
 
 class ClassMirrorTest extends TestCase
 {
@@ -222,11 +224,11 @@ class ClassMirrorTest extends TestCase
      */
     public function it_throws_an_exception_if_class_is_final()
     {
-        $this->expectException(\Prophecy\Exception\Doubler\ClassMirrorException::class);
-
         $class = new \ReflectionClass('Fixtures\Prophecy\FinalClass');
 
         $mirror = new ClassMirror();
+
+        $this->expectException(ClassMirrorException::class);
 
         $mirror->reflect($class, array());
     }
@@ -265,11 +267,11 @@ class ClassMirrorTest extends TestCase
      */
     public function it_throws_an_exception_if_interface_provided_instead_of_class()
     {
-        $this->expectException(\Prophecy\Exception\InvalidArgumentException::class);
-
         $class = new \ReflectionClass('Fixtures\Prophecy\EmptyInterface');
 
         $mirror = new ClassMirror();
+
+        $this->expectException(InvalidArgumentException::class);
 
         $mirror->reflect($class, array());
     }
@@ -357,11 +359,11 @@ class ClassMirrorTest extends TestCase
      */
     public function it_throws_an_exception_if_class_provided_in_interfaces_list()
     {
-        $this->expectException(\InvalidArgumentException::class);
-
         $class = new \ReflectionClass('Fixtures\Prophecy\EmptyClass');
 
         $mirror = new ClassMirror();
+
+        $this->expectException(\InvalidArgumentException::class);
 
         $mirror->reflect(null, array($class));
     }
@@ -371,9 +373,9 @@ class ClassMirrorTest extends TestCase
      */
     public function it_throws_an_exception_if_not_reflection_provided_as_interface()
     {
-        $this->expectException(\InvalidArgumentException::class);
-
         $mirror = new ClassMirror();
+
+        $this->expectException(\InvalidArgumentException::class);
 
         $mirror->reflect(null, array(null));
     }

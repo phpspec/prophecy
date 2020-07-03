@@ -63,7 +63,6 @@ class CallCenter
     {
         // For efficiency exclude 'args' from the generated backtrace
         // Limit backtrace to last 3 calls as we don't use the rest
-        // Limit argument was introduced in PHP 5.4.0
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
 
         $file = $line = null;
