@@ -92,7 +92,7 @@ class ArgumentNode
 
     public function isNullable()
     {
-        return $this->isNullable;
+        return $this->isNullable && $this->typeHint !== 'mixed';
     }
 
     public function setAsNullable($isNullable = true)

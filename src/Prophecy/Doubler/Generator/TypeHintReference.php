@@ -22,6 +22,9 @@ final class TypeHintReference
             case 'object':
                 return true;
 
+            case 'mixed':
+                return PHP_VERSION_ID >= 80000;
+
             default:
                 return false;
         }
