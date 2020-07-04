@@ -38,14 +38,13 @@ class ClassMirror
     /**
      * Reflects provided arguments into class node.
      *
-     * @param ReflectionClass   $class
+     * @param ReflectionClass|null $class
      * @param ReflectionClass[] $interfaces
      *
      * @return Node\ClassNode
      *
-     * @throws \Prophecy\Exception\InvalidArgumentException
      */
-    public function reflect(ReflectionClass $class = null, array $interfaces)
+    public function reflect(?ReflectionClass $class, array $interfaces)
     {
         $node = new Node\ClassNode;
 
