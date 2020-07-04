@@ -15,6 +15,7 @@ use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 
 /**
@@ -236,7 +237,15 @@ class ClassMirror
     private function getParameterClassName(ReflectionParameter $parameter)
     {
         try {
-            return $parameter->getClass() ? $parameter->getClass()->getName() : null;
+            $type = $parameter->getType();
+            if (!$type) {
+                return null;
+            }
+            if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
+                return $type->getName();
+            }
+
+            return null;
         } catch (\ReflectionException $e) {
             preg_match('/\[\s\<\w+?>\s([\w,\\\]+)/s', $parameter, $matches);
 
