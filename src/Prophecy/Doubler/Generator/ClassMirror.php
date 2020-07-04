@@ -221,14 +221,6 @@ class ClassMirror
             return $className;
         }
 
-        if (true === $parameter->isArray()) {
-            return 'array';
-        }
-
-        if (true === $parameter->isCallable()) {
-            return 'callable';
-        }
-
         if (true === $parameter->hasType()) {
             return $parameter->getType()->getName();
         }
