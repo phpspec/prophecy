@@ -21,12 +21,16 @@ matrix:
       dist: bionic
     - php: 7.4
       dist: bionic
+    - php: nightly
+      env: COMPOSER_FLAGS='--ignore-platform-reqs'
   fast_finish: true
+  allow_failures:
+    - php: nightly
 
 install:
   - export COMPOSER_ROOT_VERSION=dev-master
-  - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
-  - if [ "$DEPENDENCIES" == "low" ]; then composer update --prefer-lowest; fi;
+  - if [ "$DEPENDENCIES" != "low" ]; then composer update $COMPOSER_FLAGS; fi;
+  - if [ "$DEPENDENCIES" == "low" ]; then composer update $COMPOSER_FLAGS --prefer-lowest; fi;
 
 script:
   - vendor/bin/phpspec run -fpretty -v
