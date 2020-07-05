@@ -74,10 +74,6 @@ class MethodProphecySpec extends ObjectBehavior
         ObjectProphecy $objectProphecy,
         $subject
     ) {
-        if (PHP_VERSION_ID < 70100) {
-            throw new SkippingException('Return void type hint language feature only introduced in >=7.1');
-        }
-
         $subject->beADoubleOf('spec\Prophecy\Prophecy\ClassWithVoidTypeHintedMethods');
         $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
         $objectProphecy->reveal()->willReturn($subject);
@@ -90,10 +86,6 @@ class MethodProphecySpec extends ObjectBehavior
         ObjectProphecy $objectProphecy,
         $subject
     ) {
-        if (PHP_VERSION_ID < 70100) {
-            throw new SkippingException('Return void type hint language feature only introduced in >=7.1');
-        }
-
         $subject->beADoubleOf('spec\Prophecy\Prophecy\ClassWithVoidTypeHintedMethods');
         $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
         $objectProphecy->reveal()->willReturn($subject);
@@ -106,10 +98,6 @@ class MethodProphecySpec extends ObjectBehavior
         ObjectProphecy $objectProphecy,
         $subject
     ) {
-        if (PHP_VERSION_ID < 70100) {
-            throw new SkippingException('Return void type hint language feature only introduced in >=7.1');
-        }
-
         $subject->beADoubleOf('spec\Prophecy\Prophecy\ClassWithVoidTypeHintedMethods');
         $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
         $objectProphecy->reveal()->willReturn($subject);
@@ -145,10 +133,6 @@ class MethodProphecySpec extends ObjectBehavior
 
     function it_adds_CallbackPromise_during_willYield_call(ObjectProphecy $objectProphecy)
     {
-        if (PHP_VERSION_ID < 50500) {
-            throw new SkippingException('Yield language feature was introduced in >=5.5');
-        }
-
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
         $this->willYield(array('foo', 'bar'));
@@ -157,10 +141,6 @@ class MethodProphecySpec extends ObjectBehavior
 
     function it_yields_elements_configured_in_willYield(ObjectProphecy $objectProphecy)
     {
-        if (PHP_VERSION_ID < 70000) {
-            throw new SkippingException('Yield language feature was introduced in >=5.5 but shouldYield matcher only available in >=7.0');
-        }
-
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
         $this->willYield(array('foo', 'bar'));
@@ -169,10 +149,6 @@ class MethodProphecySpec extends ObjectBehavior
 
     function it_yields_key_value_pairs_configured_in_willYield(ObjectProphecy $objectProphecy)
     {
-        if (PHP_VERSION_ID < 70000) {
-            throw new SkippingException('Yield language feature was introduced in >=5.5 but shouldYield matcher only available in >=7.0');
-        }
-
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
 
         $this->willYield(array(10 => 'foo', 11 => 'bar'));
@@ -455,7 +431,11 @@ class ClassWithFinalMethod
     final public function finalMethod() {}
 }
 
-// Return void type hint language feature only introduced in >=7.1
-if (PHP_VERSION_ID >= 70100) {
-    require_once __DIR__ . DIRECTORY_SEPARATOR . 'ClassWithVoidTypeHintedMethods.php';
+class ClassWithVoidTypeHintedMethods
+{
+    public function getVoid(): void
+    {
+    }
 }
+
+

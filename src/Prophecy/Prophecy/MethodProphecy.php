@@ -70,8 +70,8 @@ class MethodProphecy
             $this->withArguments($arguments);
         }
 
-        if (version_compare(PHP_VERSION, '7.0', '>=') && true === $reflectedMethod->hasReturnType()) {
-            $type = PHP_VERSION_ID >= 70100 ? $reflectedMethod->getReturnType()->getName() : (string) $reflectedMethod->getReturnType();
+        if (true === $reflectedMethod->hasReturnType()) {
+            $type = $reflectedMethod->getReturnType()->getName();
 
             if ('void' === $type) {
                 $this->voidReturnType = true;
@@ -92,10 +92,7 @@ class MethodProphecy
 
                     case 'Traversable':
                     case 'Generator':
-                        // Remove eval() when minimum version >=5.5
-                        /** @var callable $generator */
-                        $generator = eval('return function () { yield; };');
-                        return $generator();
+                        return (function () { yield; })();
 
                     default:
                         $prophet = new Prophet;
@@ -203,13 +200,11 @@ class MethodProphecy
             ));
         }
 
-        // Remove eval() when minimum version >=5.5
-        /** @var callable $generator */
-        $generator = eval('return function() use ($items) {
+        $generator =  function() use ($items) {
             foreach ($items as $key => $value) {
                 yield $key => $value;
             }
-        };');
+        };
 
         return $this->will($generator);
     }
