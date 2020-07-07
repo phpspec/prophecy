@@ -1,6 +1,6 @@
 {
     "name":         "phpspec/prophecy",
-    "description":  "Highly opinionated mocking framework for PHP 5.3+",
+    "description":  "Highly opinionated mocking framework for PHP",
     "keywords":     ["Mock", "Stub", "Dummy", "Double", "Fake", "Spy"],
     "homepage":     "https://github.com/phpspec/prophecy",
     "type":         "library",
@@ -18,7 +18,7 @@
     ],
 
     "require": {
-        "php":                               "^7.2",
+        "php":                               ">=7.2",
         "phpdocumentor/reflection-docblock": "^5.0",
         "sebastian/comparator":              "^3.0 || ^4.0",
         "doctrine/instantiator":             "^1.2",
