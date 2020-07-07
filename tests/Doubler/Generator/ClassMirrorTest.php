@@ -458,6 +458,16 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
+     * @doesNotPerformAssertions
+     */
+    function it_doesnt_fail_to_mock_self_referencing_interface()
+    {
+        $class = $this->prophesize('Fixtures\Prophecy\SelfReferencing');
+        $class->reveal();
+    }
+
+    /**
+     * @test
      */
     function it_changes_argument_names_if_they_are_varying()
     {
