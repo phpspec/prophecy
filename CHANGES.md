@@ -1,3 +1,8 @@
+Unreleased
+==========
+
+* [changed] dropped support for PHP versions earlier than 7.3
+
 1.10.3 / 2020/03/05
 ===================
 
