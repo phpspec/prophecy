@@ -15,6 +15,7 @@ use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 
 /**
@@ -38,14 +39,13 @@ class ClassMirror
     /**
      * Reflects provided arguments into class node.
      *
-     * @param ReflectionClass   $class
+     * @param ReflectionClass|null $class
      * @param ReflectionClass[] $interfaces
      *
      * @return Node\ClassNode
      *
-     * @throws \Prophecy\Exception\InvalidArgumentException
      */
-    public function reflect(ReflectionClass $class = null, array $interfaces)
+    public function reflect(?ReflectionClass $class, array $interfaces)
     {
         $node = new Node\ClassNode;
 
@@ -222,14 +222,6 @@ class ClassMirror
             return $className;
         }
 
-        if (true === $parameter->isArray()) {
-            return 'array';
-        }
-
-        if (true === $parameter->isCallable()) {
-            return 'callable';
-        }
-
         if (true === $parameter->hasType()) {
             return $parameter->getType()->getName();
         }
@@ -244,12 +236,14 @@ class ClassMirror
 
     private function getParameterClassName(ReflectionParameter $parameter)
     {
-        try {
-            return $parameter->getClass() ? $parameter->getClass()->getName() : null;
-        } catch (\ReflectionException $e) {
-            preg_match('/\[\s\<\w+?>\s([\w,\\\]+)/s', $parameter, $matches);
-
-            return isset($matches[1]) ? $matches[1] : null;
+        $type = $parameter->getType();
+        if (!$type) {
+            return null;
         }
+        if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
+            return $type->getName();
+        }
+
+        return null;
     }
 }
