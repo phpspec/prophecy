@@ -1,7 +1,7 @@
 Unreleased
 ==========
 
-* [changed] dropped support for PHP versions earlier than 7.3 (@ciaranmcnulty)
+* [changed] dropped support for PHP versions earlier than 7.2 (@ciaranmcnulty)
 * [fixed] removed use of Reflection APIs deprecated in PHP 8.0 (@Ayesh)
 
 1.10.3 / 2020/03/05
