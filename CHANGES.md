@@ -1,5 +1,5 @@
-Unreleased
-==========
+1.11.0 / 2020/07/07
+===================
 
 * [changed] dropped support for PHP versions earlier than 7.2 (@ciaranmcnulty)
 * [fixed] removed use of Reflection APIs deprecated in PHP 8.0 (@Ayesh)
