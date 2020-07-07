@@ -236,20 +236,14 @@ class ClassMirror
 
     private function getParameterClassName(ReflectionParameter $parameter)
     {
-        try {
-            $type = $parameter->getType();
-            if (!$type) {
-                return null;
-            }
-            if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
-                return $type->getName();
-            }
-
+        $type = $parameter->getType();
+        if (!$type) {
             return null;
-        } catch (\ReflectionException $e) {
-            preg_match('/\[\s\<\w+?>\s([\w,\\\]+)/s', $parameter, $matches);
-
-            return isset($matches[1]) ? $matches[1] : null;
         }
+        if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
+            return $type->getName();
+        }
+
+        return null;
     }
 }
