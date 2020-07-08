@@ -1,3 +1,9 @@
+1.11.1 / 2020/07/08
+===================
+
+* [fixed] can't double objects with `self` type hints (@greg0ire)
+* [fixed] cloned doubes were not loosely comparable (@tkulka)
+
 1.11.0 / 2020/07/07
 ===================
 
