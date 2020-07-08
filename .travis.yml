@@ -23,12 +23,15 @@ matrix:
       dist: bionic
     - php: nightly
       env: COMPOSER_FLAGS='--ignore-platform-reqs'
+    - php: nightly
+      env: COMPOSER_FLAGS='--ignore-platform-reqs' COMPOSER_FORCE='phpdocumentor/reflection-docblock ^5.0@dev phpunit/phpunit ^9.0@dev'
   fast_finish: true
   allow_failures:
     - php: nightly
 
 install:
   - export COMPOSER_ROOT_VERSION=dev-master
+  - if [ -n "$COMPOSER_FORCE" ]; then composer require $COMPOSER_FORCE --no-update ; fi;
   - if [ "$DEPENDENCIES" != "low" ]; then composer update $COMPOSER_FLAGS; fi;
   - if [ "$DEPENDENCIES" == "low" ]; then composer update $COMPOSER_FLAGS --prefer-lowest; fi;
 
