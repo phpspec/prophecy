@@ -241,6 +241,10 @@ class ClassMirror
             return null;
         }
         if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
+            if ($type->getName() === 'self') {
+                return $parameter->getDeclaringClass()->getName();
+            }
+
             return $type->getName();
         }
 
