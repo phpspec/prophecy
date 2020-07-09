@@ -222,7 +222,7 @@ class ClassMirror
             return $className;
         }
 
-        if (true === $parameter->hasType()) {
+        if (true === $parameter->hasType() && $parameter->getType() instanceof \ReflectionNamedType) {
             return $parameter->getType()->getName();
         }
 
