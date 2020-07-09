@@ -386,6 +386,10 @@ class ClassMirrorTest extends TestCase
      */
     public function it_doesnt_use_scalar_typehints()
     {
+        if (PHP_VERSION_ID >= 80000) {
+            $this->markTestSkipped('Internal types have scalar hints in PHP 8');
+        }
+
         $mirror = new ClassMirror();
 
         $classNode = $mirror->reflect(new \ReflectionClass('ReflectionMethod'), array());
