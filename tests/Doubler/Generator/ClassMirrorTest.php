@@ -99,16 +99,17 @@ class ClassMirrorTest extends TestCase
 
         $this->assertCount(3, $argNodes);
 
+
         $this->assertEquals('arg_1', $argNodes[0]->getName());
-        $this->assertEquals('array', $argNodes[0]->getTypeHint());
-        $this->assertTrue($argNodes[0]->isOptional());
-        $this->assertEquals(array(), $argNodes[0]->getDefault());
-        $this->assertFalse($argNodes[0]->isPassedByReference());
-        $this->assertFalse($argNodes[0]->isVariadic());
+        $this->assertEquals('ArrayAccess', $argNodes[0]->getTypeHint());
+        $this->assertFalse($argNodes[0]->isOptional());
 
         $this->assertEquals('arg_2', $argNodes[1]->getName());
-        $this->assertEquals('ArrayAccess', $argNodes[1]->getTypeHint());
-        $this->assertFalse($argNodes[1]->isOptional());
+        $this->assertEquals('array', $argNodes[1]->getTypeHint());
+        $this->assertTrue($argNodes[1]->isOptional());
+        $this->assertEquals(array(), $argNodes[1]->getDefault());
+        $this->assertFalse($argNodes[1]->isPassedByReference());
+        $this->assertFalse($argNodes[1]->isVariadic());
 
         $this->assertEquals('arg_3', $argNodes[2]->getName());
         $this->assertEquals('ArrayAccess', $argNodes[2]->getTypeHint());
@@ -385,6 +386,10 @@ class ClassMirrorTest extends TestCase
      */
     public function it_doesnt_use_scalar_typehints()
     {
+        if (PHP_VERSION_ID >= 80000) {
+            $this->markTestSkipped('Internal types have scalar hints in PHP 8');
+        }
+
         $mirror = new ClassMirror();
 
         $classNode = $mirror->reflect(new \ReflectionClass('ReflectionMethod'), array());
