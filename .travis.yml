@@ -35,6 +35,9 @@ install:
   - if [ "$DEPENDENCIES" != "low" ]; then composer update $COMPOSER_FLAGS; fi;
   - if [ "$DEPENDENCIES" == "low" ]; then composer update $COMPOSER_FLAGS --prefer-lowest; fi;
 
+before_install:
+  - if [ $TRAVIS_PHP_VERSION = "nightly" ]; then composer config platform.php 7.4.99; fi;
+
 script:
   - vendor/bin/phpspec run -fpretty -v
   - vendor/bin/phpunit
