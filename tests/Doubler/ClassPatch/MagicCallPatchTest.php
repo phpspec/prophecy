@@ -13,6 +13,10 @@ class MagicCallPatchTest extends TestCase
      */
     public function it_supports_classes_with_invalid_tags()
     {
+        if (PHP_VERSION_ID >= 80000) {
+            $this->markTestSkipped('Internal types have scalar hints in PHP 8');
+        }
+
         $class = new \ReflectionClass('Fixtures\Prophecy\WithPhpdocClass');
 
         $mirror = new ClassMirror();

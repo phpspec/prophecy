@@ -503,6 +503,7 @@ class ClassMirrorTest extends TestCase
         $parameter->getDefaultValue()->willReturn(null);
         $parameter->isPassedByReference()->willReturn(false);
         $parameter->allowsNull()->willReturn(true);
+        $parameter->getClass()->willReturn($class);
         $parameter->getType()->willReturn(null);
         $parameter->hasType()->willReturn(false);
         if (version_compare(PHP_VERSION, '5.6', '>=')) {
