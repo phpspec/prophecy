@@ -29,6 +29,9 @@ matrix:
   allow_failures:
     - php: nightly
 
+before_install:
+  - if [[ $TRAVIS_PHP_VERSION == 'nightly' ]]; then composer config platform.php 7.4.99; fi;
+
 install:
   - export COMPOSER_ROOT_VERSION=dev-master
   - if [ -n "$COMPOSER_FORCE" ]; then composer require $COMPOSER_FORCE --no-update ; fi;
