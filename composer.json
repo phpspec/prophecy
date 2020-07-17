@@ -19,7 +19,7 @@
 
     "require": {
         "php":                               "^7.2 || ^8.0",
-        "phpdocumentor/reflection-docblock": "^5.0",
+        "phpdocumentor/reflection-docblock": "^5.1",
         "sebastian/comparator":              "^3.0 || ^4.0",
         "doctrine/instantiator":             "^1.2",
         "sebastian/recursion-context":       "^3.0 || ^4.0"
@@ -45,6 +45,11 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.11.x-dev"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.99"
         }
     }
 }
