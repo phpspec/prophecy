@@ -19,7 +19,7 @@
 
     "require": {
         "php":                               "^7.2 || ^8.0",
-        "phpdocumentor/reflection-docblock": "^5.1",
+        "phpdocumentor/reflection-docblock": "5.x-dev",
         "sebastian/comparator":              "^3.0 || ^4.0",
         "doctrine/instantiator":             "^1.2",
         "sebastian/recursion-context":       "^3.0 || ^4.0"
