@@ -24,7 +24,7 @@ matrix:
     - php: nightly
       env: COMPOSER_FLAGS='--ignore-platform-reqs'
     - php: nightly
-      env: COMPOSER_FLAGS='--ignore-platform-reqs' COMPOSER_FORCE='phpdocumentor/reflection-docblock ^5.0@dev phpunit/phpunit ^9.0@dev'
+      env: COMPOSER_FLAGS='--ignore-platform-reqs' COMPOSER_FORCE='phpunit/phpunit ^9.0@dev'
   fast_finish: true
   allow_failures:
     - php: nightly
