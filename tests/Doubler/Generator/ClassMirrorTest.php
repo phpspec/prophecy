@@ -529,7 +529,20 @@ class ClassMirrorTest extends TestCase
             $this->markTestSkipped('Union types are not supported in this PHP version');
         }
 
-        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionTypes'), []);
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionReturnTypes'), []);
+        $methodNode = $classNode->getMethods()['doSomething'];
+
+        $this->assertSame('bool|\\stdClass', $methodNode->getArguments()[0]->getTypeHint());
+    }
+
+    /** @test */
+    public function it_can_double_a_class_with_union_argument_types()
+    {
+        if (PHP_VERSION_ID < 80000) {
+            $this->markTestSkipped('Union types are not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionArgumentTypes'), []);
         $methodNode = $classNode->getMethods()['doSomething'];
 
         $this->assertSame('bool|\\stdClass', $methodNode->getArguments()[0]->getTypeHint());
