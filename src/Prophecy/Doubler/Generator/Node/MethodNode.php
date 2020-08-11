@@ -26,18 +26,14 @@ class MethodNode
     private $visibility = 'public';
     private $static = false;
     private $returnsReference = false;
-    private $returnType;
-    private $nullableReturnType = false;
+
+    /** @var ReturnTypeNode */
+    private $returnTypeNode;
 
     /**
      * @var ArgumentNode[]
      */
     private $arguments = array();
-
-    /**
-     * @var TypeHintReference
-     */
-    private $typeHintReference;
 
     /**
      * @param string $name
@@ -47,7 +43,6 @@ class MethodNode
     {
         $this->name = $name;
         $this->code = $code;
-        $this->typeHintReference = $typeHintReference ?: new TypeHintReference();
     }
 
     public function getVisibility()
@@ -109,53 +104,59 @@ class MethodNode
         return $this->arguments;
     }
 
+    /**
+     * @deprecated
+     * @return bool
+     */
     public function hasReturnType()
     {
-        return null !== $this->returnType;
+        return $this->returnTypeNode && $this->returnTypeNode->getNonNullTypes();
     }
 
     /**
+     * @deprecated use setReturnTypeNode instead
      * @param string $type
      */
     public function setReturnType($type = null)
     {
-        if ($type === '' || $type === null) {
-            $this->returnType = null;
-            return;
-        }
-        $typeMap = array(
-            'double' => 'float',
-            'real' => 'float',
-            'boolean' => 'bool',
-            'integer' => 'int',
-        );
-        if (isset($typeMap[$type])) {
-            $type = $typeMap[$type];
-        }
-        $this->returnType = $this->typeHintReference->isBuiltInReturnTypeHint($type) ?
-            $type :
-            '\\' . ltrim($type, '\\');
-    }
-
-    public function getReturnType()
-    {
-        return $this->returnType;
+        $this->returnTypeNode = ($type === '' || $type === null) ? new ReturnTypeNode() : new ReturnTypeNode($type);
     }
 
     /**
+     * @deprecated
      * @param bool $bool
      */
     public function setNullableReturnType($bool = true)
     {
-        $this->nullableReturnType = (bool) $bool;
+        if ($bool) {
+            $this->returnTypeNode = new ReturnTypeNode(...array_merge($this->returnTypeNode->getTypes(), ['null']));
+        }
+        else {
+            $this->returnTypeNode = new ReturnTypeNode(...$this->returnTypeNode->getNonNullTypes());
+        }
     }
 
     /**
+     * @deprecated
+     * @return string|null
+     */
+    public function getReturnType()
+    {
+        if ($this->returnTypeNode && $types = $this->returnTypeNode->getNonNullTypes())
+        {
+            return $types[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * @deprecated
      * @return bool
      */
     public function hasNullableReturnType()
     {
-        return $this->nullableReturnType;
+        return $this->returnTypeNode->canUseNullShorthand();
     }
 
     /**

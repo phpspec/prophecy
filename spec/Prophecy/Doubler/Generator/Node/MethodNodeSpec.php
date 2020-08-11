@@ -55,6 +55,24 @@ class MethodNodeSpec extends ObjectBehavior
         $this->shouldThrow('InvalidArgumentException')->duringSetVisibility('stealth');
     }
 
+    function it_can_set_nullable_type_using_deprecated_method()
+    {
+        $this->setReturnType('int');
+
+        $this->setNullableReturnType();
+
+        $this->hasNullableReturnType()->shouldBe(true);
+    }
+
+    function it_can_unset_nullable_type_using_deprecated_method()
+    {
+        $this->setReturnType('int');
+
+        $this->setNullableReturnType(false);
+
+        $this->hasNullableReturnType()->shouldBe(false);
+    }
+
     function it_lowercases_visibility_before_setting_it()
     {
         $this->setVisibility('Public');
