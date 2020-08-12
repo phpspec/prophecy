@@ -45,7 +45,7 @@ final class ReturnTypeNode
             case 'null':
                 return $type;
             case 'mixed':
-                return PHP_VERSION_ID < 80000 ? $this->prefixWithNsSeparator($type) : $type;
+                return \PHP_VERSION_ID < 80000 ? $this->prefixWithNsSeparator($type) : $type;
 
             default:
                 return $this->prefixWithNsSeparator($type);
@@ -62,7 +62,7 @@ final class ReturnTypeNode
             throw new DoubleException('void cannot be part of a union');
         }
 
-        if (PHP_VERSION_ID >= 80000 && isset($this->types['mixed']) && count($this->types) !== 1) {
+        if (\PHP_VERSION_ID >= 80000 && isset($this->types['mixed']) && count($this->types) !== 1) {
             throw new DoubleException('mixed cannot be part of a union');
         }
     }
