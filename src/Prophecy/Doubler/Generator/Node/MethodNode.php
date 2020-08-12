@@ -106,7 +106,7 @@ class MethodNode
     }
 
     /**
-     * @deprecated
+     * @deprecated use getReturnTypeNode instead
      * @return bool
      */
     public function hasReturnType()
@@ -129,13 +129,13 @@ class MethodNode
     }
 
     /**
-     * @deprecated
+     * @deprecated use setReturnTypeNode instead
      * @param bool $bool
      */
     public function setNullableReturnType($bool = true)
     {
         if ($bool) {
-            $this->returnTypeNode = new ReturnTypeNode(...array_merge($this->returnTypeNode->getTypes(), ['null']));
+            $this->returnTypeNode = new ReturnTypeNode('null', ...$this->returnTypeNode->getTypes());
         }
         else {
             $this->returnTypeNode = new ReturnTypeNode(...$this->returnTypeNode->getNonNullTypes());
@@ -143,7 +143,7 @@ class MethodNode
     }
 
     /**
-     * @deprecated
+     * @deprecated use getReturnTypeNode instead
      * @return string|null
      */
     public function getReturnType()
@@ -162,7 +162,7 @@ class MethodNode
     }
 
     /**
-     * @deprecated
+     * @deprecated use getReturnTypeNode instead
      * @return bool
      */
     public function hasNullableReturnType()

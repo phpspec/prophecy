@@ -58,11 +58,11 @@ final class ReturnTypeNode
             throw new DoubleException('Return type cannot be standalone null');
         }
 
-        if (isset($this->types['void']) && count($this->types) != 1) {
+        if (isset($this->types['void']) && count($this->types) !== 1) {
             throw new DoubleException('void cannot be part of a union');
         }
 
-        if (PHP_VERSION_ID >= 80000 && isset($this->types['mixed']) && count($this->types) != 1) {
+        if (PHP_VERSION_ID >= 80000 && isset($this->types['mixed']) && count($this->types) !== 1) {
             throw new DoubleException('mixed cannot be part of a union');
         }
     }
@@ -79,17 +79,15 @@ final class ReturnTypeNode
 
     public function getNonNullTypes(): array
     {
-        return array_values(array_filter(
-            $this->types,
-            function(string $type) {
-                return $type != 'null';
-            }
-        ));
+        $nonNullTypes = $this->types;
+        unset($nonNullTypes['null']);
+
+        return array_values($nonNullTypes);
     }
 
     private function prefixWithNsSeparator(string $type): string
     {
-        return '\\' . ltrim('\\' . $type, '\\');
+        return '\\' . ltrim($type, '\\');
     }
 
     public function isVoid(): bool

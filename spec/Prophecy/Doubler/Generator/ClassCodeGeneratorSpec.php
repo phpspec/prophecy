@@ -45,7 +45,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method2->returnsReference()->willReturn(false);
         $method2->isStatic()->willReturn(false);
         $method2->getArguments()->willReturn(array($argument21));
-        $method2->getReturnTypeNode()->willReturn(new ReturnTypenode());
+        $method2->getReturnTypeNode()->willReturn(new ReturnTypeNode());
         $method2->getCode()->willReturn('return $this->email;');
 
         $method3->getName()->willReturn('getRefValue');
@@ -61,7 +61,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method4->returnsReference()->willReturn(false);
         $method4->isStatic()->willReturn(false);
         $method4->getArguments()->willReturn(array());
-        $method4->getReturnTypeNode()->willReturn(new ReturnTypenode('void'));
+        $method4->getReturnTypeNode()->willReturn(new ReturnTypeNode('void'));
         $method4->getCode()->willReturn('return;');
 
         $method5->getName()->willReturn('returnObject');
@@ -69,7 +69,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method5->returnsReference()->willReturn(false);
         $method5->isStatic()->willReturn(false);
         $method5->getArguments()->willReturn(array());
-        $method5->getReturnTypeNode()->willReturn(new ReturnTypenode('object'));
+        $method5->getReturnTypeNode()->willReturn(new ReturnTypeNode('object'));
         $method5->getCode()->willReturn('return;');
 
         $argument11->getName()->willReturn('fullname');
