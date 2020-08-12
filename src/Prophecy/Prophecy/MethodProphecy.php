@@ -18,6 +18,7 @@ use Prophecy\Prediction;
 use Prophecy\Exception\Doubler\MethodNotFoundException;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Prophecy\MethodProphecyException;
+use ReflectionNamedType;
 
 /**
  * Method prophecy.
@@ -70,7 +71,7 @@ class MethodProphecy
             $this->withArguments($arguments);
         }
 
-        if (true === $reflectedMethod->hasReturnType()) {
+        if (true === $reflectedMethod->hasReturnType() && $reflectedMethod->getReturnType() instanceof ReflectionNamedType) {
             $type = $reflectedMethod->getReturnType()->getName();
 
             if ('void' === $type) {
