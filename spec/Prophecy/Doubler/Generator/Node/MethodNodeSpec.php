@@ -4,6 +4,7 @@ namespace spec\Prophecy\Doubler\Generator\Node;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
+use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 
 class MethodNodeSpec extends ObjectBehavior
 {
@@ -53,24 +54,6 @@ class MethodNodeSpec extends ObjectBehavior
     function it_accepts_only_supported_visibilities()
     {
         $this->shouldThrow('InvalidArgumentException')->duringSetVisibility('stealth');
-    }
-
-    function it_can_set_nullable_type_using_deprecated_method()
-    {
-        $this->setReturnType('int');
-
-        $this->setNullableReturnType();
-
-        $this->hasNullableReturnType()->shouldBe(true);
-    }
-
-    function it_can_unset_nullable_type_using_deprecated_method()
-    {
-        $this->setReturnType('int');
-
-        $this->setNullableReturnType(false);
-
-        $this->hasNullableReturnType()->shouldBe(false);
     }
 
     function it_lowercases_visibility_before_setting_it()
@@ -135,45 +118,42 @@ class MethodNodeSpec extends ObjectBehavior
         $this->getArguments()->shouldReturn(array($argument1, $argument2));
     }
 
-    function it_does_not_have_return_type_by_default()
+    function it_has_an_empty_return_type_by_default()
     {
-        $this->hasReturnType()->shouldReturn(false);
+        $this->getReturnTypeNode()->shouldBeLike(new ReturnTypeNode());
     }
 
-    function it_setReturnType_sets_return_type()
+    function it_can_modify_return_type()
     {
-        $returnType = 'array';
+        $this->setReturnTypeNode(new ReturnTypeNode('array'));
 
-        $this->setReturnType($returnType);
+        $this->getReturnTypeNode()->shouldBeLike(new ReturnTypeNode('array'));
+    }
+
+    function it_can_modify_return_type_as_strings_using_deprecated_methods()
+    {
+        $this->setReturnType('array');
 
         $this->hasReturnType()->shouldReturn(true);
-        $this->getReturnType()->shouldReturn($returnType);
+        $this->getReturnType()->shouldReturn('array');
     }
 
-    function it_handles_object_return_type()
+    function it_can_set_nullable_type_using_deprecated_method()
     {
-        $this->setReturnType('object');
-        $this->getReturnType()->shouldReturn('object');
+        $this->setReturnType('int');
+
+        $this->setNullableReturnType();
+
+        $this->hasNullableReturnType()->shouldBe(true);
     }
 
-    function it_handles_type_aliases()
+    function it_can_unset_nullable_type_using_deprecated_method()
     {
-        $this->setReturnType('double');
-        $this->getReturnType()->shouldReturn('float');
+        $this->setReturnType('int');
 
-        $this->setReturnType('real');
-        $this->getReturnType()->shouldReturn('float');
+        $this->setNullableReturnType(false);
 
-        $this->setReturnType('boolean');
-        $this->getReturnType()->shouldReturn('bool');
-
-        $this->setReturnType('integer');
-        $this->getReturnType()->shouldReturn('int');
+        $this->hasNullableReturnType()->shouldBe(false);
     }
 
-    function it_handles_null_return_type()
-    {
-        $this->setReturnType(null);
-        $this->getReturnType()->shouldReturn(null);
-    }
 }

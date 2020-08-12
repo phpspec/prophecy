@@ -14,6 +14,7 @@ namespace Prophecy\Doubler\ClassPatch;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
+use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 
 /**
  * Add Prophecy functionality to the double.
@@ -50,7 +51,7 @@ class ProphecySubjectPatch implements ClassPatchInterface
                 continue;
             }
 
-            if ($method->getReturnType() === 'void') {
+            if ($method->getReturnTypeNode()->isVoid()) {
                 $method->setCode(
                     '$this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());'
                 );

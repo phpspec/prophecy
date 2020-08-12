@@ -11,6 +11,7 @@
 
 namespace Prophecy\Doubler\Generator;
 
+use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use ReflectionClass;
@@ -154,11 +155,14 @@ class ClassMirror
                 $returnType = $method->getDeclaringClass()->getParentClass()->getName();
             }
 
-            $node->setReturnType($returnType);
+            $returnTypes = [$returnType];
 
             if ($method->getReturnType()->allowsNull()) {
-                $node->setNullableReturnType(true);
+                $returnTypes[] = 'null';
             }
+
+            $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
+
         }
 
         if (is_array($params = $method->getParameters()) && count($params)) {

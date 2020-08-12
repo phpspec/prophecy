@@ -43,6 +43,7 @@ class MethodNode
     {
         $this->name = $name;
         $this->code = $code;
+        $this->returnTypeNode = new ReturnTypeNode();
     }
 
     public function getVisibility()
@@ -113,6 +114,11 @@ class MethodNode
         return $this->returnTypeNode && $this->returnTypeNode->getNonNullTypes();
     }
 
+    public function setReturnTypeNode(ReturnTypeNode $returnTypeNode): void
+    {
+        $this->returnTypeNode = $returnTypeNode;
+    }
+
     /**
      * @deprecated use setReturnTypeNode instead
      * @param string $type
@@ -148,6 +154,11 @@ class MethodNode
         }
 
         return null;
+    }
+
+    public function getReturnTypeNode() : ReturnTypeNode
+    {
+        return $this->returnTypeNode;
     }
 
     /**

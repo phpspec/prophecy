@@ -8,6 +8,7 @@ use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 
 class ClassCodeGeneratorSpec extends ObjectBehavior
 {
@@ -36,9 +37,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method1->returnsReference()->willReturn(false);
         $method1->isStatic()->willReturn(true);
         $method1->getArguments()->willReturn(array($argument11, $argument12, $argument13));
-        $method1->hasReturnType()->willReturn(true);
-        $method1->getReturnType()->willReturn('string');
-        $method1->hasNullableReturnType()->willReturn(true);
+        $method1->getReturnTypeNode()->willReturn(new ReturnTypeNode('string', 'null'));
         $method1->getCode()->willReturn('return $this->name;');
 
         $method2->getName()->willReturn('getEmail');
@@ -46,8 +45,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method2->returnsReference()->willReturn(false);
         $method2->isStatic()->willReturn(false);
         $method2->getArguments()->willReturn(array($argument21));
-        $method2->hasReturnType()->willReturn(false);
-        $method2->hasNullableReturnType()->willReturn(true);
+        $method2->getReturnTypeNode()->willReturn(new ReturnTypenode());
         $method2->getCode()->willReturn('return $this->email;');
 
         $method3->getName()->willReturn('getRefValue');
@@ -55,9 +53,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method3->returnsReference()->willReturn(true);
         $method3->isStatic()->willReturn(false);
         $method3->getArguments()->willReturn(array($argument31));
-        $method3->hasReturnType()->willReturn(true);
-        $method3->getReturnType()->willReturn('string');
-        $method3->hasNullableReturnType()->willReturn(false);
+        $method3->getReturnTypeNode()->willReturn(new ReturnTypeNode('string'));
         $method3->getCode()->willReturn('return $this->refValue;');
 
         $method4->getName()->willReturn('doSomething');
@@ -65,9 +61,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method4->returnsReference()->willReturn(false);
         $method4->isStatic()->willReturn(false);
         $method4->getArguments()->willReturn(array());
-        $method4->hasReturnType()->willReturn(true);
-        $method4->getReturnType()->willReturn('void');
-        $method4->hasNullableReturnType()->willReturn(false);
+        $method4->getReturnTypeNode()->willReturn(new ReturnTypenode('void'));
         $method4->getCode()->willReturn('return;');
 
         $method5->getName()->willReturn('returnObject');
@@ -75,9 +69,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method5->returnsReference()->willReturn(false);
         $method5->isStatic()->willReturn(false);
         $method5->getArguments()->willReturn(array());
-        $method5->hasReturnType()->willReturn(true);
-        $method5->getReturnType()->willReturn('object');
-        $method5->hasNullableReturnType()->willReturn(false);
+        $method5->getReturnTypeNode()->willReturn(new ReturnTypenode('object'));
         $method5->getCode()->willReturn('return;');
 
         $argument11->getName()->willReturn('fullname');
@@ -173,7 +165,7 @@ PHP;
         $method1->returnsReference()->willReturn(false);
         $method1->isStatic()->willReturn(false);
         $method1->getArguments()->willReturn(array($argument1));
-        $method1->hasReturnType()->willReturn(false);
+        $method1->getReturnTypeNode()->willReturn(new ReturnTypeNode());
         $method1->getCode()->willReturn('');
 
         $method2->getName()->willReturn('variadicByRef');
@@ -181,7 +173,7 @@ PHP;
         $method2->returnsReference()->willReturn(false);
         $method2->isStatic()->willReturn(false);
         $method2->getArguments()->willReturn(array($argument2));
-        $method2->hasReturnType()->willReturn(false);
+        $method2->getReturnTypeNode()->willReturn(new ReturnTypeNode());
         $method2->getCode()->willReturn('');
 
         $method3->getName()->willReturn('variadicWithType');
@@ -189,7 +181,7 @@ PHP;
         $method3->returnsReference()->willReturn(false);
         $method3->isStatic()->willReturn(false);
         $method3->getArguments()->willReturn(array($argument3));
-        $method3->hasReturnType()->willReturn(false);
+        $method3->getReturnTypeNode()->willReturn(new ReturnTypeNode());
         $method3->getCode()->willReturn('');
 
         $method4->getName()->willReturn('variadicWithTypeByRef');
@@ -197,7 +189,7 @@ PHP;
         $method4->returnsReference()->willReturn(false);
         $method4->isStatic()->willReturn(false);
         $method4->getArguments()->willReturn(array($argument4));
-        $method4->hasReturnType()->willReturn(false);
+        $method4->getReturnTypeNode()->willReturn(new ReturnTypeNode());
         $method4->getCode()->willReturn('');
 
         $argument1->getName()->willReturn('args');
@@ -267,7 +259,7 @@ PHP;
         $method->getVisibility()->willReturn('public');
         $method->isStatic()->willReturn(false);
         $method->getArguments()->willReturn(array($argument));
-        $method->hasReturnType()->willReturn(false);
+        $method->getReturnTypeNode()->willReturn(new ReturnTypeNode());
         $method->returnsReference()->willReturn(false);
         $method->getCode()->willReturn('return $this->name;');
 

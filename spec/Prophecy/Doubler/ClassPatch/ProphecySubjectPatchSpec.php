@@ -6,6 +6,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 
 class ProphecySubjectPatchSpec extends ObjectBehavior
 {
@@ -55,9 +56,9 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         $method2->getName()->willReturn('method2');
         $method3->getName()->willReturn('method3');
 
-        $method1->getReturnType()->willReturn('int');
-        $method2->getReturnType()->willReturn('int');
-        $method3->getReturnType()->willReturn('void');
+        $method1->getReturnTypeNode()->willReturn(new ReturnTypeNode('int'));
+        $method2->getReturnTypeNode()->willReturn(new ReturnTypeNode('int'));
+        $method3->getReturnTypeNode()->willReturn(new ReturnTypeNode('void'));
 
         $node->getMethods()->willReturn(array(
             'method1' => $method1,

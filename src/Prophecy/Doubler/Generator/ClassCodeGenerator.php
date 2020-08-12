@@ -80,12 +80,13 @@ class ClassCodeGenerator
     /**
      * @return string
      */
-    private function getReturnType(Node\MethodNode $method)
+    private function getReturnType(Node\MethodNode $method): string
     {
-        if ($method->hasReturnType()) {
-            return $method->hasNullableReturnType()
-                ? sprintf(': ?%s', $method->getReturnType())
-                : sprintf(': %s', $method->getReturnType());
+        $typeNode = $method->getReturnTypeNode();
+
+        // assume no union types supported yet
+        if (isset($typeNode->getNonNullTypes()[0])) {
+            return sprintf($typeNode->canUseNullShorthand() ? ': ?%s':': %s', $typeNode->getNonNullTypes()[0]);
         }
 
         return '';

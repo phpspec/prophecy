@@ -4,6 +4,7 @@ namespace Tests\Prophecy\Doubler\Generator;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\Generator\ClassMirror;
+use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use Prophecy\Exception\InvalidArgumentException;
 
@@ -350,9 +351,9 @@ class ClassMirrorTest extends TestCase
         $this->assertTrue($classNode->hasMethod('getSelf'));
         $this->assertTrue($classNode->hasMethod('getParent'));
 
-        $this->assertEquals('string', $classNode->getMethod('getName')->getReturnType());
-        $this->assertEquals('\Fixtures\Prophecy\WithReturnTypehints', $classNode->getMethod('getSelf')->getReturnType());
-        $this->assertEquals('\Fixtures\Prophecy\EmptyClass', $classNode->getMethod('getParent')->getReturnType());
+        $this->assertEquals(new ReturnTypeNode('string'), $classNode->getMethod('getName')->getReturnTypeNode());
+        $this->assertEquals(new ReturnTypeNode('\Fixtures\Prophecy\WithReturnTypehints'), $classNode->getMethod('getSelf')->getReturnTypeNode());
+        $this->assertEquals(new ReturnTypeNode('\Fixtures\Prophecy\EmptyClass'), $classNode->getMethod('getParent')->getReturnTypeNode());
     }
 
     /**

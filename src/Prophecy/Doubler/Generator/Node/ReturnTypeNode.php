@@ -91,4 +91,9 @@ final class ReturnTypeNode
     {
         return '\\' . ltrim('\\' . $type, '\\');
     }
+
+    public function isVoid(): bool
+    {
+        return $this->types == ['void' => 'void'];
+    }
 }

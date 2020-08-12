@@ -104,4 +104,18 @@ class ReturnTypeNodeSpec extends ObjectBehavior
             $this->shouldThrow(DoubleException::class)->duringInstantiation();
         }
     }
+
+    function it_knows_when_it_is_not_void()
+    {
+        $this->beConstructedWith('int');
+
+        $this->shouldNotBeVoid();
+    }
+
+    function it_knows_when_it_is_void()
+    {
+        $this->beConstructedWith('void');
+
+        $this->shouldBeVoid();
+    }
 }
