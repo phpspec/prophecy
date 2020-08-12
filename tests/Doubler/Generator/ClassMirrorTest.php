@@ -533,7 +533,7 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionReturnTypes'), []);
         $methodNode = $classNode->getMethods()['doSomething'];
 
-        $this->assertSame('bool|\\stdClass', $methodNode->getArguments()[0]->getTypeHint());
+        $this->assertSame(['\stdClass', 'bool'], $methodNode->getReturnTypeNode()->getTypes());
     }
 
     /** @test */

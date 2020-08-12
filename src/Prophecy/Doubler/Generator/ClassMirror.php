@@ -18,6 +18,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionUnionType;
 
 /**
  * Class mirror.
@@ -145,20 +146,30 @@ class ClassMirror
         }
 
         if ($method->hasReturnType()) {
-            $returnType = $method->getReturnType()->getName();
-            $returnTypeLower = strtolower($returnType);
 
-            if ('self' === $returnTypeLower) {
-                $returnType = $method->getDeclaringClass()->getName();
+
+            $returnType = $method->getReturnType();
+
+            if ($returnType instanceof ReflectionNamedType) {
+                $returnTypes = [$returnType->getName()];
+                if ($returnType->allowsNull()) {
+                    $returnTypes[] = 'null';
+                }
             }
-            if ('parent' === $returnTypeLower) {
-                $returnType = $method->getDeclaringClass()->getParentClass()->getName();
+            elseif ($returnType instanceof ReflectionUnionType) {
+                $returnTypes = $returnType->getTypes();
             }
 
-            $returnTypes = [$returnType];
+            foreach ($returnTypes as $pos => $returnTypeString) {
 
-            if ($method->getReturnType()->allowsNull()) {
-                $returnTypes[] = 'null';
+                $returnTypeLower = strtolower($returnTypeString);
+
+                if ('self' === $returnTypeLower) {
+                    $returnTypes[$pos] = $method->getDeclaringClass()->getName();
+                }
+                if ('parent' === $returnTypeLower) {
+                    $returnTypes[$pos] = $method->getDeclaringClass()->getParentClass()->getName();
+                }
             }
 
             $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));

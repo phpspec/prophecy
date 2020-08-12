@@ -84,12 +84,16 @@ class ClassCodeGenerator
     {
         $typeNode = $method->getReturnTypeNode();
 
-        // assume no union types supported yet
-        if (isset($typeNode->getNonNullTypes()[0])) {
-            return sprintf($typeNode->canUseNullShorthand() ? ': ?%s':': %s', $typeNode->getNonNullTypes()[0]);
+        if (!$typeNode->getTypes()) {
+            return '';
         }
 
-        return '';
+        // When we require PHP 8 we can stop generating ?foo nullables and remove this block
+        if ($typeNode->canUseNullShorthand()) {
+            return sprintf($typeNode->canUseNullShorthand() ? ': ?%s' : ': %s', $typeNode->getNonNullTypes()[0]);
+        } else {
+            return sprintf(': %s',  join('|', $typeNode->getTypes()));
+        }
     }
 
     private function generateArguments(array $arguments)
