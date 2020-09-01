@@ -111,7 +111,7 @@ class MethodNode
      */
     public function hasReturnType()
     {
-        return $this->returnTypeNode && $this->returnTypeNode->getNonNullTypes();
+        return (bool) $this->returnTypeNode->getNonNullTypes();
     }
 
     public function setReturnTypeNode(ReturnTypeNode $returnTypeNode): void
@@ -148,7 +148,7 @@ class MethodNode
      */
     public function getReturnType()
     {
-        if ($this->returnTypeNode && $types = $this->returnTypeNode->getNonNullTypes())
+        if ($types = $this->returnTypeNode->getNonNullTypes())
         {
             return $types[0];
         }

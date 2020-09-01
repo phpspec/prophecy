@@ -191,6 +191,7 @@ class ClassMirror
         $node = new Node\ArgumentNode($name);
 
         $node->setTypeHint($this->getTypeHint($parameter));
+        $node->setAsNullable($this->isNullable($parameter));
 
         if ($parameter->isVariadic()) {
             $node->setAsVariadic();
@@ -204,7 +205,6 @@ class ClassMirror
             $node->setAsPassedByReference();
         }
 
-        $node->setAsNullable($this->isNullable($parameter));
 
         $methodNode->addArgument($node);
     }

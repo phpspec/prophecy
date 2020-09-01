@@ -144,7 +144,7 @@ class MethodNodeSpec extends ObjectBehavior
 
         $this->setNullableReturnType();
 
-        $this->hasNullableReturnType()->shouldBe(true);
+        $this->shouldHaveNullableReturnType();
     }
 
     function it_can_unset_nullable_type_using_deprecated_method()
@@ -153,7 +153,7 @@ class MethodNodeSpec extends ObjectBehavior
 
         $this->setNullableReturnType(false);
 
-        $this->hasNullableReturnType()->shouldBe(false);
+        $this->shouldNotHaveNullableReturnType();
     }
 
 }
