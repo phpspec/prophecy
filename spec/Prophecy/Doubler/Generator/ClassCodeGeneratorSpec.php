@@ -6,6 +6,7 @@ use phpDocumentor\Reflection\DocBlock\Tags\Method;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
+use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
@@ -73,42 +74,38 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method5->getCode()->willReturn('return;');
 
         $argument11->getName()->willReturn('fullname');
-        $argument11->getTypeHint()->willReturn('array');
         $argument11->isOptional()->willReturn(true);
         $argument11->getDefault()->willReturn(null);
         $argument11->isPassedByReference()->willReturn(false);
         $argument11->isVariadic()->willReturn(false);
-        $argument11->isNullable()->willReturn(false);
+        $argument11->getTypeNode()->willReturn(new ArgumentTypeNode('array'));
 
         $argument12->getName()->willReturn('class');
-        $argument12->getTypeHint()->willReturn('ReflectionClass');
         $argument12->isOptional()->willReturn(false);
         $argument12->isPassedByReference()->willReturn(false);
         $argument12->isVariadic()->willReturn(false);
-        $argument12->isNullable()->willReturn(false);
+        $argument12->getTypeNode()->willReturn(new ArgumentTypeNode('ReflectionClass'));
 
         $argument13->getName()->willReturn('instance');
-        $argument13->getTypeHint()->willReturn('object');
         $argument13->isOptional()->willReturn(false);
         $argument13->isPassedByReference()->willReturn(false);
         $argument13->isVariadic()->willReturn(false);
-        $argument13->isNullable()->willReturn(false);
+        $argument13->getTypeNode()->willReturn(new ArgumentTypeNode('object'));
 
         $argument21->getName()->willReturn('default');
-        $argument21->getTypeHint()->willReturn('string');
         $argument21->isOptional()->willReturn(true);
         $argument21->getDefault()->willReturn('ever.zet@gmail.com');
         $argument21->isPassedByReference()->willReturn(false);
         $argument21->isVariadic()->willReturn(false);
-        $argument21->isNullable()->willReturn(true);
+        $argument21->getTypeNode()->willReturn(new ArgumentTypeNode('string', 'null'));
 
         $argument31->getName()->willReturn('refValue');
-        $argument31->getTypeHint()->willReturn(null);
         $argument31->isOptional()->willReturn(false);
         $argument31->getDefault()->willReturn();
         $argument31->isPassedByReference()->willReturn(false);
         $argument31->isVariadic()->willReturn(false);
-        $argument31->isNullable()->willReturn(false);
+        $argument31->getTypeNode()->willReturn(new ArgumentTypeNode());
+
 
         $code = $this->generate('CustomClass', $class);
 
@@ -193,32 +190,29 @@ PHP;
         $method4->getCode()->willReturn('');
 
         $argument1->getName()->willReturn('args');
-        $argument1->getTypeHint()->willReturn(null);
         $argument1->isOptional()->willReturn(false);
         $argument1->isPassedByReference()->willReturn(false);
         $argument1->isVariadic()->willReturn(true);
-        $argument1->isNullable()->willReturn(false);
+        $argument1->getTypeNode()->willReturn(new ArgumentTypeNode());
 
         $argument2->getName()->willReturn('args');
-        $argument2->getTypeHint()->willReturn(null);
         $argument2->isOptional()->willReturn(false);
         $argument2->isPassedByReference()->willReturn(true);
         $argument2->isVariadic()->willReturn(true);
-        $argument2->isNullable()->willReturn(false);
+        $argument2->getTypeNode()->willReturn(new ArgumentTypeNode());
 
         $argument3->getName()->willReturn('args');
-        $argument3->getTypeHint()->willReturn('\ReflectionClass');
         $argument3->isOptional()->willReturn(false);
         $argument3->isPassedByReference()->willReturn(false);
         $argument3->isVariadic()->willReturn(true);
-        $argument3->isNullable()->willReturn(false);
+        $argument3->getTypeNode()->willReturn(new ArgumentTypeNode('ReflectionClass'));
 
         $argument4->getName()->willReturn('args');
-        $argument4->getTypeHint()->willReturn('\ReflectionClass');
         $argument4->isOptional()->willReturn(false);
         $argument4->isPassedByReference()->willReturn(true);
         $argument4->isVariadic()->willReturn(true);
-        $argument4->isNullable()->willReturn(false);
+        $argument4->getTypeNode()->willReturn(new ArgumentTypeNode('ReflectionClass'));
+
 
         $code = $this->generate('CustomClass', $class);
         $expected = <<<'PHP'
@@ -231,10 +225,10 @@ public  function variadic( ...$args) {
 public  function variadicByRef( &...$args) {
 
 }
-public  function variadicWithType(\\ReflectionClass ...$args) {
+public  function variadicWithType(\ReflectionClass ...$args) {
 
 }
-public  function variadicWithTypeByRef(\\ReflectionClass &...$args) {
+public  function variadicWithTypeByRef(\ReflectionClass &...$args) {
 
 }
 
@@ -264,12 +258,11 @@ PHP;
         $method->getCode()->willReturn('return $this->name;');
 
         $argument->getName()->willReturn('fullname');
-        $argument->getTypeHint()->willReturn('array');
         $argument->isOptional()->willReturn(true);
         $argument->getDefault()->willReturn(null);
         $argument->isPassedByReference()->willReturn(true);
         $argument->isVariadic()->willReturn(false);
-        $argument->isNullable()->willReturn(false);
+        $argument->getTypeNode()->willReturn(new ArgumentTypeNode('array'));
 
         $code = $this->generate('CustomClass', $class);
         $expected =<<<'PHP'

@@ -11,6 +11,7 @@
 
 namespace Prophecy\Doubler\ClassPatch;
 
+use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
@@ -64,7 +65,7 @@ class ProphecySubjectPatch implements ClassPatchInterface
 
         $prophecySetter = new MethodNode('setProphecy');
         $prophecyArgument = new ArgumentNode('prophecy');
-        $prophecyArgument->setTypeHint('Prophecy\Prophecy\ProphecyInterface');
+        $prophecyArgument->setTypeNode(new ArgumentTypeNode('Prophecy\Prophecy\ProphecyInterface'));
         $prophecySetter->addArgument($prophecyArgument);
         $prophecySetter->setCode(<<<PHP
 if (null === \$this->objectProphecyClosure) {

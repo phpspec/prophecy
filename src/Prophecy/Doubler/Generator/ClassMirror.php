@@ -11,6 +11,7 @@
 
 namespace Prophecy\Doubler\Generator;
 
+use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Doubler\ClassMirrorException;
@@ -147,7 +148,6 @@ class ClassMirror
 
         if ($method->hasReturnType()) {
 
-
             $returnType = $method->getReturnType();
 
             if ($returnType instanceof ReflectionNamedType) {
@@ -190,8 +190,13 @@ class ClassMirror
         $name = $parameter->getName() == '...' ? '__dot_dot_dot__' : $parameter->getName();
         $node = new Node\ArgumentNode($name);
 
-        $node->setTypeHint($this->getTypeHint($parameter));
-        $node->setAsNullable($this->isNullable($parameter));
+        $typeHints = $this->getTypeHints($parameter);
+
+        if ($typeHints && $this->isNullable($parameter)) {
+            $typeHints[] = 'null';
+        }
+
+        $node->setTypeNode(new ArgumentTypeNode(...$typeHints));
 
         if ($parameter->isVariadic()) {
             $node->setAsVariadic();
@@ -231,38 +236,23 @@ class ClassMirror
         return $parameter->getDefaultValue();
     }
 
-    private function getTypeHint(ReflectionParameter $parameter)
+    private function getTypeHints(ReflectionParameter $parameter) : array
     {
-        if (null !== $className = $this->getParameterClassName($parameter)) {
-            return $className;
+        $type = $parameter->getType();
+
+        if ($type instanceof ReflectionNamedType) {
+            if ($type->getName() === 'self') {
+                return [$parameter->getDeclaringClass()->getName()];
+            }
+
+            return [$type->getName()];
         }
 
-        if (true === $parameter->hasType() && $parameter->getType() instanceof \ReflectionNamedType) {
-            return $parameter->getType()->getName();
-        }
-
-        return null;
+        return [];
     }
 
     private function isNullable(ReflectionParameter $parameter)
     {
-        return $parameter->allowsNull() && null !== $this->getTypeHint($parameter);
-    }
-
-    private function getParameterClassName(ReflectionParameter $parameter)
-    {
-        $type = $parameter->getType();
-        if (!$type) {
-            return null;
-        }
-        if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
-            if ($type->getName() === 'self') {
-                return $parameter->getDeclaringClass()->getName();
-            }
-
-            return $type->getName();
-        }
-
-        return null;
+        return $parameter->allowsNull() && [] !== $this->getTypeHints($parameter);
     }
 }

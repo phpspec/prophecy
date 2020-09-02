@@ -100,10 +100,14 @@ class ClassCodeGenerator
     {
         $typeHintReference = $this->typeHintReference;
         return array_map(function (Node\ArgumentNode $argument) use ($typeHintReference) {
-            $php = $argument->isNullable() ? '?' : '';
 
-            if ($hint = $argument->getTypeHint()) {
-                $php .= $typeHintReference->isBuiltInParamTypeHint($hint) ? $hint : '\\'.$hint;
+            $type = $argument->getTypeNode();
+
+            if ($type->canUseNullShorthand()) {
+                $php = '?' . join('|', $type->getNonNullTypes());
+            }
+            else {
+                $php = join('|', $type->getTypes());
             }
 
             $php .= ' '.($argument->isPassedByReference() ? '&' : '');
