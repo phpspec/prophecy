@@ -11,6 +11,9 @@
 
 namespace Prophecy\Doubler\Generator;
 
+use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\TypeNodeAbstract;
+
 /**
  * Class code creator.
  * Generates PHP code for specific class node tree.
@@ -64,44 +67,32 @@ class ClassCodeGenerator
             $method->returnsReference() ? '&':'',
             $method->getName(),
             implode(', ', $this->generateArguments($method->getArguments())),
-            $this->getReturnType($method)
+            ($ret = $this->generateTypes($method->getReturnTypeNode())) ? ': '.$ret : ''
         );
         $php .= $method->getCode()."\n";
 
         return $php.'}';
     }
 
-    /**
-     * @return string
-     */
-    private function getReturnType(Node\MethodNode $method): string
+    private function generateTypes(TypeNodeAbstract $typeNode): string
     {
-        $typeNode = $method->getReturnTypeNode();
-
         if (!$typeNode->getTypes()) {
             return '';
         }
 
-        // When we require PHP 8 we can stop generating ?foo nullables and remove this block
+        // When we require PHP 8 we can stop generating ?foo nullables and remove this first block
         if ($typeNode->canUseNullShorthand()) {
-            return sprintf($typeNode->canUseNullShorthand() ? ': ?%s' : ': %s', $typeNode->getNonNullTypes()[0]);
+            return sprintf( '?%s', $typeNode->getNonNullTypes()[0]);
         } else {
-            return sprintf(': %s',  join('|', $typeNode->getTypes()));
+            return join('|', $typeNode->getTypes());
         }
     }
 
     private function generateArguments(array $arguments)
     {
-        return array_map(static function (Node\ArgumentNode $argument){
+        return array_map(function (Node\ArgumentNode $argument){
 
-            $type = $argument->getTypeNode();
-
-            if ($type->canUseNullShorthand()) {
-                $php = '?' . join('|', $type->getNonNullTypes());
-            }
-            else {
-                $php = join('|', $type->getTypes());
-            }
+            $php = $this->generateTypes($argument->getTypeNode());
 
             $php .= ' '.($argument->isPassedByReference() ? '&' : '');
 
