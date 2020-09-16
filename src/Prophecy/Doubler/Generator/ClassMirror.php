@@ -19,6 +19,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionType;
 use ReflectionUnionType;
 
 /**
@@ -103,7 +104,7 @@ class ClassMirror
                 continue;
             }
 
-            $this->reflectMethodToNode($method, $node);
+            $this->reflectMethodToNode($method, $node, $class);
         }
 
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
@@ -117,7 +118,7 @@ class ClassMirror
                 continue;
             }
 
-            $this->reflectMethodToNode($method, $node);
+            $this->reflectMethodToNode($method, $node, $class);
         }
     }
 
@@ -126,11 +127,11 @@ class ClassMirror
         $node->addInterface($interface->getName());
 
         foreach ($interface->getMethods() as $method) {
-            $this->reflectMethodToNode($method, $node);
+            $this->reflectMethodToNode($method, $node, $interface);
         }
     }
 
-    private function reflectMethodToNode(ReflectionMethod $method, Node\ClassNode $classNode)
+    private function reflectMethodToNode(ReflectionMethod $method, Node\ClassNode $classNode, ReflectionClass $class)
     {
         $node = new Node\MethodNode($method->getName());
 
@@ -147,33 +148,8 @@ class ClassMirror
         }
 
         if ($method->hasReturnType()) {
-
-            $returnType = $method->getReturnType();
-
-            if ($returnType instanceof ReflectionNamedType) {
-                $returnTypes = [$returnType->getName()];
-                if ($returnType->allowsNull()) {
-                    $returnTypes[] = 'null';
-                }
-            }
-            elseif ($returnType instanceof ReflectionUnionType) {
-                $returnTypes = $returnType->getTypes();
-            }
-
-            foreach ($returnTypes as $pos => $returnTypeString) {
-
-                $returnTypeLower = strtolower($returnTypeString);
-
-                if ('self' === $returnTypeLower) {
-                    $returnTypes[$pos] = $method->getDeclaringClass()->getName();
-                }
-                if ('parent' === $returnTypeLower) {
-                    $returnTypes[$pos] = $method->getDeclaringClass()->getParentClass()->getName();
-                }
-            }
-
+            $returnTypes = $this->getTypeHints($method->getReturnType(), $class, $method->getReturnType()->allowsNull());
             $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
-
         }
 
         if (is_array($params = $method->getParameters()) && count($params)) {
@@ -190,11 +166,7 @@ class ClassMirror
         $name = $parameter->getName() == '...' ? '__dot_dot_dot__' : $parameter->getName();
         $node = new Node\ArgumentNode($name);
 
-        $typeHints = $this->getTypeHints($parameter);
-
-        if ($typeHints && $this->isNullable($parameter)) {
-            $typeHints[] = 'null';
-        }
+        $typeHints = $this->getTypeHints($parameter->getType(), $parameter->getDeclaringClass(), $parameter->allowsNull());
 
         $node->setTypeNode(new ArgumentTypeNode(...$typeHints));
 
@@ -224,7 +196,7 @@ class ClassMirror
             return true;
         }
 
-        return $parameter->isOptional() || $this->isNullable($parameter);
+        return $parameter->isOptional() || ($parameter->allowsNull() && $parameter->getType());
     }
 
     private function getDefaultValue(ReflectionParameter $parameter)
@@ -236,22 +208,25 @@ class ClassMirror
         return $parameter->getDefaultValue();
     }
 
-    private function getTypeHints(ReflectionParameter $parameter) : array
+    private function getTypeHints(?ReflectionType $type, ?ReflectionClass $class, bool $allowsNull) : array
     {
         $types = [];
-        $type = $parameter->getType();
 
         if ($type instanceof ReflectionNamedType) {
             $types = [$type->getName()];
+
         }
         elseif ($type instanceof ReflectionUnionType) {
             $types = $type->getTypes();
         }
 
         $types = array_map(
-            function(string $type) use ($parameter) {
+            function(string $type) use ($class) {
                 if ($type === 'self') {
-                    return $parameter->getDeclaringClass()->getName();
+                    return $class->getName();
+                }
+                if ($type === 'parent') {
+                    return $class->getParentClass()->getName();
                 }
 
                 return $type;
@@ -259,11 +234,10 @@ class ClassMirror
             $types
         );
 
-        return $types;
-    }
+        if ($types && $types != ['mixed'] && $allowsNull) {
+            $types[] = 'null';
+        }
 
-    private function isNullable(ReflectionParameter $parameter)
-    {
-        return $parameter->allowsNull() && [] !== $this->getTypeHints($parameter);
+        return $types;
     }
 }

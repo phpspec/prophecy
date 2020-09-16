@@ -494,10 +494,7 @@ class ClassMirrorTest extends TestCase
         $method->isProtected()->willReturn(false);
         $method->isStatic()->willReturn(false);
         $method->returnsReference()->willReturn(false);
-
-        if (version_compare(PHP_VERSION, '7.0', '>=')) {
-            $method->hasReturnType()->willReturn(false);
-        }
+        $method->hasReturnType()->willReturn(false);
 
         $parameter->getName()->willReturn('...');
         $parameter->isDefaultValueAvailable()->willReturn(true);
@@ -507,9 +504,8 @@ class ClassMirrorTest extends TestCase
         $parameter->getClass()->willReturn($class);
         $parameter->getType()->willReturn(null);
         $parameter->hasType()->willReturn(false);
-        if (version_compare(PHP_VERSION, '5.6', '>=')) {
-            $parameter->isVariadic()->willReturn(false);
-        }
+        $parameter->isVariadic()->willReturn(false);
+        $parameter->getDeclaringClass()->willReturn($class);
 
         $mirror = new ClassMirror();
 
@@ -548,6 +544,21 @@ class ClassMirrorTest extends TestCase
 
         $this->assertEquals(new ArgumentTypeNode('bool', '\\stdClass'), $methodNode->getArguments()[0]->getTypeNode());
     }
+
+    /** @test */
+    public function it_can_double_a_class_with_mixed_types()
+    {
+        if (PHP_VERSION_ID < 80000) {
+            $this->markTestSkipped('Mixed type is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\MixedTypes'), []);
+        $methodNode = $classNode->getMethods()['doSomething'];
+
+        $this->assertEquals(new ArgumentTypeNode('mixed'), $methodNode->getArguments()[0]->getTypeNode());
+        $this->assertEquals(new ReturnTypeNode('mixed'), $methodNode->getReturnTypeNode());
+    }
+
 
     /**
      * @test
