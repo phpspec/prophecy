@@ -238,17 +238,28 @@ class ClassMirror
 
     private function getTypeHints(ReflectionParameter $parameter) : array
     {
+        $types = [];
         $type = $parameter->getType();
 
         if ($type instanceof ReflectionNamedType) {
-            if ($type->getName() === 'self') {
-                return [$parameter->getDeclaringClass()->getName()];
-            }
-
-            return [$type->getName()];
+            $types = [$type->getName()];
+        }
+        elseif ($type instanceof ReflectionUnionType) {
+            $types = $type->getTypes();
         }
 
-        return [];
+        $types = array_map(
+            function(string $type) use ($parameter) {
+                if ($type === 'self') {
+                    return $parameter->getDeclaringClass()->getName();
+                }
+
+                return $type;
+            },
+            $types
+        );
+
+        return $types;
     }
 
     private function isNullable(ReflectionParameter $parameter)
