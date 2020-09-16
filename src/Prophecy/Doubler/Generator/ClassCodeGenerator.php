@@ -19,14 +19,8 @@ namespace Prophecy\Doubler\Generator;
  */
 class ClassCodeGenerator
 {
-    /**
-     * @var TypeHintReference
-     */
-    private $typeHintReference;
-
     public function __construct(TypeHintReference $typeHintReference = null)
     {
-        $this->typeHintReference = $typeHintReference ?: new TypeHintReference();
     }
 
     /**
@@ -98,8 +92,7 @@ class ClassCodeGenerator
 
     private function generateArguments(array $arguments)
     {
-        $typeHintReference = $this->typeHintReference;
-        return array_map(function (Node\ArgumentNode $argument) use ($typeHintReference) {
+        return array_map(static function (Node\ArgumentNode $argument){
 
             $type = $argument->getTypeNode();
 
