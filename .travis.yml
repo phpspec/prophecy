@@ -24,7 +24,7 @@ matrix:
     - php: nightly
       env: COMPOSER_FLAGS='--ignore-platform-reqs'
     - php: nightly
-      env: COMPOSER_FLAGS='--ignore-platform-reqs' COMPOSER_FORCE='phpunit/phpunit ^9.0@dev'
+      env: COMPOSER_FLAGS='--ignore-platform-reqs' COMPOSER_FORCE='phpspec/phpspec dev-master#5c6b6a5737420af057170b246ba9941acaa11614'
   fast_finish: true
   allow_failures:
     - php: nightly
