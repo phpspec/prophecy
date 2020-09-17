@@ -176,7 +176,7 @@ class CallCenter
 
         $expected = array();
 
-        foreach (call_user_func_array('array_merge', $prophecy->getMethodProphecies()) as $methodProphecy) {
+        foreach (array_merge(...array_values($prophecy->getMethodProphecies())) as $methodProphecy) {
             $expected[] = sprintf(
                 "  - %s(\n" .
                 "%s\n" .
