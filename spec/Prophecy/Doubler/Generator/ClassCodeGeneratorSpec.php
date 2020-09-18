@@ -283,8 +283,7 @@ PHP;
     function it_generates_proper_code_for_union_return_types
     (
         ClassNode $class,
-        MethodNode $method,
-        ArgumentNode $argument
+        MethodNode $method
     )
     {
         $class->getParentClass()->willReturn('stdClass');
@@ -307,6 +306,50 @@ namespace  {
 class CustomClass extends \stdClass implements  {
 
 public  function foo(): int|string|null {
+
+}
+
+}
+}
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+
+        $code->shouldBe($expected);
+    }
+
+    function it_generates_proper_code_for_union_argument_types
+    (
+        ClassNode $class,
+        MethodNode $method,
+        ArgumentNode $argument
+    )
+    {
+        $class->getParentClass()->willReturn('stdClass');
+        $class->getInterfaces()->willReturn([]);
+        $class->getProperties()->willReturn([]);
+        $class->getMethods()->willReturn(array($method));
+
+        $method->getName()->willReturn('foo');
+        $method->getVisibility()->willReturn('public');
+        $method->isStatic()->willReturn(false);
+        $method->getArguments()->willReturn([$argument]);
+        $method->getReturnTypeNode()->willReturn(new ReturnTypeNode());
+        $method->returnsReference()->willReturn(false);
+        $method->getCode()->willReturn('');
+
+        $argument->getTypeNode()->willReturn(new ArgumentTypeNode('int', 'string', 'null'));
+        $argument->getName()->willReturn('arg');
+        $argument->isPassedByReference()->willReturn(false);
+        $argument->isVariadic()->willReturn(false);
+        $argument->isOptional()->willReturn(false);
+
+        $code = $this->generate('CustomClass', $class);
+
+        $expected =<<<'PHP'
+namespace  {
+class CustomClass extends \stdClass implements  {
+
+public  function foo(int|string|null $arg) {
 
 }
 
