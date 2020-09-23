@@ -11,6 +11,7 @@ use Prophecy\Prediction\PredictionInterface;
 use Prophecy\Promise\CallbackPromise;
 use Prophecy\Promise\PromiseInterface;
 use Prophecy\Prophecy\ObjectProphecy;
+use Prophecy\Prophecy\ProphecySubjectInterface;
 use ReflectionClass;
 use RuntimeException;
 
@@ -424,6 +425,140 @@ class MethodProphecySpec extends ObjectBehavior
     {
         $this->shouldThrow('Prophecy\Exception\InvalidArgumentException')->duringWithArguments(42);
     }
+
+    function it_returns_null_for_void_return_type(ObjectProphecy $objectProphecy)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'void');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldBeNull();
+    }
+
+    function it_returns_empty_string_for_string_return_type(ObjectProphecy $objectProphecy)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'string');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldBe('');
+    }
+
+    function it_returns_zero_for_float_return_type(ObjectProphecy $objectProphecy)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'float');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldBe(0.00);
+    }
+
+    function it_returns_false_for_bool_return_type(ObjectProphecy $objectProphecy)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'bool');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldBe(false);
+    }
+
+    function it_returns_empty_for_array_return_type(ObjectProphecy $objectProphecy)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'array');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldBe([]);
+    }
+
+    function it_returns_empty_closure_for_callable_return_type(ObjectProphecy $objectProphecy)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'callable');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldBeAnInstanceOf(\Closure::class);
+    }
+
+    function it_returns_empty_closure_for_closure_return_type(ObjectProphecy $objectProphecy)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'Closure');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldBeAnInstanceOf(\Closure::class);
+    }
+
+    function it_returns_null_generator_for_traversable_return_type(ObjectProphecy $objectProphecy)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'Traversable');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldYieldLike([null]);
+    }
+
+    function it_returns_null_generator_for_generator_return_type(ObjectProphecy $objectProphecy)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'Generator');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldYieldLike([null]);
+    }
+
+    function it_returns_an_object_prophecy_for_other_object_return_types(ObjectProphecy $objectProphecy)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'ArrayObject');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $return = $this->getPromise()->execute([], $objectProphecy, $this);
+        $return->shouldBeAnInstanceOf(\ArrayObject::class);
+        $return->shouldImplement(ProphecySubjectInterface::class);
+    }
+
+    function it_returns_object_prophecy_for_nullable_return_type(ObjectProphecy $objectProphecy)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', '?ArrayObject');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $return = $this->getPromise()->execute([], $objectProphecy, $this);
+        $return->shouldBeAnInstanceOf(\ArrayObject::class);
+        $return->shouldImplement(ProphecySubjectInterface::class);
+    }
+
+    function it_returns_scalar_prophecy_for_scalar_and_null_union(ObjectProphecy $objectProphecy)
+    {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'string|null|int');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldNotBeNull();
+    }
+
+    function it_returns_object_prophecy_for_object_scalar_union(ObjectProphecy $objectProphecy)
+    {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'string|ArrayObject|int');
+        $this->beConstructedWith($objectProphecy, 'foo');
+
+        $return = $this->getPromise()->execute([], $objectProphecy, $this);
+        $return->shouldBeAnInstanceOf(\ArrayObject::class);
+        $return->shouldImplement(ProphecySubjectInterface::class);
+    }
+
+    private function generateMethodProphecyWithReturnValue($objectProphecy, string $methodName, string $returnType): void
+    {
+        $objectProphecy->reveal()->willReturn(
+            eval(
+            <<<CODE
+return new class() {
+     public function $methodName() : $returnType {}
+};
+CODE
+            )
+        );
+        $objectProphecy->addMethodProphecy(Argument::any())->willReturn();
+    }
+
+
 }
 
 class ClassWithFinalMethod

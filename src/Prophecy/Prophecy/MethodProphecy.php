@@ -19,6 +19,8 @@ use Prophecy\Exception\Doubler\MethodNotFoundException;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Prophecy\MethodProphecyException;
 use ReflectionNamedType;
+use ReflectionType;
+use ReflectionUnionType;
 
 /**
  * Method prophecy.
@@ -71,15 +73,43 @@ class MethodProphecy
             $this->withArguments($arguments);
         }
 
-        if (true === $reflectedMethod->hasReturnType() && $reflectedMethod->getReturnType() instanceof ReflectionNamedType) {
-            $type = $reflectedMethod->getReturnType()->getName();
+        if (true === $reflectedMethod->hasReturnType()) {
 
-            if ('void' === $type) {
+            $reflectionType = $reflectedMethod->getReturnType();
+
+            if ($reflectionType instanceof ReflectionNamedType) {
+                $types = [$reflectionType];
+            }
+            elseif ($reflectionType instanceof ReflectionUnionType) {
+                $types = $reflectionType->getTypes();
+            }
+
+            $types = array_map(
+                function(ReflectionType $type) { return $type->getName(); },
+                $types
+            );
+
+            usort(
+                $types,
+                function(string $type) {
+                    if(class_exists($type) || interface_exists($type)) {
+                        return -1;
+                    }
+                    if ($type == 'null') {
+                        return 1;
+                    }
+                    return 0;
+                }
+            );
+
+            $defaultType = $types[0];
+
+            if ('void' === $defaultType) {
                 $this->voidReturnType = true;
             }
 
-            $this->will(function () use ($type) {
-                switch ($type) {
+            $this->will(function () use ($defaultType) {
+                switch ($defaultType) {
                     case 'void': return;
                     case 'string': return '';
                     case 'float':  return 0.0;
@@ -97,7 +127,7 @@ class MethodProphecy
 
                     default:
                         $prophet = new Prophet;
-                        return $prophet->prophesize($type)->reveal();
+                        return $prophet->prophesize($defaultType)->reveal();
                 }
             });
         }
