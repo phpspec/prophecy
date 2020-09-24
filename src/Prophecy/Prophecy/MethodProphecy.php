@@ -91,13 +91,30 @@ class MethodProphecy
 
             usort(
                 $types,
-                function(string $type) {
-                    if(class_exists($type) || interface_exists($type)) {
+                static function(string $type1, string $type2) {
+
+                    // null is lowest priority
+                    if ($type2 == 'null') {
                         return -1;
                     }
-                    if ($type == 'null') {
+                    elseif ($type1 == 'null') {
                         return 1;
                     }
+
+                    // objects are higher priority than scalars
+                    $isObject = static function($type) {
+                        return class_exists($type) || interface_exists($type);
+                    };
+
+                    if($isObject($type1) && !$isObject($type2)) {
+                        return -1;
+                    }
+                    elseif(!$isObject($type1) && $isObject($type2))
+                    {
+                        return 1;
+                    }
+
+                    // don't sort both-scalars or both-objects
                     return 0;
                 }
             );
