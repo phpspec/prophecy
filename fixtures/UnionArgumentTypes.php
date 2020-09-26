@@ -4,7 +4,7 @@ namespace Fixtures\Prophecy;
 
 class UnionArgumentTypes
 {
-    public function doSomething(bool|stdClass $arg)
+    public function doSomething(bool|\stdClass $arg)
     {
 
     }

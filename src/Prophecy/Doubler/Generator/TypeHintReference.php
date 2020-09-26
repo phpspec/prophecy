@@ -5,6 +5,8 @@ namespace Prophecy\Doubler\Generator;
 /**
  * Tells whether a keyword refers to a class or to a built-in type for the
  * current version of php
+ *
+ * @deprecated in favour of Node\TypeNodeAbstract
  */
 final class TypeHintReference
 {

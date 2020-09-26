@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Doubler\Generator\Node;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 
 class ArgumentNodeSpec extends ObjectBehavior
 {
@@ -62,10 +63,40 @@ class ArgumentNodeSpec extends ObjectBehavior
         $this->getTypeHint()->shouldReturn(null);
     }
 
-    function its_typeHint_is_mutable()
+    function its_typeHint_is_mutable_with_deprecated_accessors()
     {
         $this->setTypeHint('array');
         $this->getTypeHint()->shouldReturn('array');
+    }
+
+    function it_can_set_nullable_type_using_deprecated_method()
+    {
+        $this->setTypeHint('int');
+
+        $this->setAsNullable();
+
+        $this->shouldBeNullable();
+    }
+
+    function it_can_unset_nullable_type_using_deprecated_method()
+    {
+        $this->setTypeHint('int');
+
+        $this->setAsNullable(false);
+
+        $this->shouldNotBeNullable();
+    }
+
+    function it_has_an_empty_type_by_default()
+    {
+        $this->getTypeNode()->shouldBeLike(new ArgumentTypeNode());
+    }
+
+    function it_has_a_mutable_type()
+    {
+        $this->setTypeNode(new ArgumentTypeNode('int'));
+
+        $this->getTypeNode()->shouldBeLike(new ArgumentTypeNode('int'));
     }
 
     function it_does_not_have_default_value_by_default()

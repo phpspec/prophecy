@@ -4,6 +4,8 @@ namespace Tests\Prophecy\Doubler\Generator;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\Generator\ClassMirror;
+use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
+use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use Prophecy\Exception\InvalidArgumentException;
 
@@ -77,7 +79,7 @@ class ClassMirrorTest extends TestCase
         $this->assertCount(1, $argNodes);
 
         $this->assertEquals('arg', $argNodes[0]->getName());
-        $this->assertNull($argNodes[0]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode(), $argNodes[0]->getTypeNode());
         $this->assertFalse($argNodes[0]->isOptional());
         $this->assertNull($argNodes[0]->getDefault());
         $this->assertFalse($argNodes[0]->isPassedByReference());
@@ -101,18 +103,18 @@ class ClassMirrorTest extends TestCase
 
 
         $this->assertEquals('arg_1', $argNodes[0]->getName());
-        $this->assertEquals('ArrayAccess', $argNodes[0]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode('ArrayAccess'), $argNodes[0]->getTypeNode());
         $this->assertFalse($argNodes[0]->isOptional());
 
         $this->assertEquals('arg_2', $argNodes[1]->getName());
-        $this->assertEquals('array', $argNodes[1]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode('array'), $argNodes[1]->getTypeNode());
         $this->assertTrue($argNodes[1]->isOptional());
         $this->assertEquals(array(), $argNodes[1]->getDefault());
         $this->assertFalse($argNodes[1]->isPassedByReference());
         $this->assertFalse($argNodes[1]->isVariadic());
 
         $this->assertEquals('arg_3', $argNodes[2]->getName());
-        $this->assertEquals('ArrayAccess', $argNodes[2]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode('ArrayAccess', 'null'), $argNodes[2]->getTypeNode());
         $this->assertTrue($argNodes[2]->isOptional());
         $this->assertNull($argNodes[2]->getDefault());
         $this->assertFalse($argNodes[2]->isPassedByReference());
@@ -136,13 +138,13 @@ class ClassMirrorTest extends TestCase
         $this->assertCount(2, $argNodes);
 
         $this->assertEquals('arg_1', $argNodes[0]->getName());
-        $this->assertEquals('callable', $argNodes[0]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode('callable'), $argNodes[0]->getTypeNode());
         $this->assertFalse($argNodes[0]->isOptional());
         $this->assertFalse($argNodes[0]->isPassedByReference());
         $this->assertFalse($argNodes[0]->isVariadic());
 
         $this->assertEquals('arg_2', $argNodes[1]->getName());
-        $this->assertEquals('callable', $argNodes[1]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode('callable', 'null'), $argNodes[1]->getTypeNode());
         $this->assertTrue($argNodes[1]->isOptional());
         $this->assertNull($argNodes[1]->getDefault());
         $this->assertFalse($argNodes[1]->isPassedByReference());
@@ -166,7 +168,7 @@ class ClassMirrorTest extends TestCase
         $this->assertCount(1, $argNodes);
 
         $this->assertEquals('args', $argNodes[0]->getName());
-        $this->assertNull($argNodes[0]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode(), $argNodes[0]->getTypeNode());
         $this->assertFalse($argNodes[0]->isOptional());
         $this->assertFalse($argNodes[0]->isPassedByReference());
         $this->assertTrue($argNodes[0]->isVariadic());
@@ -193,7 +195,7 @@ class ClassMirrorTest extends TestCase
         $this->assertCount(1, $argNodes);
 
         $this->assertEquals('args', $argNodes[0]->getName());
-        $this->assertEquals('array', $argNodes[0]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode('array'), $argNodes[0]->getTypeNode());
         $this->assertFalse($argNodes[0]->isOptional());
         $this->assertFalse($argNodes[0]->isPassedByReference());
         $this->assertTrue($argNodes[0]->isVariadic());
@@ -350,9 +352,9 @@ class ClassMirrorTest extends TestCase
         $this->assertTrue($classNode->hasMethod('getSelf'));
         $this->assertTrue($classNode->hasMethod('getParent'));
 
-        $this->assertEquals('string', $classNode->getMethod('getName')->getReturnType());
-        $this->assertEquals('\Fixtures\Prophecy\WithReturnTypehints', $classNode->getMethod('getSelf')->getReturnType());
-        $this->assertEquals('\Fixtures\Prophecy\EmptyClass', $classNode->getMethod('getParent')->getReturnType());
+        $this->assertEquals(new ReturnTypeNode('string'), $classNode->getMethod('getName')->getReturnTypeNode());
+        $this->assertEquals(new ReturnTypeNode('\Fixtures\Prophecy\WithReturnTypehints'), $classNode->getMethod('getSelf')->getReturnTypeNode());
+        $this->assertEquals(new ReturnTypeNode('\Fixtures\Prophecy\EmptyClass'), $classNode->getMethod('getParent')->getReturnTypeNode());
     }
 
     /**
@@ -396,9 +398,9 @@ class ClassMirrorTest extends TestCase
         $method = $classNode->getMethod('export');
         $arguments = $method->getArguments();
 
-        $this->assertNull($arguments[0]->getTypeHint());
-        $this->assertNull($arguments[1]->getTypeHint());
-        $this->assertNull($arguments[2]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode(), $arguments[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(), $arguments[1]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(), $arguments[2]->getTypeNode());
     }
 
     /**
@@ -411,7 +413,7 @@ class ClassMirrorTest extends TestCase
         $classNode = $mirror->reflect(new \ReflectionClass('Fixtures\Prophecy\OptionalDepsClass'), array());
         $method = $classNode->getMethod('iHaveAStrangeTypeHintedArg');
         $arguments = $method->getArguments();
-        $this->assertEquals('I\Simply\Am\Nonexistent', $arguments[0]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode('I\Simply\Am\Nonexistent'), $arguments[0]->getTypeNode());
     }
 
     /**
@@ -425,8 +427,7 @@ class ClassMirrorTest extends TestCase
         $classNode = $mirror->reflect(new \ReflectionClass('Fixtures\Prophecy\NullableArrayParameter'), array());
         $method = $classNode->getMethod('iHaveNullableArrayParameterWithNotNullDefaultValue');
         $arguments = $method->getArguments();
-        $this->assertSame('array', $arguments[0]->getTypeHint());
-        $this->assertTrue($arguments[0]->isNullable());
+        $this->assertEquals(new ArgumentTypeNode('array', 'null'), $arguments[0]->getTypeNode());
     }
 
     /**
@@ -439,7 +440,7 @@ class ClassMirrorTest extends TestCase
         $classNode = $mirror->reflect(new \ReflectionClass('Fixtures\Prophecy\OptionalDepsClass'), array());
         $method = $classNode->getMethod('iHaveAnEvenStrangerTypeHintedArg');
         $arguments = $method->getArguments();
-        $this->assertEquals('I\Simply\Am\Not', $arguments[0]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode('I\Simply\Am\Not'), $arguments[0]->getTypeNode());
     }
 
     /**
@@ -493,10 +494,7 @@ class ClassMirrorTest extends TestCase
         $method->isProtected()->willReturn(false);
         $method->isStatic()->willReturn(false);
         $method->returnsReference()->willReturn(false);
-
-        if (version_compare(PHP_VERSION, '7.0', '>=')) {
-            $method->hasReturnType()->willReturn(false);
-        }
+        $method->hasReturnType()->willReturn(false);
 
         $parameter->getName()->willReturn('...');
         $parameter->isDefaultValueAvailable()->willReturn(true);
@@ -506,9 +504,8 @@ class ClassMirrorTest extends TestCase
         $parameter->getClass()->willReturn($class);
         $parameter->getType()->willReturn(null);
         $parameter->hasType()->willReturn(false);
-        if (version_compare(PHP_VERSION, '5.6', '>=')) {
-            $parameter->isVariadic()->willReturn(false);
-        }
+        $parameter->isVariadic()->willReturn(false);
+        $parameter->getDeclaringClass()->willReturn($class);
 
         $mirror = new ClassMirror();
 
@@ -532,7 +529,7 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionReturnTypes'), []);
         $methodNode = $classNode->getMethods()['doSomething'];
 
-        $this->assertSame('bool|\\stdClass', $methodNode->getArguments()[0]->getTypeHint());
+        $this->assertSame(['\stdClass', 'bool'], $methodNode->getReturnTypeNode()->getTypes());
     }
 
     /** @test */
@@ -545,8 +542,23 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionArgumentTypes'), []);
         $methodNode = $classNode->getMethods()['doSomething'];
 
-        $this->assertSame('bool|\\stdClass', $methodNode->getArguments()[0]->getTypeHint());
+        $this->assertEquals(new ArgumentTypeNode('bool', '\\stdClass'), $methodNode->getArguments()[0]->getTypeNode());
     }
+
+    /** @test */
+    public function it_can_double_a_class_with_mixed_types()
+    {
+        if (PHP_VERSION_ID < 80000) {
+            $this->markTestSkipped('Mixed type is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\MixedTypes'), []);
+        $methodNode = $classNode->getMethods()['doSomething'];
+
+        $this->assertEquals(new ArgumentTypeNode('mixed'), $methodNode->getArguments()[0]->getTypeNode());
+        $this->assertEquals(new ReturnTypeNode('mixed'), $methodNode->getReturnTypeNode());
+    }
+
 
     /**
      * @test
