@@ -257,6 +257,8 @@ That's why Prophecy comes bundled with a bunch of other tokens:
 - `AnyValueToken` or `Argument::any()` - matches any argument
 - `AnyValuesToken` or `Argument::cetera()` - matches any arguments to the rest of the signature
 - `StringContainsToken` or `Argument::containingString($value)` - checks that the argument contains a specific string value
+- `InArrayToken` or `Argument::in($array)` - checks if value is in array
+- `NotInArrayToken` or `Argument::notIn($array)` - checks if value is not in array
 
 And you can add even more by implementing `TokenInterface` with your own custom classes.
 
