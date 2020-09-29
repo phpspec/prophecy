@@ -559,6 +559,14 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode('mixed'), $methodNode->getReturnTypeNode());
     }
 
+    /** @test */
+    public function it_can_double_inherited_self_return_type()
+    {
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\ClassExtendAbstractWithMethodWithReturnType'), []);
+        $methodNode = $classNode->getMethods()['returnSelf'];
+
+        $this->assertEquals(new ReturnTypeNode('Fixtures\Prophecy\AbstractBaseClassWithMethodWithReturnType'), $methodNode->getReturnTypeNode());
+    }
 
     /**
      * @test
