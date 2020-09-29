@@ -6,5 +6,4 @@ namespace Fixtures\Prophecy;
 
 class ClassExtendAbstractWithMethodWithReturnType extends AbstractBaseClassWithMethodWithReturnType
 {
-
 }

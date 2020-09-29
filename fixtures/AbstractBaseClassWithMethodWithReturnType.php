@@ -4,14 +4,9 @@ declare(strict_types=1);
 
 namespace Fixtures\Prophecy;
 
-abstract class AbstractBaseClassWithMethodWithReturnType implements EmptyInterface
+abstract class AbstractBaseClassWithMethodWithReturnType
 {
-    private $test;
-
-    public function test(?\DateTimeInterface $test): self
+    public function returnSelf(?\DateTimeInterface $test): self
     {
-        $this->test = $test;
-
-        return $this;
     }
 }
