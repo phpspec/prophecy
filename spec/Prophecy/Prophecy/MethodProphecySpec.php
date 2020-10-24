@@ -156,6 +156,16 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPromise()->execute(array(), $objectProphecy, $this)->shouldYield(array(10 => 'foo', 11 => 'bar'));
     }
 
+    function it_yields_and_return_elements_configured_in_willYield(ObjectProphecy $objectProphecy)
+    {
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+
+        $this->willYield(array('foo', 'bar'), true);
+        $generator = $this->getPromise()->execute(array(), $objectProphecy, $this);
+        $generator->shouldYield(array('foo', 'bar'));
+        $generator->callOnWrappedObject('getReturn')->shouldReturn(true);
+    }
+
     function it_adds_ThrowPromise_during_willThrow_call(ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);

@@ -227,12 +227,13 @@ class MethodProphecy
 
     /**
      * @param array $items
+     * @param mixed $return
      *
      * @return $this
      *
      * @throws \Prophecy\Exception\InvalidArgumentException
      */
-    public function willYield($items)
+    public function willYield($items, $return = null)
     {
         if ($this->voidReturnType) {
             throw new MethodProphecyException(
@@ -248,10 +249,10 @@ class MethodProphecy
             ));
         }
 
-        $generator =  function() use ($items) {
-            foreach ($items as $key => $value) {
-                yield $key => $value;
-            }
+        $generator =  function() use ($items, $return) {
+            yield from $items;
+
+            return $return;
         };
 
         return $this->will($generator);
