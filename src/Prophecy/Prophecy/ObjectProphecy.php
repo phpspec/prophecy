@@ -133,7 +133,7 @@ class ObjectProphecy implements ProphecyInterface
      */
     public function enableSpyBehavior(bool $enable = true): void
     {
-        $this->callCenter->makeUnexpectedCallsFailFast($enable);
+        $this->callCenter->makeUnexpectedCallsFailFast(! $enable);
     }
 
     /**
