@@ -161,6 +161,7 @@ promise, there's plenty others you can use:
 - `ReturnArgumentPromise` or `->willReturnArgument($index)` - returns the nth method argument from call
 - `ThrowPromise` or `->willThrow($exception)` - causes the method to throw specific exception
 - `CallbackPromise` or `->will($callback)` - gives you a quick way to define your own custom logic
+- `ChainPromise` or `->willChain($myFirstPromise, $mySecondPromise, ...)` - gives you the ability to chain other instance of `Prophecy\Promise\PromiseInterface`, this allows you to define a different behavior during different calls, for example, you can pass an instance of `ThrowPromise` in second position if that method should throw an exception if it is called more than once.
 
 Keep in mind, that you can always add even more promises by implementing
 `Prophecy\Promise\PromiseInterface`.

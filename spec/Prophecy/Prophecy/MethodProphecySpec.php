@@ -156,6 +156,32 @@ class MethodProphecySpec extends ObjectBehavior
         $this->getPromise()->execute(array(), $objectProphecy, $this)->shouldYield(array(10 => 'foo', 11 => 'bar'));
     }
 
+    function it_adds_ChainPromise_during_willChain_call(
+        ObjectProphecy $objectProphecy,
+        PromiseInterface $promiseToChain
+    ) {
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+
+        $this->willChain($promiseToChain);
+        $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\ChainPromise');
+    }
+
+    function it_adds_ChainPromise_during_willChain_call_and_it_passes_him_the_promises(
+        ObjectProphecy $objectProphecy,
+        PromiseInterface $firstPromiseToChain,
+        PromiseInterface $secondPromiseToChain
+    ) {
+        $objectProphecy->addMethodProphecy($this)->willReturn(null);
+
+        $this->willChain($firstPromiseToChain, $secondPromiseToChain);
+        $chainPromise = $this->getPromise();
+        $chainPromise->shouldBeAnInstanceOf('Prophecy\Promise\ChainPromise');
+        $chainPromise->execute([], $objectProphecy, $this);
+        $chainPromise->execute([], $objectProphecy, $this);
+        $firstPromiseToChain->execute([], $objectProphecy, $this)->shouldHaveBeenCalled();
+        $secondPromiseToChain->execute([], $objectProphecy, $this)->shouldHaveBeenCalled();
+    }
+
     function it_adds_ThrowPromise_during_willThrow_call(ObjectProphecy $objectProphecy)
     {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
