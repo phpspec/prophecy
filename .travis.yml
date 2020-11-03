@@ -14,7 +14,7 @@ matrix:
   include:
     - php: 7.2
       dist: bionic
-      env: DEPENDENCIES='low'
+      env: COMPOSER_FLAGS='--prefer-lowest'
     - php: 7.2
       dist: bionic
     - php: 7.3
@@ -26,8 +26,7 @@ matrix:
 
 install:
   - export COMPOSER_ROOT_VERSION=dev-master
-  - if [ "$DEPENDENCIES" != "low" ]; then composer update $COMPOSER_FLAGS; fi;
-  - if [ "$DEPENDENCIES" == "low" ]; then composer update $COMPOSER_FLAGS --prefer-lowest; fi;
+  - composer update $COMPOSER_FLAGS
 
 script:
   - vendor/bin/phpspec run -fpretty -v
