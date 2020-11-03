@@ -22,12 +22,10 @@ matrix:
     - php: 7.4
       dist: bionic
     - php: nightly
-      env: COMPOSER_FLAGS='--ignore-platform-reqs' COMPOSER_FORCE='phpspec/phpspec dev-master#5c6b6a5737420af057170b246ba9941acaa11614'
   fast_finish: true
 
 install:
   - export COMPOSER_ROOT_VERSION=dev-master
-  - if [ -n "$COMPOSER_FORCE" ]; then composer require $COMPOSER_FORCE --no-update ; fi;
   - if [ "$DEPENDENCIES" != "low" ]; then composer update $COMPOSER_FLAGS; fi;
   - if [ "$DEPENDENCIES" == "low" ]; then composer update $COMPOSER_FLAGS --prefer-lowest; fi;
 
