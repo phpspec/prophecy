@@ -97,7 +97,7 @@ $prophecy->willImplement('SessionHandlerInterface');
 ```
 
 There are 2 interesting calls - `willExtend` and `willImplement`. The first one tells
-object prophecy that our object should extend specific class, the second one says that
+object prophecy that our object should extend a specific class. The second one says that
 it should implement some interface. Obviously, objects in PHP can implement multiple
 interfaces, but extend only one parent class.
 
