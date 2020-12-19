@@ -35,8 +35,8 @@ jobs:
 
       -   name: Run tests (phpspec)
           run: ./vendor/bin/phpspec run --format=dot
-          if: always() && end-of-setup.outcome == 'success'
+          if: always() && steps.end-of-setup.outcome == 'success'
 
       -   name: Run tests (phpunit)
           run: ./vendor/bin/phpunit
-          if: always() && end-of-setup.outcome == 'success'
+          if: always() && steps.end-of-setup.outcome == 'success'
