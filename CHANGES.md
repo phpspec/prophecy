@@ -1,3 +1,8 @@
+1.12.2 / 2020/12/19
+===================
+
+* [fixed] MethodNotFoundException sometimes thrown with wrong class attached [@ciaranmcnulty]
+
 1.12.1 / 2020/10/29
 ===================
 
