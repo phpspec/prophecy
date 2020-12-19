@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  release:
+    types: [created]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    name: Build and test
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [7.2, 7.3, 7.4, 8.0]
+        composer-flags: [ "" ]
+        include:
+          - php: 7.2
+            composer-flags: "--prefer-lowest"
+
+    steps:
+      -   uses: actions/checkout@v2
+
+      -   name: Set up PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: "${{ matrix.php }}"
+            coverage: none
+
+      -   name: Install dependencies
+          run: COMPOSER_ROOT_VERSION=dev-master composer update ${{ matrix.composer-flags }}
+          id: end-of-setup
+
+      -   name: Run tests (phpspec)
+          run: ./vendor/bin/phpspec run --format=dot
+          if: always() && end-of-setup.outcome == 'success'
+
+      -   name: Run tests (phpunit)
+          run: ./vendor/bin/phpunit
+          if: always() && end-of-setup.outcome == 'success'
