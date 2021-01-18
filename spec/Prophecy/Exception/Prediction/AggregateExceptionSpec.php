@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Exception\Prediction;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Exception\Prediction\FailedPredictionException;
 use Prophecy\Exception\Prediction\PredictionException;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -30,18 +31,18 @@ class AggregateExceptionSpec extends ObjectBehavior
         $this->getExceptions()->shouldHaveCount(0);
     }
 
-    function it_should_append_exception_through_append_method(PredictionException $exception)
+    function it_should_append_exception_through_append_method()
     {
-        $exception->getMessage()->willReturn('Exception #1');
+        $exception = new FailedPredictionException();
 
         $this->append($exception);
 
         $this->getExceptions()->shouldReturn(array($exception));
     }
 
-    function it_should_update_message_during_append(PredictionException $exception)
+    function it_should_update_message_during_append()
     {
-        $exception->getMessage()->willReturn('Exception #1');
+        $exception = new FailedPredictionException('Exception #1');
 
         $this->append($exception);
 
@@ -52,12 +53,10 @@ class AggregateExceptionSpec extends ObjectBehavior
         PredictionException $exception1,
         PredictionException $exception2
     ) {
-        $exception1->getMessage()->willReturn('Exception #1');
-        $exception2->getMessage()->willReturn('Exception #2');
+        $exception1 = new FailedPredictionException('Exception #1');
+        $exception2 = new FailedPredictionException('Exception #2');
 
         $this->append($exception1);
-        $this->getMessage()->shouldReturn('Exception #1');
-
         $this->append($exception2);
         $this->getMessage()->shouldReturn("Exception #1\nException #2");
     }
