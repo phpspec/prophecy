@@ -84,4 +84,29 @@ class ArgumentTypeNodeSpec extends ObjectBehavior
             $this->shouldThrow(DoubleException::class)->duringInstantiation();
         }
     }
+
+    function it_does_not_prefix_false()
+    {
+        $this->beConstructedWith('false', 'array');
+
+        $this->getTypes()->shouldReturn(['false', 'array']);
+    }
+
+    function it_does_not_allow_standalone_false()
+    {
+        $this->beConstructedWith('false');
+
+        if (PHP_VERSION_ID >=80000) {
+            $this->shouldThrow(DoubleException::class)->duringInstantiation();
+        }
+    }
+
+    function it_does_not_allow_nullable_false()
+    {
+        $this->beConstructedWith('null', 'false');
+
+        if (PHP_VERSION_ID >=80000) {
+            $this->shouldThrow(DoubleException::class)->duringInstantiation();
+        }
+    }
 }

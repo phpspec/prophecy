@@ -59,6 +59,7 @@ abstract class TypeNodeAbstract
             case 'array':
             case 'callable':
             case 'bool':
+            case 'false':
             case 'float':
             case 'int':
             case 'string':
@@ -77,7 +78,15 @@ abstract class TypeNodeAbstract
     protected function guardIsValidType()
     {
         if ($this->types == ['null' => 'null']) {
-            throw new DoubleException('Argument type cannot be standalone null');
+            throw new DoubleException('Type cannot be standalone null');
+        }
+
+        if ($this->types == ['false' => 'false']) {
+            throw new DoubleException('Type cannot be standalone false');
+        }
+
+        if ($this->types == ['false' => 'false', 'null' => 'null']) {
+            throw new DoubleException('Type cannot be nullable false');
         }
 
         if (\PHP_VERSION_ID >= 80000 && isset($this->types['mixed']) && count($this->types) !== 1) {
