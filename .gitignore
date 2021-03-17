@@ -3,3 +3,4 @@
 /composer.lock
 /vendor
 /phpunit.xml
+*.cache

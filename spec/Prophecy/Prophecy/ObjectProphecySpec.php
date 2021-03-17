@@ -287,17 +287,6 @@ class ObjectProphecySpec extends ObjectBehavior
 
         $methodProphecy2->shouldNotBe($methodProphecy1);
     }
-
-    function it_throws_UnexpectedCallException_during_checkPredictions_if_unexpected_method_was_called(
-        $lazyDouble, CallCenter $callCenter
-    ) {
-        $this->beConstructedWith($lazyDouble, $callCenter);
-
-        $callCenter->checkUnexpectedCalls()->willThrow('Prophecy\Exception\Call\UnexpectedCallException');
-
-        $this->shouldThrow('Prophecy\Exception\Call\UnexpectedCallException')
-             ->duringCheckProphecyMethodsPredictions();
-    }
 }
 
 class ObjectProphecySpecFixtureA
