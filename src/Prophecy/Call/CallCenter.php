@@ -12,6 +12,7 @@
 namespace Prophecy\Call;
 
 use Prophecy\Exception\Prophecy\MethodProphecyException;
+use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Util\StringUtil;
@@ -81,12 +82,10 @@ class CallCenter
         // There are method prophecies, so it's a fake/stub. Searching prophecy for this call
         $matches = $this->findMethodProphecies($prophecy, $methodName, $arguments);
 
-        // If fake/stub doesn't have method prophecy for this call - throw exception
+        // If fake/stub doesn't have method prophecy for this call - remember it as unexpected method call
         if (!count($matches)) {
             $this->unexpectedCalls->attach(new Call($methodName, $arguments, null, null, $file, $line), $prophecy);
-            $this->recordedCalls[] = new Call($methodName, $arguments, null, null, $file, $line);
-
-            return null;
+            $matches = [[1, new MethodProphecy($prophecy, $methodName, $arguments)]];
         }
 
         // Sort matches by their score value
