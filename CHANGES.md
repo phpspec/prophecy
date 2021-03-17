@@ -1,3 +1,12 @@
+1.13.0 / 2021/03/17
+===================
+
+* [added] willYield can now specify a return value [@camilledejoye]
+* [added] Prophecy exception interfaces are explicitly Throwable [@ciaranmcnulty]
+* [fixed] Argument::in() and notIn() now marked as static [@tyteen4a03]
+* [fixed] Can now double unions containing false [@ciaranmcnulty]
+* [fixed] Virtual magic methods with arguments are now doublable in PHP 8 [@ciaranmcnulty]
+
 1.12.2 / 2020/12/19
 ===================
 
