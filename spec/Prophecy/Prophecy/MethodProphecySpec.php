@@ -353,7 +353,7 @@ class MethodProphecySpec extends ObjectBehavior
         $this->withArguments($arguments);
 
         try {
-          $this->callOnWrappedObject('shouldHave', array($prediction));
+            $this->callOnWrappedObject('shouldHave', array($prediction));
         } catch (\Exception $e) {}
 
         $this->getCheckedPredictions()->shouldReturn(array($prediction));
