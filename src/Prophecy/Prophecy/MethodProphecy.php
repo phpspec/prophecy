@@ -12,12 +12,13 @@
 namespace Prophecy\Prophecy;
 
 use Prophecy\Argument;
-use Prophecy\Prophet;
-use Prophecy\Promise;
-use Prophecy\Prediction;
 use Prophecy\Exception\Doubler\MethodNotFoundException;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Prophecy\MethodProphecyException;
+use Prophecy\Prediction;
+use Prophecy\Promise;
+use Prophecy\Promise\PromiseInterface;
+use Prophecy\Prophet;
 use ReflectionNamedType;
 use ReflectionType;
 use ReflectionUnionType;
@@ -205,6 +206,14 @@ class MethodProphecy
 
         return $this;
     }
+
+    /**
+     * @param PromiseInterface ...$promises
+     */
+    public function willChain(PromiseInterface ...$promises)
+    {
+        return $this->will(new Promise\ChainPromise(...$promises));
+    }    
 
     /**
      * Sets return promise to the prophecy.
