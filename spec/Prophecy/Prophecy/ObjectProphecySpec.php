@@ -298,6 +298,16 @@ class ObjectProphecySpec extends ObjectBehavior
         $this->shouldThrow('Prophecy\Exception\Call\UnexpectedCallException')
              ->duringCheckProphecyMethodsPredictions();
     }
+
+    function it_makes_CallCenter_fail_fast_if_spy_behaviour_is_disabled($lazyDouble, CallCenter $callCenter)
+    {
+        $this->beConstructedWith($lazyDouble, $callCenter);
+
+        $callCenter->makeUnexpectedCallsFailFast(true)
+            ->shouldBeCalled();
+
+        $this->enableSpyBehavior(false);
+    }
 }
 
 class ObjectProphecySpecFixtureA
