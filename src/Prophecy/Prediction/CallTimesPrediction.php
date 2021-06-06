@@ -43,6 +43,15 @@ class CallTimesPrediction implements PredictionInterface
     }
 
     /**
+     * Returns the prediction's times.
+     *
+     * @return int $times
+     */
+    public function getTimes() {
+        return $this->times;
+    }
+
+    /**
      * Tests that there was exact amount of calls made.
      *
      * @param Call[]         $calls
