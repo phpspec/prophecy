@@ -11,7 +11,7 @@ class AggregateExceptionSpec extends ObjectBehavior
 {
     function let()
     {
-        $this->beConstructedWith(null);
+        $this->beConstructedWith('');
     }
 
     function it_is_prediction_exception()

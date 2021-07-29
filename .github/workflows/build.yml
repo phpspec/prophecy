@@ -11,14 +11,19 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     name: Build and test
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
         php: [7.2, 7.3, 7.4, 8.0]
         composer-flags: [ "" ]
+        experimental: [false]
         include:
           - php: 7.2
             composer-flags: "--prefer-lowest"
+            experimental: false
+          - php: 8.1
+            experimental: true
 
     steps:
       -   uses: actions/checkout@v2
@@ -28,6 +33,10 @@ jobs:
           with:
             php-version: "${{ matrix.php }}"
             coverage: none
+
+      -   name: Configure for PHP 8.1
+          run: composer config platform.php 8.0.99
+          if: matrix.php == '8.1'
 
       -   name: Install dependencies
           run: COMPOSER_ROOT_VERSION=dev-master composer update ${{ matrix.composer-flags }}

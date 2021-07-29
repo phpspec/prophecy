@@ -68,8 +68,8 @@ class ArrayEntryTokenSpec extends ObjectBehavior
             return 'value';
         });
         $object->key()->willReturn('key');
-        $object->rewind()->willReturn(null);
-        $object->next()->willReturn(null);
+        (\PHP_VERSION_ID < 80100) ? $object->rewind()->willReturn(null) : $object->rewind()->shouldBeCalled();
+        (\PHP_VERSION_ID < 80100) ? $object->next()->willReturn(null) : $object->next()->shouldBeCalled();
         $object->valid()->willReturn(true);
         $key->scoreArgument('key')->willReturn(6);
         $value->scoreArgument('value')->willReturn(2);
@@ -113,8 +113,8 @@ class ArrayEntryTokenSpec extends ObjectBehavior
             return 'value';
         });
         $object->key()->willReturn('key');
-        $object->rewind()->willReturn(null);
-        $object->next()->willReturn(null);
+        (\PHP_VERSION_ID < 80100) ? $object->rewind()->willReturn(null) : $object->rewind()->shouldBeCalled();
+        (\PHP_VERSION_ID < 80100) ? $object->next()->willReturn(null) : $object->next()->shouldBeCalled();
         $object->valid()->willReturn(true);
         $this->shouldNotThrow(new InvalidArgumentException)->duringScoreArgument($object);
     }
@@ -142,8 +142,8 @@ class ArrayEntryTokenSpec extends ObjectBehavior
 
     function it_does_not_score_traversable_object_without_entries(\Iterator $object)
     {
-        $object->rewind()->willReturn(null);
-        $object->next()->willReturn(null);
+        (\PHP_VERSION_ID < 80100) ? $object->rewind()->willReturn(null) : $object->rewind()->shouldBeCalled();
+        (\PHP_VERSION_ID < 80100) && $object->next()->willReturn(null);
         $object->valid()->willReturn(false);
         $this->scoreArgument($object)->shouldBe(false);
     }
@@ -161,8 +161,8 @@ class ArrayEntryTokenSpec extends ObjectBehavior
         });
         $object->key()->willReturn(1);
         $object->key()->willReturn(2);
-        $object->rewind()->willReturn(null);
-        $object->next()->willReturn(null);
+        (\PHP_VERSION_ID < 80100) ? $object->rewind()->willReturn(null) : $object->rewind()->shouldBeCalled();
+        (\PHP_VERSION_ID < 80100) ? $object->next()->willReturn(null) : $object->next()->shouldBeCalled();
         $object->valid()->willReturn(true);
         $key->scoreArgument(1)->willReturn(true);
         $key->scoreArgument(2)->willReturn(false);
