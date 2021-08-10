@@ -52,8 +52,8 @@ class ArrayEveryEntryTokenSpec extends ObjectBehavior
 
     function it_does_not_score_traversable_object_without_entries(\Iterator $object)
     {
-        $object->rewind()->willReturn(null);
-        $object->next()->willReturn(null);
+        (\PHP_VERSION_ID < 80100) ? $object->rewind()->willReturn(null) : $object->rewind()->shouldBeCalled();
+        (\PHP_VERSION_ID < 80100) && $object->next()->willReturn(null);
         $object->valid()->willReturn(false);
         $this->scoreArgument($object)->shouldBe(false);
     }
@@ -87,8 +87,8 @@ class ArrayEveryEntryTokenSpec extends ObjectBehavior
             return 'value';
         });
         $object->key()->willReturn('key');
-        $object->rewind()->willReturn(null);
-        $object->next()->willReturn(null);
+        (\PHP_VERSION_ID < 80100) ? $object->rewind()->willReturn(null) : $object->rewind()->shouldBeCalled();
+        (\PHP_VERSION_ID < 80100) ? $object->next()->willReturn(null) : $object->next()->shouldBeCalled();
         $object->valid()->willReturn(true);
         $value->scoreArgument('value')->willReturn(2);
         $this->scoreArgument($object)->shouldBe(2);

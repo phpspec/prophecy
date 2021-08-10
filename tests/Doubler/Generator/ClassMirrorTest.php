@@ -496,6 +496,10 @@ class ClassMirrorTest extends TestCase
         $method->returnsReference()->willReturn(false);
         $method->hasReturnType()->willReturn(false);
 
+        if (\PHP_VERSION_ID >= 80100) {
+            $method->hasTentativeReturnType()->willReturn(false);
+        }
+
         $parameter->getName()->willReturn('...');
         $parameter->isDefaultValueAvailable()->willReturn(true);
         $parameter->getDefaultValue()->willReturn(null);
