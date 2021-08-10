@@ -154,7 +154,7 @@ class ArrayEntryTokenSpec extends ObjectBehavior
         \Iterator $object
     ) {
         $object->current()->willReturn('foo');
-        $object->current()->will(function () use ($object) {
+        $object->current()->will(static function () use ($object) {
             $object->valid()->willReturn(false);
 
             return 'bar';
