@@ -44,7 +44,7 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         MethodNode $method1,
         MethodNode $method2,
         MethodNode $method3,
-        MethodNode $method4,
+        MethodNode $method4
     ) {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->willReturn(null);
         $node->addProperty('objectProphecyClosure', 'private')->willReturn(null);
