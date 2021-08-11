@@ -587,4 +587,20 @@ class ClassMirrorTest extends TestCase
         self::assertSame(2, $arrayObject->offsetGet(2));
         self::assertSame(3, $arrayObject->offsetGet(3));
     }
+
+    /**
+     * @test
+     */
+    public function it_can_double_never_return_type()
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Never type is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\NeverType'), []);
+        $methodNode = $classNode->getMethods()['doSomething'];
+
+        $this->assertEquals(new ReturnTypeNode('never'), $methodNode->getReturnTypeNode());
+
+    }
 }
