@@ -29,6 +29,14 @@ final class ReturnTypeNode extends TypeNodeAbstract
         parent::guardIsValidType();
     }
 
+    /**
+     * @deprecated use hasReturnStatement
+     */
+    public function isVoid()
+    {
+        return $this->types == ['void' => 'void'];
+    }
+
     public function hasReturnStatement(): bool
     {
         return $this->types !== ['void' => 'void']
