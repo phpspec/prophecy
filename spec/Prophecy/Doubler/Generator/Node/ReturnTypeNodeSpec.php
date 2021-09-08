@@ -105,20 +105,6 @@ class ReturnTypeNodeSpec extends ObjectBehavior
         }
     }
 
-    function it_knows_when_it_is_not_void()
-    {
-        $this->beConstructedWith('int');
-
-        $this->shouldNotBeVoid();
-    }
-
-    function it_knows_when_it_is_void()
-    {
-        $this->beConstructedWith('void');
-
-        $this->shouldBeVoid();
-    }
-
     function it_does_not_prefix_false()
     {
         $this->beConstructedWith('false', 'array');
@@ -142,5 +128,40 @@ class ReturnTypeNodeSpec extends ObjectBehavior
         if (PHP_VERSION_ID >=80000) {
             $this->shouldThrow(DoubleException::class)->duringInstantiation();
         }
+    }
+
+    function it_does_not_prefix_never()
+    {
+        $this->beConstructedWith('never');
+
+        $this->getTypes()->shouldReturn(['never']);
+    }
+
+    function it_does_not_allow_union_never()
+    {
+        $this->beConstructedWith('never', 'int');
+
+        $this->shouldThrow(DoubleException::class)->duringInstantiation();
+    }
+
+    function it_has_a_return_statement_if_it_is_a_simple_type()
+    {
+        $this->beConstructedWith('int');
+
+        $this->shouldHaveReturnStatement();
+    }
+
+    function it_does_not_have_return_statement_if_it_returns_void()
+    {
+        $this->beConstructedWith('void');
+
+        $this->shouldNotHaveReturnStatement();
+    }
+
+    function it_does_not_have_return_statement_if_it_returns_never()
+    {
+        $this->beConstructedWith('never');
+
+        $this->shouldNotHaveReturnStatement();
     }
 }
