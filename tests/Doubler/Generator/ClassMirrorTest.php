@@ -603,4 +603,32 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode('never'), $methodNode->getReturnTypeNode());
 
     }
+
+    /**
+     * @test
+     */
+    public function it_can_not_double_intersection_return_types()
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Intersection types are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionReturnType'), []);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_not_double_intersection_argument_types()
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Intersection types are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionArgumentType'), []);
+    }
 }

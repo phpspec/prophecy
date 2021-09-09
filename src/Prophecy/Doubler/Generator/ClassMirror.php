@@ -16,6 +16,7 @@ use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use ReflectionClass;
+use ReflectionIntersectionType;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -222,6 +223,12 @@ class ClassMirror
         }
         elseif ($type instanceof ReflectionUnionType) {
             $types = $type->getTypes();
+        }
+        elseif ($type instanceof ReflectionIntersectionType) {
+            throw new ClassMirrorException('Doubling intersection types is not supported', $class);
+        }
+        elseif(is_object($type)) {
+            throw new ClassMirrorException('Unknown reflection type ' . get_class($type), $class);
         }
 
         $types = array_map(
