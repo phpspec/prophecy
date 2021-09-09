@@ -603,4 +603,19 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode('never'), $methodNode->getReturnTypeNode());
 
     }
+
+    /**
+     * @test
+     */
+    public function it_can_not_double_an_enum()
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Enums are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\Enum'), []);
+
+    }
 }
