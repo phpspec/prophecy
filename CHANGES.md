@@ -1,3 +1,9 @@
+1.15.0 / 2021/12/08
+===================
+
+* [added] Support for the `static` return type [@denis-rolling-scopes]
+* [fixed] Add return types for Comparator implementations to avoid deprecation warnings from Symfony's DebugClassLoader [@stof]
+
 1.14.0 / 2021/09/16
 ===================
 
