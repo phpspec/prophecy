@@ -56,6 +56,7 @@ abstract class TypeNodeAbstract
 
             //  built in types
             case 'self':
+            case 'static':
             case 'array':
             case 'callable':
             case 'bool':
