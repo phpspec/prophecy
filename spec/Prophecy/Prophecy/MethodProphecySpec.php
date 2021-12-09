@@ -21,6 +21,10 @@ class MethodProphecySpec extends ObjectBehavior
     {
         $objectProphecy->reveal()->willReturn($reflection);
 
+        if (\PHP_VERSION_ID >= 80100) {
+            $objectProphecy->addMethodProphecy(Argument::any())->willReturn();
+        }
+
         $this->beConstructedWith($objectProphecy, 'getName', null);
     }
 
@@ -293,7 +297,11 @@ class MethodProphecySpec extends ObjectBehavior
         $this->withArguments($arguments);
         $this->callOnWrappedObject('shouldHave', array($prediction));
 
-        $this->getPromise()->shouldReturnAnInstanceOf('Prophecy\Promise\ReturnPromise');
+        $this->getPromise()->shouldReturnAnInstanceOf(
+            \PHP_VERSION_ID < 80100
+                ? 'Prophecy\Promise\ReturnPromise'
+                : 'Prophecy\Promise\CallbackPromise'
+        );
     }
 
     function it_does_not_set_return_promise_during_shouldHave_call_if_it_was_set_before(

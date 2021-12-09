@@ -496,6 +496,10 @@ class ClassMirrorTest extends TestCase
         $method->returnsReference()->willReturn(false);
         $method->hasReturnType()->willReturn(false);
 
+        if (\PHP_VERSION_ID >= 80100) {
+            $method->hasTentativeReturnType()->willReturn(false);
+        }
+
         $parameter->getName()->willReturn('...');
         $parameter->isDefaultValueAvailable()->willReturn(true);
         $parameter->getDefaultValue()->willReturn(null);
@@ -582,5 +586,63 @@ class ClassMirrorTest extends TestCase
         self::assertSame(1, $arrayObject->offsetGet(1));
         self::assertSame(2, $arrayObject->offsetGet(2));
         self::assertSame(3, $arrayObject->offsetGet(3));
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_never_return_type()
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Never type is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\NeverType'), []);
+        $methodNode = $classNode->getMethods()['doSomething'];
+
+        $this->assertEquals(new ReturnTypeNode('never'), $methodNode->getReturnTypeNode());
+
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_not_double_an_enum()
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Enums are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+  
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\Enum'), []);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_not_double_intersection_return_types()
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Intersection types are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionReturnType'), []);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_not_double_intersection_argument_types()
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Intersection types are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionArgumentType'), []);
     }
 }
