@@ -31,15 +31,6 @@ use ReflectionUnionType;
  */
 class ClassMirror
 {
-    private const REFLECTABLE_METHODS = array(
-        '__construct',
-        '__destruct',
-        '__sleep',
-        '__wakeup',
-        '__toString',
-        '__call',
-        '__invoke'
-    );
 
     /**
      * Reflects provided arguments into class node.
@@ -116,11 +107,6 @@ class ClassMirror
         }
 
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            if (0 === strpos($method->getName(), '_')
-                && !in_array($method->getName(), self::REFLECTABLE_METHODS)) {
-                continue;
-            }
-
             if (true === $method->isFinal()) {
                 $node->addUnextendableMethod($method->getName());
                 continue;

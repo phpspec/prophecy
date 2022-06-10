@@ -302,7 +302,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
-    public function it_ignores_virtually_private_methods()
+    public function it_does_not_ignores_virtually_private_methods()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithVirtuallyPrivateMethod');
 
@@ -310,10 +310,10 @@ class ClassMirrorTest extends TestCase
 
         $classNode = $mirror->reflect($class, array());
 
-        $this->assertCount(2, $classNode->getMethods());
+        $this->assertCount(3, $classNode->getMethods());
         $this->assertTrue($classNode->hasMethod('isAbstract'));
         $this->assertTrue($classNode->hasMethod('__toString'));
-        $this->assertFalse($classNode->hasMethod('_getName'));
+        $this->assertTrue($classNode->hasMethod('_getName'));
     }
 
     /**
