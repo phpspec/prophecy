@@ -22,6 +22,8 @@ jobs:
           - php: 7.2
             composer-flags: "--prefer-lowest"
             experimental: false
+          - php: 8.2
+            experimental: true
           - php: nightly
             experimental: true
 
@@ -34,9 +36,9 @@ jobs:
             php-version: "${{ matrix.php }}"
             coverage: none
 
-      -   name: Configure for PHP > 8.0 and nightly builds
-          run: composer config platform.php 8.0.99
-          if: matrix.php == '8.1' || matrix.php == 'latest' || matrix.php == 'nightly'
+      -   name: Configure for experimental builds
+          run: composer config platform.php 8.1.99
+          if: matrix.php == '8.2' || matrix.php == 'nightly'
 
       -   name: Install dependencies
           run: COMPOSER_ROOT_VERSION=dev-master composer update ${{ matrix.composer-flags }}
