@@ -8,9 +8,12 @@ use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use Prophecy\Exception\InvalidArgumentException;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class ClassMirrorTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @test
      */
@@ -482,12 +485,14 @@ class ClassMirrorTest extends TestCase
         $method = $this->prophesize('ReflectionMethod');
         $parameter = $this->prophesize('ReflectionParameter');
 
+        $class->willBeConstructedWith(['Fixtures\Prophecy\WithArguments']);
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
         $class->getMethods(\ReflectionMethod::IS_PUBLIC)->willReturn(array($method));
         $class->getMethods(\ReflectionMethod::IS_ABSTRACT)->willReturn(array());
 
+        $method->willBeConstructedWith(['Fixtures\Prophecy\WithArguments', 'methodWithoutTypeHints']);
         $method->getParameters()->willReturn(array($parameter));
         $method->getName()->willReturn('methodName');
         $method->isFinal()->willReturn(false);
@@ -500,6 +505,7 @@ class ClassMirrorTest extends TestCase
             $method->hasTentativeReturnType()->willReturn(false);
         }
 
+        $parameter->willBeConstructedWith([['Fixtures\Prophecy\WithArguments', 'methodWithoutTypeHints'], 0]);
         $parameter->getName()->willReturn('...');
         $parameter->isDefaultValueAvailable()->willReturn(true);
         $parameter->getDefaultValue()->willReturn(null);
@@ -578,6 +584,7 @@ class ClassMirrorTest extends TestCase
     public function case_insensitive_method_names()
     {
         $prophecy = $this->prophesize('ArrayObject');
+        $prophecy->willBeConstructedWith([[], 0, \ArrayIterator::class]);
         $prophecy->offsetGet(1)->willReturn(1)->shouldBeCalledTimes(1);
         $prophecy->offsetget(2)->willReturn(2)->shouldBeCalledTimes(1);
         $prophecy->OffsetGet(3)->willReturn(3)->shouldBeCalledTimes(1);
