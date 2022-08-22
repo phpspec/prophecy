@@ -56,7 +56,7 @@ class StringUtil
             return get_resource_type($value).':'.$value;
         }
         if (is_object($value)) {
-            return $exportObject ? ExportUtil::export($value) : sprintf('%s:%s', get_class($value), spl_object_hash($value));
+            return $exportObject ? ExportUtil::export($value) : sprintf('%s#%s', get_class($value), spl_object_id($value));
         }
         if (true === $value || false === $value) {
             return $value ? 'true' : 'false';
