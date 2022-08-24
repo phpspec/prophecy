@@ -78,18 +78,6 @@ class ExportUtil
         // above (fast) mechanism nor with reflection in Zend.
         // Format the output similarly to print_r() in this case
         if ($value instanceof \SplObjectStorage) {
-            // However, the fast method does work in HHVM, and exposes the
-            // internal implementation. Hide it again.
-            if (property_exists('\SplObjectStorage', '__storage')) {
-                unset($array['__storage']);
-            } elseif (property_exists('\SplObjectStorage', 'storage')) {
-                unset($array['storage']);
-            }
-
-            if (property_exists('\SplObjectStorage', '__key')) {
-                unset($array['__key']);
-            }
-
             foreach ($value as $key => $val) {
                 // Use the same identifier that would be printed alongside the object's representation elsewhere.
                 $array[spl_object_id($val)] = array(
