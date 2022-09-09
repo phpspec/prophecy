@@ -645,4 +645,32 @@ class ClassMirrorTest extends TestCase
 
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionArgumentType'), []);
     }
+
+    /**
+     * @test
+     */
+    public function it_can_not_double_dnf_intersection_argument_types()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('DNF intersection types are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfArgumentType'), []);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_not_double_dnf_intersection_return_types()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('DNF intersection types are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfReturnType'), []);
+    }
 }

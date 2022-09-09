@@ -223,6 +223,13 @@ class ClassMirror
         }
         elseif ($type instanceof ReflectionUnionType) {
             $types = $type->getTypes();
+            if (\PHP_VERSION_ID >= 80200) {
+                foreach ($types as $reflectionType) {
+                    if ($reflectionType instanceof ReflectionIntersectionType) {
+                        throw new ClassMirrorException('Doubling intersection types is not supported', $class);
+                    }
+                }
+            }
         }
         elseif ($type instanceof ReflectionIntersectionType) {
             throw new ClassMirrorException('Doubling intersection types is not supported', $class);
