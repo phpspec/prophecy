@@ -645,4 +645,21 @@ class ClassMirrorTest extends TestCase
 
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionArgumentType'), []);
     }
+
+    /**
+     * @test
+     */
+    public function it_throws_an_exception_if_class_is_readonly()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Classes marked readonly are not supported in this PHP version.');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+        $this->expectExceptionMessageMatches(
+            '/Could not reflect class [^\.]*.\. Doubling a readonly class is not supported yet./'
+        );
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\ReadOnlyClass'), []);
+    }
 }

@@ -98,6 +98,12 @@ class ClassMirror
             ), $class);
         }
 
+        if (method_exists(ReflectionClass::class, 'isReadOnly') && true === $class->isReadOnly()) {
+            throw new ClassMirrorException(sprintf(
+                'Could not reflect class %s. Doubling a readonly class is not supported yet.', $class->getName()
+            ), $class);
+        }
+
         $node->setParentClass($class->getName());
 
         foreach ($class->getMethods(ReflectionMethod::IS_ABSTRACT) as $method) {
