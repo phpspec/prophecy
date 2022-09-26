@@ -607,6 +607,17 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    public function it_can_double_void_return_type()
+    {
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\VoidReturnType'), []);
+        $methodNode = $classNode->getMethods()['doSomething'];
+
+        $this->assertEquals(new ReturnTypeNode('void'), $methodNode->getReturnTypeNode());
+    }
+
+    /**
+     * @test
+     */
     public function it_can_not_double_an_enum()
     {
         if (PHP_VERSION_ID < 80100) {
