@@ -84,7 +84,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $argument12->isOptional()->willReturn(false);
         $argument12->isPassedByReference()->willReturn(false);
         $argument12->isVariadic()->willReturn(false);
-        $argument12->getTypeNode()->willReturn(new ArgumentTypeNode('ReflectionClass'));
+        $argument12->getTypeNode()->willReturn(new ArgumentTypeNode('\ReflectionClass'));
 
         $argument13->getName()->willReturn('instance');
         $argument13->isOptional()->willReturn(false);
@@ -134,6 +134,7 @@ return;
 }
 }
 PHP;
+
 
         $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
         $code->shouldBe($expected);
@@ -205,13 +206,13 @@ PHP;
         $argument3->isOptional()->willReturn(false);
         $argument3->isPassedByReference()->willReturn(false);
         $argument3->isVariadic()->willReturn(true);
-        $argument3->getTypeNode()->willReturn(new ArgumentTypeNode('ReflectionClass'));
+        $argument3->getTypeNode()->willReturn(new ArgumentTypeNode('\ReflectionClass'));
 
         $argument4->getName()->willReturn('args');
         $argument4->isOptional()->willReturn(false);
         $argument4->isPassedByReference()->willReturn(true);
         $argument4->isVariadic()->willReturn(true);
-        $argument4->getTypeNode()->willReturn(new ArgumentTypeNode('ReflectionClass'));
+        $argument4->getTypeNode()->willReturn(new ArgumentTypeNode('\ReflectionClass'));
 
 
         $code = $this->generate('CustomClass', $class);

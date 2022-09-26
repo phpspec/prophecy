@@ -27,13 +27,6 @@ class ArgumentTypeNodeSpec extends ObjectBehavior
         $this->getTypes()->shouldReturn(['int', 'string']);
     }
 
-    function it_will_prefix_fcqns()
-    {
-        $this->beConstructedWith('Foo');
-
-        $this->getTypes()->shouldReturn(['\\Foo']);
-    }
-
     function it_will_not_prefix_fcqns_that_already_have_prefix()
     {
         $this->beConstructedWith('\\Foo');

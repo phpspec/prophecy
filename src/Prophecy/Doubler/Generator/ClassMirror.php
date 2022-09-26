@@ -12,6 +12,8 @@
 namespace Prophecy\Doubler\Generator;
 
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
+use Prophecy\Doubler\Generator\Node\NameNormalization\ArgumentTypeNameNormalization;
+use Prophecy\Doubler\Generator\Node\NameNormalization\ReturnTypeNameNormalization;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Doubler\ClassMirrorException;
@@ -150,10 +152,18 @@ class ClassMirror
 
         if ($method->hasReturnType()) {
             $returnTypes = $this->getTypeHints($method->getReturnType(), $method->getDeclaringClass(), $method->getReturnType()->allowsNull());
+
+            $normalization = new ReturnTypeNameNormalization();
+            $returnTypes = $normalization->normalize(...$returnTypes);
+
             $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
         }
         elseif (method_exists($method, 'hasTentativeReturnType') && $method->hasTentativeReturnType()) {
             $returnTypes = $this->getTypeHints($method->getTentativeReturnType(), $method->getDeclaringClass(), $method->getTentativeReturnType()->allowsNull());
+
+            $normalization = new ReturnTypeNameNormalization();
+            $returnTypes = $normalization->normalize(...$returnTypes);
+
             $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
         }
 
@@ -171,9 +181,14 @@ class ClassMirror
         $name = $parameter->getName() == '...' ? '__dot_dot_dot__' : $parameter->getName();
         $node = new Node\ArgumentNode($name);
 
-        $typeHints = $this->getTypeHints($parameter->getType(), $parameter->getDeclaringClass(), $parameter->allowsNull());
+        if ($parameter->hasType()) {
+            $typeHints = $this->getTypeHints($parameter->getType(), $parameter->getDeclaringClass(), $parameter->allowsNull());
 
-        $node->setTypeNode(new ArgumentTypeNode(...$typeHints));
+            $normalization = new ArgumentTypeNameNormalization();
+            $typeHints = $normalization->normalize(...$typeHints);
+
+            $node->setTypeNode(new ArgumentTypeNode(...$typeHints));
+        }
 
         if ($parameter->isVariadic()) {
             $node->setAsVariadic();

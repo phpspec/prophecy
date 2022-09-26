@@ -33,18 +33,18 @@ class ReturnTypeNodeSpec extends ObjectBehavior
         $this->getTypes()->shouldReturn(['void']);
     }
 
-    function it_will_normalise_type_aliases_types()
+    function it_will_not_normalise_type_aliases_types()
     {
         $this->beConstructedWith('double', 'real', 'boolean', 'integer');
 
-        $this->getTypes()->shouldReturn(['float', 'bool', 'int']);
+        $this->getTypes()->shouldNotBe(['float', 'bool', 'int']);
     }
 
-    function it_will_prefix_fcqns()
+    function it_will_not_prefix_fcqns()
     {
         $this->beConstructedWith('Foo');
 
-        $this->getTypes()->shouldReturn(['\\Foo']);
+        $this->getTypes()->shouldNotBe(['\\Foo']);
     }
 
     function it_will_not_prefix_fcqns_that_already_have_prefix()
