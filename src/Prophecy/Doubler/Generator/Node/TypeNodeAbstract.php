@@ -61,7 +61,6 @@ abstract class TypeNodeAbstract
             case 'callable':
             case 'bool':
             case 'false':
-            case 'true':
             case 'float':
             case 'int':
             case 'string':
@@ -71,6 +70,8 @@ abstract class TypeNodeAbstract
                 return $type;
             case 'mixed':
                 return \PHP_VERSION_ID < 80000 ? $this->prefixWithNsSeparator($type) : $type;
+            case 'true':
+                return \PHP_VERSION_ID < 80200 ? $this->prefixWithNsSeparator($type) : $type;
 
             default:
                 return $this->prefixWithNsSeparator($type);
