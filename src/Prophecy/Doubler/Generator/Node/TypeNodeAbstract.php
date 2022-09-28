@@ -2,76 +2,66 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
+use Prophecy\Doubler\Generator\Node\Type\IntersectionTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\NamedTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\UnionTypeNode;
 use Prophecy\Exception\Doubler\DoubleException;
 
 abstract class TypeNodeAbstract
 {
-    /** @var string[] */
-    protected $types = [];
+    /** @var ?Type $type */
+    protected $type;
 
-    public function __construct(string ...$types)
+    public function __construct(?Type $type = null)
     {
-        $this->types = $types;
+        $this->type = $type;
         $this->guardIsValidType();
     }
 
     public function canUseNullShorthand(): bool
     {
-        return in_array('null', $this->types) && count($this->types) <= 2;
+        return $this->type instanceof NamedTypeNode
+            && $this->type->getName() !== 'mixed'
+            && $this->type->allowsNull();
     }
 
-    public function getTypes(): array
+    public function getType(): ?Type
     {
-        return array_values($this->types);
-    }
-
-    public function getNonNullTypes(): array
-    {
-        $nonNullTypes = $this->types;
-
-        if (($key = array_search('null', $nonNullTypes)) !== false) {
-            unset($nonNullTypes[$key]);
-        }
-
-        return array_values($nonNullTypes);
-    }
-
-    /**
-     * Order of array does not matter. $array has to be non empty.
-     *
-     * @param $array
-     * @return bool
-     */
-    protected function doesArrayEqual($array)
-   {
-       if (empty($this->types)) {
-           return false;
-       }
-       $intersection = array_intersect($this->types, $array);
-
-        return count($intersection) == count($this->types);
+        return $this->type;
     }
 
     protected function guardIsValidType()
     {
-        if(!empty($this->types) && count(array_intersect($this->types, ['false', 'null'])) == count($this->types)){
-            throw new DoubleException('Type cannot be nullable false');
+        if ($this->type instanceof UnionTypeNode) {
+            /** @var NamedTypeNode $type */
+            foreach ($this->type->getTypes() as $type) {
+                if (\PHP_VERSION_ID >= 80000 && $type->getName() === 'mixed') {
+                    throw new DoubleException('mixed cannot be part of a union');
+                }
+            }
         }
-
-        if ($this->doesArrayEqual(['null'])) {
-            throw new DoubleException('Type cannot be standalone null');
+        elseif($this->type instanceof IntersectionTypeNode)
+        {
+            /** @var NamedTypeNode $type */
+            foreach ($this->type->getTypes() as $type) {
+                if (\PHP_VERSION_ID >= 80000 && $type->getName() === 'mixed') {
+                    throw new DoubleException('mixed cannot be part of an intersection');
+                }
+            }
         }
+        elseif($this->type instanceof NamedTypeNode)
+        {
+            if ($this->type->getName() === 'null') {
+                throw new DoubleException('Type cannot be standalone null');
+            }
 
-        if ($this->doesArrayEqual(['false'])) {
-            throw new DoubleException('Type cannot be standalone false');
-        }
+            if ($this->type->getName() === 'false' && $this->type->allowsNull()) {
+                throw new DoubleException('Type cannot be nullable false');
+            }
 
-        if ($this->doesArrayEqual(['false', 'null'])) {
-            throw new DoubleException('Type cannot be nullable false');
-        }
-
-        if (\PHP_VERSION_ID >= 80000 && in_array('mixed', $this->types) && count($this->types) !== 1) {
-            throw new DoubleException('mixed cannot be part of a union');
+            if ($this->type->getName() === 'false') {
+                throw new DoubleException('Type cannot be standalone false');
+            }
         }
     }
 }

@@ -98,6 +98,7 @@ class ArgumentNode
      */
     public function getTypeHint()
     {
+        // @TODO fix.
         $type = $this->typeNode->getNonNullTypes() ? $this->typeNode->getNonNullTypes()[0] : null;
 
         return $type ? ltrim($type, '\\') : null;
@@ -127,6 +128,7 @@ class ArgumentNode
      */
     public function setAsNullable($isNullable = true)
     {
+        // @TOOD fix
         $nonNullTypes = $this->typeNode->getNonNullTypes();
         $this->typeNode = $isNullable ? new ArgumentTypeNode('null', ...$nonNullTypes) : new ArgumentTypeNode(...$nonNullTypes);
     }

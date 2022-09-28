@@ -65,7 +65,7 @@ class TraversablePatchSpec extends ObjectBehavior
             $node->addMethod(Argument::that(static function ($value) use ($methodName, $returnType) {
                 return $value instanceof MethodNode
                     && $value->getName() === $methodName
-                    && (\PHP_VERSION_ID < 80100 || $value->getReturnTypeNode()->getTypes() === [$returnType]);
+                    && (\PHP_VERSION_ID < 80100 || $value->getReturnTypeNode()->getType() === [$returnType]);
             }))->shouldBeCalled();
         }
 

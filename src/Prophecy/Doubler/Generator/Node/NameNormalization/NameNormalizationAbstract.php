@@ -17,7 +17,7 @@ abstract class NameNormalizationAbstract implements NameNormalization
         return array_values($normalizedTypes);
     }
 
-    protected function getRealType(string $type): string
+    public function getRealType(string $type): string
     {
         switch ($type) {
             // type aliases

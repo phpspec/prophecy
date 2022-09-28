@@ -4,7 +4,7 @@ namespace Prophecy\Doubler\Generator\Node\NameNormalization;
 
 class ReturnTypeNameNormalization extends NameNormalizationAbstract
 {
-    protected function getRealType(string $type): string
+    public function getRealType(string $type): string
     {
         switch ($type) {
             case 'void':

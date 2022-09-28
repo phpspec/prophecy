@@ -111,6 +111,7 @@ class MethodNode
      */
     public function hasReturnType()
     {
+        // @TODO fix.
         return (bool) $this->returnTypeNode->getNonNullTypes();
     }
 
@@ -134,10 +135,12 @@ class MethodNode
      */
     public function setNullableReturnType($bool = true)
     {
+        // @TOOD fix
         if ($bool) {
-            $this->returnTypeNode = new ReturnTypeNode('null', ...$this->returnTypeNode->getTypes());
+            $this->returnTypeNode = new ReturnTypeNode('null', ...$this->returnTypeNode->getType());
         }
         else {
+            // @TODO fix.
             $this->returnTypeNode = new ReturnTypeNode(...$this->returnTypeNode->getNonNullTypes());
         }
     }
@@ -148,6 +151,7 @@ class MethodNode
      */
     public function getReturnType()
     {
+        // @TODO fix.
         if ($types = $this->returnTypeNode->getNonNullTypes())
         {
             return $types[0];

@@ -12,9 +12,13 @@
 namespace Prophecy\Doubler\Generator;
 
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
+use Prophecy\Doubler\Generator\Node\NameNormalization;
 use Prophecy\Doubler\Generator\Node\NameNormalization\ArgumentTypeNameNormalization;
 use Prophecy\Doubler\Generator\Node\NameNormalization\ReturnTypeNameNormalization;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\IntersectionTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\NamedTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\UnionTypeNode;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use ReflectionClass;
@@ -151,20 +155,14 @@ class ClassMirror
         }
 
         if ($method->hasReturnType()) {
-            $returnTypes = $this->getTypeHints($method->getReturnType(), $method->getDeclaringClass(), $method->getReturnType()->allowsNull());
-
-            $normalization = new ReturnTypeNameNormalization();
-            $returnTypes = $normalization->normalize(...$returnTypes);
-
-            $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
+            $returnTypes = $this->getTypeDeclarations(new ReturnTypeNameNormalization(), $method->getDeclaringClass(), $method->getReturnType());
+            $returnTypes = array_shift($returnTypes);
+            $node->setReturnTypeNode(new ReturnTypeNode($returnTypes));
         }
         elseif (method_exists($method, 'hasTentativeReturnType') && $method->hasTentativeReturnType()) {
-            $returnTypes = $this->getTypeHints($method->getTentativeReturnType(), $method->getDeclaringClass(), $method->getTentativeReturnType()->allowsNull());
-
-            $normalization = new ReturnTypeNameNormalization();
-            $returnTypes = $normalization->normalize(...$returnTypes);
-
-            $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
+            $returnTypes = $this->getTypeDeclarations(new ReturnTypeNameNormalization(), $method->getDeclaringClass(), $method->getTentativeReturnType());
+            $returnTypes = array_shift($returnTypes);
+            $node->setReturnTypeNode(new ReturnTypeNode($returnTypes));
         }
 
         if (is_array($params = $method->getParameters()) && count($params)) {
@@ -182,12 +180,10 @@ class ClassMirror
         $node = new Node\ArgumentNode($name);
 
         if ($parameter->hasType()) {
-            $typeHints = $this->getTypeHints($parameter->getType(), $parameter->getDeclaringClass(), $parameter->allowsNull());
+            $typeHints = $this->getTypeDeclarations(new ArgumentTypeNameNormalization(), $parameter->getDeclaringClass(), $parameter->getType());
+            $typeHints = array_shift($typeHints);
 
-            $normalization = new ArgumentTypeNameNormalization();
-            $typeHints = $normalization->normalize(...$typeHints);
-
-            $node->setTypeNode(new ArgumentTypeNode(...$typeHints));
+            $node->setTypeNode(new ArgumentTypeNode($typeHints));
         }
 
         if ($parameter->isVariadic()) {
@@ -228,42 +224,89 @@ class ClassMirror
         return $parameter->getDefaultValue();
     }
 
-    private function getTypeHints(?ReflectionType $type, ?ReflectionClass $class, bool $allowsNull) : array
+    private function getTypeDeclarations(NameNormalization $normalization, ReflectionClass $class = null, ReflectionType ...$types): array
     {
-        $types = [];
+        $nodes = [];
+        foreach ($types as $type) {
+            if ($type instanceof ReflectionUnionType) {
+                $nodes[] =  new UnionTypeNode(
+                    $type->allowsNull(),
+                    ...$this->getTypeDeclarations(
+                        $normalization,
+                        $class,
+                        ...$type->getTypes()
+                    )
+                );
+            }
 
-        if ($type instanceof ReflectionNamedType) {
-            $types = [$type->getName()];
+            if ($type instanceof ReflectionIntersectionType) {
+                $nodes[] = new IntersectionTypeNode(
+                    $type->allowsNull(),
+                    ...$this->getTypeDeclarations(
+                        $normalization,
+                        $class,
+                        ...$type->getTypes()
+                    )
+                );
+            }
 
-        }
-        elseif ($type instanceof ReflectionUnionType) {
-            $types = $type->getTypes();
-        }
-        elseif ($type instanceof ReflectionIntersectionType) {
-            throw new ClassMirrorException('Doubling intersection types is not supported', $class);
-        }
-        elseif(is_object($type)) {
-            throw new ClassMirrorException('Unknown reflection type ' . get_class($type), $class);
-        }
+            if ($type instanceof ReflectionNamedType) {
+                $name = $type->getName();
 
-        $types = array_map(
-            function(string $type) use ($class) {
-                if ($type === 'self') {
-                    return $class->getName();
+                if ($name === 'self') {
+                    $name = $class->getName();
                 }
-                if ($type === 'parent') {
-                    return $class->getParentClass()->getName();
+                elseif ($name === 'parent') {
+                    $name = $class->getParentClass()->getName();
                 }
 
-                return $type;
-            },
-            $types
-        );
-
-        if ($types && $types != ['mixed'] && $allowsNull) {
-            $types[] = 'null';
+                $nodes[] = new NamedTypeNode(
+                    $normalization->getRealType($name),
+                    $type->allowsNull(),
+                    $type->isBuiltin()
+                );
+            }
         }
 
-        return $types;
+        return $nodes;
     }
+
+//    private function getTypeHints(?ReflectionType $type, ?ReflectionClass $class, bool $allowsNull) : array
+//    {
+//        $types = [];
+//
+//        if ($type instanceof ReflectionNamedType) {
+//            $types = [$type->getName()];
+//
+//        }
+//        elseif ($type instanceof ReflectionUnionType) {
+//            $types = $type->getTypes();
+//        }
+//        elseif ($type instanceof ReflectionIntersectionType) {
+//            throw new ClassMirrorException('Doubling intersection types is not supported', $class);
+//        }
+//        elseif(is_object($type)) {
+//            throw new ClassMirrorException('Unknown reflection type ' . get_class($type), $class);
+//        }
+//
+//        $types = array_map(
+//            function(string $type) use ($class) {
+//                if ($type === 'self') {
+//                    return $class->getName();
+//                }
+//                if ($type === 'parent') {
+//                    return $class->getParentClass()->getName();
+//                }
+//
+//                return $type;
+//            },
+//            $types
+//        );
+//
+//        if ($types && $types != ['mixed'] && $allowsNull) {
+//            $types[] = 'null';
+//        }
+//
+//        return $types;
+//    }
 }

@@ -76,15 +76,15 @@ class ClassCodeGenerator
 
     private function generateTypes(TypeNodeAbstract $typeNode): string
     {
-        if (!$typeNode->getTypes()) {
+        if (!$typeNode->getType()) {
             return '';
         }
 
         // When we require PHP 8 we can stop generating ?foo nullables and remove this first block
         if ($typeNode->canUseNullShorthand()) {
-            return sprintf( '?%s', $typeNode->getNonNullTypes()[0]);
+            return sprintf( '?%s', $typeNode->getType()->getName());
         } else {
-            return join('|', $typeNode->getTypes());
+            return (string) $typeNode->getType();
         }
     }
 
