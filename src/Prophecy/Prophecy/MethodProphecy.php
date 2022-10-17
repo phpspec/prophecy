@@ -241,6 +241,8 @@ class MethodProphecy
      *
      * @see \Prophecy\Promise\ReturnPromise
      *
+     * @param mixed ... a list of return values
+     *
      * @return $this
      */
     public function willReturn()
