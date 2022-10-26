@@ -39,4 +39,11 @@ class CallbackTokenSpec extends ObjectBehavior
     {
         $this->__toString()->shouldReturn('callback()');
     }
+
+    function its_string_representation_can_be_customized()
+    {
+        $this->beConstructedWith('get_class', 'MyCustomTestCase');
+
+        $this->__toString()->shouldReturn('MyCustomTestCase');
+    }
 }

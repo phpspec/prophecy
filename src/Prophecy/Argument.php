@@ -61,12 +61,13 @@ class Argument
      * Checks that argument matches provided callback.
      *
      * @param callable $callback
+     * @param string|null $customStringRepresentation Customize the __toString() representation of this token
      *
      * @return Token\CallbackToken
      */
-    public static function that($callback)
+    public static function that($callback, ?string $customStringRepresentation = null)
     {
-        return new Token\CallbackToken($callback);
+        return new Token\CallbackToken($callback, $customStringRepresentation);
     }
 
     /**
