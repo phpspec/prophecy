@@ -1,3 +1,14 @@
+1.16.0 / 2022/11/29
+===================
+
+* [added] Allow install with PHP 8.2 [@gquemener]
+* [added] Use shorter object IDs for object comparison [@TysonAndre]
+* [added] Support standalone false,true and null types [@kschatzle]
+* [added] Support doubling readonly classes [@gquemener]
+* [fixed] Remove workarounds for unsupported HHVM [@TysonAndre]
+* [fixed] Clear error message when doubling DNF types [@kschatzle]
+
+
 1.15.0 / 2021/12/08
 ===================
 
