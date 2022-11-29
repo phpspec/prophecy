@@ -32,6 +32,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         ));
         $class->getProperties()->willReturn(array('name' => 'public', 'email' => 'private'));
         $class->getMethods()->willReturn(array($method1, $method2, $method3, $method4, $method5));
+        $class->isReadOnly()->willReturn(false);
 
         $method1->getName()->willReturn('getName');
         $method1->getVisibility()->willReturn('public');
@@ -156,6 +157,7 @@ PHP;
         $class->getMethods()->willReturn(array(
             $method1, $method2, $method3, $method4
         ));
+        $class->isReadOnly()->willReturn(false);
 
         $method1->getName()->willReturn('variadic');
         $method1->getVisibility()->willReturn('public');
@@ -248,6 +250,7 @@ PHP;
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
         $class->getProperties()->willReturn(array());
         $class->getMethods()->willReturn(array($method));
+        $class->isReadOnly()->willReturn(false);
 
         $method->getName()->willReturn('getName');
         $method->getVisibility()->willReturn('public');
@@ -290,6 +293,7 @@ PHP;
         $class->getInterfaces()->willReturn([]);
         $class->getProperties()->willReturn([]);
         $class->getMethods()->willReturn(array($method));
+        $class->isReadOnly()->willReturn(false);
 
         $method->getName()->willReturn('foo');
         $method->getVisibility()->willReturn('public');
@@ -328,6 +332,7 @@ PHP;
         $class->getInterfaces()->willReturn([]);
         $class->getProperties()->willReturn([]);
         $class->getMethods()->willReturn(array($method));
+        $class->isReadOnly()->willReturn(false);
 
         $method->getName()->willReturn('foo');
         $method->getVisibility()->willReturn('public');
@@ -367,6 +372,7 @@ PHP;
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
         $class->getProperties()->willReturn(array());
         $class->getMethods()->willReturn(array());
+        $class->isReadOnly()->willReturn(false);
 
         $code = $this->generate('CustomClass', $class);
         $expected =<<<'PHP'
@@ -387,11 +393,33 @@ PHP;
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
         $class->getProperties()->willReturn(array());
         $class->getMethods()->willReturn(array());
+        $class->isReadOnly()->willReturn(false);
 
         $code = $this->generate('My\Awesome\CustomClass', $class);
         $expected =<<<'PHP'
 namespace My\Awesome {
 class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
+
+
+}
+}
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $code->shouldBe($expected);
+    }
+
+    function it_generates_read_only_class_if_parent_class_is_read_only(ClassNode $class)
+    {
+        $class->getParentClass()->willReturn('ReadOnlyClass');
+        $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
+        $class->getProperties()->willReturn(array());
+        $class->getMethods()->willReturn(array());
+        $class->isReadOnly()->willReturn(true);
+
+        $code = $this->generate('CustomClass', $class);
+        $expected =<<<'PHP'
+namespace  {
+readonly class CustomClass extends \ReadOnlyClass implements \Prophecy\Doubler\Generator\MirroredInterface {
 
 
 }

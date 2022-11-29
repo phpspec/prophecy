@@ -78,20 +78,9 @@ class ExportUtil
         // above (fast) mechanism nor with reflection in Zend.
         // Format the output similarly to print_r() in this case
         if ($value instanceof \SplObjectStorage) {
-            // However, the fast method does work in HHVM, and exposes the
-            // internal implementation. Hide it again.
-            if (property_exists('\SplObjectStorage', '__storage')) {
-                unset($array['__storage']);
-            } elseif (property_exists('\SplObjectStorage', 'storage')) {
-                unset($array['storage']);
-            }
-
-            if (property_exists('\SplObjectStorage', '__key')) {
-                unset($array['__key']);
-            }
-
             foreach ($value as $key => $val) {
-                $array[spl_object_hash($val)] = array(
+                // Use the same identifier that would be printed alongside the object's representation elsewhere.
+                $array[spl_object_id($val)] = array(
                     'obj' => $val,
                     'inf' => $value->getInfo(),
                 );
@@ -181,11 +170,11 @@ class ExportUtil
         if (is_object($value)) {
             $class = get_class($value);
 
-            if ($hash = $processed->contains($value)) {
-                return sprintf('%s:%s Object', $class, $hash);
+            if ($processed->contains($value)) {
+                return sprintf('%s#%d Object', $class, spl_object_id($value));
             }
 
-            $hash   = $processed->add($value);
+            $processed->add($value);
             $values = '';
             $array  = self::toArray($value);
 
@@ -202,7 +191,7 @@ class ExportUtil
                 $values = "\n" . $values . $whitespace;
             }
 
-            return sprintf('%s:%s Object (%s)', $class, $hash, $values);
+            return sprintf('%s#%d Object (%s)', $class, spl_object_id($value), $values);
         }
 
         return var_export($value, true);

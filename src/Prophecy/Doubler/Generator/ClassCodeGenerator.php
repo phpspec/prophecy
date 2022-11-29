@@ -40,8 +40,11 @@ class ClassCodeGenerator
         $classname = array_pop($parts);
         $namespace = implode('\\', $parts);
 
-        $code = sprintf("class %s extends \%s implements %s {\n",
-            $classname, $class->getParentClass(), implode(', ',
+        $code = sprintf("%sclass %s extends \%s implements %s {\n",
+            $class->isReadOnly() ? 'readonly ': '',
+            $classname,
+            $class->getParentClass(),
+            implode(', ',
                 array_map(function ($interface) {return '\\'.$interface;}, $class->getInterfaces())
             )
         );

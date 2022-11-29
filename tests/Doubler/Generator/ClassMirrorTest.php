@@ -123,7 +123,6 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 5.4
      */
     public function it_properly_reads_methods_arguments_with_callable_types()
     {
@@ -153,7 +152,6 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 5.6
      */
     public function it_properly_reads_methods_variadic_arguments()
     {
@@ -176,14 +174,9 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 5.6
      */
     public function it_properly_reads_methods_typehinted_variadic_arguments()
     {
-        if (defined('HHVM_VERSION_ID')) {
-            $this->markTestSkipped('HHVM does not support typehints on variadic arguments.');
-        }
-
         $class = new \ReflectionClass('Fixtures\Prophecy\WithTypehintedVariadicArgument');
 
         $mirror = new ClassMirror();
@@ -337,7 +330,6 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 7
      */
     public function it_reflects_return_typehints()
     {
@@ -418,7 +410,6 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 7.1
      */
     public function it_doesnt_fail_on_array_nullable_parameter_with_not_null_default_value()
     {
@@ -445,7 +436,6 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 7.2
      */
     function it_doesnt_fail_when_method_is_extended_with_more_params()
     {
@@ -482,6 +472,9 @@ class ClassMirrorTest extends TestCase
         $method = $this->prophesize('ReflectionMethod');
         $parameter = $this->prophesize('ReflectionParameter');
 
+        if (PHP_VERSION_ID >= 80200) {
+            $class->isReadOnly()->willReturn(false);
+        }
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
@@ -644,7 +637,7 @@ class ClassMirrorTest extends TestCase
         }
 
         $this->expectException(ClassMirrorException::class);
-  
+
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\Enum'), []);
     }
 
@@ -741,6 +734,34 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    public function it_can_not_double_dnf_intersection_argument_types()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('DNF intersection types are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfArgumentType'), []);
+    }
+    
+    /**
+     * @test
+     */
+    public function it_can_not_double_dnf_intersection_return_types()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('DNF intersection types are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfReturnType'), []);
+    }
+
+    /**
+     * @test
+     */
     public function it_can_double_a_standalone_return_type_of_true()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -751,6 +772,19 @@ class ClassMirrorTest extends TestCase
         $methodNode = $classNode->getMethods()['method'];
 
         $this->assertEquals(new ReturnTypeNode('true'), $methodNode->getReturnTypeNode());
+    }
+    
+    /**
+     * @test
+     */
+    public function it_reflects_non_read_only_class()
+    {
+        $classNode = (new ClassMirror())->reflect(
+            new \ReflectionClass('Fixtures\Prophecy\EmptyClass'),
+            []
+        );
+
+        $this->assertFalse($classNode->isReadOnly());
     }
 
     /**
@@ -829,5 +863,22 @@ class ClassMirrorTest extends TestCase
         $arguments = $method->getArguments();
 
         $this->assertEquals(new ArgumentTypeNode('null'), $arguments[0]->getTypeNode());
+    }
+    
+    /**
+     * @test
+     */
+    public function it_reflects_read_only_class()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Read only classes are not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(
+            new \ReflectionClass('Fixtures\Prophecy\ReadOnlyClass'),
+            []
+        );
+
+        $this->assertTrue($classNode->isReadOnly());
     }
 }
