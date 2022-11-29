@@ -35,7 +35,7 @@ class ObjectProphecy implements ProphecyInterface
     private $comparatorFactory;
 
     /**
-     * @var MethodProphecy[][]
+     * @var array<string, list<MethodProphecy>>
      */
     private $methodProphecies = array();
 
@@ -160,7 +160,9 @@ class ObjectProphecy implements ProphecyInterface
      *
      * @param null|string $methodName
      *
-     * @return MethodProphecy[]
+     * @return MethodProphecy[]|array<string, MethodProphecy[]>
+     *
+     * @phpstan-return ($methodName is string ? list<MethodProphecy> : array<string, list<MethodProphecy>>)
      */
     public function getMethodProphecies($methodName = null)
     {
