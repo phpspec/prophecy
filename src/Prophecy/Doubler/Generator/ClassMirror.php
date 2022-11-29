@@ -98,6 +98,10 @@ class ClassMirror
             ), $class);
         }
 
+        if (method_exists(ReflectionClass::class, 'isReadOnly')) {
+            $node->setReadOnly($class->isReadOnly());
+        }
+
         $node->setParentClass($class->getName());
 
         foreach ($class->getMethods(ReflectionMethod::IS_ABSTRACT) as $method) {

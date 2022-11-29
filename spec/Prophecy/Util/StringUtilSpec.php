@@ -71,20 +71,20 @@ class StringUtilSpec extends ObjectBehavior
 
     function it_generates_proper_string_representation_for_object(\stdClass $object)
     {
-        $objHash = sprintf('%s:%s',
+        $objHash = sprintf('%s#%s',
             get_class($object->getWrappedObject()),
-            spl_object_hash($object->getWrappedObject())
-        ) . " Object (\n    'objectProphecyClosure' => Closure:%s Object (\n        0 => Closure:%s Object\n    )\n)";
+            spl_object_id($object->getWrappedObject())
+        ) . " Object (\n    'objectProphecyClosure' => Closure#%s Object (\n        0 => Closure#%s Object\n    )\n)";
 
-        $hashRegexExpr = '[a-f0-9]{32}';
-        $this->stringify($object)->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $hashRegexExpr, $hashRegexExpr)));
+        $idRegexExpr = '[0-9]+';
+        $this->stringify($object)->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $idRegexExpr, $idRegexExpr)));
     }
 
     function it_generates_proper_string_representation_for_object_without_exporting(\stdClass $object)
     {
-        $objHash = sprintf('%s:%s',
+        $objHash = sprintf('%s#%s',
             get_class($object->getWrappedObject()),
-            spl_object_hash($object->getWrappedObject())
+            spl_object_id($object->getWrappedObject())
         );
 
         $this->stringify($object, false)->shouldReturn("$objHash");
