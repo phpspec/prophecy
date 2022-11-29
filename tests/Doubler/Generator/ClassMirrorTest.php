@@ -472,6 +472,9 @@ class ClassMirrorTest extends TestCase
         $method = $this->prophesize('ReflectionMethod');
         $parameter = $this->prophesize('ReflectionParameter');
 
+        if (PHP_VERSION_ID >= 80200) {
+            $class->isReadOnly()->willReturn(false);
+        }
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
@@ -634,5 +637,35 @@ class ClassMirrorTest extends TestCase
         $this->expectException(ClassMirrorException::class);
 
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionArgumentType'), []);
+    }
+
+    /**
+     * @test
+     */
+    public function it_reflects_non_read_only_class()
+    {
+        $classNode = (new ClassMirror())->reflect(
+            new \ReflectionClass('Fixtures\Prophecy\EmptyClass'),
+            []
+        );
+
+        $this->assertFalse($classNode->isReadOnly());
+    }
+
+    /**
+     * @test
+     */
+    public function it_reflects_read_only_class()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Read only classes are not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(
+            new \ReflectionClass('Fixtures\Prophecy\ReadOnlyClass'),
+            []
+        );
+
+        $this->assertTrue($classNode->isReadOnly());
     }
 }
