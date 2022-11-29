@@ -24,7 +24,6 @@ jobs:
             experimental: false
           - php: 8.2
             composer-flags: "--ignore-platform-req=php"
-            experimental: false
 
     steps:
       -   uses: actions/checkout@v2
