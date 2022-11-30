@@ -26,6 +26,9 @@ use Prophecy\Exception\Prediction\PredictionException;
  * Object prophecy.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template-covariant T of object
+ * @template-implements ProphecyInterface<T>
  */
 class ObjectProphecy implements ProphecyInterface
 {
@@ -66,6 +69,10 @@ class ObjectProphecy implements ProphecyInterface
      * @param string $class
      *
      * @return $this
+     *
+     * @template U
+     * @phpstan-param class-string<U> $class
+     * @phpstan-this-out static<T&U>
      */
     public function willExtend($class)
     {
@@ -80,6 +87,10 @@ class ObjectProphecy implements ProphecyInterface
      * @param string $interface
      *
      * @return $this
+     *
+     * @template U
+     * @phpstan-param class-string<U> $class
+     * @phpstan-this-out static<T&U>
      */
     public function willImplement($interface)
     {
@@ -108,6 +119,8 @@ class ObjectProphecy implements ProphecyInterface
      * @return object
      *
      * @throws \Prophecy\Exception\Prophecy\ObjectProphecyException If double doesn't implement needed interface
+     *
+     * @phpstan-return T
      */
     public function reveal()
     {
