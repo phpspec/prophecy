@@ -11,11 +11,6 @@ parameters:
 			path: src/Prophecy/Doubler/Generator/ClassMirror.php
 
 		-
-			message: "#^Unable to resolve the template type T in call to method Doctrine\\\\Instantiator\\\\Instantiator\\:\\:instantiate\\(\\)$#"
-			count: 1
-			path: src/Prophecy/Promise/ThrowPromise.php
-
-		-
 			message: "#^Unable to resolve the template type T in call to method Prophecy\\\\Prophet\\:\\:prophesize\\(\\)$#"
 			count: 1
 			path: src/Prophecy/Prophecy/MethodProphecy.php

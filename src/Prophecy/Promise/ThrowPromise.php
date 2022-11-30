@@ -34,9 +34,11 @@ class ThrowPromise implements PromiseInterface
     /**
      * Initializes promise.
      *
-     * @param string|\Exception|\Throwable $exception Exception class name or instance
+     * @param string|\Throwable $exception Exception class name or instance
      *
      * @throws \Prophecy\Exception\InvalidArgumentException
+     *
+     * @phpstan-param class-string<\Throwable>|\Throwable $exception
      */
     public function __construct($exception)
     {

@@ -314,6 +314,8 @@ class MethodProphecy
      * @param string|\Throwable $exception Exception class or instance
      *
      * @return $this
+     *
+     * @phpstan-param class-string<\Throwable>|\Throwable $exception
      */
     public function willThrow($exception)
     {
