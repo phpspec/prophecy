@@ -89,7 +89,7 @@ class ObjectProphecy implements ProphecyInterface
      * @return $this
      *
      * @template U
-     * @phpstan-param class-string<U> $class
+     * @phpstan-param class-string<U> $interface
      * @phpstan-this-out static<T&U>
      */
     public function willImplement($interface)

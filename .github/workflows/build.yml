@@ -42,3 +42,17 @@ jobs:
       -   name: Run tests (phpunit)
           run: ./vendor/bin/phpunit
           if: always() && steps.end-of-setup.outcome == 'success'
+
+  phpstan:
+    runs-on: ubuntu-latest
+    name: Static analysis
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          coverage: none
+      - name: Install dependencies
+        run: COMPOSER_ROOT_VERSION=dev-master composer update
+      - run: ./vendor/bin/phpstan
