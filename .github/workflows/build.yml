@@ -20,7 +20,7 @@ jobs:
           - php: 7.2
             composer-flags: "--prefer-lowest"
           - php: 8.2
-            composer-flags: "--ignore-platform-req=php"
+            composer-flags: "--ignore-platform-req=php+"
 
     steps:
       -   uses: actions/checkout@v2
