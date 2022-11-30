@@ -31,7 +31,7 @@ use ReflectionUnionType;
  */
 class ClassMirror
 {
-    private static $reflectableMethods = array(
+    private const REFLECTABLE_METHODS = array(
         '__construct',
         '__destruct',
         '__sleep',
@@ -114,7 +114,7 @@ class ClassMirror
 
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             if (0 === strpos($method->getName(), '_')
-                && !in_array($method->getName(), self::$reflectableMethods)) {
+                && !in_array($method->getName(), self::REFLECTABLE_METHODS)) {
                 continue;
             }
 
