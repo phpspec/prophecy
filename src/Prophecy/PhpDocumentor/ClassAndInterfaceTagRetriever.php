@@ -20,6 +20,9 @@ use phpDocumentor\Reflection\DocBlock\Tags\Method;
  */
 final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
 {
+    /**
+     * @var MethodTagRetrieverInterface
+     */
     private $classRetriever;
 
     public function __construct(MethodTagRetrieverInterface $classRetriever = null)
