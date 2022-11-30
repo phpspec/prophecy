@@ -1,0 +1,6 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method ReflectionClass\\:\\:isReadOnly\\(\\)\\.$#"
+			count: 1
+			path: src/Prophecy/Doubler/Generator/ClassMirror.php

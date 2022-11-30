@@ -12,6 +12,7 @@
 namespace Prophecy\Prediction;
 
 use Prophecy\Call\Call;
+use Prophecy\Exception\Prediction\PredictionException;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
 
@@ -30,7 +31,7 @@ interface PredictionInterface
      * @param ObjectProphecy $object
      * @param MethodProphecy $method
      *
-     * @throws object
+     * @throws PredictionException
      * @return void
      */
     public function check(array $calls, ObjectProphecy $object, MethodProphecy $method);

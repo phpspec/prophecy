@@ -19,7 +19,6 @@ use Prophecy\Exception\Doubler\MethodNotFoundException;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Prophecy\MethodProphecyException;
 use ReflectionNamedType;
-use ReflectionType;
 use ReflectionUnionType;
 
 /**
@@ -97,7 +96,7 @@ class MethodProphecy
             }
 
             $types = array_map(
-                function(ReflectionType $type) { return $type->getName(); },
+                function(ReflectionNamedType $type) { return $type->getName(); },
                 $types
             );
 

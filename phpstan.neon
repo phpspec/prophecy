@@ -1,6 +1,8 @@
 parameters:
-    level: 1
+    level: 2
     inferPrivatePropertyTypeFromConstructor: true
     treatPhpDocTypesAsCertain: false
     paths:
         - ./src/
+includes:
+    - phpstan-baseline.neon

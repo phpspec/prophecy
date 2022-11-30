@@ -96,9 +96,9 @@ class Argument
      *
      * @return Token\LogicalAndToken
      */
-    public static function allOf()
+    public static function allOf(...$tokens)
     {
-        return new Token\LogicalAndToken(func_get_args());
+        return new Token\LogicalAndToken($tokens);
     }
 
     /**
