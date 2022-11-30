@@ -11,20 +11,16 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     name: Build and test
-    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
         php: ["7.2", "7.3", "7.4", "8.0", "8.1"]
         composer-flags: [ "" ]
-        experimental: [false]
         include:
           - php: 7.2
             composer-flags: "--prefer-lowest"
-            experimental: false
           - php: 8.2
             composer-flags: "--ignore-platform-req=php"
-            experimental: false
 
     steps:
       -   uses: actions/checkout@v2
