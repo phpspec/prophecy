@@ -21,6 +21,10 @@ class ApproximateValueToken implements TokenInterface
     private $value;
     private $precision;
 
+    /**
+     * @param float $value
+     * @param int $precision
+     */
     public function __construct($value, $precision = 0)
     {
         $this->value = $value;

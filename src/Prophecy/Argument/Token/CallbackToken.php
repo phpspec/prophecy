@@ -44,9 +44,9 @@ class CallbackToken implements TokenInterface
     /**
      * Scores 7 if callback returns true, false otherwise.
      *
-     * @param $argument
+     * @param mixed $argument
      *
-     * @return bool|int
+     * @return false|int
      */
     public function scoreArgument($argument)
     {

@@ -21,7 +21,7 @@ class AnyValueToken implements TokenInterface
     /**
      * Always scores 3 for any argument.
      *
-     * @param $argument
+     * @param mixed $argument
      *
      * @return int
      */

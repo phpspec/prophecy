@@ -20,9 +20,9 @@ use Prophecy\Exception\InvalidArgumentException;
  */
 class ArrayEntryToken implements TokenInterface
 {
-    /** @var \Prophecy\Argument\Token\TokenInterface */
+    /** @var TokenInterface */
     private $key;
-    /** @var \Prophecy\Argument\Token\TokenInterface */
+    /** @var TokenInterface */
     private $value;
 
     /**
@@ -39,10 +39,10 @@ class ArrayEntryToken implements TokenInterface
      * Scores half of combined scores from key and value tokens for same entry. Capped at 8.
      * If argument implements \ArrayAccess without \Traversable, then key token is restricted to ExactValueToken.
      *
-     * @param array|\ArrayAccess|\Traversable $argument
+     * @param mixed $argument
      *
-     * @throws \Prophecy\Exception\InvalidArgumentException
-     * @return bool|int
+     * @throws InvalidArgumentException
+     * @return false|int
      */
     public function scoreArgument($argument)
     {
@@ -60,6 +60,7 @@ class ArrayEntryToken implements TokenInterface
 
         $keyScores = array_map(array($this->key,'scoreArgument'), array_keys($argument));
         $valueScores = array_map(array($this->value,'scoreArgument'), $argument);
+        /** @var callable(int|false, int|false): (int|false) $scoreEntry */
         $scoreEntry = function ($value, $key) {
             return $value && $key ? min(8, ($key + $value) / 2) : false;
         };
@@ -110,7 +111,7 @@ class ArrayEntryToken implements TokenInterface
     /**
      * Wraps non token $value into ExactValueToken
      *
-     * @param $value
+     * @param mixed $value
      * @return TokenInterface
      */
     private function wrapIntoExactValueToken($value)
@@ -123,8 +124,8 @@ class ArrayEntryToken implements TokenInterface
      *
      * @param \ArrayAccess $object
      *
-     * @return array|null
-     * @throws \Prophecy\Exception\InvalidArgumentException
+     * @return array<mixed>
+     * @throws InvalidArgumentException
      */
     private function convertArrayAccessToEntry(\ArrayAccess $object)
     {
