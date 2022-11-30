@@ -488,6 +488,7 @@ class ClassMirrorTest extends TestCase
         $method->isStatic()->willReturn(false);
         $method->returnsReference()->willReturn(false);
         $method->hasReturnType()->willReturn(false);
+        $method->getDeclaringClass()->willReturn($class);
 
         if (\PHP_VERSION_ID >= 80100) {
             $method->hasTentativeReturnType()->willReturn(false);
@@ -502,7 +503,6 @@ class ClassMirrorTest extends TestCase
         $parameter->getType()->willReturn(null);
         $parameter->hasType()->willReturn(false);
         $parameter->isVariadic()->willReturn(false);
-        $parameter->getDeclaringClass()->willReturn($class);
 
         $mirror = new ClassMirror();
 
@@ -744,7 +744,7 @@ class ClassMirrorTest extends TestCase
 
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfArgumentType'), []);
     }
-    
+
     /**
      * @test
      */
@@ -773,7 +773,7 @@ class ClassMirrorTest extends TestCase
 
         $this->assertEquals(new ReturnTypeNode('true'), $methodNode->getReturnTypeNode());
     }
-    
+
     /**
      * @test
      */
@@ -864,7 +864,7 @@ class ClassMirrorTest extends TestCase
 
         $this->assertEquals(new ArgumentTypeNode('null'), $arguments[0]->getTypeNode());
     }
-    
+
     /**
      * @test
      */

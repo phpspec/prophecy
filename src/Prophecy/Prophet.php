@@ -30,6 +30,9 @@ use Prophecy\Exception\Prediction\AggregateException;
  */
 class Prophet
 {
+    /**
+     * @var Doubler
+     */
     private $doubler;
     private $revealer;
     private $util;
@@ -39,13 +42,6 @@ class Prophet
      */
     private $prophecies = array();
 
-    /**
-     * Initializes Prophet.
-     *
-     * @param null|Doubler           $doubler
-     * @param null|RevealerInterface $revealer
-     * @param null|StringUtil        $util
-     */
     public function __construct(
         Doubler $doubler = null,
         RevealerInterface $revealer = null,

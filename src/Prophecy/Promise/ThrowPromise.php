@@ -66,7 +66,7 @@ class ThrowPromise implements PromiseInterface
             $reflection  = new ReflectionClass($classname);
             $constructor = $reflection->getConstructor();
 
-            if ($constructor->isPublic() && 0 == $constructor->getNumberOfRequiredParameters()) {
+            if ($constructor === null || $constructor->isPublic() && 0 == $constructor->getNumberOfRequiredParameters()) {
                 throw $reflection->newInstance();
             }
 

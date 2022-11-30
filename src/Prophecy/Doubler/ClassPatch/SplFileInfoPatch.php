@@ -45,6 +45,7 @@ class SplFileInfoPatch implements ClassPatchInterface
     {
         if ($node->hasMethod('__construct')) {
             $constructor = $node->getMethod('__construct');
+            \assert($constructor !== null);
         } else {
             $constructor = new MethodNode('__construct');
             $node->addMethod($constructor);
