@@ -88,6 +88,13 @@ class MethodProphecy
             elseif ($reflectionType instanceof ReflectionUnionType) {
                 $types = $reflectionType->getTypes();
             }
+            else {
+                throw new MethodProphecyException(sprintf(
+                    "Can not add prophecy for a method `%s::%s()`\nas its return type is not supported by Prophecy yet.",
+                    get_class($double),
+                    $methodName
+                ), $this);
+            }
 
             $types = array_map(
                 function(ReflectionType $type) { return $type->getName(); },

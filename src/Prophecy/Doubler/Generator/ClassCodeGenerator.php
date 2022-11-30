@@ -22,7 +22,8 @@ use Prophecy\Doubler\Generator\Node\TypeNodeAbstract;
  */
 class ClassCodeGenerator
 {
-    public function __construct(TypeHintReference $typeHintReference = null)
+    // Used to accept an optional first argument with the deprecated Prophecy\Doubler\Generator\TypeHintReference so careful when adding a new argument in a minor version.
+    public function __construct()
     {
     }
 

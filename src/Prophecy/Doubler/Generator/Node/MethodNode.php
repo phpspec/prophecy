@@ -11,7 +11,6 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
-use Prophecy\Doubler\Generator\TypeHintReference;
 use Prophecy\Exception\InvalidArgumentException;
 
 /**
@@ -35,11 +34,12 @@ class MethodNode
      */
     private $arguments = array();
 
+    // Used to accept an optional third argument with the deprecated Prophecy\Doubler\Generator\TypeHintReference so careful when adding a new argument in a minor version.
     /**
      * @param string $name
      * @param string $code
      */
-    public function __construct($name, $code = null, TypeHintReference $typeHintReference = null)
+    public function __construct($name, $code = null)
     {
         $this->name = $name;
         $this->code = $code;
