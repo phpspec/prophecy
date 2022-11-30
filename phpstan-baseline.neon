@@ -1,6 +1,26 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Parameter \\#1 \\$objectOrClass of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, string given\\.$#"
+			count: 1
+			path: src/Prophecy/Doubler/ClassPatch/MagicCallPatch.php
+
+		-
+			message: "#^Method Prophecy\\\\Doubler\\\\Doubler\\:\\:double\\(\\) should return Prophecy\\\\Doubler\\\\DoubleInterface but returns object\\.$#"
+			count: 3
+			path: src/Prophecy/Doubler/Doubler.php
+
+		-
+			message: "#^Parameter \\#1 \\$className of method Doctrine\\\\Instantiator\\\\Instantiator\\:\\:instantiate\\(\\) expects class\\-string\\<object\\>, string given\\.$#"
+			count: 1
+			path: src/Prophecy/Doubler/Doubler.php
+
+		-
+			message: "#^Parameter \\#1 \\$objectOrClass of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, string given\\.$#"
+			count: 1
+			path: src/Prophecy/Doubler/Doubler.php
+
+		-
 			message: "#^Unable to resolve the template type T in call to method Doctrine\\\\Instantiator\\\\Instantiator\\:\\:instantiate\\(\\)$#"
 			count: 1
 			path: src/Prophecy/Doubler/Doubler.php
@@ -11,6 +31,21 @@ parameters:
 			path: src/Prophecy/Doubler/Generator/ClassMirror.php
 
 		-
+			message: "#^Parameter \\#1 \\$classOrInterface of method Prophecy\\\\Prophet\\:\\:prophesize\\(\\) expects class\\-string\\<object\\>\\|null, string given\\.$#"
+			count: 1
+			path: src/Prophecy/Prophecy/MethodProphecy.php
+
+		-
 			message: "#^Unable to resolve the template type T in call to method Prophecy\\\\Prophet\\:\\:prophesize\\(\\)$#"
 			count: 1
 			path: src/Prophecy/Prophecy/MethodProphecy.php
+
+		-
+			message: "#^Method Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:reveal\\(\\) should return T of object but returns Prophecy\\\\Doubler\\\\DoubleInterface&Prophecy\\\\Prophecy\\\\ProphecySubjectInterface\\.$#"
+			count: 1
+			path: src/Prophecy/Prophecy/ObjectProphecy.php
+
+		-
+			message: "#^Method Prophecy\\\\Prophet\\:\\:prophesize\\(\\) should return Prophecy\\\\Prophecy\\\\ObjectProphecy\\<T of object\\> but returns Prophecy\\\\Prophecy\\\\ObjectProphecy\\<object\\>\\.$#"
+			count: 3
+			path: src/Prophecy/Prophet.php

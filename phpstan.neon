@@ -1,5 +1,5 @@
 parameters:
-    level: 6
+    level: 7
     inferPrivatePropertyTypeFromConstructor: true
     treatPhpDocTypesAsCertain: false
     paths:

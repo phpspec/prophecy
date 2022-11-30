@@ -262,6 +262,10 @@ class ClassMirror
                     return $class->getName();
                 }
                 if ($type === 'parent') {
+                    if (false === $class->getParentClass()) {
+                        throw new ClassMirrorException(sprintf('Invalid type "parent" in class "%s" without a parent', $class->getName()), $class);
+                    }
+
                     return $class->getParentClass()->getName();
                 }
 

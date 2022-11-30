@@ -67,7 +67,7 @@ class CallCenter
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
 
         $file = $line = null;
-        if (isset($backtrace[2]) && isset($backtrace[2]['file'])) {
+        if (isset($backtrace[2]) && isset($backtrace[2]['file']) && isset($backtrace[2]['line'])) {
             $file = $backtrace[2]['file'];
             $line = $backtrace[2]['line'];
         }
