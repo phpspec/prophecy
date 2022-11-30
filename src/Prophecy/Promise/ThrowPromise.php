@@ -27,7 +27,7 @@ class ThrowPromise implements PromiseInterface
     private $exception;
 
     /**
-     * @var \Doctrine\Instantiator\Instantiator
+     * @var Instantiator|null
      */
     private $instantiator;
 

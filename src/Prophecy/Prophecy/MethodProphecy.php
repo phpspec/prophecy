@@ -30,6 +30,9 @@ class MethodProphecy
 {
     private $objectProphecy;
     private $methodName;
+    /**
+     * @var Argument\ArgumentsWildcard
+     */
     private $argumentsWildcard;
     private $promise;
     private $prediction;

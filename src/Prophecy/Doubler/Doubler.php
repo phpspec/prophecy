@@ -36,7 +36,7 @@ class Doubler
     private $patches = array();
 
     /**
-     * @var \Doctrine\Instantiator\Instantiator
+     * @var Instantiator|null
      */
     private $instantiator;
 

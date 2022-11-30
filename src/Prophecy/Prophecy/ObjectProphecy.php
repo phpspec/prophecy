@@ -126,7 +126,7 @@ class ObjectProphecy implements ProphecyInterface
     {
         $double = $this->lazyDouble->getInstance();
 
-        if (null === $double || !$double instanceof ProphecySubjectInterface) {
+        if (!$double instanceof ProphecySubjectInterface) {
             throw new ObjectProphecyException(
                 "Generated double must implement ProphecySubjectInterface, but it does not.\n".
                 'It seems you have wrongly configured doubler without required ClassPatch.',
