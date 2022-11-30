@@ -44,8 +44,8 @@ class ClassMirror
     /**
      * Reflects provided arguments into class node.
      *
-     * @param ReflectionClass|null $class
-     * @param ReflectionClass[] $interfaces
+     * @param ReflectionClass<object>|null $class
+     * @param ReflectionClass<object>[]    $interfaces
      *
      * @return Node\ClassNode
      *
@@ -90,7 +90,10 @@ class ClassMirror
         return $node;
     }
 
-    private function reflectClassToNode(ReflectionClass $class, Node\ClassNode $node)
+    /**
+     * @param ReflectionClass<object> $class
+     */
+    private function reflectClassToNode(ReflectionClass $class, Node\ClassNode $node): void
     {
         if (true === $class->isFinal()) {
             throw new ClassMirrorException(sprintf(
@@ -127,7 +130,10 @@ class ClassMirror
         }
     }
 
-    private function reflectInterfaceToNode(ReflectionClass $interface, Node\ClassNode $node)
+    /**
+     * @param ReflectionClass<object> $interface
+     */
+    private function reflectInterfaceToNode(ReflectionClass $interface, Node\ClassNode $node): void
     {
         $node->addInterface($interface->getName());
 
@@ -136,7 +142,7 @@ class ClassMirror
         }
     }
 
-    private function reflectMethodToNode(ReflectionMethod $method, Node\ClassNode $classNode)
+    private function reflectMethodToNode(ReflectionMethod $method, Node\ClassNode $classNode): void
     {
         $node = new Node\MethodNode($method->getName());
 
@@ -170,7 +176,7 @@ class ClassMirror
         $classNode->addMethod($node);
     }
 
-    private function reflectArgumentToNode(ReflectionParameter $parameter, Node\MethodNode $methodNode)
+    private function reflectArgumentToNode(ReflectionParameter $parameter, Node\MethodNode $methodNode): void
     {
         $name = $parameter->getName() == '...' ? '__dot_dot_dot__' : $parameter->getName();
         $node = new Node\ArgumentNode($name);
@@ -195,7 +201,7 @@ class ClassMirror
         $methodNode->addArgument($node);
     }
 
-    private function hasDefaultValue(ReflectionParameter $parameter)
+    private function hasDefaultValue(ReflectionParameter $parameter): bool
     {
         if ($parameter->isVariadic()) {
             return false;
@@ -208,6 +214,9 @@ class ClassMirror
         return $parameter->isOptional() || ($parameter->allowsNull() && $parameter->getType() && \PHP_VERSION_ID < 80100);
     }
 
+    /**
+     * @return mixed
+     */
     private function getDefaultValue(ReflectionParameter $parameter)
     {
         if (!$parameter->isDefaultValueAvailable()) {
@@ -217,6 +226,11 @@ class ClassMirror
         return $parameter->getDefaultValue();
     }
 
+    /**
+     * @param ReflectionClass<object>|null $class
+     *
+     * @return list<string>
+     */
     private function getTypeHints(?ReflectionType $type, ?ReflectionClass $class, bool $allowsNull) : array
     {
         $types = [];

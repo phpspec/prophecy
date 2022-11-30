@@ -36,11 +36,6 @@ final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
         $this->classRetriever = new ClassTagRetriever();
     }
 
-    /**
-     * @param \ReflectionClass $reflectionClass
-     *
-     * @return Method[]
-     */
     public function getTagList(\ReflectionClass $reflectionClass)
     {
         return array_merge(
@@ -50,9 +45,9 @@ final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
     }
 
     /**
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass<object> $reflectionClass
      *
-     * @return Method[]
+     * @return list<Method>
      */
     private function getInterfacesTagList(\ReflectionClass $reflectionClass)
     {

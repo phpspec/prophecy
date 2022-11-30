@@ -31,9 +31,6 @@ class SplFileInfoPatch implements ClassPatchInterface
      */
     public function supports(ClassNode $node)
     {
-        if (null === $node->getParentClass()) {
-            return false;
-        }
         return 'SplFileInfo' === $node->getParentClass()
             || is_subclass_of($node->getParentClass(), 'SplFileInfo')
         ;

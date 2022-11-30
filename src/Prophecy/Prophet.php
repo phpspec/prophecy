@@ -35,7 +35,7 @@ class Prophet
     private $util;
 
     /**
-     * @var ObjectProphecy[]
+     * @var list<ObjectProphecy<object>>
      */
     private $prophecies = array();
 
@@ -101,7 +101,7 @@ class Prophet
     /**
      * Returns all created object prophecies.
      *
-     * @return ObjectProphecy[]
+     * @return list<ObjectProphecy<object>>
      */
     public function getProphecies()
     {
@@ -120,6 +120,8 @@ class Prophet
 
     /**
      * Checks all predictions defined by prophecies of this Prophet.
+     *
+     * @return void
      *
      * @throws Exception\Prediction\AggregateException If any prediction fails
      */

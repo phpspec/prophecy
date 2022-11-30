@@ -29,11 +29,17 @@ class ReturnByReferenceException extends DoubleException
         $this->methodName = $methodName;
     }
 
+    /**
+     * @return string
+     */
     public function getClassname()
     {
         return $this->classname;
     }
 
+    /**
+     * @return string
+     */
     public function getMethodName()
     {
         return $this->methodName;

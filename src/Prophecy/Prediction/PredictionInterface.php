@@ -28,7 +28,7 @@ interface PredictionInterface
      * Tests that double fulfilled prediction.
      *
      * @param Call[]        $calls
-     * @param ObjectProphecy $object
+     * @param ObjectProphecy<object> $object
      * @param MethodProphecy $method
      *
      * @throws PredictionException

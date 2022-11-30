@@ -12,6 +12,7 @@
 namespace Prophecy\Prophecy;
 
 use Prophecy\Argument;
+use Prophecy\Exception\Prediction\PredictionException;
 use Prophecy\Prophet;
 use Prophecy\Promise;
 use Prophecy\Prediction;
@@ -34,16 +35,31 @@ class MethodProphecy
      * @var Argument\ArgumentsWildcard
      */
     private $argumentsWildcard;
+    /**
+     * @var Promise\PromiseInterface|null
+     */
     private $promise;
+    /**
+     * @var Prediction\PredictionInterface|null
+     */
     private $prediction;
+    /**
+     * @var list<Prediction\PredictionInterface>
+     */
     private $checkedPredictions = array();
+    /**
+     * @var bool
+     */
     private $bound = false;
+    /**
+     * @var bool
+     */
     private $voidReturnType = false;
 
     /**
-     * @param ObjectProphecy                   $objectProphecy
-     * @param string                           $methodName
-     * @param Argument\ArgumentsWildcard|array $arguments
+     * @param ObjectProphecy<object>                  $objectProphecy
+     * @param string                                  $methodName
+     * @param Argument\ArgumentsWildcard|array<mixed> $arguments
      *
      * @throws \Prophecy\Exception\Doubler\MethodNotFoundException If method not found
      *
@@ -167,7 +183,7 @@ class MethodProphecy
     /**
      * Sets argument wildcard.
      *
-     * @param array|Argument\ArgumentsWildcard $arguments
+     * @param array<mixed>|Argument\ArgumentsWildcard $arguments
      *
      * @return $this
      *
@@ -240,7 +256,7 @@ class MethodProphecy
     }
 
     /**
-     * @param array $items
+     * @param array<mixed> $items
      * @param mixed $return
      *
      * @return $this
@@ -295,7 +311,7 @@ class MethodProphecy
      *
      * @see \Prophecy\Promise\ThrowPromise
      *
-     * @param string|\Exception $exception Exception class or instance
+     * @param string|\Throwable $exception Exception class or instance
      *
      * @return $this
      */
@@ -361,7 +377,7 @@ class MethodProphecy
      *
      * @see \Prophecy\Prediction\CallTimesPrediction
      *
-     * @param $count
+     * @param int $count
      *
      * @return $this
      */
@@ -390,6 +406,7 @@ class MethodProphecy
      * @return $this
      *
      * @throws \Prophecy\Exception\InvalidArgumentException
+     * @throws PredictionException
      */
     public function shouldHave($prediction)
     {
@@ -431,6 +448,8 @@ class MethodProphecy
      * @see \Prophecy\Prediction\CallPrediction
      *
      * @return $this
+     *
+     * @throws PredictionException
      */
     public function shouldHaveBeenCalled()
     {
@@ -443,6 +462,8 @@ class MethodProphecy
      * @see \Prophecy\Prediction\NoCallsPrediction
      *
      * @return $this
+     *
+     * @throws PredictionException
      */
     public function shouldNotHaveBeenCalled()
     {
@@ -490,6 +511,10 @@ class MethodProphecy
 
     /**
      * Checks currently registered [with should(...)] prediction.
+     *
+     * @return void
+     *
+     * @throws PredictionException
      */
     public function checkPrediction()
     {
@@ -523,7 +548,7 @@ class MethodProphecy
     /**
      * Returns predictions that were checked on this object.
      *
-     * @return Prediction\PredictionInterface[]
+     * @return list<Prediction\PredictionInterface>
      */
     public function getCheckedPredictions()
     {
@@ -533,7 +558,7 @@ class MethodProphecy
     /**
      * Returns object prophecy this method prophecy is tied to.
      *
-     * @return ObjectProphecy
+     * @return ObjectProphecy<object>
      */
     public function getObjectProphecy()
     {
@@ -568,6 +593,9 @@ class MethodProphecy
         return $this->voidReturnType;
     }
 
+    /**
+     * @return void
+     */
     private function bindToObjectProphecy()
     {
         if ($this->bound) {

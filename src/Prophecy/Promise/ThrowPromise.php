@@ -18,7 +18,7 @@ use Prophecy\Exception\InvalidArgumentException;
 use ReflectionClass;
 
 /**
- * Throw promise.
+ * Throws predefined exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -57,13 +57,6 @@ class ThrowPromise implements PromiseInterface
         $this->exception = $exception;
     }
 
-    /**
-     * Throws predefined exception.
-     *
-     * @param array          $args
-     * @param ObjectProphecy $object
-     * @param MethodProphecy $method
-     */
     public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
     {
         if (is_string($this->exception)) {

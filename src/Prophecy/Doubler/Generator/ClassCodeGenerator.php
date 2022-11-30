@@ -63,7 +63,7 @@ class ClassCodeGenerator
         return sprintf("namespace %s {\n%s\n}", $namespace, $code);
     }
 
-    private function generateMethod(Node\MethodNode $method)
+    private function generateMethod(Node\MethodNode $method): string
     {
         $php = sprintf("%s %s function %s%s(%s)%s {\n",
             $method->getVisibility(),
@@ -92,7 +92,12 @@ class ClassCodeGenerator
         }
     }
 
-    private function generateArguments(array $arguments)
+    /**
+     * @param list<Node\ArgumentNode> $arguments
+     *
+     * @return list<string>
+     */
+    private function generateArguments(array $arguments): array
     {
         return array_map(function (Node\ArgumentNode $argument){
 

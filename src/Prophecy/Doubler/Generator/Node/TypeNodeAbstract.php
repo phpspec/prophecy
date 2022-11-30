@@ -6,7 +6,7 @@ use Prophecy\Exception\Doubler\DoubleException;
 
 abstract class TypeNodeAbstract
 {
-    /** @var string[] */
+    /** @var array<string, string> */
     protected $types = [];
 
     public function __construct(string ...$types)
@@ -24,11 +24,17 @@ abstract class TypeNodeAbstract
         return isset($this->types['null']) && count($this->types) <= 2;
     }
 
+    /**
+     * @return list<string>
+     */
     public function getTypes(): array
     {
         return array_values($this->types);
     }
 
+    /**
+     * @return list<string>
+     */
     public function getNonNullTypes(): array
     {
         $nonNullTypes = $this->types;
@@ -77,6 +83,9 @@ abstract class TypeNodeAbstract
         }
     }
 
+    /**
+     * @return void
+     */
     protected function guardIsValidType()
     {
         if (\PHP_VERSION_ID < 80200) {

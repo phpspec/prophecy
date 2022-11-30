@@ -23,8 +23,6 @@ use Prophecy\Exception\Prediction\AggregateException;
 use Prophecy\Exception\Prediction\PredictionException;
 
 /**
- * Object prophecy.
- *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * @template-covariant T of object
@@ -42,14 +40,6 @@ class ObjectProphecy implements ProphecyInterface
      */
     private $methodProphecies = array();
 
-    /**
-     * Initializes object prophecy.
-     *
-     * @param LazyDouble        $lazyDouble
-     * @param CallCenter        $callCenter
-     * @param RevealerInterface $revealer
-     * @param ComparatorFactory $comparatorFactory
-     */
     public function __construct(
         LazyDouble $lazyDouble,
         CallCenter $callCenter = null,
@@ -102,7 +92,7 @@ class ObjectProphecy implements ProphecyInterface
     /**
      * Sets constructor arguments.
      *
-     * @param array $arguments
+     * @param array<mixed> $arguments
      *
      * @return $this
      */
@@ -143,6 +133,8 @@ class ObjectProphecy implements ProphecyInterface
      * Adds method prophecy to object prophecy.
      *
      * @param MethodProphecy $methodProphecy
+     *
+     * @return void
      */
     public function addMethodProphecy(MethodProphecy $methodProphecy)
     {
@@ -183,7 +175,7 @@ class ObjectProphecy implements ProphecyInterface
      * Makes specific method call.
      *
      * @param string $methodName
-     * @param array  $arguments
+     * @param array<mixed> $arguments
      *
      * @return mixed
      */
@@ -201,7 +193,7 @@ class ObjectProphecy implements ProphecyInterface
      * @param string            $methodName
      * @param ArgumentsWildcard $wildcard
      *
-     * @return Call[]
+     * @return list<Call>
      */
     public function findProphecyMethodCalls($methodName, ArgumentsWildcard $wildcard)
     {
@@ -210,6 +202,8 @@ class ObjectProphecy implements ProphecyInterface
 
     /**
      * Checks that registered method predictions do not fail.
+     *
+     * @return void
      *
      * @throws \Prophecy\Exception\Prediction\AggregateException If any of registered predictions fail
      * @throws \Prophecy\Exception\Call\UnexpectedCallException
@@ -240,7 +234,7 @@ class ObjectProphecy implements ProphecyInterface
      * Creates new method prophecy using specified method name and arguments.
      *
      * @param string $methodName
-     * @param array  $arguments
+     * @param array<mixed> $arguments
      *
      * @return MethodProphecy
      */
@@ -280,6 +274,8 @@ class ObjectProphecy implements ProphecyInterface
      *
      * @param string $name
      * @param mixed  $value
+     *
+     * @return void
      */
     public function __set($name, $value)
     {

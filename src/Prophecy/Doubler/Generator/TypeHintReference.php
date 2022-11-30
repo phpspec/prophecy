@@ -10,6 +10,11 @@ namespace Prophecy\Doubler\Generator;
  */
 final class TypeHintReference
 {
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
     public function isBuiltInParamTypeHint($type)
     {
         switch ($type) {
@@ -32,6 +37,11 @@ final class TypeHintReference
         }
     }
 
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
     public function isBuiltInReturnTypeHint($type)
     {
         if ($type === 'void') {

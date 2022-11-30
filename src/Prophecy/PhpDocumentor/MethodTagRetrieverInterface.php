@@ -21,9 +21,9 @@ use phpDocumentor\Reflection\DocBlock\Tags\Method;
 interface MethodTagRetrieverInterface
 {
     /**
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass<object> $reflectionClass
      *
-     * @return Method[]
+     * @return list<Method>
      */
     public function getTagList(\ReflectionClass $reflectionClass);
 }

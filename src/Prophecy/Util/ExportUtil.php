@@ -47,7 +47,7 @@ class ExportUtil
      * and public properties.
      *
      * @param  mixed $value
-     * @return array
+     * @return array<mixed>
      */
     public static function toArray($value)
     {

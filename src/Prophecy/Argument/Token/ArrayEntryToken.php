@@ -122,7 +122,7 @@ class ArrayEntryToken implements TokenInterface
     /**
      * Converts instance of \ArrayAccess to key => value array entry
      *
-     * @param \ArrayAccess $object
+     * @param \ArrayAccess<array-key, mixed> $object
      *
      * @return array<mixed>
      * @throws InvalidArgumentException
