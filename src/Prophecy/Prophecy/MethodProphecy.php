@@ -39,15 +39,15 @@ class MethodProphecy
     private $voidReturnType = false;
 
     /**
-     * Initializes method prophecy.
-     *
-     * @param ObjectProphecy                        $objectProphecy
-     * @param string                                $methodName
-     * @param null|Argument\ArgumentsWildcard|array $arguments
+     * @param ObjectProphecy                   $objectProphecy
+     * @param string                           $methodName
+     * @param Argument\ArgumentsWildcard|array $arguments
      *
      * @throws \Prophecy\Exception\Doubler\MethodNotFoundException If method not found
+     *
+     * @internal
      */
-    public function __construct(ObjectProphecy $objectProphecy, $methodName, $arguments = null)
+    public function __construct(ObjectProphecy $objectProphecy, $methodName, $arguments)
     {
         $double = $objectProphecy->reveal();
         if (!method_exists($double, $methodName)) {
@@ -69,9 +69,7 @@ class MethodProphecy
             ), $this);
         }
 
-        if (null !== $arguments) {
-            $this->withArguments($arguments);
-        }
+        $this->withArguments($arguments);
 
         $hasTentativeReturnType = method_exists($reflectedMethod, 'hasTentativeReturnType')
             && $reflectedMethod->hasTentativeReturnType();
