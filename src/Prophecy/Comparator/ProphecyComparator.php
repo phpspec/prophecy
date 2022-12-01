@@ -29,6 +29,7 @@ class ProphecyComparator extends ObjectComparator
      */
     public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = array()): void
     {
+        \assert($actual instanceof ProphecyInterface);
         parent::assertEquals($expected, $actual->reveal(), $delta, $canonicalize, $ignoreCase, $processed);
     }
 }

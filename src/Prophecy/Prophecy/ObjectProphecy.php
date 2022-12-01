@@ -182,6 +182,7 @@ class ObjectProphecy implements ProphecyInterface
     public function makeProphecyMethodCall($methodName, array $arguments)
     {
         $arguments = $this->revealer->reveal($arguments);
+        \assert(\is_array($arguments));
         $return    = $this->callCenter->makeCall($this, $methodName, $arguments);
 
         return $this->revealer->reveal($return);
@@ -240,7 +241,9 @@ class ObjectProphecy implements ProphecyInterface
      */
     public function __call($methodName, array $arguments)
     {
-        $arguments = new ArgumentsWildcard($this->revealer->reveal($arguments));
+        $arguments = $this->revealer->reveal($arguments);
+        \assert(\is_array($arguments));
+        $arguments = new ArgumentsWildcard($arguments);
 
         foreach ($this->getMethodProphecies($methodName) as $prophecy) {
             $argumentsWildcard = $prophecy->getArgumentsWildcard();

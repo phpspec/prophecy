@@ -139,6 +139,14 @@ class ArrayEntryToken implements TokenInterface
 
         $key = $this->key->getValue();
 
+        if (!\is_int($key) && !\is_string($key)) {
+            throw new InvalidArgumentException(sprintf(
+            'You can only use integer or string keys to match key of ArrayAccess object'.PHP_EOL.
+                'But you used `%s`.',
+               $this->key
+            ));
+        }
+
         return $object->offsetExists($key) ? array($key => $object[$key]) : array();
     }
 }

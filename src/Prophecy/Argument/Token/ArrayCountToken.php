@@ -66,6 +66,8 @@ class ArrayCountToken implements TokenInterface
      *
      * @param mixed $argument
      * @return bool
+     *
+     * @phpstan-assert-if-true array<mixed>|\Countable $argument
      */
     private function isCountable($argument)
     {

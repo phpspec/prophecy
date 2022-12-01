@@ -36,6 +36,10 @@ class ApproximateValueToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
+        if (!\is_float($argument) && !\is_int($argument) && !\is_numeric($argument)) {
+            return false;
+        }
+
         return round((float)$argument, $this->precision) === round($this->value, $this->precision) ? 10 : false;
     }
 

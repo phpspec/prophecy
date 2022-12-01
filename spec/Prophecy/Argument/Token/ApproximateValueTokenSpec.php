@@ -46,6 +46,8 @@ class ApproximateValueTokenSpec extends ObjectBehavior
     function it_does_not_score_if_rounded_argument_is_not_numeric()
     {
         $this->scoreArgument('hello')->shouldReturn(false);
+        $this->scoreArgument(new \stdClass())->shouldReturn(false);
+        $this->scoreArgument(false)->shouldReturn(false);
     }
 
     function it_has_simple_string_representation()
