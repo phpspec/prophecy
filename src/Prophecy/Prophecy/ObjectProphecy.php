@@ -143,22 +143,9 @@ class ObjectProphecy implements ProphecyInterface
      * Adds method prophecy to object prophecy.
      *
      * @param MethodProphecy $methodProphecy
-     *
-     * @throws \Prophecy\Exception\Prophecy\MethodProphecyException If method prophecy doesn't
-     *                                                              have arguments wildcard
      */
     public function addMethodProphecy(MethodProphecy $methodProphecy)
     {
-        $argumentsWildcard = $methodProphecy->getArgumentsWildcard();
-        if (null === $argumentsWildcard) {
-            throw new MethodProphecyException(sprintf(
-                "Can not add prophecy for a method `%s::%s()`\n".
-                "as you did not specify arguments wildcard for it.",
-                get_class($this->reveal()),
-                $methodProphecy->getMethodName()
-            ), $methodProphecy);
-        }
-
         $methodName = strtolower($methodProphecy->getMethodName());
 
         if (!isset($this->methodProphecies[$methodName])) {
