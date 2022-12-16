@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Argument\Token;
 
 use PhpSpec\ObjectBehavior;
+use Stringable;
 
 class ExactValueTokenSpec extends ObjectBehavior
 {
@@ -143,6 +144,33 @@ class ExactValueTokenSpec extends ObjectBehavior
         $idRegexExpr = '[0-9]+';
         $this->__toString()->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $idRegexExpr, $idRegexExpr)));
     }
+
+    function it_scores_10_if_value_an_numeric_and_equal_to_argument_as_stringable()
+    {
+        $value = 10;
+        $argument = new ExactValueTokenC("10");
+
+        $this->beConstructedWith($value);
+        $this->scoreArgument($argument)->shouldReturn(10);
+    }
+
+    function it_does_not_scores_if_value_an_numeric_and_equal_to_argument_as_stringable()
+    {
+        $value = 10;
+        $argument = new ExactValueTokenC("example");
+
+        $this->beConstructedWith($value);
+        $this->scoreArgument($argument)->shouldReturn(false);
+    }
+
+    function it_does_not_scores_if_value_an_object_and_not_equal_to_argument_object()
+    {
+        $value = new ExactValueTokenFixtureA;
+        $argument = new ExactValueTokenC("example");
+
+        $this->beConstructedWith($value);
+        $this->scoreArgument($argument)->shouldReturn(false);
+    }
 }
 
 class ExactValueTokenFixtureA
@@ -158,5 +186,19 @@ class ExactValueTokenFixtureB extends ExactValueTokenFixtureA
     public function __construct($value)
     {
         $this->value = $value;
+    }
+}
+
+class ExactValueTokenC implements \Stringable
+{
+    public $value;
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
+
+    public function __toString()
+    {
+        return $this->value;
     }
 }
