@@ -189,7 +189,7 @@ class ExactValueTokenFixtureB extends ExactValueTokenFixtureA
     }
 }
 
-class ExactValueTokenC implements \Stringable
+class ExactValueTokenC
 {
     public $value;
     public function __construct($value)
