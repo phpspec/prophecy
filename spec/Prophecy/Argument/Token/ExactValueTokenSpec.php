@@ -3,7 +3,6 @@
 namespace spec\Prophecy\Argument\Token;
 
 use PhpSpec\ObjectBehavior;
-use Stringable;
 
 class ExactValueTokenSpec extends ObjectBehavior
 {
