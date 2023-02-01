@@ -37,6 +37,13 @@ class ArgumentSpec extends ObjectBehavior
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\CallbackToken');
     }
 
+    function it_supports_customizing_tostring_representation_for_callback_token()
+    {
+        $token = $this->that('get_class', 'MyCustomTestCase');
+        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\CallbackToken');
+        $token->__toString()->shouldReturn('MyCustomTestCase');
+    }
+
     function it_has_a_shortcut_for_object_state_token()
     {
         $token = $this->which('getName', 'everzet');
