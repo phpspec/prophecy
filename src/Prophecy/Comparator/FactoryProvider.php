@@ -11,37 +11,30 @@
 
 namespace Prophecy\Comparator;
 
-use SebastianBergmann\Comparator\Factory as BaseFactory;
+use SebastianBergmann\Comparator\Factory;
 
 /**
  * Prophecy comparator factory.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @deprecated Use "Prophecy\Comparator\FactoryProvider" instead to get a "SebastianBergmann\Comparator\Factory" instance.
  */
-final class Factory extends BaseFactory
+final class FactoryProvider
 {
     /**
-     * @var Factory
+     * @var Factory|null
      */
     private static $instance;
 
-    public function __construct()
+    private function __construct()
     {
-        parent::__construct();
-
-        $this->register(new ClosureComparator());
-        $this->register(new ProphecyComparator());
     }
 
-    /**
-     * @return Factory
-     */
-    public static function getInstance()
+    public static function getInstance(): Factory
     {
         if (self::$instance === null) {
-            self::$instance = new Factory;
+            self::$instance = new Factory();
+            self::$instance->register(new ClosureComparator());
+            self::$instance->register(new ProphecyComparator());
         }
 
         return self::$instance;

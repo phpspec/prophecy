@@ -39,7 +39,8 @@
 
     "autoload-dev": {
         "psr-4": {
-            "Fixtures\\Prophecy\\": "fixtures"
+            "Fixtures\\Prophecy\\": "fixtures",
+            "Tests\\Prophecy\\": "tests"
         }
     },
 

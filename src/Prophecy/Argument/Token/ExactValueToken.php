@@ -11,8 +11,9 @@
 
 namespace Prophecy\Argument\Token;
 
+use Prophecy\Comparator\FactoryProvider;
 use SebastianBergmann\Comparator\ComparisonFailure;
-use Prophecy\Comparator\Factory as ComparatorFactory;
+use SebastianBergmann\Comparator\Factory as ComparatorFactory;
 use Prophecy\Util\StringUtil;
 
 /**
@@ -40,7 +41,7 @@ class ExactValueToken implements TokenInterface
         $this->value = $value;
         $this->util  = $util ?: new StringUtil();
 
-        $this->comparatorFactory = $comparatorFactory ?: ComparatorFactory::getInstance();
+        $this->comparatorFactory = $comparatorFactory ?: FactoryProvider::getInstance();
     }
 
     /**
