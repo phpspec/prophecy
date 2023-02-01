@@ -93,13 +93,13 @@ class Argument
     /**
      * Checks that argument matches all tokens
      *
-     * @param mixed ... a list of tokens
+     * @param mixed ...$tokens a list of tokens
      *
      * @return Token\LogicalAndToken
      */
-    public static function allOf()
+    public static function allOf(...$tokens)
     {
-        return new Token\LogicalAndToken(func_get_args());
+        return new Token\LogicalAndToken($tokens);
     }
 
     /**
@@ -202,7 +202,7 @@ class Argument
      * given precision.
      *
      * @param float $value
-     * @param float $precision
+     * @param int $precision
      *
      * @return Token\ApproximateValueToken
      */
@@ -214,7 +214,7 @@ class Argument
     /**
      * Checks that argument is in array.
      *
-     * @param array $value
+     * @param array<mixed> $value
      *
      * @return Token\InArrayToken
      */
@@ -227,7 +227,7 @@ class Argument
     /**
      * Checks that argument is not in array.
      *
-     * @param array $value
+     * @param array<mixed> $value
      *
      * @return Token\NotInArrayToken
      */

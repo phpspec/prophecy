@@ -55,7 +55,7 @@ class ThrowablePatch implements ClassPatchInterface
         $this->setParentClassToException($node);
     }
 
-    private function checkItCanBeDoubled(ClassNode $node)
+    private function checkItCanBeDoubled(ClassNode $node): void
     {
         $className = $node->getParentClass();
         if ($className !== 'stdClass') {
@@ -69,7 +69,7 @@ class ThrowablePatch implements ClassPatchInterface
         }
     }
 
-    private function setParentClassToException(ClassNode $node)
+    private function setParentClassToException(ClassNode $node): void
     {
         $node->setParentClass('Exception');
 

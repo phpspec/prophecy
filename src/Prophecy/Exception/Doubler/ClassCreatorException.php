@@ -17,6 +17,10 @@ class ClassCreatorException extends \RuntimeException implements DoublerExceptio
 {
     private $node;
 
+    /**
+     * @param string    $message
+     * @param ClassNode $node
+     */
     public function __construct($message, ClassNode $node)
     {
         parent::__construct($message);
@@ -24,6 +28,9 @@ class ClassCreatorException extends \RuntimeException implements DoublerExceptio
         $this->node = $node;
     }
 
+    /**
+     * @return ClassNode
+     */
     public function getClassNode()
     {
         return $this->node;

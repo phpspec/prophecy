@@ -22,7 +22,7 @@ class NotInArrayToken implements TokenInterface
     private $strict;
 
     /**
-     * @param array $arguments tokens
+     * @param array<mixed> $arguments tokens
      * @param bool $strict
      */
     public function __construct(array $arguments, $strict = true)

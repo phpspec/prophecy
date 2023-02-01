@@ -15,7 +15,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
 
 /**
- * Return promise.
+ * Returns saved values one by one until last one, then continuously returns last value.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -26,22 +26,13 @@ class ReturnPromise implements PromiseInterface
     /**
      * Initializes promise.
      *
-     * @param array $returnValues Array of values
+     * @param array<mixed> $returnValues Array of values
      */
     public function __construct(array $returnValues)
     {
         $this->returnValues = $returnValues;
     }
 
-    /**
-     * Returns saved values one by one until last one, then continuously returns last value.
-     *
-     * @param array          $args
-     * @param ObjectProphecy $object
-     * @param MethodProphecy $method
-     *
-     * @return mixed
-     */
     public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
     {
         $value = array_shift($this->returnValues);

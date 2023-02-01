@@ -23,6 +23,9 @@ use Prophecy\Util\StringUtil;
 class ExactValueToken implements TokenInterface
 {
     private $value;
+    /**
+     * @var string|null
+     */
     private $string;
     private $util;
     private $comparatorFactory;
@@ -30,9 +33,7 @@ class ExactValueToken implements TokenInterface
     /**
      * Initializes token.
      *
-     * @param mixed             $value
-     * @param StringUtil        $util
-     * @param ComparatorFactory $comparatorFactory
+     * @param mixed $value
      */
     public function __construct($value, StringUtil $util = null, ComparatorFactory $comparatorFactory = null)
     {
@@ -45,9 +46,9 @@ class ExactValueToken implements TokenInterface
     /**
      * Scores 10 if argument matches preset value.
      *
-     * @param $argument
+     * @param mixed $argument
      *
-     * @return bool|int
+     * @return false|int
      */
     public function scoreArgument($argument)
     {

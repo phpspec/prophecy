@@ -18,10 +18,13 @@ namespace Prophecy\Argument\Token;
  */
 class LogicalAndToken implements TokenInterface
 {
+    /**
+     * @var list<TokenInterface>
+     */
     private $tokens = array();
 
     /**
-     * @param array $arguments exact values or tokens
+     * @param array<mixed> $arguments exact values or tokens
      */
     public function __construct(array $arguments)
     {
@@ -36,9 +39,9 @@ class LogicalAndToken implements TokenInterface
     /**
      * Scores maximum score from scores returned by tokens for this argument if all of them score.
      *
-     * @param $argument
+     * @param mixed $argument
      *
-     * @return bool|int
+     * @return false|int
      */
     public function scoreArgument($argument)
     {

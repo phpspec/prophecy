@@ -17,6 +17,10 @@ class ObjectProphecyException extends \RuntimeException implements ProphecyExcep
 {
     private $objectProphecy;
 
+    /**
+     * @param string                 $message
+     * @param ObjectProphecy<object> $objectProphecy
+     */
     public function __construct($message, ObjectProphecy $objectProphecy)
     {
         parent::__construct($message);
@@ -25,7 +29,7 @@ class ObjectProphecyException extends \RuntimeException implements ProphecyExcep
     }
 
     /**
-     * @return ObjectProphecy
+     * @return ObjectProphecy<object>
      */
     public function getObjectProphecy()
     {

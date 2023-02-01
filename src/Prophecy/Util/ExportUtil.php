@@ -47,7 +47,7 @@ class ExportUtil
      * and public properties.
      *
      * @param  mixed $value
-     * @return array
+     * @return array<mixed>
      */
     public static function toArray($value)
     {
@@ -120,7 +120,7 @@ class ExportUtil
         if (is_resource($value)) {
             return sprintf(
                 'resource(%d) of type (%s)',
-                $value,
+                (int) $value,
                 get_resource_type($value)
             );
         }

@@ -13,6 +13,9 @@ namespace Prophecy\Exception\Doubler;
 
 class InterfaceNotFoundException extends ClassNotFoundException
 {
+    /**
+     * @return string
+     */
     public function getInterfaceName()
     {
         return $this->getClassname();

@@ -44,8 +44,8 @@ class ClassMirror
     /**
      * Reflects provided arguments into class node.
      *
-     * @param ReflectionClass|null $class
-     * @param ReflectionClass[] $interfaces
+     * @param ReflectionClass<object>|null $class
+     * @param ReflectionClass<object>[]    $interfaces
      *
      * @return Node\ClassNode
      *
@@ -90,7 +90,10 @@ class ClassMirror
         return $node;
     }
 
-    private function reflectClassToNode(ReflectionClass $class, Node\ClassNode $node)
+    /**
+     * @param ReflectionClass<object> $class
+     */
+    private function reflectClassToNode(ReflectionClass $class, Node\ClassNode $node): void
     {
         if (true === $class->isFinal()) {
             throw new ClassMirrorException(sprintf(
@@ -127,7 +130,10 @@ class ClassMirror
         }
     }
 
-    private function reflectInterfaceToNode(ReflectionClass $interface, Node\ClassNode $node)
+    /**
+     * @param ReflectionClass<object> $interface
+     */
+    private function reflectInterfaceToNode(ReflectionClass $interface, Node\ClassNode $node): void
     {
         $node->addInterface($interface->getName());
 
@@ -136,7 +142,7 @@ class ClassMirror
         }
     }
 
-    private function reflectMethodToNode(ReflectionMethod $method, Node\ClassNode $classNode)
+    private function reflectMethodToNode(ReflectionMethod $method, Node\ClassNode $classNode): void
     {
         $node = new Node\MethodNode($method->getName());
 
@@ -153,29 +159,36 @@ class ClassMirror
         }
 
         if ($method->hasReturnType()) {
+            \assert($method->getReturnType() !== null);
             $returnTypes = $this->getTypeHints($method->getReturnType(), $method->getDeclaringClass(), $method->getReturnType()->allowsNull());
             $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
         }
         elseif (method_exists($method, 'hasTentativeReturnType') && $method->hasTentativeReturnType()) {
+            \assert($method->getTentativeReturnType() !== null);
             $returnTypes = $this->getTypeHints($method->getTentativeReturnType(), $method->getDeclaringClass(), $method->getTentativeReturnType()->allowsNull());
             $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
         }
 
         if (is_array($params = $method->getParameters()) && count($params)) {
             foreach ($params as $param) {
-                $this->reflectArgumentToNode($param, $node);
+                $this->reflectArgumentToNode($param, $method->getDeclaringClass(), $node);
             }
         }
 
         $classNode->addMethod($node);
     }
 
-    private function reflectArgumentToNode(ReflectionParameter $parameter, Node\MethodNode $methodNode)
+    /**
+     * @param ReflectionClass<object> $declaringClass
+     *
+     * @return void
+     */
+    private function reflectArgumentToNode(ReflectionParameter $parameter, ReflectionClass $declaringClass, Node\MethodNode $methodNode): void
     {
         $name = $parameter->getName() == '...' ? '__dot_dot_dot__' : $parameter->getName();
         $node = new Node\ArgumentNode($name);
 
-        $typeHints = $this->getTypeHints($parameter->getType(), $parameter->getDeclaringClass(), $parameter->allowsNull());
+        $typeHints = $this->getTypeHints($parameter->getType(), $declaringClass, $parameter->allowsNull());
 
         $node->setTypeNode(new ArgumentTypeNode(...$typeHints));
 
@@ -195,7 +208,7 @@ class ClassMirror
         $methodNode->addArgument($node);
     }
 
-    private function hasDefaultValue(ReflectionParameter $parameter)
+    private function hasDefaultValue(ReflectionParameter $parameter): bool
     {
         if ($parameter->isVariadic()) {
             return false;
@@ -208,6 +221,9 @@ class ClassMirror
         return $parameter->isOptional() || ($parameter->allowsNull() && $parameter->getType() && \PHP_VERSION_ID < 80100);
     }
 
+    /**
+     * @return mixed
+     */
     private function getDefaultValue(ReflectionParameter $parameter)
     {
         if (!$parameter->isDefaultValueAvailable()) {
@@ -217,7 +233,12 @@ class ClassMirror
         return $parameter->getDefaultValue();
     }
 
-    private function getTypeHints(?ReflectionType $type, ?ReflectionClass $class, bool $allowsNull) : array
+    /**
+     * @param ReflectionClass<object> $class
+     *
+     * @return list<string>
+     */
+    private function getTypeHints(?ReflectionType $type, ReflectionClass $class, bool $allowsNull) : array
     {
         $types = [];
 
@@ -248,6 +269,10 @@ class ClassMirror
                     return $class->getName();
                 }
                 if ($type === 'parent') {
+                    if (false === $class->getParentClass()) {
+                        throw new ClassMirrorException(sprintf('Invalid type "parent" in class "%s" without a parent', $class->getName()), $class);
+                    }
+
                     return $class->getParentClass()->getName();
                 }
 

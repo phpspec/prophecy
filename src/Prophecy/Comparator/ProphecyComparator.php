@@ -24,8 +24,12 @@ class ProphecyComparator extends ObjectComparator
         return is_object($expected) && is_object($actual) && $actual instanceof ProphecyInterface;
     }
 
+    /**
+     * @phpstan-param list<array{object, object}> $processed
+     */
     public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = array()): void
     {
+        \assert($actual instanceof ProphecyInterface);
         parent::assertEquals($expected, $actual->reveal(), $delta, $canonicalize, $ignoreCase, $processed);
     }
 }

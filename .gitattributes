@@ -5,5 +5,6 @@
 /.github/         export-ignore
 /fixtures/        export-ignore
 /phpunit.xml.dist export-ignore
+/phpstan*.neon    export-ignore
 /spec/            export-ignore
 /tests/           export-ignore
