@@ -11,8 +11,9 @@
 
 namespace Prophecy\Prophecy;
 
+use Prophecy\Comparator\FactoryProvider;
 use SebastianBergmann\Comparator\ComparisonFailure;
-use Prophecy\Comparator\Factory as ComparatorFactory;
+use SebastianBergmann\Comparator\Factory as ComparatorFactory;
 use Prophecy\Call\Call;
 use Prophecy\Doubler\LazyDouble;
 use Prophecy\Argument\ArgumentsWildcard;
@@ -50,7 +51,7 @@ class ObjectProphecy implements ProphecyInterface
         $this->callCenter = $callCenter ?: new CallCenter;
         $this->revealer   = $revealer ?: new Revealer;
 
-        $this->comparatorFactory = $comparatorFactory ?: ComparatorFactory::getInstance();
+        $this->comparatorFactory = $comparatorFactory ?: FactoryProvider::getInstance();
     }
 
     /**

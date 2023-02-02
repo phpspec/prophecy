@@ -11,8 +11,9 @@
 
 namespace Prophecy\Argument\Token;
 
+use Prophecy\Comparator\FactoryProvider;
 use SebastianBergmann\Comparator\ComparisonFailure;
-use Prophecy\Comparator\Factory as ComparatorFactory;
+use SebastianBergmann\Comparator\Factory as ComparatorFactory;
 use Prophecy\Util\StringUtil;
 
 /**
@@ -30,10 +31,8 @@ class ObjectStateToken implements TokenInterface
     /**
      * Initializes token.
      *
-     * @param string            $methodName
-     * @param mixed             $value             Expected return value
-     * @param null|StringUtil   $util
-     * @param ComparatorFactory $comparatorFactory
+     * @param string $methodName
+     * @param mixed  $value             Expected return value
      */
     public function __construct(
         $methodName,
@@ -45,7 +44,7 @@ class ObjectStateToken implements TokenInterface
         $this->value = $value;
         $this->util  = $util ?: new StringUtil;
 
-        $this->comparatorFactory = $comparatorFactory ?: ComparatorFactory::getInstance();
+        $this->comparatorFactory = $comparatorFactory ?: FactoryProvider::getInstance();
     }
 
     /**
