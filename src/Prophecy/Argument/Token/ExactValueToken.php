@@ -75,6 +75,10 @@ class ExactValueToken implements TokenInterface
             if (is_object($this->value) && !method_exists($this->value, '__toString')) {
                 return false;
             }
+
+            if (is_numeric($argument) xor is_numeric($this->value)) {
+                return strval($argument) == strval($this->value) ? 10 : false;
+            }
         } elseif (is_numeric($argument) && is_numeric($this->value)) {
             // noop
         } elseif (gettype($argument) !== gettype($this->value)) {
