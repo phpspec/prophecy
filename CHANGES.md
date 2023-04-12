@@ -1,3 +1,11 @@
+Unreleased
+==========
+
+* [fixed] Error when comparing object arguments with integers [@lucassabreu]
+* [changed] Add PHP 8.2 to test matrix [@Jean85]
+* [Added] Allow sebastian/comparator and sebastian/recursion-context 5, and phpunit/phpunit 10 [@Jean85]
+* [docs] Switch travis status badge to GHA one [@michalbundyra]
+
 1.17.0 / 2023-02-02
 ===================
 
