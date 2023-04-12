@@ -241,9 +241,11 @@ class MethodProphecy
      *
      * @see \Prophecy\Promise\ReturnPromise
      *
+     * @param mixed ...$return a list of return values
+     *
      * @return $this
      */
-    public function willReturn()
+    public function willReturn(...$return)
     {
         if ($this->voidReturnType) {
             throw new MethodProphecyException(
@@ -252,7 +254,7 @@ class MethodProphecy
             );
         }
 
-        return $this->will(new Promise\ReturnPromise(func_get_args()));
+        return $this->will(new Promise\ReturnPromise($return));
     }
 
     /**
