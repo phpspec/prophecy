@@ -78,4 +78,13 @@ class ProphetSpec extends ObjectBehavior
     {
         $this->getDoubler()->shouldReturn($doubler);
     }
+
+    function it_throws_ClassNotFound_if_class_to_double_does_not_exist()
+    {
+        $this->shouldThrow('Prophecy\Exception\Doubler\ClassNotFoundException')
+            ->duringProphesize('This\ClassOrInterface\Does\Not\Exist');
+
+        $this->shouldNotThrow()
+            ->duringProphesize();
+    }
 }
