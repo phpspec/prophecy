@@ -21,7 +21,7 @@ abstract class TypeNodeAbstract
 
     public function canUseNullShorthand(): bool
     {
-        return isset($this->types['null']) && count($this->types) <= 2;
+        return isset($this->types['null']) && count($this->types) === 2;
     }
 
     /**
