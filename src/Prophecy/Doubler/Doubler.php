@@ -133,6 +133,7 @@ class Doubler
                 $patch->apply($node);
             }
         }
+        $node->addInterface(DoubleInterface::class);
 
         $this->creator->create($name, $node);
 
