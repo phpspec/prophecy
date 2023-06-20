@@ -36,11 +36,6 @@ parameters:
 			path: src/Prophecy/Doubler/Doubler.php
 
 		-
-			message: "#^Call to an undefined method ReflectionClass\\<object\\>\\:\\:isReadOnly\\(\\)\\.$#"
-			count: 1
-			path: src/Prophecy/Doubler/Generator/ClassMirror.php
-
-		-
 			message: "#^Parameter \\#1 \\$classOrInterface of method Prophecy\\\\Prophet\\:\\:prophesize\\(\\) expects class\\-string\\<object\\>\\|null, string given\\.$#"
 			count: 1
 			path: src/Prophecy/Prophecy/MethodProphecy.php
