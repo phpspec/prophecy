@@ -20,13 +20,15 @@ use ReflectionClass;
  * Lazy double.
  * Gives simple interface to describe double before creating it.
  *
+ * @template T of object
+ *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 class LazyDouble
 {
     private $doubler;
     /**
-     * @var ReflectionClass<object>|null
+     * @var ReflectionClass<T>|null
      */
     private $class;
     /**
@@ -38,7 +40,7 @@ class LazyDouble
      */
     private $arguments  = null;
     /**
-     * @var DoubleInterface|null
+     * @var (T&DoubleInterface)|null
      */
     private $double;
 
@@ -50,12 +52,16 @@ class LazyDouble
     /**
      * Tells doubler to use specific class as parent one for double.
      *
-     * @param string|ReflectionClass<object> $class
+     * @param class-string|ReflectionClass<object> $class
      *
      * @return void
      *
-     * @throws \Prophecy\Exception\Doubler\ClassNotFoundException
-     * @throws \Prophecy\Exception\Doubler\DoubleException
+     * @template U of object
+     * @phpstan-param class-string<U>|ReflectionClass<U> $class
+     * @phpstan-this-out static<U>
+     *
+     * @throws ClassNotFoundException
+     * @throws DoubleException
      */
     public function setParentClass($class)
     {
@@ -71,18 +77,24 @@ class LazyDouble
             $class = new ReflectionClass($class);
         }
 
+        /** @var static<U> $this */
+
         $this->class = $class;
     }
 
     /**
      * Tells doubler to implement specific interface with double.
      *
-     * @param string|ReflectionClass<object> $interface
+     * @param class-string|ReflectionClass<object> $interface
      *
      * @return void
      *
-     * @throws \Prophecy\Exception\Doubler\InterfaceNotFoundException
-     * @throws \Prophecy\Exception\Doubler\DoubleException
+     * @template U of object
+     * @phpstan-param class-string<U>|ReflectionClass<U> $interface
+     * @phpstan-this-out static<T&U>
+     *
+     * @throws InterfaceNotFoundException
+     * @throws DoubleException
      */
     public function addInterface($interface)
     {
@@ -121,7 +133,7 @@ class LazyDouble
     /**
      * Creates double instance or returns already created one.
      *
-     * @return DoubleInterface
+     * @return T&DoubleInterface
      */
     public function getInstance()
     {

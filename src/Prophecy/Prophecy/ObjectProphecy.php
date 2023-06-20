@@ -31,6 +31,9 @@ use Prophecy\Exception\Prediction\PredictionException;
  */
 class ObjectProphecy implements ProphecyInterface
 {
+    /**
+     * @var LazyDouble<T>
+     */
     private $lazyDouble;
     private $callCenter;
     private $revealer;
@@ -41,6 +44,9 @@ class ObjectProphecy implements ProphecyInterface
      */
     private $methodProphecies = array();
 
+    /**
+     * @param LazyDouble<T> $lazyDouble
+     */
     public function __construct(
         LazyDouble $lazyDouble,
         CallCenter $callCenter = null,
@@ -61,7 +67,7 @@ class ObjectProphecy implements ProphecyInterface
      *
      * @return $this
      *
-     * @template U
+     * @template U of object
      * @phpstan-param class-string<U> $class
      * @phpstan-this-out static<T&U>
      */
@@ -79,7 +85,7 @@ class ObjectProphecy implements ProphecyInterface
      *
      * @return $this
      *
-     * @template U
+     * @template U of object
      * @phpstan-param class-string<U> $interface
      * @phpstan-this-out static<T&U>
      */
