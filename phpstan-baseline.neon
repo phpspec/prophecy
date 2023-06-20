@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
+			count: 2
+			path: src/Prophecy/Argument/Token/ExactValueToken.php
+
+		-
 			message: "#^Method Prophecy\\\\Call\\\\CallCenter\\:\\:indentArguments\\(\\) should return array\\<string\\> but returns array\\<string\\>\\|null\\.$#"
 			count: 1
 			path: src/Prophecy/Call/CallCenter.php

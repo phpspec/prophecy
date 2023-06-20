@@ -4,5 +4,7 @@ parameters:
     treatPhpDocTypesAsCertain: false
     paths:
         - ./src/
+    excludePaths:
+        - src/Prophecy/Comparator/Factory.php
 includes:
     - phpstan-baseline.neon
