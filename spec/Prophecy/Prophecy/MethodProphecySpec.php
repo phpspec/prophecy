@@ -7,6 +7,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Call\Call;
+use Prophecy\Exception\Prophecy\MethodProphecyException;
 use Prophecy\Prediction\PredictionInterface;
 use Prophecy\Promise\CallbackPromise;
 use Prophecy\Promise\PromiseInterface;
@@ -555,6 +556,59 @@ class MethodProphecySpec extends ObjectBehavior
         $return = $this->getPromise()->execute([], $objectProphecy, $this);
         $return->shouldBeAnInstanceOf(\ArrayObject::class);
         $return->shouldImplement(ProphecySubjectInterface::class);
+    }
+
+    function it_returns_object_prophecy_for_object_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'object');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
+
+        $return = $this->getPromise()->execute([], $objectProphecy, $this);
+        $return->shouldImplement(ProphecySubjectInterface::class);
+    }
+
+    function it_throws_for_non_existent_class_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
+    {
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'NonExistentClass');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
+
+        $return = $this->getPromise()->shouldThrow(MethodProphecyException::class)->during('execute', [[], $objectProphecy, $this]);
+    }
+
+    function it_returns_true_prophecy_for_true_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
+    {
+        if (\PHP_VERSION_ID < 80200) {
+            return;
+        }
+
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'true');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldBe(true);
+    }
+
+    function it_returns_false_prophecy_for_false_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
+    {
+        if (\PHP_VERSION_ID < 80200) {
+            return;
+        }
+
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'false');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldBe(false);
+    }
+
+    function it_returns_null_prophecy_for_null_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
+    {
+        if (\PHP_VERSION_ID < 80200) {
+            return;
+        }
+
+        $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'null');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
+
+        $this->getPromise()->execute([], $objectProphecy, $this)->shouldBe(null);
     }
 
     private function generateMethodProphecyWithReturnValue($objectProphecy, string $methodName, string $returnType): void
