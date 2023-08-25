@@ -16,7 +16,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
 
 /**
- * Return argument promise.
+ * Returns nth argument if has one, null otherwise.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -45,15 +45,6 @@ class ReturnArgumentPromise implements PromiseInterface
         $this->index = $index;
     }
 
-    /**
-     * Returns nth argument if has one, null otherwise.
-     *
-     * @param array          $args
-     * @param ObjectProphecy $object
-     * @param MethodProphecy $method
-     *
-     * @return null|mixed
-     */
     public function execute(array $args, ObjectProphecy $object, MethodProphecy $method)
     {
         return count($args) > $this->index ? $args[$this->index] : null;

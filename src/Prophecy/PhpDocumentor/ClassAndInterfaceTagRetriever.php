@@ -11,7 +11,6 @@
 
 namespace Prophecy\PhpDocumentor;
 
-use phpDocumentor\Reflection\DocBlock\Tag\MethodTag as LegacyMethodTag;
 use phpDocumentor\Reflection\DocBlock\Tags\Method;
 
 /**
@@ -21,6 +20,9 @@ use phpDocumentor\Reflection\DocBlock\Tags\Method;
  */
 final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
 {
+    /**
+     * @var MethodTagRetrieverInterface
+     */
     private $classRetriever;
 
     public function __construct(MethodTagRetrieverInterface $classRetriever = null)
@@ -31,17 +33,9 @@ final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
             return;
         }
 
-        $this->classRetriever = class_exists('phpDocumentor\Reflection\DocBlockFactory') && class_exists('phpDocumentor\Reflection\Types\ContextFactory')
-            ? new ClassTagRetriever()
-            : new LegacyClassTagRetriever()
-        ;
+        $this->classRetriever = new ClassTagRetriever();
     }
 
-    /**
-     * @param \ReflectionClass $reflectionClass
-     *
-     * @return LegacyMethodTag[]|Method[]
-     */
     public function getTagList(\ReflectionClass $reflectionClass)
     {
         return array_merge(
@@ -51,9 +45,9 @@ final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
     }
 
     /**
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass<object> $reflectionClass
      *
-     * @return LegacyMethodTag[]|Method[]
+     * @return list<Method>
      */
     private function getInterfacesTagList(\ReflectionClass $reflectionClass)
     {

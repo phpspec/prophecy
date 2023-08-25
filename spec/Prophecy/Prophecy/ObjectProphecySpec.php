@@ -200,17 +200,6 @@ class ObjectProphecySpec extends ObjectBehavior
         ));
     }
 
-    function its_addMethodProphecy_throws_exception_when_method_has_no_ArgumentsWildcard(MethodProphecy $methodProphecy)
-    {
-        $methodProphecy->getArgumentsWildcard()->willReturn(null);
-        $methodProphecy->getObjectProphecy()->willReturn($this);
-        $methodProphecy->getMethodName()->willReturn('getTitle');
-
-        $this->shouldThrow('Prophecy\Exception\Prophecy\MethodProphecyException')->duringAddMethodProphecy(
-            $methodProphecy
-        );
-    }
-
     function it_returns_null_after_checkPredictions_call_if_there_is_no_method_prophecies()
     {
         $this->checkProphecyMethodsPredictions()->shouldReturn(null);

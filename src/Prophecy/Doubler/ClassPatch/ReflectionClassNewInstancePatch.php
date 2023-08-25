@@ -40,7 +40,9 @@ class ReflectionClassNewInstancePatch implements ClassPatchInterface
      */
     public function apply(ClassNode $node)
     {
-        foreach ($node->getMethod('newInstance')->getArguments() as $argument) {
+        $method = $node->getMethod('newInstance');
+        \assert($method !== null);
+        foreach ($method->getArguments() as $argument) {
             $argument->setDefault(null);
         }
     }

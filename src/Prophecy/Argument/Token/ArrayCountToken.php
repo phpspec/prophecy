@@ -32,9 +32,9 @@ class ArrayCountToken implements TokenInterface
     /**
      * Scores 6 when argument has preset number of elements.
      *
-     * @param $argument
+     * @param mixed $argument
      *
-     * @return bool|int
+     * @return false|int
      */
     public function scoreArgument($argument)
     {
@@ -64,8 +64,10 @@ class ArrayCountToken implements TokenInterface
     /**
      * Returns true if object is either array or instance of \Countable
      *
-     * @param $argument
+     * @param mixed $argument
      * @return bool
+     *
+     * @phpstan-assert-if-true array<mixed>|\Countable $argument
      */
     private function isCountable($argument)
     {
@@ -75,7 +77,7 @@ class ArrayCountToken implements TokenInterface
     /**
      * Returns true if $argument has expected number of elements
      *
-     * @param array|\Countable $argument
+     * @param array<mixed>|\Countable $argument
      *
      * @return bool
      */

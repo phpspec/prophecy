@@ -12,6 +12,7 @@
 namespace Prophecy\Call;
 
 use Prophecy\Exception\Prophecy\MethodProphecyException;
+use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Util\StringUtil;
@@ -44,9 +45,9 @@ class CallCenter
     /**
      * Makes and records specific method call for object prophecy.
      *
-     * @param ObjectProphecy $prophecy
+     * @param ObjectProphecy<object> $prophecy
      * @param string         $methodName
-     * @param array          $arguments
+     * @param array<mixed>          $arguments
      *
      * @return mixed Returns null if no promise for prophecy found or promise return value.
      *
@@ -59,7 +60,7 @@ class CallCenter
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
 
         $file = $line = null;
-        if (isset($backtrace[2]) && isset($backtrace[2]['file'])) {
+        if (isset($backtrace[2]) && isset($backtrace[2]['file']) && isset($backtrace[2]['line'])) {
             $file = $backtrace[2]['file'];
             $line = $backtrace[2]['line'];
         }
@@ -125,7 +126,7 @@ class CallCenter
      * @param string            $methodName
      * @param ArgumentsWildcard $wildcard
      *
-     * @return Call[]
+     * @return list<Call>
      */
     public function findCalls($methodName, ArgumentsWildcard $wildcard)
     {
@@ -140,6 +141,13 @@ class CallCenter
         );
     }
 
+    /**
+     * @param ObjectProphecy<object> $prophecy
+     * @param string                 $methodName
+     * @param array<mixed>           $arguments
+     *
+     * @return UnexpectedCallException
+     */
     private function createUnexpectedCallException(ObjectProphecy $prophecy, $methodName,
                                                    array $arguments)
     {
@@ -187,6 +195,12 @@ class CallCenter
         );
     }
 
+    /**
+     * @param string[] $arguments
+     * @param int      $indentationLength
+     *
+     * @return string[]
+     */
     private function indentArguments(array $arguments, $indentationLength)
     {
         return preg_replace_callback(

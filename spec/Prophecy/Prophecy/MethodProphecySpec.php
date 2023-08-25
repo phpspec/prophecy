@@ -17,7 +17,7 @@ use RuntimeException;
 
 class MethodProphecySpec extends ObjectBehavior
 {
-    function let(ObjectProphecy $objectProphecy, ReflectionClass $reflection)
+    function let(ObjectProphecy $objectProphecy, ReflectionClass $reflection, ArgumentsWildcard $argumentsWildcard)
     {
         $objectProphecy->reveal()->willReturn($reflection);
 
@@ -25,7 +25,7 @@ class MethodProphecySpec extends ObjectBehavior
             $objectProphecy->addMethodProphecy(Argument::any())->willReturn();
         }
 
-        $this->beConstructedWith($objectProphecy, 'getName', null);
+        $this->beConstructedWith($objectProphecy, 'getName', $argumentsWildcard);
     }
 
     function it_is_initializable()
@@ -36,11 +36,12 @@ class MethodProphecySpec extends ObjectBehavior
     function its_constructor_throws_MethodNotFoundException_for_unexisting_method(
         ObjectProphecy $objectProphecy,
         ObjectProphecy $objectProphecyInner,
-        ReflectionClass $reflection
+        ReflectionClass $reflection,
+        ArgumentsWildcard $argumentsWildcard
     ) {
         $objectProphecy->reveal()->willReturn($objectProphecyInner);
         $objectProphecyInner->reveal()->willReturn($reflection);
-        $this->beConstructedWith($objectProphecy, 'getUnexisting', null);
+        $this->beConstructedWith($objectProphecy, 'getUnexisting', $argumentsWildcard);
         $this->shouldThrow('Prophecy\Exception\Doubler\MethodNotFoundException')->duringInstantiation();
     }
 
@@ -63,51 +64,45 @@ class MethodProphecySpec extends ObjectBehavior
         $this->beConstructedWith($objectProphecy, 'getName', array(42, 33));
 
         $wildcard = $this->getArgumentsWildcard();
-        $wildcard->shouldNotBe(null);
         $wildcard->__toString()->shouldReturn('exact(42), exact(33)');
-    }
-
-    function its_constructor_does_not_touch_third_argument_if_it_is_null(ObjectProphecy $objectProphecy)
-    {
-        $this->beConstructedWith($objectProphecy, 'getName', null);
-
-        $wildcard = $this->getArgumentsWildcard();
-        $wildcard->shouldBe(null);
     }
 
     function its_constructor_records_default_callback_promise_for_return_type_hinted_methods(
         ObjectProphecy $objectProphecy,
-        $subject
+        $subject,
+        ArgumentsWildcard $argumentsWildcard
     ) {
         $subject->beADoubleOf('spec\Prophecy\Prophecy\ClassWithVoidTypeHintedMethods');
         $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
         $objectProphecy->reveal()->willReturn($subject);
 
-        $this->beConstructedWith($objectProphecy, 'getVoid');
+        $this->beConstructedWith($objectProphecy, 'getVoid', $argumentsWildcard);
         $this->getPromise()->shouldBeAnInstanceOf('Prophecy\Promise\CallbackPromise');
     }
 
     function its_constructor_records_promise_that_returns_null_for_void_type_hinted_methods(
         ObjectProphecy $objectProphecy,
-        $subject
+        $subject,
+        ArgumentsWildcard $argumentsWildcard
     ) {
         $subject->beADoubleOf('spec\Prophecy\Prophecy\ClassWithVoidTypeHintedMethods');
         $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
         $objectProphecy->reveal()->willReturn($subject);
 
-        $this->beConstructedWith($objectProphecy, 'getVoid');
+        $this->beConstructedWith($objectProphecy, 'getVoid', $argumentsWildcard);
         $this->getPromise()->execute(array(), $objectProphecy, $this)->shouldBeNull();
     }
 
     function its_constructor_adds_itself_to_ObjectProphecy_for_return_type_hinted_methods(
         ObjectProphecy $objectProphecy,
-        $subject
+        $subject,
+        ArgumentsWildcard $argumentsWildcard
     ) {
         $subject->beADoubleOf('spec\Prophecy\Prophecy\ClassWithVoidTypeHintedMethods');
         $objectProphecy->addMethodProphecy(Argument::cetera())->willReturn(null);
         $objectProphecy->reveal()->willReturn($subject);
 
-        $this->beConstructedWith($objectProphecy, 'getVoid');
+        $this->beConstructedWith($objectProphecy, 'getVoid', $argumentsWildcard);
         $objectProphecy->addMethodProphecy($this)->shouldHaveBeenCalled();
     }
 
@@ -443,118 +438,118 @@ class MethodProphecySpec extends ObjectBehavior
         $this->shouldThrow('Prophecy\Exception\InvalidArgumentException')->duringWithArguments(42);
     }
 
-    function it_returns_null_for_void_return_type(ObjectProphecy $objectProphecy)
+    function it_returns_null_for_void_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'void');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $this->getPromise()->execute([], $objectProphecy, $this)->shouldBeNull();
     }
 
-    function it_returns_empty_string_for_string_return_type(ObjectProphecy $objectProphecy)
+    function it_returns_empty_string_for_string_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'string');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $this->getPromise()->execute([], $objectProphecy, $this)->shouldBe('');
     }
 
-    function it_returns_zero_for_float_return_type(ObjectProphecy $objectProphecy)
+    function it_returns_zero_for_float_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'float');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $this->getPromise()->execute([], $objectProphecy, $this)->shouldBe(0.00);
     }
 
-    function it_returns_false_for_bool_return_type(ObjectProphecy $objectProphecy)
+    function it_returns_false_for_bool_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'bool');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $this->getPromise()->execute([], $objectProphecy, $this)->shouldBe(false);
     }
 
-    function it_returns_empty_for_array_return_type(ObjectProphecy $objectProphecy)
+    function it_returns_empty_for_array_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'array');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $this->getPromise()->execute([], $objectProphecy, $this)->shouldBe([]);
     }
 
-    function it_returns_empty_closure_for_callable_return_type(ObjectProphecy $objectProphecy)
+    function it_returns_empty_closure_for_callable_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'callable');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $this->getPromise()->execute([], $objectProphecy, $this)->shouldBeAnInstanceOf(\Closure::class);
     }
 
-    function it_returns_empty_closure_for_closure_return_type(ObjectProphecy $objectProphecy)
+    function it_returns_empty_closure_for_closure_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'Closure');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $this->getPromise()->execute([], $objectProphecy, $this)->shouldBeAnInstanceOf(\Closure::class);
     }
 
-    function it_returns_null_generator_for_traversable_return_type(ObjectProphecy $objectProphecy)
+    function it_returns_null_generator_for_traversable_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'Traversable');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $this->getPromise()->execute([], $objectProphecy, $this)->shouldYieldLike([null]);
     }
 
-    function it_returns_null_generator_for_generator_return_type(ObjectProphecy $objectProphecy)
+    function it_returns_null_generator_for_generator_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'Generator');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $this->getPromise()->execute([], $objectProphecy, $this)->shouldYieldLike([null]);
     }
 
-    function it_returns_an_object_prophecy_for_other_object_return_types(ObjectProphecy $objectProphecy)
+    function it_returns_an_object_prophecy_for_other_object_return_types(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'ArrayObject');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $return = $this->getPromise()->execute([], $objectProphecy, $this);
         $return->shouldBeAnInstanceOf(\ArrayObject::class);
         $return->shouldImplement(ProphecySubjectInterface::class);
     }
 
-    function it_returns_object_prophecy_for_nullable_return_type(ObjectProphecy $objectProphecy)
+    function it_returns_object_prophecy_for_nullable_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', '?ArrayObject');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $return = $this->getPromise()->execute([], $objectProphecy, $this);
         $return->shouldBeAnInstanceOf(\ArrayObject::class);
         $return->shouldImplement(ProphecySubjectInterface::class);
     }
 
-    function it_returns_scalar_prophecy_for_scalar_and_null_union(ObjectProphecy $objectProphecy)
+    function it_returns_scalar_prophecy_for_scalar_and_null_union(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         if (\PHP_VERSION_ID < 80000) {
             return;
         }
 
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'string|null|int');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $this->getPromise()->execute([], $objectProphecy, $this)->shouldNotBeNull();
     }
 
-    function it_returns_object_prophecy_for_object_scalar_union(ObjectProphecy $objectProphecy)
+    function it_returns_object_prophecy_for_object_scalar_union(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         if (\PHP_VERSION_ID < 80000) {
             return;
         }
 
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'string|ArrayObject|int');
-        $this->beConstructedWith($objectProphecy, 'foo');
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
 
         $return = $this->getPromise()->execute([], $objectProphecy, $this);
         $return->shouldBeAnInstanceOf(\ArrayObject::class);

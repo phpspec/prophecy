@@ -17,6 +17,10 @@ class ClassMirrorException extends \RuntimeException implements DoublerException
 {
     private $class;
 
+    /**
+     * @param string                  $message
+     * @param ReflectionClass<object> $class
+     */
     public function __construct($message, ReflectionClass $class)
     {
         parent::__construct($message);
@@ -24,6 +28,9 @@ class ClassMirrorException extends \RuntimeException implements DoublerException
         $this->class = $class;
     }
 
+    /**
+     * @return ReflectionClass<object>
+     */
     public function getReflectedClass()
     {
         return $this->class;

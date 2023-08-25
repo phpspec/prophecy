@@ -123,7 +123,6 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 5.4
      */
     public function it_properly_reads_methods_arguments_with_callable_types()
     {
@@ -153,7 +152,6 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 5.6
      */
     public function it_properly_reads_methods_variadic_arguments()
     {
@@ -176,14 +174,9 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 5.6
      */
     public function it_properly_reads_methods_typehinted_variadic_arguments()
     {
-        if (defined('HHVM_VERSION_ID')) {
-            $this->markTestSkipped('HHVM does not support typehints on variadic arguments.');
-        }
-
         $class = new \ReflectionClass('Fixtures\Prophecy\WithTypehintedVariadicArgument');
 
         $mirror = new ClassMirror();
@@ -337,7 +330,6 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 7
      */
     public function it_reflects_return_typehints()
     {
@@ -418,7 +410,6 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 7.1
      */
     public function it_doesnt_fail_on_array_nullable_parameter_with_not_null_default_value()
     {
@@ -445,7 +436,6 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @requires PHP 7.2
      */
     function it_doesnt_fail_when_method_is_extended_with_more_params()
     {
@@ -482,6 +472,9 @@ class ClassMirrorTest extends TestCase
         $method = $this->prophesize('ReflectionMethod');
         $parameter = $this->prophesize('ReflectionParameter');
 
+        if (PHP_VERSION_ID >= 80200) {
+            $class->isReadOnly()->willReturn(false);
+        }
         $class->getName()->willReturn('Custom\ClassName');
         $class->isInterface()->willReturn(false);
         $class->isFinal()->willReturn(false);
@@ -495,6 +488,7 @@ class ClassMirrorTest extends TestCase
         $method->isStatic()->willReturn(false);
         $method->returnsReference()->willReturn(false);
         $method->hasReturnType()->willReturn(false);
+        $method->getDeclaringClass()->willReturn($class);
 
         if (\PHP_VERSION_ID >= 80100) {
             $method->hasTentativeReturnType()->willReturn(false);
@@ -509,7 +503,6 @@ class ClassMirrorTest extends TestCase
         $parameter->getType()->willReturn(null);
         $parameter->hasType()->willReturn(false);
         $parameter->isVariadic()->willReturn(false);
-        $parameter->getDeclaringClass()->willReturn($class);
 
         $mirror = new ClassMirror();
 
@@ -536,6 +529,21 @@ class ClassMirrorTest extends TestCase
         $this->assertSame(['\stdClass', 'bool'], $methodNode->getReturnTypeNode()->getTypes());
     }
 
+    /**
+     * @test
+     */
+    public function it_can_double_a_class_with_union_return_type_with_false()
+    {
+        if (PHP_VERSION_ID < 80000) {
+            $this->markTestSkipped('Union types with false are not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionReturnTypeFalse'), []);
+        $methodNode = $classNode->getMethods()['method'];
+
+        $this->assertSame(['\stdClass', 'false'], $methodNode->getReturnTypeNode()->getTypes());
+    }
+
     /** @test */
     public function it_can_double_a_class_with_union_argument_types()
     {
@@ -547,6 +555,21 @@ class ClassMirrorTest extends TestCase
         $methodNode = $classNode->getMethods()['doSomething'];
 
         $this->assertEquals(new ArgumentTypeNode('bool', '\\stdClass'), $methodNode->getArguments()[0]->getTypeNode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_a_class_with_union_argument_type_with_false()
+    {
+        if (PHP_VERSION_ID < 80000) {
+            $this->markTestSkipped('Union types with false are not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionArgumentTypeFalse'), []);
+        $methodNode = $classNode->getMethods()['method'];
+
+        $this->assertEquals(new ArgumentTypeNode('false', '\stdClass'), $methodNode->getArguments()[0]->getTypeNode());
     }
 
     /** @test */
@@ -614,7 +637,7 @@ class ClassMirrorTest extends TestCase
         }
 
         $this->expectException(ClassMirrorException::class);
-  
+
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\Enum'), []);
     }
 
@@ -644,5 +667,218 @@ class ClassMirrorTest extends TestCase
         $this->expectException(ClassMirrorException::class);
 
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionArgumentType'), []);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_a_standalone_return_type_of_false()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Standalone return type of false is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\StandaloneReturnTypeFalse'), []);
+        $methodNode = $classNode->getMethods()['method'];
+
+        $this->assertEquals(new ReturnTypeNode('false'), $methodNode->getReturnTypeNode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_a_standalone_parameter_type_of_false()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Standalone parameter type of false is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\StandaloneParameterTypeFalse'), []);
+        $method = $classNode->getMethod('method');
+        $arguments = $method->getArguments();
+
+        $this->assertEquals(new ArgumentTypeNode('false'), $arguments[0]->getTypeNode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_a_nullable_return_type_of_false()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Nullable return type of false is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\NullableReturnTypeFalse'), []);
+        $methodNode = $classNode->getMethods()['method'];
+
+        $this->assertEquals(new ReturnTypeNode('null', 'false'), $methodNode->getReturnTypeNode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_a_nullable_parameter_type_of_false()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Nullable parameter type of false is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\NullableParameterTypeFalse'), []);
+        $method = $classNode->getMethod('method');
+        $arguments = $method->getArguments();
+
+        $this->assertEquals(new ArgumentTypeNode('null', 'false'), $arguments[0]->getTypeNode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_not_double_dnf_intersection_argument_types()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('DNF intersection types are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfArgumentType'), []);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_not_double_dnf_intersection_return_types()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('DNF intersection types are not supported in this PHP version');
+        }
+
+        $this->expectException(ClassMirrorException::class);
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfReturnType'), []);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_a_standalone_return_type_of_true()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Standalone return type of true is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\StandaloneReturnTypeTrue'), []);
+        $methodNode = $classNode->getMethods()['method'];
+
+        $this->assertEquals(new ReturnTypeNode('true'), $methodNode->getReturnTypeNode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_reflects_non_read_only_class()
+    {
+        $classNode = (new ClassMirror())->reflect(
+            new \ReflectionClass('Fixtures\Prophecy\EmptyClass'),
+            []
+        );
+
+        $this->assertFalse($classNode->isReadOnly());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_a_standalone_parameter_type_of_true()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Standalone parameter type of true is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\StandaloneParameterTypeTrue'), []);
+        $method = $classNode->getMethod('method');
+        $arguments = $method->getArguments();
+
+        $this->assertEquals(new ArgumentTypeNode('true'), $arguments[0]->getTypeNode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_a_nullable_return_type_of_true()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Nullable return type of true is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\NullableReturnTypeTrue'), []);
+        $methodNode = $classNode->getMethods()['method'];
+
+        $this->assertEquals(new ReturnTypeNode('null', 'true'), $methodNode->getReturnTypeNode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_a_nullable_parameter_type_of_true()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Nullable parameter type of true is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\NullableParameterTypeTrue'), []);
+        $method = $classNode->getMethod('method');
+        $arguments = $method->getArguments();
+
+        $this->assertEquals(new ArgumentTypeNode('null', 'true'), $arguments[0]->getTypeNode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_a_standalone_return_type_of_null()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Standalone return type of null is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\StandaloneReturnTypeNull'), []);
+        $methodNode = $classNode->getMethods()['method'];
+
+        $this->assertEquals(new ReturnTypeNode('null'), $methodNode->getReturnTypeNode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_double_a_standalone_parameter_type_of_null()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Standalone parameter type of null is not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\StandaloneParameterTypeNull'), []);
+        $method = $classNode->getMethod('method');
+        $arguments = $method->getArguments();
+
+        $this->assertEquals(new ArgumentTypeNode('null'), $arguments[0]->getTypeNode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_reflects_read_only_class()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Read only classes are not supported in this PHP version');
+        }
+
+        $classNode = (new ClassMirror())->reflect(
+            new \ReflectionClass('Fixtures\Prophecy\ReadOnlyClass'),
+            []
+        );
+
+        $this->assertTrue($classNode->isReadOnly());
     }
 }

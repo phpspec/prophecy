@@ -20,7 +20,7 @@ use Prophecy\Util\StringUtil;
 use Prophecy\Exception\Prediction\NoCallsException;
 
 /**
- * Call prediction.
+ * Tests that there was at least one call.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -28,25 +28,11 @@ class CallPrediction implements PredictionInterface
 {
     private $util;
 
-    /**
-     * Initializes prediction.
-     *
-     * @param StringUtil $util
-     */
     public function __construct(StringUtil $util = null)
     {
         $this->util = $util ?: new StringUtil;
     }
 
-    /**
-     * Tests that there was at least one call.
-     *
-     * @param Call[]         $calls
-     * @param ObjectProphecy $object
-     * @param MethodProphecy $method
-     *
-     * @throws \Prophecy\Exception\Prediction\NoCallsException
-     */
     public function check(array $calls, ObjectProphecy $object, MethodProphecy $method)
     {
         if (count($calls)) {

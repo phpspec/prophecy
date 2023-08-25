@@ -82,13 +82,6 @@ class ReturnTypeNodeSpec extends ObjectBehavior
         $this->getNonNullTypes()->shouldReturn(['int']);
     }
 
-    function it_does_not_allow_standalone_null()
-    {
-        $this->beConstructedWith('null');
-
-        $this->shouldThrow(DoubleException::class)->duringInstantiation();
-    }
-
     function it_does_not_allow_union_void()
     {
         $this->beConstructedWith('void', 'int');
@@ -112,21 +105,77 @@ class ReturnTypeNodeSpec extends ObjectBehavior
         $this->getTypes()->shouldReturn(['false', 'array']);
     }
 
-    function it_does_not_allow_standalone_false()
+    function it_allows_standalone_false()
     {
         $this->beConstructedWith('false');
 
-        if (PHP_VERSION_ID >=80000) {
+        if (PHP_VERSION_ID >=80000 && PHP_VERSION_ID < 80200) {
             $this->shouldThrow(DoubleException::class)->duringInstantiation();
+        }
+
+        if (PHP_VERSION_ID >= 80200) {
+            $this->getTypes()->shouldReturn(['false']);
         }
     }
 
-    function it_does_not_allow_nullable_false()
+    function it_allows_standalone_null()
+    {
+        $this->beConstructedWith('null');
+
+        if (PHP_VERSION_ID >=80000 && PHP_VERSION_ID < 80200) {
+            $this->shouldThrow(DoubleException::class)->duringInstantiation();
+        }
+
+        if (PHP_VERSION_ID >= 80200) {
+            $this->getTypes()->shouldReturn(['null']);
+        }
+    }
+
+    function it_allows_standalone_true()
+    {
+        $this->beConstructedWith('true');
+
+        if (PHP_VERSION_ID >=80000 && PHP_VERSION_ID < 80200) {
+            $this->shouldThrow(DoubleException::class)->duringInstantiation();
+        }
+
+        if (PHP_VERSION_ID >= 80200) {
+            $this->getTypes()->shouldReturn(['true']);
+        }
+    }
+
+    function it_allows_nullable_false()
     {
         $this->beConstructedWith('null', 'false');
 
-        if (PHP_VERSION_ID >=80000) {
+        if (PHP_VERSION_ID >=80000 && PHP_VERSION_ID < 80200) {
             $this->shouldThrow(DoubleException::class)->duringInstantiation();
+        }
+
+        if (PHP_VERSION_ID >= 80200) {
+            $this->getTypes()->shouldReturn(['null', 'false']);
+        }
+    }
+
+    function it_allows_nullable_true()
+    {
+        $this->beConstructedWith('null', 'true');
+
+        if (PHP_VERSION_ID >=80000 && PHP_VERSION_ID < 80200) {
+            $this->shouldThrow(DoubleException::class)->duringInstantiation();
+        }
+
+        if (PHP_VERSION_ID >= 80200) {
+            $this->getTypes()->shouldReturn(['null', 'true']);
+        }
+    }
+
+    function it_allows_union_with_false()
+    {
+        $this->beConstructedWith('false', 'Foo');
+
+        if (PHP_VERSION_ID >= 80000) {
+            $this->getTypes()->shouldReturn(['false', '\\Foo']);
         }
     }
 

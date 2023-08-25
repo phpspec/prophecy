@@ -31,22 +31,15 @@ class Doubler
     private $namer;
 
     /**
-     * @var ClassPatchInterface[]
+     * @var list<ClassPatchInterface>
      */
     private $patches = array();
 
     /**
-     * @var \Doctrine\Instantiator\Instantiator
+     * @var Instantiator|null
      */
     private $instantiator;
 
-    /**
-     * Initializes doubler.
-     *
-     * @param ClassMirror   $mirror
-     * @param ClassCreator  $creator
-     * @param NameGenerator $namer
-     */
     public function __construct(ClassMirror $mirror = null, ClassCreator $creator = null,
                                 NameGenerator $namer = null)
     {
@@ -58,7 +51,7 @@ class Doubler
     /**
      * Returns list of registered class patches.
      *
-     * @return ClassPatchInterface[]
+     * @return list<ClassPatchInterface>
      */
     public function getClassPatches()
     {
@@ -69,6 +62,8 @@ class Doubler
      * Registers new class patch.
      *
      * @param ClassPatchInterface $patch
+     *
+     * @return void
      */
     public function registerClassPatch(ClassPatchInterface $patch)
     {
@@ -82,9 +77,9 @@ class Doubler
     /**
      * Creates double from specific class or/and list of interfaces.
      *
-     * @param ReflectionClass   $class
-     * @param ReflectionClass[] $interfaces Array of ReflectionClass instances
-     * @param array             $args       Constructor arguments
+     * @param ReflectionClass<object>|null $class
+     * @param ReflectionClass<object>[]    $interfaces Array of ReflectionClass instances
+     * @param array<mixed>|null            $args       Constructor arguments
      *
      * @return DoubleInterface
      *
@@ -123,8 +118,8 @@ class Doubler
     /**
      * Creates double class and returns its FQN.
      *
-     * @param ReflectionClass   $class
-     * @param ReflectionClass[] $interfaces
+     * @param ReflectionClass<object>|null $class
+     * @param ReflectionClass<object>[]    $interfaces
      *
      * @return string
      */

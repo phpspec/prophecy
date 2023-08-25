@@ -1,7 +1,7 @@
 # Prophecy
 
 [![Stable release](https://poser.pugx.org/phpspec/prophecy/version.svg)](https://packagist.org/packages/phpspec/prophecy)
-[![Build Status](https://travis-ci.org/phpspec/prophecy.svg?branch=master)](https://travis-ci.org/phpspec/prophecy)
+[![Build](https://github.com/phpspec/prophecy/actions/workflows/build.yml/badge.svg)](https://github.com/phpspec/prophecy/actions/workflows/build.yml)
 
 Prophecy is a highly opinionated yet very powerful and flexible PHP object mocking
 framework. Though initially it was created to fulfil phpspec2 needs, it is flexible

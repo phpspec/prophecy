@@ -182,4 +182,16 @@ class ClassNodeSpec extends ObjectBehavior
         );
         $this->shouldThrow($expectedException)->duringAddMethod($method);
     }
+
+    function it_is_non_read_only_by_default()
+    {
+        $this->isReadOnly()->shouldReturn(false);
+    }
+
+    function its_read_only_is_mutable()
+    {
+        $this->setReadOnly(true);
+
+        $this->isReadOnly()->shouldReturn(true);
+    }
 }

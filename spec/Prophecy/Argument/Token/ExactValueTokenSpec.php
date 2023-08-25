@@ -133,15 +133,42 @@ class ExactValueTokenSpec extends ObjectBehavior
 
     function it_generates_proper_string_representation_for_object(\stdClass $object)
     {
-        $objHash = sprintf('exact(%s:%s',
+        $objHash = sprintf('exact(%s#%s',
             get_class($object->getWrappedObject()),
-            spl_object_hash($object->getWrappedObject())
-        ) . " Object (\n    'objectProphecyClosure' => Closure:%s Object (\n        0 => Closure:%s Object\n    )\n))";
+            spl_object_id($object->getWrappedObject())
+        ) . " Object (\n    'objectProphecyClosure' => Closure#%s Object (\n        0 => Closure#%s Object\n    )\n))";
 
         $this->beConstructedWith($object);
 
-        $hashRegexExpr = '[a-f0-9]{32}';
-        $this->__toString()->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $hashRegexExpr, $hashRegexExpr)));
+        $idRegexExpr = '[0-9]+';
+        $this->__toString()->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $idRegexExpr, $idRegexExpr)));
+    }
+
+    function it_scores_10_if_value_an_numeric_and_equal_to_argument_as_stringable()
+    {
+        $value = 10;
+        $argument = new ExactValueTokenC("10");
+
+        $this->beConstructedWith($value);
+        $this->scoreArgument($argument)->shouldReturn(10);
+    }
+
+    function it_does_not_scores_if_value_an_numeric_and_equal_to_argument_as_stringable()
+    {
+        $value = 10;
+        $argument = new ExactValueTokenC("example");
+
+        $this->beConstructedWith($value);
+        $this->scoreArgument($argument)->shouldReturn(false);
+    }
+
+    function it_does_not_scores_if_value_an_object_and_not_equal_to_argument_object()
+    {
+        $value = new ExactValueTokenFixtureA;
+        $argument = new ExactValueTokenC("example");
+
+        $this->beConstructedWith($value);
+        $this->scoreArgument($argument)->shouldReturn(false);
     }
 }
 
@@ -158,5 +185,19 @@ class ExactValueTokenFixtureB extends ExactValueTokenFixtureA
     public function __construct($value)
     {
         $this->value = $value;
+    }
+}
+
+class ExactValueTokenC
+{
+    public $value;
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
+
+    public function __toString()
+    {
+        return $this->value;
     }
 }

@@ -11,8 +11,9 @@
 
 namespace Prophecy\Argument\Token;
 
+use Prophecy\Comparator\FactoryProvider;
 use SebastianBergmann\Comparator\ComparisonFailure;
-use Prophecy\Comparator\Factory as ComparatorFactory;
+use SebastianBergmann\Comparator\Factory as ComparatorFactory;
 use Prophecy\Util\StringUtil;
 
 /**
@@ -23,6 +24,9 @@ use Prophecy\Util\StringUtil;
 class ExactValueToken implements TokenInterface
 {
     private $value;
+    /**
+     * @var string|null
+     */
     private $string;
     private $util;
     private $comparatorFactory;
@@ -30,24 +34,22 @@ class ExactValueToken implements TokenInterface
     /**
      * Initializes token.
      *
-     * @param mixed             $value
-     * @param StringUtil        $util
-     * @param ComparatorFactory $comparatorFactory
+     * @param mixed $value
      */
     public function __construct($value, StringUtil $util = null, ComparatorFactory $comparatorFactory = null)
     {
         $this->value = $value;
         $this->util  = $util ?: new StringUtil();
 
-        $this->comparatorFactory = $comparatorFactory ?: ComparatorFactory::getInstance();
+        $this->comparatorFactory = $comparatorFactory ?: FactoryProvider::getInstance();
     }
 
     /**
      * Scores 10 if argument matches preset value.
      *
-     * @param $argument
+     * @param mixed $argument
      *
-     * @return bool|int
+     * @return false|int
      */
     public function scoreArgument($argument)
     {
@@ -72,6 +74,10 @@ class ExactValueToken implements TokenInterface
 
             if (is_object($this->value) && !method_exists($this->value, '__toString')) {
                 return false;
+            }
+
+            if (is_numeric($argument) xor is_numeric($this->value)) {
+                return strval($argument) == strval($this->value) ? 10 : false;
             }
         } elseif (is_numeric($argument) && is_numeric($this->value)) {
             // noop

@@ -19,15 +19,18 @@ namespace Prophecy\Argument;
 class ArgumentsWildcard
 {
     /**
-     * @var Token\TokenInterface[]
+     * @var list<Token\TokenInterface>
      */
     private $tokens = array();
+    /**
+     * @var string|null
+     */
     private $string;
 
     /**
      * Initializes wildcard.
      *
-     * @param array $arguments Array of argument tokens or values
+     * @param array<mixed> $arguments Array of argument tokens or values
      */
     public function __construct(array $arguments)
     {
@@ -43,7 +46,7 @@ class ArgumentsWildcard
     /**
      * Calculates wildcard match score for provided arguments.
      *
-     * @param array $arguments
+     * @param array<mixed> $arguments
      *
      * @return false|int False OR integer score (higher - better)
      */
@@ -92,7 +95,7 @@ class ArgumentsWildcard
     }
 
     /**
-     * @return array
+     * @return list<Token\TokenInterface>
      */
     public function getTokens()
     {
