@@ -6,6 +6,12 @@ return (new PhpCsFixer\Config())
     ->setRiskyAllowed(false)
     ->setRules([
         '@PER-CS' => true,
+        'braces_position' => [
+            'control_structures_opening_brace' => 'same_line',
+        ],
+        'concat_space' => ['spacing' => 'none'],
+        'method_argument_space' => ['on_multiline' => 'ignore'],
+        'visibility_required' => false,
     ])
     ->setFinder(
         (new PhpCsFixer\Finder())
