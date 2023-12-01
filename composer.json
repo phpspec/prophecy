@@ -45,11 +45,20 @@
     },
 
     "scripts": {
+        "post-autoload-dump": [
+            "@install-tools"
+        ],
+        "cs:check": "@php dev-tools/vendor/bin/php-cs-fixer check --verbose --diff",
+        "cs:fix": "@php dev-tools/vendor/bin/php-cs-fixer fix",
+        "install-tools": "@composer --working-dir=dev-tools install",
         "phpstan": "phpstan analyse",
         "phpstan:baseline": "phpstan analyse --generate-baseline"
     },
 
     "scripts-descriptions": {
+        "cs:check": "Check coding standards",
+        "cs:fix": "Fix coding standards",
+        "install-tools": "Install DEV tools",
         "phpstan": "Run PHPStan analysis",
         "phpstan:baseline": "Dump PHPStan baseline file - use only for updating, do not add new errors when possible"
     },
