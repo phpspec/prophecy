@@ -74,4 +74,4 @@ jobs:
           coverage: none
       - name: Install PHP-CS-Fixer
         run: COMPOSER_ROOT_VERSION=dev-master composer require php-cs-fixer/shim
-      - run: ./vendor/bin/php-cs-fixer check --verbose --diff
+      - run: composer cs:check -- --ansi
