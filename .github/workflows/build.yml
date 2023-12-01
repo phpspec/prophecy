@@ -72,6 +72,6 @@ jobs:
         with:
           php-version: "8.2"
           coverage: none
-      - name: Install dependencies
-        run: COMPOSER_ROOT_VERSION=dev-master composer update
+      - name: Install PHP-CS-Fixer
+        run: COMPOSER_ROOT_VERSION=dev-master composer require php-cs-fixer/shim
       - run: ./vendor/bin/php-cs-fixer check --verbose --diff
