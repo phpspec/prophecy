@@ -37,7 +37,7 @@ jobs:
             coverage: none
 
       -   name: Install dependencies
-          run: COMPOSER_ROOT_VERSION=dev-master composer update ${{ matrix.composer-flags }}
+          run: COMPOSER_ROOT_VERSION=dev-master composer update ${{ matrix.composer-flags }} --no-scripts
           id: end-of-setup
 
       -   name: Run tests (phpspec)
@@ -59,7 +59,7 @@ jobs:
           php-version: "8.2"
           coverage: none
       - name: Install dependencies
-        run: COMPOSER_ROOT_VERSION=dev-master composer update
+        run: COMPOSER_ROOT_VERSION=dev-master composer update --no-scripts
       - run: ./vendor/bin/phpstan
 
   coding-standards:
