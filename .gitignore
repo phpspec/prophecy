@@ -2,6 +2,7 @@
 *.phar
 /.php-cs-fixer.cache
 /composer.lock
+/dev-tools/vendor/
 /vendor
 /phpstan.neon
 /phpunit.xml

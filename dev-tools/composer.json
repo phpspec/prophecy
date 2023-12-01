@@ -1,0 +1,11 @@
+{
+    "require": {
+        "php": "^7.4|^8.0",
+        "friendsofphp/php-cs-fixer": "^3.40"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "prefer-stable": true,
+        "sort-packages": true
+    }
+}
