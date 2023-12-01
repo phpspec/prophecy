@@ -1,5 +1,6 @@
 *.tgz
 *.phar
+/.php-cs-fixer.cache
 /composer.lock
 /vendor
 /phpstan.neon
