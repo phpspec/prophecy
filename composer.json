@@ -44,6 +44,16 @@
         }
     },
 
+    "scripts": {
+        "phpstan": "phpstan analyse",
+        "phpstan:baseline": "phpstan analyse --generate-baseline"
+    },
+
+    "scripts-descriptions": {
+        "phpstan": "Run PHPStan analysis",
+        "phpstan:baseline": "Dump PHPStan baseline file - use only for updating, do not add new errors when possible"
+    },
+
     "extra": {
         "branch-alias": {
             "dev-master": "1.x-dev"
