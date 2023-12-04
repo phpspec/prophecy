@@ -2,5 +2,6 @@
 *.phar
 /composer.lock
 /vendor
+/phpstan.neon
 /phpunit.xml
 /.phpunit.result.cache
