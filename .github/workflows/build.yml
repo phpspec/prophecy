@@ -75,4 +75,6 @@ jobs:
         with:
           php-version: "8.2"
           coverage: none
+      - name: Install dependencies
+        run: COMPOSER_ROOT_VERSION=dev-master composer update --no-scripts
       - run: composer cs:check -- --ansi
