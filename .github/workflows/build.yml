@@ -19,6 +19,8 @@ jobs:
         include:
           - php: 7.2
             composer-flags: "--prefer-lowest"
+          - php: '8.3'
+            composer-flags: "--ignore-platform-req=php+" # TODO move that to a normal job without flag once phpspec supports it
 
     steps:
       -   uses: actions/checkout@v3
