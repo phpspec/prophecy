@@ -74,7 +74,7 @@ class Prophet
      *
      * @template T of object
      * @phpstan-param class-string<T>|null $classOrInterface
-     * @phpstan-return ObjectProphecy<T>
+     * @phpstan-return ($classOrInterface is null ? ObjectProphecy<object> : ObjectProphecy<T>)
      */
     public function prophesize($classOrInterface = null)
     {
