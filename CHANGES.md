@@ -1,6 +1,12 @@
 Unreleased
 ==========
 
+1.18.0 / 2023-12-07
+===================
+
+* [added] Add support for PHP 8.3 [@rajeshreeputra]
+* [changed] Improve the error when using return types that Prophecy does not support for mocking [@stof]
+* [changed] Add more precise type for static analysis [@stof]
 * [fixed] Error when comparing object arguments with integers [@lucassabreu]
 * [changed] Add PHP 8.2 to test matrix [@Jean85]
 * [Added] Allow sebastian/comparator and sebastian/recursion-context 5, and phpunit/phpunit 10 [@Jean85]
