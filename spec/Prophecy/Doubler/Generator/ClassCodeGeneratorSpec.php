@@ -459,9 +459,11 @@ PHP;
         $expected =<<<'PHP'
 namespace  {
 class CustomClass extends \ClassWithArgument implements \Prophecy\Doubler\Generator\MirroredInterface {
-public function foo(\DateTimeInterface $arg = NULL) {
+
+public  function foo(\DateTimeInterface $arg = NULL) {
 
 }
+
 }
 }
 PHP;
