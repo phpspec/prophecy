@@ -155,7 +155,7 @@ class MethodProphecy
                 $this->voidReturnType = true;
             }
 
-            $this->will(function () use ($defaultType) {
+            $this->will(function ($args, ObjectProphecy $object, MethodProphecy $method) use ($defaultType) {
                 switch ($defaultType) {
                     case 'void': return;
                     case 'string': return '';
@@ -163,6 +163,9 @@ class MethodProphecy
                     case 'int':    return 0;
                     case 'bool':   return false;
                     case 'array':  return array();
+                    case 'true': return true;
+                    case 'false': return false;
+                    case 'null': return null;
 
                     case 'callable':
                     case 'Closure':
@@ -172,7 +175,15 @@ class MethodProphecy
                     case 'Generator':
                         return (function () { yield; })();
 
+                    case 'object':
+                        $prophet = new Prophet;
+                        return $prophet->prophesize()->reveal();
+
                     default:
+                        if (!class_exists($defaultType) && !interface_exists($defaultType)) {
+                            throw new MethodProphecyException(sprintf('Cannot create a return value for the method as the type "%s" is not supported. Configure an explicit return value instead.', $defaultType), $method);
+                        }
+
                         $prophet = new Prophet;
                         return $prophet->prophesize($defaultType)->reveal();
                 }

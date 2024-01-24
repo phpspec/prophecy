@@ -77,11 +77,13 @@ class Doubler
     /**
      * Creates double from specific class or/and list of interfaces.
      *
-     * @param ReflectionClass<object>|null $class
-     * @param ReflectionClass<object>[]    $interfaces Array of ReflectionClass instances
-     * @param array<mixed>|null            $args       Constructor arguments
+     * @template T of object
      *
-     * @return DoubleInterface
+     * @param ReflectionClass<T>|null   $class
+     * @param ReflectionClass<object>[] $interfaces Array of ReflectionClass instances
+     * @param array<mixed>|null         $args       Constructor arguments
+     *
+     * @return T&DoubleInterface
      *
      * @throws \Prophecy\Exception\InvalidArgumentException
      */
@@ -118,10 +120,12 @@ class Doubler
     /**
      * Creates double class and returns its FQN.
      *
-     * @param ReflectionClass<object>|null $class
-     * @param ReflectionClass<object>[]    $interfaces
+     * @template T of object
      *
-     * @return string
+     * @param ReflectionClass<T>|null   $class
+     * @param ReflectionClass<object>[] $interfaces
+     *
+     * @return class-string<T&DoubleInterface>
      */
     protected function createDoubleClass(ReflectionClass $class = null, array $interfaces)
     {
@@ -133,8 +137,10 @@ class Doubler
                 $patch->apply($node);
             }
         }
+        $node->addInterface(DoubleInterface::class);
 
         $this->creator->create($name, $node);
+        \assert(class_exists($name, false));
 
         return $name;
     }

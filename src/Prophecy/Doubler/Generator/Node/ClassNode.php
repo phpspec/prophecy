@@ -22,11 +22,11 @@ use Prophecy\Exception\InvalidArgumentException;
 class ClassNode
 {
     /**
-     * @var string
+     * @var class-string
      */
     private $parentClass = 'stdClass';
     /**
-     * @var list<string>
+     * @var list<class-string>
      */
     private $interfaces  = array();
 
@@ -53,7 +53,7 @@ class ClassNode
     private $methods = array();
 
     /**
-     * @return string
+     * @return class-string
      */
     public function getParentClass()
     {
@@ -61,7 +61,7 @@ class ClassNode
     }
 
     /**
-     * @param string $class
+     * @param class-string|null $class
      *
      * @return void
      */
@@ -71,7 +71,7 @@ class ClassNode
     }
 
     /**
-     * @return list<string>
+     * @return list<class-string>
      */
     public function getInterfaces()
     {
@@ -79,7 +79,7 @@ class ClassNode
     }
 
     /**
-     * @param string $interface
+     * @param class-string $interface
      *
      * @return void
      */
@@ -93,7 +93,7 @@ class ClassNode
     }
 
     /**
-     * @param string $interface
+     * @param class-string $interface
      *
      * @return bool
      */

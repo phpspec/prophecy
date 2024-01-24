@@ -2,12 +2,14 @@
 
 namespace Tests\Prophecy\Doubler\Generator;
 
+use Fixtures\Prophecy\SelfReferencing;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\Generator\ClassMirror;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use Prophecy\Exception\InvalidArgumentException;
+use Prophecy\Prophet;
 
 class ClassMirrorTest extends TestCase
 {
@@ -454,12 +456,19 @@ class ClassMirrorTest extends TestCase
 
     /**
      * @test
-     * @doesNotPerformAssertions
      */
     function it_doesnt_fail_to_mock_self_referencing_interface()
     {
-        $class = $this->prophesize('Fixtures\Prophecy\SelfReferencing');
-        $class->reveal();
+        $mirror = new ClassMirror();
+
+        $classNode = $mirror->reflect(null, array(new \ReflectionClass(SelfReferencing::class)));
+
+        $method = $classNode->getMethod('__invoke');
+        $this->assertCount(1, $method->getArguments());
+
+        $this->assertEquals(new ArgumentTypeNode(SelfReferencing::class), $method->getArguments()[0]->getTypeNode());
+
+        $this->assertEquals(new ReturnTypeNode(SelfReferencing::class), $method->getReturnTypeNode());
     }
 
     /**
@@ -468,9 +477,10 @@ class ClassMirrorTest extends TestCase
     function it_changes_argument_names_if_they_are_varying()
     {
         // Use test doubles in this test, as arguments named ... in the Reflection API can only happen for internal classes
-        $class = $this->prophesize('ReflectionClass');
-        $method = $this->prophesize('ReflectionMethod');
-        $parameter = $this->prophesize('ReflectionParameter');
+        $prophet = new Prophet();
+        $class = $prophet->prophesize('ReflectionClass');
+        $method = $prophet->prophesize('ReflectionMethod');
+        $parameter = $prophet->prophesize('ReflectionParameter');
 
         if (PHP_VERSION_ID >= 80200) {
             $class->isReadOnly()->willReturn(false);
@@ -593,22 +603,6 @@ class ClassMirrorTest extends TestCase
         $methodNode = $classNode->getMethods()['returnSelf'];
 
         $this->assertEquals(new ReturnTypeNode('Fixtures\Prophecy\AbstractBaseClassWithMethodWithReturnType'), $methodNode->getReturnTypeNode());
-    }
-
-    /**
-     * @test
-     */
-    public function case_insensitive_method_names()
-    {
-        $prophecy = $this->prophesize('ArrayObject');
-        $prophecy->offsetGet(1)->willReturn(1)->shouldBeCalledTimes(1);
-        $prophecy->offsetget(2)->willReturn(2)->shouldBeCalledTimes(1);
-        $prophecy->OffsetGet(3)->willReturn(3)->shouldBeCalledTimes(1);
-
-        $arrayObject = $prophecy->reveal();
-        self::assertSame(1, $arrayObject->offsetGet(1));
-        self::assertSame(2, $arrayObject->offsetGet(2));
-        self::assertSame(3, $arrayObject->offsetGet(3));
     }
 
     /**

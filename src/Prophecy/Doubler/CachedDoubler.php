@@ -22,7 +22,7 @@ use ReflectionClass;
 class CachedDoubler extends Doubler
 {
     /**
-     * @var array<string, string>
+     * @var array<string, class-string>
      */
     private static $classes = array();
 
@@ -37,8 +37,8 @@ class CachedDoubler extends Doubler
     }
 
     /**
-     * @param ReflectionClass<object> $class
-     * @param ReflectionClass<object>[] $interfaces
+     * @param ReflectionClass<object>|null $class
+     * @param ReflectionClass<object>[]    $interfaces
      *
      * @return string
      */

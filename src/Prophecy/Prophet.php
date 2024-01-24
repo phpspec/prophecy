@@ -15,6 +15,7 @@ use Prophecy\Doubler\CachedDoubler;
 use Prophecy\Doubler\Doubler;
 use Prophecy\Doubler\LazyDouble;
 use Prophecy\Doubler\ClassPatch;
+use Prophecy\Exception\Doubler\ClassNotFoundException;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\RevealerInterface;
 use Prophecy\Prophecy\Revealer;
@@ -73,7 +74,7 @@ class Prophet
      *
      * @template T of object
      * @phpstan-param class-string<T>|null $classOrInterface
-     * @phpstan-return ObjectProphecy<T>
+     * @phpstan-return ($classOrInterface is null ? ObjectProphecy<object> : ObjectProphecy<T>)
      */
     public function prophesize($classOrInterface = null)
     {
@@ -83,12 +84,19 @@ class Prophet
             $this->revealer
         );
 
-        if ($classOrInterface && class_exists($classOrInterface)) {
-            return $prophecy->willExtend($classOrInterface);
-        }
+        if ($classOrInterface) {
+            if (class_exists($classOrInterface)) {
+                return $prophecy->willExtend($classOrInterface);
+            }
 
-        if ($classOrInterface && interface_exists($classOrInterface)) {
-            return $prophecy->willImplement($classOrInterface);
+            if (interface_exists($classOrInterface)) {
+                return $prophecy->willImplement($classOrInterface);
+            }
+
+            throw new ClassNotFoundException(sprintf(
+                'Cannot prophesize class %s, because it cannot be found.',
+                $classOrInterface
+            ), $classOrInterface);
         }
 
         return $prophecy;
