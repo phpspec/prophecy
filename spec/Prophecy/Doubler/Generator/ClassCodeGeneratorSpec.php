@@ -428,4 +428,44 @@ PHP;
         $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
         $code->shouldBe($expected);
     }
+
+    function it_generates_correct_code_if_argument_default_value_is_an_object(
+        ClassNode $class,
+        MethodNode $method,
+        ArgumentNode $argument
+    ) {
+        $class->getParentClass()->willReturn('ClassWithArgument');
+        $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
+        $class->getProperties()->willReturn(array());
+        $class->getMethods()->willReturn(array($method));
+        $class->isReadOnly()->willReturn(false);
+
+        $method->getName()->willReturn('foo');
+        $method->getVisibility()->willReturn('public');
+        $method->isStatic()->willReturn(false);
+        $method->getArguments()->willReturn([$argument]);
+        $method->getReturnTypeNode()->willReturn(new ReturnTypeNode());
+        $method->returnsReference()->willReturn(false);
+        $method->getCode()->willReturn('');
+
+        $argument->getTypeNode()->willReturn(new ArgumentTypeNode(\DateTimeInterface::class));
+        $argument->getName()->willReturn('arg');
+        $argument->isPassedByReference()->willReturn(false);
+        $argument->isVariadic()->willReturn(false);
+        $argument->isOptional()->willReturn(true);
+        $argument->getDefault()->willReturn(new \DateTime());
+
+        $code = $this->generate('CustomClass', $class);
+        $expected =<<<'PHP'
+namespace  {
+class CustomClass extends \ClassWithArgument implements \Prophecy\Doubler\Generator\MirroredInterface {
+public function foo(\DateTimeInterface $arg = NULL) {
+
+}
+}
+}
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+        $code->shouldBe($expected);
+    }
 }
