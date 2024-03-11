@@ -110,7 +110,12 @@ class ClassCodeGenerator
             $php .= '$'.$argument->getName();
 
             if ($argument->isOptional() && !$argument->isVariadic()) {
-                $php .= ' = '.var_export($argument->getDefault(), true);
+                $default = $argument->getDefault();
+                if (is_object($argument->getDefault())) {
+                    $default = null;
+                }
+
+                $php .= ' = '.var_export($default, true);
             }
 
             return $php;
