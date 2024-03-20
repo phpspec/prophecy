@@ -31,7 +31,7 @@ class AggregateException extends \RuntimeException implements PredictionExceptio
     {
         $message = $exception->getMessage();
         $message = strtr($message, array("\n" => "\n  "))."\n";
-        $message = empty($this->exceptions) ? $message : "\n" . $message;
+        $message = empty($this->exceptions) ? $message : "\n".$message;
 
         $this->message      = rtrim($this->message.$message);
         $this->exceptions[] = $exception;

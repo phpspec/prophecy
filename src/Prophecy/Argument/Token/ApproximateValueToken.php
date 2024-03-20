@@ -40,7 +40,7 @@ class ApproximateValueToken implements TokenInterface
             return false;
         }
 
-        return round((float)$argument, $this->precision) === round($this->value, $this->precision) ? 10 : false;
+        return round((float) $argument, $this->precision) === round($this->value, $this->precision) ? 10 : false;
     }
 
     /**

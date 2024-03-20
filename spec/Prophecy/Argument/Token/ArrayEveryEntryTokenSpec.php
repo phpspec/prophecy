@@ -42,7 +42,7 @@ class ArrayEveryEntryTokenSpec extends ObjectBehavior
     function it_does_not_score_if_argument_is_neither_array_nor_traversable()
     {
         $this->scoreArgument('string')->shouldBe(false);
-        $this->scoreArgument(new \stdClass)->shouldBe(false);
+        $this->scoreArgument(new \stdClass())->shouldBe(false);
     }
 
     function it_does_not_score_empty_array()

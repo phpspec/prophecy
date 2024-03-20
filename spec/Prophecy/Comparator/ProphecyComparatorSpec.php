@@ -19,9 +19,9 @@ class ProphecyComparatorSpec extends ObjectBehavior
         $this->accepts('string', 'string')->shouldReturn(false);
         $this->accepts(false, true)->shouldReturn(false);
         $this->accepts(true, false)->shouldReturn(false);
-        $this->accepts((object)array(), (object)array())->shouldReturn(false);
-        $this->accepts(function(){}, (object)array())->shouldReturn(false);
-        $this->accepts(function(){}, function(){})->shouldReturn(false);
+        $this->accepts((object) array(), (object) array())->shouldReturn(false);
+        $this->accepts(function () {}, (object) array())->shouldReturn(false);
+        $this->accepts(function () {}, function () {})->shouldReturn(false);
 
         $prophet = new Prophet();
         $prophecy = $prophet->prophesize('Prophecy\Prophecy\ObjectProphecy');

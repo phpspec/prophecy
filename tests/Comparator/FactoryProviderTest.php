@@ -13,7 +13,7 @@ class FactoryProviderTest extends TestCase
      */
     function it_should_have_ClosureComparator_registered()
     {
-        $comparator = FactoryProvider::getInstance()->getComparatorFor(function(){}, function(){});
+        $comparator = FactoryProvider::getInstance()->getComparatorFor(function () {}, function () {});
 
         $this->assertInstanceOf(ClosureComparator::class, $comparator);
     }

@@ -27,8 +27,8 @@ class TypeNodeAbstractTest extends TestCase
             $count = count($types);
             $expected = $count === 2;
 
-            yield $count . ' return types' => [new ReturnTypeNode(...$types), $expected];
-            yield $count . ' argument types' => [new ArgumentTypeNode(...$types), $expected];
+            yield $count.' return types' => [new ReturnTypeNode(...$types), $expected];
+            yield $count.' argument types' => [new ArgumentTypeNode(...$types), $expected];
         }
     }
 

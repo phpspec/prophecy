@@ -73,7 +73,7 @@ class ArgumentTypeNodeSpec extends ObjectBehavior
     {
         $this->beConstructedWith('mixed', 'int');
 
-        if (PHP_VERSION_ID >=80000) {
+        if (PHP_VERSION_ID >= 80000) {
             $this->shouldThrow(DoubleException::class)->duringInstantiation();
         }
     }
@@ -89,7 +89,7 @@ class ArgumentTypeNodeSpec extends ObjectBehavior
     {
         $this->beConstructedWith('false');
 
-        if (PHP_VERSION_ID >=80000 && PHP_VERSION_ID < 80200) {
+        if (PHP_VERSION_ID >= 80000 && PHP_VERSION_ID < 80200) {
             $this->shouldThrow(DoubleException::class)->duringInstantiation();
         }
 
@@ -102,7 +102,7 @@ class ArgumentTypeNodeSpec extends ObjectBehavior
     {
         $this->beConstructedWith('null');
 
-        if (PHP_VERSION_ID >=80000 && PHP_VERSION_ID < 80200) {
+        if (PHP_VERSION_ID >= 80000 && PHP_VERSION_ID < 80200) {
             $this->shouldThrow(DoubleException::class)->duringInstantiation();
         }
 
@@ -115,7 +115,7 @@ class ArgumentTypeNodeSpec extends ObjectBehavior
     {
         $this->beConstructedWith('true');
 
-        if (PHP_VERSION_ID >=80000 && PHP_VERSION_ID < 80200) {
+        if (PHP_VERSION_ID >= 80000 && PHP_VERSION_ID < 80200) {
             $this->shouldThrow(DoubleException::class)->duringInstantiation();
         }
 
@@ -128,7 +128,7 @@ class ArgumentTypeNodeSpec extends ObjectBehavior
     {
         $this->beConstructedWith('null', 'false');
 
-        if (PHP_VERSION_ID >=80000 && PHP_VERSION_ID < 80200) {
+        if (PHP_VERSION_ID >= 80000 && PHP_VERSION_ID < 80200) {
             $this->shouldThrow(DoubleException::class)->duringInstantiation();
         }
 
@@ -141,7 +141,7 @@ class ArgumentTypeNodeSpec extends ObjectBehavior
     {
         $this->beConstructedWith('null', 'true');
 
-        if (PHP_VERSION_ID >=80000 && PHP_VERSION_ID < 80200) {
+        if (PHP_VERSION_ID >= 80000 && PHP_VERSION_ID < 80200) {
             $this->shouldThrow(DoubleException::class)->duringInstantiation();
         }
 

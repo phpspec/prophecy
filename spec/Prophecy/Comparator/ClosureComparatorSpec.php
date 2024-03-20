@@ -18,21 +18,21 @@ class ClosureComparatorSpec extends ObjectBehavior
         $this->accepts('string', 'string')->shouldReturn(false);
         $this->accepts(false, true)->shouldReturn(false);
         $this->accepts(true, false)->shouldReturn(false);
-        $this->accepts((object)array(), (object)array())->shouldReturn(false);
-        $this->accepts(function(){}, (object)array())->shouldReturn(false);
-        $this->accepts(function(){}, (object)array())->shouldReturn(false);
+        $this->accepts((object) array(), (object) array())->shouldReturn(false);
+        $this->accepts(function () {}, (object) array())->shouldReturn(false);
+        $this->accepts(function () {}, (object) array())->shouldReturn(false);
 
-        $this->accepts(function(){}, function(){})->shouldReturn(true);
+        $this->accepts(function () {}, function () {})->shouldReturn(true);
     }
 
     function it_asserts_that_different_closures_are_different()
     {
-        $this->shouldThrow()->duringAssertEquals(function(){}, function(){});
+        $this->shouldThrow()->duringAssertEquals(function () {}, function () {});
     }
 
     function it_asserts_that_closures_are_equal_if_its_the_same_closure()
     {
-        $closure = function(){};
+        $closure = function () {};
 
         $this->shouldNotThrow()->duringAssertEquals($closure, $closure);
     }

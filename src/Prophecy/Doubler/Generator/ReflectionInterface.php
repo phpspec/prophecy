@@ -17,6 +17,4 @@ namespace Prophecy\Doubler\Generator;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface ReflectionInterface
-{
-}
+interface ReflectionInterface {}

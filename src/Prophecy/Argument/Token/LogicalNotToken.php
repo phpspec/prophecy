@@ -26,7 +26,7 @@ class LogicalNotToken implements TokenInterface
      */
     public function __construct($value)
     {
-        $this->token = $value instanceof TokenInterface? $value : new ExactValueToken($value);
+        $this->token = $value instanceof TokenInterface ? $value : new ExactValueToken($value);
     }
 
     /**
