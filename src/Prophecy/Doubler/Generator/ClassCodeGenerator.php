@@ -112,6 +112,7 @@ class ClassCodeGenerator
             if ($argument->isOptional() && !$argument->isVariadic()) {
                 $default = var_export($argument->getDefault(), true);
 
+                // This is necessary for PHP 8.1, as enum cases are exported without a leading slash in this version
                 if ($argument->getDefault() instanceof \UnitEnum && 0 !== strpos($default, '\\'))  {
                     $default = '\\'.$default;
                 }
