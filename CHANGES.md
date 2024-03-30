@@ -1,6 +1,13 @@
 Unreleased
 ==========
 
+1.19.0
+======
+
+**Added:**
+
+* Allow sebastian/comparator and sebastian/recursion-context 6
+
 1.18.0 / 2023-12-07
 ===================
 
