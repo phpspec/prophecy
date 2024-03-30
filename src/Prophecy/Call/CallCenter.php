@@ -17,7 +17,6 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Util\StringUtil;
 use Prophecy\Exception\Call\UnexpectedCallException;
-use SplObjectStorage;
 
 /**
  * Calls receiver & manager.
@@ -34,11 +33,6 @@ class CallCenter
     private $recordedCalls = array();
 
     /**
-     * @var SplObjectStorage<Call, ObjectProphecy<object>>
-     */
-    private $unexpectedCalls;
-
-    /**
      * Initializes call center.
      *
      * @param StringUtil $util
@@ -46,7 +40,6 @@ class CallCenter
     public function __construct(StringUtil $util = null)
     {
         $this->util = $util ?: new StringUtil;
-        $this->unexpectedCalls = new SplObjectStorage();
     }
 
     /**
@@ -80,14 +73,16 @@ class CallCenter
         }
 
         // There are method prophecies, so it's a fake/stub. Searching prophecy for this call
-        $matches = $this->findMethodProphecies($prophecy, $methodName, $arguments);
+        $matches = array();
+        foreach ($prophecy->getMethodProphecies($methodName) as $methodProphecy) {
+            if (0 < $score = $methodProphecy->getArgumentsWildcard()->scoreArguments($arguments)) {
+                $matches[] = array($score, $methodProphecy);
+            }
+        }
 
         // If fake/stub doesn't have method prophecy for this call - throw exception
         if (!count($matches)) {
-            $this->unexpectedCalls->attach(new Call($methodName, $arguments, null, null, $file, $line), $prophecy);
-            $this->recordedCalls[] = new Call($methodName, $arguments, null, null, $file, $line);
-
-            return null;
+            throw $this->createUnexpectedCallException($prophecy, $methodName, $arguments);
         }
 
         // Sort matches by their score value
@@ -144,22 +139,6 @@ class CallCenter
                 ;
             })
         );
-    }
-
-    /**
-     * @return void
-     * @throws UnexpectedCallException
-     */
-    public function checkUnexpectedCalls()
-    {
-        foreach ($this->unexpectedCalls as $call) {
-            $prophecy = $this->unexpectedCalls[$call];
-
-            // If fake/stub doesn't have method prophecy for this call - throw exception
-            if (!count($this->findMethodProphecies($prophecy, $call->getMethodName(), $call->getArguments()))) {
-                throw $this->createUnexpectedCallException($prophecy, $call->getMethodName(), $call->getArguments());
-            }
-        }
     }
 
     /**
@@ -231,26 +210,5 @@ class CallCenter
             },
             $arguments
         );
-    }
-
-    /**
-     * @param ObjectProphecy<object> $prophecy
-     * @param string $methodName
-     * @param array<mixed> $arguments
-     *
-     * @return array
-     *
-     * @phpstan-return list<array{int, MethodProphecy}>
-     */
-    private function findMethodProphecies(ObjectProphecy $prophecy, $methodName, array $arguments)
-    {
-        $matches = array();
-        foreach ($prophecy->getMethodProphecies($methodName) as $methodProphecy) {
-            if (0 < $score = $methodProphecy->getArgumentsWildcard()->scoreArguments($arguments)) {
-                $matches[] = array($score, $methodProphecy);
-            }
-        }
-
-        return $matches;
     }
 }

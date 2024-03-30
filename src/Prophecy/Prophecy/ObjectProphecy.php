@@ -214,14 +214,11 @@ class ObjectProphecy implements ProphecyInterface
      * @return void
      *
      * @throws \Prophecy\Exception\Prediction\AggregateException If any of registered predictions fail
-     * @throws \Prophecy\Exception\Call\UnexpectedCallException
      */
     public function checkProphecyMethodsPredictions()
     {
         $exception = new AggregateException(sprintf("%s:\n", get_class($this->reveal())));
         $exception->setObjectProphecy($this);
-
-        $this->callCenter->checkUnexpectedCalls();
 
         foreach ($this->methodProphecies as $prophecies) {
             foreach ($prophecies as $prophecy) {

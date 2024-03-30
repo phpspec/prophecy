@@ -369,7 +369,6 @@ class MethodProphecySpec extends ObjectBehavior
         Call $call1,
         Call $call2
     ) {
-        $objectProphecy->addMethodProphecy($this)->willReturn(null);
         $callback = function ($calls, $object, $method) {
             throw new RuntimeException;
         };
