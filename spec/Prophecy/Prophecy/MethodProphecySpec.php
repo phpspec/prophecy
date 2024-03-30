@@ -567,6 +567,33 @@ class MethodProphecySpec extends ObjectBehavior
         $return->shouldImplement(ProphecySubjectInterface::class);
     }
 
+    function it_returns_double_for_static_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
+    {
+        if (\PHP_VERSION_ID < 80000) {
+            return;
+        }
+
+        $objectProphecy->reveal()->willReturn(
+            eval(
+            <<<CODE
+class ClassNameWithStaticReturnMethod {
+    public function foo() : static
+    {
+    }
+}
+
+return new ClassNameWithStaticReturnMethod();
+CODE
+            )
+        );
+        $objectProphecy->addMethodProphecy(Argument::any())->willReturn();
+
+        $this->beConstructedWith($objectProphecy, 'foo', $argumentsWildcard);
+
+        $return = $this->getPromise()->execute([], $objectProphecy, $this);
+        $return->shouldImplement(ProphecySubjectInterface::class);
+    }
+
     function it_throws_for_non_existent_class_return_type(ObjectProphecy $objectProphecy, ArgumentsWildcard $argumentsWildcard)
     {
         $this->generateMethodProphecyWithReturnValue($objectProphecy, 'foo', 'NonExistentClass');

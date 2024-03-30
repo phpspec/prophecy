@@ -155,6 +155,10 @@ class MethodProphecy
                 $this->voidReturnType = true;
             }
 
+            if ('static' === $defaultType) {
+                $defaultType = get_class($double);
+            }
+
             $this->will(function ($args, ObjectProphecy $object, MethodProphecy $method) use ($defaultType) {
                 switch ($defaultType) {
                     case 'void': return;
