@@ -271,8 +271,8 @@ class ObjectProphecySpec extends ObjectBehavior
     ) {
         $doubler->double(Argument::any())->willReturn($reflection);
 
-        $this->addMethodProphecy($methodProphecy1 = $this->getProphecy(function(){}));
-        $methodProphecy2 = $this->getProphecy(function(){});
+        $this->addMethodProphecy($methodProphecy1 = $this->getProphecy(function () {}));
+        $methodProphecy2 = $this->getProphecy(function () {});
 
         $methodProphecy2->shouldNotBe($methodProphecy1);
     }
@@ -291,7 +291,7 @@ class ObjectProphecySpec extends ObjectBehavior
 
 class ObjectProphecySpecFixtureA
 {
-	public $errors;
+    public $errors;
 }
 
 class ObjectProphecySpecFixtureB extends ObjectProphecySpecFixtureA

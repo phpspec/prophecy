@@ -144,7 +144,7 @@ class IdenticalValueTokenSpec extends ObjectBehavior
         $objHash = sprintf('identical(%s#%s',
             get_class($object->getWrappedObject()),
             spl_object_id($object->getWrappedObject())
-        ) . " Object (\n    'objectProphecyClosure' => Closure#%s Object (\n        0 => Closure#%s Object\n    )\n))";
+        )." Object (\n    'objectProphecyClosure' => Closure#%s Object (\n        0 => Closure#%s Object\n    )\n))";
 
         $this->beConstructedWith($object);
 

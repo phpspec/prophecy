@@ -42,7 +42,7 @@ class ObjectStateToken implements TokenInterface
     ) {
         $this->name  = $methodName;
         $this->value = $value;
-        $this->util  = $util ?: new StringUtil;
+        $this->util  = $util ?: new StringUtil();
 
         $this->comparatorFactory = $comparatorFactory ?: FactoryProvider::getInstance();
     }

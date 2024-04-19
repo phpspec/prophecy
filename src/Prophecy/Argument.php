@@ -77,7 +77,7 @@ class Argument
      */
     public static function any()
     {
-        return new Token\AnyValueToken;
+        return new Token\AnyValueToken();
     }
 
     /**
@@ -87,7 +87,7 @@ class Argument
      */
     public static function cetera()
     {
-        return new Token\AnyValuesToken;
+        return new Token\AnyValuesToken();
     }
 
     /**

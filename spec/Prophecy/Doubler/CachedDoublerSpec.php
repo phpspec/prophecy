@@ -409,6 +409,4 @@ class CachedDoublerSpec extends ObjectBehavior
     }
 }
 
-class aClass
-{
-}
+class aClass {}

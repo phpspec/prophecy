@@ -36,7 +36,7 @@ class ArrayCountTokenSpec extends ObjectBehavior
     {
         $this->scoreArgument('string')->shouldBe(false);
         $this->scoreArgument(5)->shouldBe(false);
-        $this->scoreArgument(new \stdClass)->shouldBe(false);
+        $this->scoreArgument(new \stdClass())->shouldBe(false);
     }
 
     function it_does_not_score_if_argument_array_has_wrong_count()
