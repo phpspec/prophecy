@@ -4,6 +4,7 @@ namespace spec\Prophecy\Doubler\Generator\Node;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\PropertyNode;
 use Prophecy\Exception\Doubler\MethodNotExtendableException;
 
 class ClassNodeSpec extends ObjectBehavior
@@ -122,8 +123,12 @@ class ClassNodeSpec extends ObjectBehavior
 
     function it_is_able_to_have_properties()
     {
-        $this->addProperty('title');
-        $this->addProperty('text', 'private');
+        $this->addProperty(new PropertyNode('title'));
+
+        $textProperty = new PropertyNode('text');
+        $textProperty->setVisibility('private');
+        $this->addProperty($textProperty);
+
         $this->getProperties()->shouldReturn(array(
             'title' => 'public',
             'text'  => 'private'
@@ -137,8 +142,11 @@ class ClassNodeSpec extends ObjectBehavior
 
     function its_addProperty_lowercases_visibility_before_setting()
     {
-        $this->addProperty('text', 'PRIVATE');
-        $this->getProperties()->shouldReturn(array('text' => 'private'));
+        $textProperty = new PropertyNode('text');
+        $textProperty->setVisibility('PRIVATE');
+        $this->addProperty($textProperty);
+
+        $this->getProperties()->shouldReturn(array('text' => $textProperty));
     }
 
     function its_has_no_unextendable_methods_by_default()

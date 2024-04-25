@@ -6,6 +6,8 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\PropertyNode;
+use Prophecy\Doubler\Generator\Node\PropertyTypeNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 
 class ProphecySubjectPatchSpec extends ObjectBehavior
@@ -29,7 +31,11 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
     {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->shouldBeCalled();
 
-        $node->addProperty('objectProphecyClosure', 'private')->willReturn(null);
+        $objectProphecyClosureContainer = new PropertyNode('objectProphecyClosureContainer');
+        $objectProphecyClosureContainer->setTypeNode(new PropertyTypeNode('Prophecy\Doubler\ClassPatch\ProphecySubjectPatch\ObjectProphecyClosureContainer'));
+        $objectProphecyClosureContainer->setVisibility('private');
+        $node->addProperty($objectProphecyClosureContainer)->willReturn(null);
+
         $node->getMethods()->willReturn(array());
         $node->hasMethod(Argument::any())->willReturn(false);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);
@@ -47,7 +53,12 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         MethodNode $method4
     ) {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->willReturn(null);
-        $node->addProperty('objectProphecyClosure', 'private')->willReturn(null);
+
+        $objectProphecyClosureContainer = new PropertyNode('objectProphecyClosureContainer');
+        $objectProphecyClosureContainer->setTypeNode(new PropertyTypeNode('Prophecy\Doubler\ClassPatch\ProphecySubjectPatch\ObjectProphecyClosureContainer'));
+        $objectProphecyClosureContainer->setVisibility('private');
+        $node->addProperty($objectProphecyClosureContainer)->willReturn(null);
+
         $node->hasMethod(Argument::any())->willReturn(false);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);

@@ -31,9 +31,7 @@ class ClassNode
     private $interfaces  = array();
 
     /**
-     * @var array<string, string>
-     *
-     * @phpstan-var array<string, 'public'|'private'|'protected'>
+     * @var array<string, PropertyNode>
      */
     private $properties  = array();
 
@@ -103,9 +101,7 @@ class ClassNode
     }
 
     /**
-     * @return array<string, string>
-     *
-     * @phpstan-return array<string, 'public'|'private'|'protected'>
+     * @return array<string, PropertyNode>
      */
     public function getProperties()
     {
@@ -113,24 +109,13 @@ class ClassNode
     }
 
     /**
-     * @param string $name
-     * @param string $visibility
+     * @param PropertyNode $property
      *
      * @return void
-     *
-     * @phpstan-param 'public'|'private'|'protected' $visibility
      */
-    public function addProperty($name, $visibility = 'public')
+    public function addProperty(PropertyNode $property): void
     {
-        $visibility = strtolower($visibility);
-
-        if (!\in_array($visibility, array('public', 'private', 'protected'), true)) {
-            throw new InvalidArgumentException(sprintf(
-                '`%s` property visibility is not supported.', $visibility
-            ));
-        }
-
-        $this->properties[$name] = $visibility;
+        $this->properties[$property->getName()] = $property;
     }
 
     /**

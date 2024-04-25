@@ -9,6 +9,7 @@ use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\PropertyNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 
 class ClassCodeGeneratorSpec extends ObjectBehavior
@@ -30,7 +31,12 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $class->getInterfaces()->willReturn(array(
             'Prophecy\Doubler\Generator\MirroredInterface', 'ArrayAccess', 'ArrayIterator'
         ));
-        $class->getProperties()->willReturn(array('name' => 'public', 'email' => 'private'));
+
+        $nameProperty = new PropertyNode('name');
+        $emailProperty = new PropertyNode('email');
+        $emailProperty->setVisibility('private');
+        $class->getProperties()->willReturn(array('name' => $nameProperty, 'email' => $emailProperty));
+
         $class->getMethods()->willReturn(array($method1, $method2, $method3, $method4, $method5));
         $class->isReadOnly()->willReturn(false);
 
