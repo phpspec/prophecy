@@ -11,7 +11,6 @@
 
 namespace Prophecy\Doubler\Generator;
 
-use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Doubler\Generator\Node\TypeNodeAbstract;
 
 /**
@@ -50,8 +49,8 @@ class ClassCodeGenerator
             )
         );
 
-        foreach ($class->getProperties() as $name => $visibility) {
-            $code .= sprintf("%s \$%s;\n", $visibility, $name);
+        foreach ((array) $class->getPropertyNodes() as $propertyNode) {
+            $code .= $this->generateProperty($propertyNode)."\n";
         }
         $code .= "\n";
 
@@ -61,6 +60,23 @@ class ClassCodeGenerator
         $code .= "\n}";
 
         return sprintf("namespace %s {\n%s\n}", $namespace, $code);
+    }
+
+    private function generateProperty(Node\PropertyNode $property): string
+    {
+        if (PHP_VERSION_ID >= 70400) {
+            $type = ($type = $this->generateTypes($property->getTypeNode())) ? $type.' ' : '';
+        } else {
+            $type = '';
+        }
+
+        $php = sprintf("%s %s%s;",
+            $property->getVisibility(),
+            $type,
+            '$'.$property->getName()
+        );
+
+        return $php;
     }
 
     private function generateMethod(Node\MethodNode $method): string

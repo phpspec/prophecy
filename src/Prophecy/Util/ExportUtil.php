@@ -158,7 +158,7 @@ class ExportUtil
                         '%s    %s => %s' . "\n",
                         $whitespace,
                         self::recursiveExport($k, $indentation),
-                        self::recursiveExport($value[$k], $indentation + 1, $processed)
+                        self::recursiveExport($v, $indentation + 1, $processed)
                     );
                 }
 
