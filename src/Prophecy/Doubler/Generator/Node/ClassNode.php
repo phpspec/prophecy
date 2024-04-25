@@ -38,6 +38,11 @@ class ClassNode
     private $properties  = array();
 
     /**
+     * @var array<string, PropertyNode>
+     */
+    private $propertyNodes = array();
+
+    /**
      * @var list<string>
      */
     private $unextendableMethods = array();
@@ -113,6 +118,14 @@ class ClassNode
     }
 
     /**
+     * @return array<string, PropertyNode>
+     */
+    public function getPropertyNodes()
+    {
+        return $this->propertyNodes;
+    }
+
+    /**
      * @param string $name
      * @param string $visibility
      *
@@ -120,7 +133,7 @@ class ClassNode
      *
      * @phpstan-param 'public'|'private'|'protected' $visibility
      */
-    public function addProperty($name, $visibility = 'public')
+    public function addProperty($name, $visibility = 'public', ?PropertyTypeNode $typeNode = null)
     {
         $visibility = strtolower($visibility);
 
@@ -129,6 +142,14 @@ class ClassNode
                 '`%s` property visibility is not supported.', $visibility
             ));
         }
+
+        $propertyNode = new PropertyNode($name);
+        $propertyNode->setVisibility($visibility);
+        if ($typeNode) {
+            $propertyNode->setTypeNode($typeNode);
+        }
+
+        $this->propertyNodes[$name] = $propertyNode;
 
         $this->properties[$name] = $visibility;
     }
