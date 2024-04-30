@@ -44,9 +44,9 @@ class Prophet
     private $prophecies = array();
 
     public function __construct(
-        Doubler $doubler = null,
-        RevealerInterface $revealer = null,
-        StringUtil $util = null
+        ?Doubler $doubler = null,
+        ?RevealerInterface $revealer = null,
+        ?StringUtil $util = null
     ) {
         if (null === $doubler) {
             $doubler = new CachedDoubler();

@@ -28,7 +28,7 @@ class CallPrediction implements PredictionInterface
 {
     private $util;
 
-    public function __construct(StringUtil $util = null)
+    public function __construct(?StringUtil $util = null)
     {
         $this->util = $util ?: new StringUtil;
     }

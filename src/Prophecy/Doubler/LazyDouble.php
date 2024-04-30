@@ -125,7 +125,7 @@ class LazyDouble
      *
      * @return void
      */
-    public function setArguments(array $arguments = null)
+    public function setArguments(?array $arguments = null)
     {
         $this->arguments = $arguments;
     }
