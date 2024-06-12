@@ -11,10 +11,11 @@
 
 namespace Prophecy\Exception\Call;
 
+use Prophecy\Exception\Prediction\PredictionException;
 use Prophecy\Exception\Prophecy\ObjectProphecyException;
 use Prophecy\Prophecy\ObjectProphecy;
 
-class UnexpectedCallException extends ObjectProphecyException
+class UnexpectedCallException extends ObjectProphecyException implements PredictionException
 {
     private $methodName;
     private $arguments;
