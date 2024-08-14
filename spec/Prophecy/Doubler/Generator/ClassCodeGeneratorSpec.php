@@ -75,8 +75,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method5->getCode()->willReturn('return;');
 
         $argument11->getName()->willReturn('fullname');
-        $argument11->isOptional()->willReturn(true);
-        $argument11->getDefault()->willReturn(null);
+        $argument11->isOptional()->willReturn(false);
         $argument11->isPassedByReference()->willReturn(false);
         $argument11->isVariadic()->willReturn(false);
         $argument11->getTypeNode()->willReturn(new ArgumentTypeNode('array'));
@@ -116,7 +115,7 @@ class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generat
 public $name;
 private $email;
 
-public static function getName(array $fullname = NULL, \ReflectionClass $class, object $instance): ?string {
+public static function getName(array $fullname, \ReflectionClass $class, object $instance): ?string {
 return $this->name;
 }
 protected  function getEmail(?string $default = 'ever.zet@gmail.com') {
@@ -265,14 +264,14 @@ PHP;
         $argument->getDefault()->willReturn(null);
         $argument->isPassedByReference()->willReturn(true);
         $argument->isVariadic()->willReturn(false);
-        $argument->getTypeNode()->willReturn(new ArgumentTypeNode('array'));
+        $argument->getTypeNode()->willReturn(new ArgumentTypeNode('array', 'null'));
 
         $code = $this->generate('CustomClass', $class);
         $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface {
 
-public  function getName(array &$fullname = NULL) {
+public  function getName(?array &$fullname = NULL) {
 return $this->name;
 }
 
