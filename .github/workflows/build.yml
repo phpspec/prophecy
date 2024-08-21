@@ -11,14 +11,21 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     name: Build and test
+    continue-on-error: ${{ matrix.experimental || false }}
     strategy:
       fail-fast: false
       matrix:
         php: ["7.2", "7.3", "7.4", "8.0", "8.1", "8.2", "8.3"]
         composer-flags: [ "" ]
+        experimental: [ false ]
         include:
           - php: 7.2
             composer-flags: "--prefer-lowest"
+          - php: "8.4" # TODO move that to a normal job once phpspec supports PHP 8.4
+            composer-flags: "--ignore-platform-req=php+"
+          - php: nightly
+            composer-flags: "--ignore-platform-req=php+"
+            experimental: true
 
     steps:
       -   uses: actions/checkout@v4
