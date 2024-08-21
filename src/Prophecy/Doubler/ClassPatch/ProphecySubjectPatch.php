@@ -11,11 +11,11 @@
 
 namespace Prophecy\Doubler\ClassPatch;
 
+use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
-use Prophecy\Doubler\Generator\Node\ArgumentNode;
-use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\PropertyTypeNode;
 
 /**
  * Add Prophecy functionality to the double.
@@ -45,10 +45,19 @@ class ProphecySubjectPatch implements ClassPatchInterface
     public function apply(ClassNode $node)
     {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface');
-        $node->addProperty('objectProphecyClosure', 'private');
+        $node->addProperty(
+            'objectProphecyClosureContainer',
+            'private',
+            new PropertyTypeNode('Prophecy\Doubler\ClassPatch\ProphecySubjectPatch\ObjectProphecyClosureContainer')
+        );
 
         foreach ($node->getMethods() as $name => $method) {
             if ('__construct' === strtolower($name)) {
+                $method->setCode(
+                    $method->getCode() .
+                    '$this->objectProphecyClosureContainer = new \Prophecy\Doubler\ClassPatch\ProphecySubjectPatch\ObjectProphecyClosureContainer();'
+                );
+
                 continue;
             }
 
@@ -68,8 +77,8 @@ class ProphecySubjectPatch implements ClassPatchInterface
         $prophecyArgument->setTypeNode(new ArgumentTypeNode('Prophecy\Prophecy\ProphecyInterface'));
         $prophecySetter->addArgument($prophecyArgument);
         $prophecySetter->setCode(<<<PHP
-if (null === \$this->objectProphecyClosure) {
-    \$this->objectProphecyClosure = static function () use (\$prophecy) {
+if (null === \$this->objectProphecyClosureContainer->closure) {
+    \$this->objectProphecyClosureContainer->closure = static function () use (\$prophecy) {
         return \$prophecy;
     };
 }
@@ -77,7 +86,7 @@ PHP
     );
 
         $prophecyGetter = new MethodNode('getProphecy');
-        $prophecyGetter->setCode('return \call_user_func($this->objectProphecyClosure);');
+        $prophecyGetter->setCode('return \call_user_func($this->objectProphecyClosureContainer->closure);');
 
         if ($node->hasMethod('__call')) {
             $__call = $node->getMethod('__call');
