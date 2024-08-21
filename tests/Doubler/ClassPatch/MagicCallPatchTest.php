@@ -38,7 +38,16 @@ class MagicCallPatchTest extends TestCase
 
         $classNode = $this->applyPatchTo($class);
 
-        $this->assertEquals([new ArgumentNode('data')], $classNode->getMethod('__unserialize')->getArguments());
+        $method = $classNode->getMethod('__unserialize');
+        if (method_exists($method, 'getParameters')) {
+            // Reflection Docblock 5.4.0+.
+            $args = $method->getParameters();
+        } else {
+            // Reflection Docblock < 5.4.0.
+            $args = $method->getArguments();
+        }
+
+        $this->assertEquals([new ArgumentNode('data')], $args);
     }
 
     private function applyPatchTo(\ReflectionClass $class): ClassNode
