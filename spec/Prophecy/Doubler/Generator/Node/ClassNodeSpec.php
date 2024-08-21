@@ -78,7 +78,7 @@ class ClassNodeSpec extends ObjectBehavior
 
         $this->getMethods()->shouldReturn(array(
             '__construct' => $method1,
-            'getName'     => $method2
+            'getName'     => $method2,
         ));
     }
 
@@ -126,7 +126,7 @@ class ClassNodeSpec extends ObjectBehavior
         $this->addProperty('text', 'private');
         $this->getProperties()->shouldReturn(array(
             'title' => 'public',
-            'text'  => 'private'
+            'text'  => 'private',
         ));
     }
 

@@ -38,7 +38,7 @@ class ClassMirror
         '__wakeup',
         '__toString',
         '__call',
-        '__invoke'
+        '__invoke',
     );
 
     /**

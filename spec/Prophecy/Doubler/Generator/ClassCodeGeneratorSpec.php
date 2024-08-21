@@ -28,7 +28,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
     ) {
         $class->getParentClass()->willReturn('RuntimeException');
         $class->getInterfaces()->willReturn(array(
-            'Prophecy\Doubler\Generator\MirroredInterface', 'ArrayAccess', 'ArrayIterator'
+            'Prophecy\Doubler\Generator\MirroredInterface', 'ArrayAccess', 'ArrayIterator',
         ));
         $class->getProperties()->willReturn(array('name' => 'public', 'email' => 'private'));
         $class->getMethods()->willReturn(array($method1, $method2, $method3, $method4, $method5));
@@ -155,7 +155,7 @@ PHP;
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
         $class->getProperties()->willReturn(array());
         $class->getMethods()->willReturn(array(
-            $method1, $method2, $method3, $method4
+            $method1, $method2, $method3, $method4,
         ));
         $class->isReadOnly()->willReturn(false);
 

@@ -65,7 +65,7 @@ class CallCenterSpec extends ObjectBehavior
 
         $objectProphecy->getMethodProphecies()->willReturn(array(
             'method1' => array($method1),
-            'method2' => array($method2, $method3)
+            'method2' => array($method2, $method3),
         ));
         $objectProphecy->getMethodProphecies('getName')->willReturn(array($method1, $method3));
         $objectProphecy->reveal()->willReturn(new \stdClass());
@@ -107,10 +107,10 @@ class CallCenterSpec extends ObjectBehavior
 
         $objectProphecy->getMethodProphecies()->willReturn(array(
             'method1' => array($method1),
-            'method2' => array($method2, $method3)
+            'method2' => array($method2, $method3),
         ));
         $objectProphecy->getMethodProphecies('getName')->willReturn(array(
-            $method1, $method2, $method3
+            $method1, $method2, $method3,
         ));
         $objectProphecy->reveal()->willReturn(new \stdClass());
 
