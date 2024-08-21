@@ -11,6 +11,7 @@ return (new PhpCsFixer\Config())
         ],
         'concat_space' => ['spacing' => 'none'],
         'method_argument_space' => ['on_multiline' => 'ignore'],
+        'trailing_comma_in_multiline' => false,
         'visibility_required' => false,
     ])
     ->setFinder(
