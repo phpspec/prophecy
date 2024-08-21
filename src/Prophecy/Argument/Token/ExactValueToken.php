@@ -36,7 +36,7 @@ class ExactValueToken implements TokenInterface
      *
      * @param mixed $value
      */
-    public function __construct($value, StringUtil $util = null, ComparatorFactory $comparatorFactory = null)
+    public function __construct($value, ?StringUtil $util = null, ?ComparatorFactory $comparatorFactory = null)
     {
         $this->value = $value;
         $this->util  = $util ?: new StringUtil();

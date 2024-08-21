@@ -25,7 +25,7 @@ final class ClassAndInterfaceTagRetriever implements MethodTagRetrieverInterface
      */
     private $classRetriever;
 
-    public function __construct(MethodTagRetrieverInterface $classRetriever = null)
+    public function __construct(?MethodTagRetrieverInterface $classRetriever = null)
     {
         if (null !== $classRetriever) {
             $this->classRetriever = $classRetriever;

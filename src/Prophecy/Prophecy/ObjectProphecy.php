@@ -49,9 +49,9 @@ class ObjectProphecy implements ProphecyInterface
      */
     public function __construct(
         LazyDouble $lazyDouble,
-        CallCenter $callCenter = null,
-        RevealerInterface $revealer = null,
-        ComparatorFactory $comparatorFactory = null
+        ?CallCenter $callCenter = null,
+        ?RevealerInterface $revealer = null,
+        ?ComparatorFactory $comparatorFactory = null
     ) {
         $this->lazyDouble = $lazyDouble;
         $this->callCenter = $callCenter ?: new CallCenter;
@@ -103,7 +103,7 @@ class ObjectProphecy implements ProphecyInterface
      *
      * @return $this
      */
-    public function willBeConstructedWith(array $arguments = null)
+    public function willBeConstructedWith(?array $arguments = null)
     {
         $this->lazyDouble->setArguments($arguments);
 

@@ -37,8 +37,8 @@ class ObjectStateToken implements TokenInterface
     public function __construct(
         $methodName,
         $value,
-        StringUtil $util = null,
-        ComparatorFactory $comparatorFactory = null
+        ?StringUtil $util = null,
+        ?ComparatorFactory $comparatorFactory = null
     ) {
         $this->name  = $methodName;
         $this->value = $value;
