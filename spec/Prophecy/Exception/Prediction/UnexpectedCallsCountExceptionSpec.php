@@ -9,7 +9,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 class UnexpectedCallsCountExceptionSpec extends ObjectBehavior
 {
-    function let( ObjectProphecy $objectProphecy, MethodProphecy $methodProphecy, Call $call1, Call $call2) {
+    function let(ObjectProphecy $objectProphecy, MethodProphecy $methodProphecy, Call $call1, Call $call2)
+    {
         $methodProphecy->getObjectProphecy()->willReturn($objectProphecy);
 
         $this->beConstructedWith('message', $methodProphecy, 5, array($call1, $call2));

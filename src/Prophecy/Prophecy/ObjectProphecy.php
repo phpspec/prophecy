@@ -54,8 +54,8 @@ class ObjectProphecy implements ProphecyInterface
         ?ComparatorFactory $comparatorFactory = null
     ) {
         $this->lazyDouble = $lazyDouble;
-        $this->callCenter = $callCenter ?: new CallCenter;
-        $this->revealer   = $revealer ?: new Revealer;
+        $this->callCenter = $callCenter ?: new CallCenter();
+        $this->revealer   = $revealer ?: new Revealer();
 
         $this->comparatorFactory = $comparatorFactory ?: FactoryProvider::getInstance();
     }
@@ -261,7 +261,8 @@ class ObjectProphecy implements ProphecyInterface
             try {
                 $comparator->assertEquals($argumentsWildcard, $arguments);
                 return $prophecy;
-            } catch (ComparisonFailure $failure) {}
+            } catch (ComparisonFailure $failure) {
+            }
         }
 
         return new MethodProphecy($this, $methodName, $arguments);

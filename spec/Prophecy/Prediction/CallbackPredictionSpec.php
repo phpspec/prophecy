@@ -24,7 +24,7 @@ class CallbackPredictionSpec extends ObjectBehavior
     function it_proxies_call_to_callback(ObjectProphecy $object, MethodProphecy $method, Call $call)
     {
         $returnFirstCallCallback = function ($calls, $object, $method) {
-            throw new RuntimeException;
+            throw new RuntimeException();
         };
 
         $this->beConstructedWith($returnFirstCallCallback);

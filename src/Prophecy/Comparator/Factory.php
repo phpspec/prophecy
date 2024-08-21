@@ -41,7 +41,7 @@ final class Factory extends BaseFactory
     public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new Factory;
+            self::$instance = new Factory();
         }
 
         return self::$instance;

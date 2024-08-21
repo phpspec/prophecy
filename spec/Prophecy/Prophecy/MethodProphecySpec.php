@@ -358,7 +358,8 @@ class MethodProphecySpec extends ObjectBehavior
 
         try {
             $this->callOnWrappedObject('shouldHave', array($prediction));
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         $this->getCheckedPredictions()->shouldReturn(array($prediction));
     }
@@ -371,7 +372,7 @@ class MethodProphecySpec extends ObjectBehavior
     ) {
         $objectProphecy->addMethodProphecy($this)->willReturn(null);
         $callback = function ($calls, $object, $method) {
-            throw new RuntimeException;
+            throw new RuntimeException();
         };
         $objectProphecy->findProphecyMethodCalls('getName', $arguments)->willReturn(array($call1, $call2));
 
@@ -615,7 +616,7 @@ class MethodProphecySpec extends ObjectBehavior
     {
         $objectProphecy->reveal()->willReturn(
             eval(
-            <<<CODE
+                <<<CODE
 return new class() {
      public function $methodName() : $returnType {}
 };
@@ -635,9 +636,5 @@ class ClassWithFinalMethod
 
 class ClassWithVoidTypeHintedMethods
 {
-    public function getVoid(): void
-    {
-    }
+    public function getVoid(): void {}
 }
-
-

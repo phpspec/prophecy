@@ -11,9 +11,7 @@ use Prophecy\Argument\ArgumentsWildcard;
 
 class CallCenterSpec extends ObjectBehavior
 {
-    function let(ObjectProphecy $objectProphecy)
-    {
-    }
+    function let(ObjectProphecy $objectProphecy) {}
 
     function it_records_calls_made_through_makeCall_method(ObjectProphecy $objectProphecy, ArgumentsWildcard $wildcard)
     {
@@ -33,8 +31,7 @@ class CallCenterSpec extends ObjectBehavior
 
     function it_returns_null_for_any_call_through_makeCall_if_no_method_prophecies_added(
         $objectProphecy
-    )
-    {
+    ) {
         $objectProphecy->getMethodProphecies()->willReturn(array());
 
         $this->makeCall($objectProphecy, 'setValues', array(5, 2, 3))->shouldReturn(null);

@@ -28,7 +28,7 @@ class NoCallsPrediction implements PredictionInterface
 
     public function __construct(?StringUtil $util = null)
     {
-        $this->util = $util ?: new StringUtil;
+        $this->util = $util ?: new StringUtil();
     }
 
     public function check(array $calls, ObjectProphecy $object, MethodProphecy $method)

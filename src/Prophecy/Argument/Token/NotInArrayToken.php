@@ -72,4 +72,3 @@ class NotInArrayToken implements TokenInterface
         return "[{$arrayAsString}]";
     }
 }
-

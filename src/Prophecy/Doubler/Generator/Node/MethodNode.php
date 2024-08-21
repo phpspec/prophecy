@@ -178,8 +178,7 @@ class MethodNode
     {
         if ($bool) {
             $this->returnTypeNode = new ReturnTypeNode('null', ...$this->returnTypeNode->getTypes());
-        }
-        else {
+        } else {
             $this->returnTypeNode = new ReturnTypeNode(...$this->returnTypeNode->getNonNullTypes());
         }
     }
@@ -190,15 +189,14 @@ class MethodNode
      */
     public function getReturnType()
     {
-        if ($types = $this->returnTypeNode->getNonNullTypes())
-        {
+        if ($types = $this->returnTypeNode->getNonNullTypes()) {
             return $types[0];
         }
 
         return null;
     }
 
-    public function getReturnTypeNode() : ReturnTypeNode
+    public function getReturnTypeNode(): ReturnTypeNode
     {
         return $this->returnTypeNode;
     }
@@ -227,8 +225,7 @@ class MethodNode
      */
     public function getCode()
     {
-        if ($this->returnsReference)
-        {
+        if ($this->returnsReference) {
             return "throw new \Prophecy\Exception\Doubler\ReturnByReferenceException('Returning by reference not supported', get_class(\$this), '{$this->name}');";
         }
 
