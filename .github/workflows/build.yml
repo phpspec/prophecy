@@ -36,8 +36,11 @@ jobs:
             php-version: "${{ matrix.php }}"
             coverage: none
 
+      -   name: Remove PHP-CS-Fixer from dependencies
+          run: COMPOSER_ROOT_VERSION=dev-master composer remove --dev friendsofphp/php-cs-fixer --no-update
+
       -   name: Install dependencies
-          run: COMPOSER_ROOT_VERSION=dev-master composer update ${{ matrix.composer-flags }}
+          run: COMPOSER_ROOT_VERSION=dev-master composer update ${{ matrix.composer-flags }} --no-scripts
           id: end-of-setup
 
       -   name: Run tests (phpspec)
@@ -59,5 +62,19 @@ jobs:
           php-version: "8.2"
           coverage: none
       - name: Install dependencies
-        run: COMPOSER_ROOT_VERSION=dev-master composer update
+        run: COMPOSER_ROOT_VERSION=dev-master composer update --no-scripts
       - run: ./vendor/bin/phpstan
+
+  coding-standards:
+    runs-on: ubuntu-latest
+    name: Coding standards
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+      - name: Install dependencies
+        run: COMPOSER_ROOT_VERSION=dev-master composer update --no-scripts
+      - run: composer cs:check -- --ansi

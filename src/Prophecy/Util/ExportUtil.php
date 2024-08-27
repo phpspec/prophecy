@@ -128,23 +128,23 @@ class ExportUtil
         if (is_string($value)) {
             // Match for most non printable chars somewhat taking multibyte chars into account
             if (preg_match('/[^\x09-\x0d\x20-\xff]/', $value)) {
-                return 'Binary String: 0x' . bin2hex($value);
+                return 'Binary String: 0x'.bin2hex($value);
             }
 
-            return "'" .
-            str_replace(array("\r\n", "\n\r", "\r"), array("\n", "\n", "\n"), $value) .
+            return "'".
+            str_replace(array("\r\n", "\n\r", "\r"), array("\n", "\n", "\n"), $value).
             "'";
         }
 
         $whitespace = str_repeat(' ', 4 * $indentation);
 
         if (!$processed) {
-            $processed = new Context;
+            $processed = new Context();
         }
 
         if (is_array($value)) {
             if (($key = $processed->contains($value)) !== false) {
-                return 'Array &' . $key;
+                return 'Array &'.$key;
             }
 
             \assert(\is_array($value));
@@ -155,14 +155,14 @@ class ExportUtil
             if (count($array) > 0) {
                 foreach ($array as $k => $v) {
                     $values .= sprintf(
-                        '%s    %s => %s' . "\n",
+                        '%s    %s => %s'."\n",
                         $whitespace,
                         self::recursiveExport($k, $indentation),
                         self::recursiveExport($value[$k], $indentation + 1, $processed)
                     );
                 }
 
-                $values = "\n" . $values . $whitespace;
+                $values = "\n".$values.$whitespace;
             }
 
             return sprintf('Array &%s (%s)', $key, $values);
@@ -184,14 +184,14 @@ class ExportUtil
             if (count($array) > 0) {
                 foreach ($array as $k => $v) {
                     $values .= sprintf(
-                        '%s    %s => %s' . "\n",
+                        '%s    %s => %s'."\n",
                         $whitespace,
                         self::recursiveExport($k, $indentation),
                         self::recursiveExport($v, $indentation + 1, $processed)
                     );
                 }
 
-                $values = "\n" . $values . $whitespace;
+                $values = "\n".$values.$whitespace;
             }
 
             return sprintf('%s#%d Object (%s)', $class, spl_object_id($value), $values);

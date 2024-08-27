@@ -45,7 +45,7 @@ class CallCenter
      */
     public function __construct(?StringUtil $util = null)
     {
-        $this->util = $util ?: new StringUtil;
+        $this->util = $util ?: new StringUtil();
         $this->unexpectedCalls = new SplObjectStorage();
     }
 
@@ -170,7 +170,7 @@ class CallCenter
      * @return UnexpectedCallException
      */
     private function createUnexpectedCallException(ObjectProphecy $prophecy, $methodName,
-                                                   array $arguments)
+        array $arguments)
     {
         $classname = get_class($prophecy->reveal());
         $indentationLength = 8; // looks good
@@ -186,8 +186,8 @@ class CallCenter
 
         foreach (array_merge(...array_values($prophecy->getMethodProphecies())) as $methodProphecy) {
             $expected[] = sprintf(
-                "  - %s(\n" .
-                "%s\n" .
+                "  - %s(\n".
+                "%s\n".
                 "    )",
                 $methodProphecy->getMethodName(),
                 implode(

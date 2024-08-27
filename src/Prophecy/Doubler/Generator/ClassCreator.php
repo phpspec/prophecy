@@ -25,7 +25,7 @@ class ClassCreator
 
     public function __construct(?ClassCodeGenerator $generator = null)
     {
-        $this->generator = $generator ?: new ClassCodeGenerator;
+        $this->generator = $generator ?: new ClassCodeGenerator();
     }
 
     /**

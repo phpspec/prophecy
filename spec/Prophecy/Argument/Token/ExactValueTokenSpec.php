@@ -136,7 +136,7 @@ class ExactValueTokenSpec extends ObjectBehavior
         $objHash = sprintf('exact(%s#%s',
             get_class($object->getWrappedObject()),
             spl_object_id($object->getWrappedObject())
-        ) . " Object (\n    'objectProphecyClosure' => Closure#%s Object (\n        0 => Closure#%s Object\n    )\n))";
+        )." Object (\n    'objectProphecyClosure' => Closure#%s Object (\n        0 => Closure#%s Object\n    )\n))";
 
         $this->beConstructedWith($object);
 
@@ -164,7 +164,7 @@ class ExactValueTokenSpec extends ObjectBehavior
 
     function it_does_not_scores_if_value_an_object_and_not_equal_to_argument_object()
     {
-        $value = new ExactValueTokenFixtureA;
+        $value = new ExactValueTokenFixtureA();
         $argument = new ExactValueTokenC("example");
 
         $this->beConstructedWith($value);

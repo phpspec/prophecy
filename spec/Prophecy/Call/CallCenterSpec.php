@@ -11,9 +11,7 @@ use Prophecy\Argument\ArgumentsWildcard;
 
 class CallCenterSpec extends ObjectBehavior
 {
-    function let(ObjectProphecy $objectProphecy)
-    {
-    }
+    function let(ObjectProphecy $objectProphecy) {}
 
     function it_records_calls_made_through_makeCall_method(ObjectProphecy $objectProphecy, ArgumentsWildcard $wildcard)
     {
@@ -33,8 +31,7 @@ class CallCenterSpec extends ObjectBehavior
 
     function it_returns_null_for_any_call_through_makeCall_if_no_method_prophecies_added(
         $objectProphecy
-    )
-    {
+    ) {
         $objectProphecy->getMethodProphecies()->willReturn(array());
 
         $this->makeCall($objectProphecy, 'setValues', array(5, 2, 3))->shouldReturn(null);
@@ -68,7 +65,7 @@ class CallCenterSpec extends ObjectBehavior
 
         $objectProphecy->getMethodProphecies()->willReturn(array(
             'method1' => array($method1),
-            'method2' => array($method2, $method3)
+            'method2' => array($method2, $method3),
         ));
         $objectProphecy->getMethodProphecies('getName')->willReturn(array($method1, $method3));
         $objectProphecy->reveal()->willReturn(new \stdClass());
@@ -110,10 +107,10 @@ class CallCenterSpec extends ObjectBehavior
 
         $objectProphecy->getMethodProphecies()->willReturn(array(
             'method1' => array($method1),
-            'method2' => array($method2, $method3)
+            'method2' => array($method2, $method3),
         ));
         $objectProphecy->getMethodProphecies('getName')->willReturn(array(
-            $method1, $method2, $method3
+            $method1, $method2, $method3,
         ));
         $objectProphecy->reveal()->willReturn(new \stdClass());
 

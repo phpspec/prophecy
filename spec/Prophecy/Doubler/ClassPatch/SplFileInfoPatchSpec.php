@@ -63,7 +63,7 @@ class SplFileInfoPatchSpec extends ObjectBehavior
         $node->getMethod('__construct')->willReturn($method);
         $node->getParentClass()->willReturn('DirectoryIterator');
 
-        $method->setCode(Argument::that(function($value) {
+        $method->setCode(Argument::that(function ($value) {
             return strpos($value, '.php') === false;
         }))->shouldBeCalled();
 
@@ -76,7 +76,7 @@ class SplFileInfoPatchSpec extends ObjectBehavior
         $node->getMethod('__construct')->willReturn($method);
         $node->getParentClass()->willReturn('SplFileObject');
 
-        $method->setCode(Argument::that(function($value) {
+        $method->setCode(Argument::that(function ($value) {
             return strpos($value, '.php') !== false;
         }))->shouldBeCalled();
 
@@ -89,7 +89,7 @@ class SplFileInfoPatchSpec extends ObjectBehavior
         $node->getMethod('__construct')->willReturn($method);
         $node->getParentClass()->willReturn('Symfony\\Component\\Finder\\SplFileInfo');
 
-        $method->setCode(Argument::that(function($value) {
+        $method->setCode(Argument::that(function ($value) {
             return strpos($value, '.php') !== false;
         }))->shouldBeCalled();
 

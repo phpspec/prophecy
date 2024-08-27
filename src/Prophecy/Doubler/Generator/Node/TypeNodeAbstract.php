@@ -45,7 +45,7 @@ abstract class TypeNodeAbstract
 
     protected function prefixWithNsSeparator(string $type): string
     {
-        return '\\' . ltrim($type, '\\');
+        return '\\'.ltrim($type, '\\');
     }
 
     protected function getRealType(string $type): string
@@ -60,7 +60,7 @@ abstract class TypeNodeAbstract
             case 'integer':
                 return 'int';
 
-            //  built in types
+                //  built in types
             case 'self':
             case 'static':
             case 'array':

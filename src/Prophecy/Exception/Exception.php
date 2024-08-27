@@ -17,6 +17,4 @@ namespace Prophecy\Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface Exception extends \Throwable
-{
-}
+interface Exception extends \Throwable {}

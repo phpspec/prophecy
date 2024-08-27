@@ -54,7 +54,7 @@ class ArrayEntryTokenSpec extends ObjectBehavior
     {
         $key->scoreArgument('key')->willReturn(4);
         $value->scoreArgument('value')->willReturn(6);
-        $this->scoreArgument(array('key'=>'value'))->shouldBe(5);
+        $this->scoreArgument(array('key' => 'value'))->shouldBe(5);
     }
 
     function it_scores_traversable_object_half_of_combined_scores_from_key_and_value_tokens(
@@ -82,7 +82,7 @@ class ArrayEntryTokenSpec extends ObjectBehavior
         \ArrayAccess $object
     ) {
         $key->__toString()->willReturn('any_token');
-        $this->beConstructedWith($key,$value);
+        $this->beConstructedWith($key, $value);
         $errorMessage = 'You can only use exact value tokens to match key of ArrayAccess object'.PHP_EOL.
                         'But you used `any_token`.';
         $this->shouldThrow(new InvalidArgumentException($errorMessage))->duringScoreArgument($object);
@@ -116,13 +116,13 @@ class ArrayEntryTokenSpec extends ObjectBehavior
         (\PHP_VERSION_ID < 80100) ? $object->rewind()->willReturn(null) : $object->rewind()->shouldBeCalled();
         (\PHP_VERSION_ID < 80100) ? $object->next()->willReturn(null) : $object->next()->shouldBeCalled();
         $object->valid()->willReturn(true);
-        $this->shouldNotThrow(new InvalidArgumentException)->duringScoreArgument($object);
+        $this->shouldNotThrow(new InvalidArgumentException())->duringScoreArgument($object);
     }
 
     function it_does_not_score_if_argument_is_neither_array_nor_traversable_nor_array_accessible()
     {
         $this->scoreArgument('string')->shouldBe(false);
-        $this->scoreArgument(new \stdClass)->shouldBe(false);
+        $this->scoreArgument(new \stdClass())->shouldBe(false);
     }
 
     function it_does_not_score_empty_array()
@@ -197,6 +197,6 @@ class ArrayEntryTokenSpec extends ObjectBehavior
     {
         $key->scoreArgument('key')->willReturn(10);
         $value->scoreArgument('value')->willReturn(10);
-        $this->scoreArgument(array('key'=>'value'))->shouldBe(8);
+        $this->scoreArgument(array('key' => 'value'))->shouldBe(8);
     }
 }

@@ -125,7 +125,7 @@ class ObjectProphecySpec extends ObjectBehavior
         $this->addMethodProphecy($methodProphecy);
 
         $this->getMethodProphecies()->shouldReturn(array(
-            'getusername' => array($methodProphecy)
+            'getusername' => array($methodProphecy),
         ));
     }
 
@@ -148,7 +148,7 @@ class ObjectProphecySpec extends ObjectBehavior
             'getusername' => array(
                 $methodProphecy1,
                 $methodProphecy2,
-            )
+            ),
         ));
     }
 
@@ -171,7 +171,7 @@ class ObjectProphecySpec extends ObjectBehavior
             'getusername' => array(
                 $methodProphecy1,
                 $methodProphecy2,
-            )
+            ),
         ));
     }
 
@@ -192,11 +192,11 @@ class ObjectProphecySpec extends ObjectBehavior
 
         $this->getMethodProphecies()->shouldReturn(array(
             'getusername' => array(
-                $methodProphecy1
+                $methodProphecy1,
             ),
             'isusername' => array(
-                $methodProphecy2
-            )
+                $methodProphecy2,
+            ),
         ));
     }
 
@@ -271,8 +271,8 @@ class ObjectProphecySpec extends ObjectBehavior
     ) {
         $doubler->double(Argument::any())->willReturn($reflection);
 
-        $this->addMethodProphecy($methodProphecy1 = $this->getProphecy(function(){}));
-        $methodProphecy2 = $this->getProphecy(function(){});
+        $this->addMethodProphecy($methodProphecy1 = $this->getProphecy(function () {}));
+        $methodProphecy2 = $this->getProphecy(function () {});
 
         $methodProphecy2->shouldNotBe($methodProphecy1);
     }
@@ -291,7 +291,7 @@ class ObjectProphecySpec extends ObjectBehavior
 
 class ObjectProphecySpecFixtureA
 {
-	public $errors;
+    public $errors;
 }
 
 class ObjectProphecySpecFixtureB extends ObjectProphecySpecFixtureA
