@@ -116,7 +116,7 @@ class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generat
 public $name;
 private $email;
 
-public static function getName(array $fullname = NULL, \ReflectionClass $class, object $instance): ?string {
+public static function getName(?array $fullname = NULL, \ReflectionClass $class, object $instance): ?string {
 return $this->name;
 }
 protected  function getEmail(?string $default = 'ever.zet@gmail.com') {
@@ -272,7 +272,7 @@ PHP;
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface {
 
-public  function getName(array &$fullname = NULL) {
+public  function getName(?array &$fullname = NULL) {
 return $this->name;
 }
 
