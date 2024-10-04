@@ -79,13 +79,13 @@ class MagicCallPatch implements ClassPatchInterface
                         if (in_array($methodName, self::MAGIC_METHODS_WITH_ARGUMENTS)) {
                             if (method_exists($tag, 'getParameters')) {
                                 // Reflection Docblock 5.4.0+.
-                                foreach($tag->getParameters() as $argument) {
+                                foreach ($tag->getParameters() as $argument) {
                                     $argumentNode = new ArgumentNode($argument->getName());
                                     $methodNode->addArgument($argumentNode);
                                 }
                             } else {
                                 // Reflection Docblock < 5.4.0.
-                                foreach($tag->getArguments() as $argument) {
+                                foreach ($tag->getArguments() as $argument) {
                                     $argumentNode = new ArgumentNode($argument['name']);
                                     $methodNode->addArgument($argumentNode);
                                 }

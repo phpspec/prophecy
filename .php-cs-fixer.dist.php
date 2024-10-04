@@ -6,6 +6,7 @@ return (new PhpCsFixer\Config())
     ->setRiskyAllowed(false)
     ->setRules([
         '@PER-CS' => true,
+        'array_syntax' => false,
         'braces_position' => [
             'control_structures_opening_brace' => 'same_line',
         ],

@@ -132,9 +132,9 @@ class MethodProphecy
                         return class_exists($type) || interface_exists($type);
                     };
 
-                    if($isObject($type1) && !$isObject($type2)) {
+                    if ($isObject($type1) && !$isObject($type2)) {
                         return -1;
-                    } elseif(!$isObject($type1) && $isObject($type2)) {
+                    } elseif (!$isObject($type1) && $isObject($type2)) {
                         return 1;
                     }
 
