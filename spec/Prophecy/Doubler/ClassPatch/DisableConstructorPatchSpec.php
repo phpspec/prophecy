@@ -5,6 +5,7 @@ namespace spec\Prophecy\Doubler\ClassPatch;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
+use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 
@@ -31,6 +32,9 @@ class DisableConstructorPatchSpec extends ObjectBehavior
         ArgumentNode $arg1,
         ArgumentNode $arg2
     ) {
+        $arg1->getTypeNode()->willReturn(new ArgumentTypeNode('string', 'null'));
+        $arg2->getTypeNode()->willReturn(new ArgumentTypeNode('mixed'));
+
         $class->isExtendable('__construct')->willReturn(true);
         $class->hasMethod('__construct')->willReturn(true);
         $class->getMethod('__construct')->willReturn($method);
@@ -38,6 +42,8 @@ class DisableConstructorPatchSpec extends ObjectBehavior
 
         $arg1->setDefault(null)->shouldBeCalled();
         $arg2->setDefault(null)->shouldBeCalled();
+
+        $arg1->setTypeNode(new ArgumentTypeNode('null', 'string'))->shouldBeCalled();
 
         $method->setCode(Argument::type('string'))->shouldBeCalled();
 
