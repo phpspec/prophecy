@@ -6,11 +6,6 @@ parameters:
 			path: src/Prophecy/Argument/Token/ExactValueToken.php
 
 		-
-			message: "#^Method Prophecy\\\\Call\\\\CallCenter\\:\\:indentArguments\\(\\) should return array\\<string\\> but returns array\\<string\\>\\|null\\.$#"
-			count: 1
-			path: src/Prophecy/Call/CallCenter.php
-
-		-
 			message: "#^Method Prophecy\\\\Doubler\\\\CachedDoubler\\:\\:createDoubleClass\\(\\) should return class\\-string\\<Prophecy\\\\Doubler\\\\DoubleInterface&T of object\\> but returns class\\-string\\.$#"
 			count: 1
 			path: src/Prophecy/Doubler/CachedDoubler.php
