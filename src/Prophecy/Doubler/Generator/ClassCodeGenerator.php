@@ -11,6 +11,7 @@
 
 namespace Prophecy\Doubler\Generator;
 
+use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Doubler\Generator\Node\TypeNodeAbstract;
 
@@ -76,14 +77,14 @@ class ClassCodeGenerator
         return $php.'}';
     }
 
-    private function generateTypes(TypeNodeAbstract $typeNode): string
+    private function generateTypes(TypeNodeAbstract $typeNode, bool $nullable = false): string
     {
         if (!$typeNode->getTypes()) {
             return '';
         }
 
         // When we require PHP 8 we can stop generating ?foo nullables and remove this first block
-        if ($typeNode->canUseNullShorthand()) {
+        if ($typeNode->canUseNullShorthand() || $nullable) {
             return sprintf('?%s', $typeNode->getNonNullTypes()[0]);
         } else {
             return join('|', $typeNode->getTypes());
@@ -99,7 +100,17 @@ class ClassCodeGenerator
     {
         return array_map(function (Node\ArgumentNode $argument) {
 
-            $php = $this->generateTypes($argument->getTypeNode());
+            if ($nullable = $argument->isOptional() && $argument->getDefault() === null) {
+                $types = $argument->getTypeNode()->getTypes();
+                $count = \count($types);
+                if ($count === 1 && $types[0] === 'mixed') {
+                    $nullable = false;
+                } elseif ($count > 1 && !isset($types['null'])) {
+                    $argument->setTypeNode(new ArgumentTypeNode('null', ...$types));
+                    $nullable = false;
+                }
+            }
+            $php = $this->generateTypes($argument->getTypeNode(), $nullable);
 
             $php .= ' '.($argument->isPassedByReference() ? '&' : '');
 
