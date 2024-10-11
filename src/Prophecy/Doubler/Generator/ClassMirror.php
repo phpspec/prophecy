@@ -255,7 +255,7 @@ class ClassMirror
             }
         } elseif ($type instanceof ReflectionIntersectionType) {
             throw new ClassMirrorException('Doubling intersection types is not supported', $class);
-        } elseif(is_object($type)) {
+        } elseif (is_object($type)) {
             throw new ClassMirrorException('Unknown reflection type '.get_class($type), $class);
         }
 

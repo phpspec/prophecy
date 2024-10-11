@@ -3,7 +3,6 @@
 namespace spec\Prophecy\Prediction;
 
 use PhpSpec\ObjectBehavior;
-
 use Prophecy\Call\Call;
 use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Prophecy\ObjectProphecy;
