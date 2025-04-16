@@ -2,6 +2,7 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
+use Prophecy\Doubler\Generator\Node\Type\IntersectionType;
 use Prophecy\Doubler\Generator\Node\Type\TypeInterface;
 use Prophecy\Doubler\Generator\Node\Type\SimpleType;
 use Prophecy\Doubler\Generator\Node\Type\UnionType;
@@ -9,7 +10,7 @@ use Prophecy\Exception\Doubler\DoubleException;
 
 abstract class TypeNodeAbstract
 {
-    protected TypeInterface $type;
+    protected TypeInterface|null $type;
 
     /**
      * @param string|TypeInterface ...$types
@@ -29,23 +30,35 @@ abstract class TypeNodeAbstract
         }
 
         // BC Layer for usage with strings
+        $typesNormalized = [];
+        $union = [];
         foreach ($types as $index => $type) {
             if (is_string($type)) {
-                $types[$index] = new SimpleType($type);
+                $type = new SimpleType($type);
+                if (!in_array($type->getType(), $typesNormalized, true)) {
+                    $union[] = $type;
+                    $typesNormalized[] = $type->getType();
+                }
+                continue;
             }
+            $union[] = $type;
         }
 
         // BC Layer for usage with many types
-        if (count($types) > 1) {
-            $this->type = new UnionType($types);
+        if (count($union) > 1) {
+            $this->type = new UnionType($union);
         } else {
-            $this->type = $types[0];
+            $this->type = $union[0] ?? null;
         }
     }
 
     public function canUseNullShorthand(): bool
     {
-        return isset($this->types['null']) && count($this->types) === 2;
+        if ($this->type instanceof UnionType) {
+            return $this->type->has(new SimpleType('null')) && count($this->type->getTypes()) === 2;
+        }
+
+        return false;
     }
 
     /**
@@ -56,16 +69,21 @@ abstract class TypeNodeAbstract
     {
         // TODO: add deprecation notice
         if ($this->type instanceof SimpleType) {
-            return [(string) $this->type];
+            return [$this->type->getType()];
         }
 
-        if ($this->type instanceof UnionType && $this->type->isSimple()) {
+        $types = [];
+
+        if ($this->type instanceof UnionType) {
             foreach ($this->type->getTypes() as $type) {
-                $types[] = (string) $type;
+                if ($type instanceof IntersectionType) {
+                    throw new DoubleException('getType() method is deprecated and do not support IntersectionType by design. Use getType() instead.');
+                }
+                $types[$type->getType()] = $type->getType();
             }
         }
 
-        return $types;
+        return array_values($types);
     }
 
     public function getType(): TypeInterface
@@ -79,11 +97,29 @@ abstract class TypeNodeAbstract
      */
     public function getNonNullTypes(): array
     {
-        // @fixme
-        $nonNullTypes = $this->types;
-        unset($nonNullTypes['null']);
+        if ($this->type === null) {
+            return [];
+        }
+        if ($this->type instanceof UnionType) {
+            $types = [];
+            foreach ($this->type->getTypes() as $type) {
+                if ($type->getType() === 'null') {
+                    continue;
+                }
+                $types[] = $type->getType();
+            }
 
-        return array_values($nonNullTypes);
+            return $types;
+        }
+
+        if ($this->type instanceof SimpleType) {
+            if ($this->type->getType() === 'null') {
+                return [];
+            }
+            return [$this->type->getType()];
+        }
+
+        throw new DoubleException('getNonNullTypes() method is deprecated and do not support IntersectionType by design. Use getType() instead.');
     }
 
     protected function prefixWithNsSeparator(string $type): string

@@ -3,6 +3,7 @@
 namespace spec\Prophecy\Doubler\Generator\Node\Type;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Doubler\Generator\Node\Type\IntersectionType;
 use Prophecy\Doubler\Generator\Node\Type\SimpleType;
 use Prophecy\Doubler\Generator\Node\Type\TypeInterface;
 use Prophecy\Doubler\Generator\Node\Type\UnionType;
@@ -67,5 +68,15 @@ class UnionTypeSpec extends ObjectBehavior
             new SimpleType('int'),
             new SimpleType('string')
         ]);
+    }
+
+    function it_should_accept_simple_type_and_intersection()
+    {
+        $type1 = new SimpleType('string');
+        $type2 = new IntersectionType([new SimpleType('A'), new SimpleType('B')]);
+        $this->beConstructedWith([$type1, $type2]);
+
+        $this->has($type1)->shouldBe(true);
+        $this->has($type2)->shouldBe(true);
     }
 }

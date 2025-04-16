@@ -215,7 +215,6 @@ class ClassMirror
             $node->setAsPassedByReference();
         }
 
-
         $methodNode->addArgument($node);
     }
 
@@ -278,15 +277,15 @@ class ClassMirror
             // Handle nullability for named types explicitly by wrapping in a UnionType if needed
             if ($type->allowsNull() && $name !== 'mixed' && $name !== 'null') {
                 // Check if SimpleType already resolved to 'null' (e.g. input was 'null')
-                if ((string)$simpleType === 'null') {
+                if ($simpleType->getType() === 'null') {
                     return $simpleType; // Already null, no union needed
                 }
                 // Check if SimpleType already resolved to 'mixed'
-                if ((string)$simpleType === 'mixed') {
+                if ($simpleType->getType() === 'mixed') {
                     return $simpleType; // mixed implies null, no union needed
                 }
 
-                return new UnionType([$simpleType, new SimpleType('null')]);
+                return new UnionType([new SimpleType('null'), $simpleType]);
             }
 
             return $simpleType;
@@ -357,7 +356,7 @@ class ClassMirror
             $types
         );
 
-        if ($types && $types != ['mixed'] && $allowsNull) {
+        if ($types && $types != ['mixed'] && $allowsNull && !in_array('null', $types, true)) {
             $types[] = 'null';
         }
 

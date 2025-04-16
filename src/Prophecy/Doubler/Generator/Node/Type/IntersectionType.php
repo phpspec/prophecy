@@ -15,7 +15,7 @@ class IntersectionType implements TypeInterface
     }
 
     /**
-     * @return list<TypeInterface>
+     * @return list<SimpleType>
      */
     public function getTypes(): array
     {
@@ -48,6 +48,8 @@ class IntersectionType implements TypeInterface
                 return false;
             }
         }
+
+        return true;
     }
 
     private function guard(): void

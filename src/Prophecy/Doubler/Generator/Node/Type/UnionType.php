@@ -42,12 +42,13 @@ class UnionType implements TypeInterface
                 throw new DoubleException('Union types cannot contain other unions.');
             }
             if ($type instanceof IntersectionType) {
+                $typeStrings[] = implode('inter-', array_map(fn(SimpleType $type) => $type->getType(), $type->getTypes()));
                 continue; // Valid type, nothing to be checked
             }
             if (!$type instanceof SimpleType) {
                 throw new DoubleException(sprintf('Unexpected type "%s". Only IntersectionType and SimpleType are supported in UnionType.', get_class($type)));
             }
-            $typeName = (string) $type;
+            $typeName = $type->getType();
             $typeStrings[] = $typeName;
 
             if (in_array($typeName, ['void', 'never', 'mixed'], true)) {
@@ -65,7 +66,7 @@ class UnionType implements TypeInterface
         }
     }
 
-    private function has(SimpleType|IntersectionType $givenType): bool
+    public function has(SimpleType|IntersectionType $givenType): bool
     {
         foreach ($this->types as $type) {
             if ($type->equals($givenType)) {
