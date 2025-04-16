@@ -2,21 +2,45 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
+use Prophecy\Doubler\Generator\Node\Type\AbstractType;
+use Prophecy\Doubler\Generator\Node\Type\SimpleType;
+use Prophecy\Doubler\Generator\Node\Type\UnionType;
 use Prophecy\Exception\Doubler\DoubleException;
 
 abstract class TypeNodeAbstract
 {
-    /** @var array<string, string> */
-    protected $types = [];
+    protected AbstractType $type;
 
-    public function __construct(string ...$types)
+    /**
+     * @param string|AbstractType ...$types
+     */
+    public function __construct(string|AbstractType ...$types)
     {
-        foreach ($types as $type) {
-            $type = $this->getRealType($type);
-            $this->types[$type] = $type;
+        $deprecation = 'Only 1 type will be supported in the future, strings are no longer supported as type.';
+        if (count($types) !== 1) {
+            // TODO: trigger deprecation notice
+        } else {
+            foreach ($types as $type) {
+                if (!$type instanceof AbstractType) {
+                    // TODO: deprecation notice
+                    break;
+                }
+            }
         }
 
-        $this->guardIsValidType();
+        // BC Layer for usage with strings
+        foreach ($types as $index => $type) {
+            if (is_string($type)) {
+                $types[$index] = new SimpleType($type);
+            }
+        }
+
+        // BC Layer for usage with many types
+        if (count($types) > 1) {
+            $this->type = new UnionType($types);
+        } else {
+            $this->type = $types[0];
+        }
     }
 
     public function canUseNullShorthand(): bool
@@ -26,17 +50,36 @@ abstract class TypeNodeAbstract
 
     /**
      * @return list<string>
+     * @deprecated use getType() instead
      */
     public function getTypes(): array
     {
-        return array_values($this->types);
+        // TODO: add deprecation notice
+        if ($this->type instanceof SimpleType) {
+            return [(string) $this->type];
+        }
+
+        if ($this->type instanceof UnionType && $this->type->isSimple()) {
+            foreach ($this->type->getTypes() as $type) {
+                $types[] = (string) $type;
+            }
+        }
+
+        return $types;
+    }
+
+    public function getType(): AbstractType
+    {
+        return $this->type;
     }
 
     /**
+     * @deprecated use getType() instead
      * @return list<string>
      */
     public function getNonNullTypes(): array
     {
+        // @fixme
         $nonNullTypes = $this->types;
         unset($nonNullTypes['null']);
 
@@ -60,7 +103,7 @@ abstract class TypeNodeAbstract
             case 'integer':
                 return 'int';
 
-                //  built in types
+            //  built in types
             case 'self':
             case 'static':
             case 'array':
@@ -74,16 +117,18 @@ abstract class TypeNodeAbstract
             case 'iterable':
             case 'object':
             case 'null':
-                return $type;
             case 'mixed':
-                return \PHP_VERSION_ID < 80000 ? $this->prefixWithNsSeparator($type) : $type;
-
+            case 'void':
+            case 'never':
+                return $type;
             default:
+                // Class / Interface type
                 return $this->prefixWithNsSeparator($type);
         }
     }
 
     /**
+     * @todo: put this in SimpleType
      * @return void
      */
     protected function guardIsValidType()
