@@ -13,6 +13,12 @@ parameters:
 			path: src/Prophecy/Doubler/CachedDoubler.php
 
 		-
+			message: '#^Parameter \#1 \$types of class Prophecy\\Doubler\\Generator\\Node\\Type\\UnionType constructor expects list\<Prophecy\\Doubler\\Generator\\Node\\Type\\IntersectionType\|Prophecy\\Doubler\\Generator\\Node\\Type\\SimpleType\>, array\{Prophecy\\Doubler\\Generator\\Node\\Type\\BuiltinType, Prophecy\\Doubler\\Generator\\Node\\Type\\TypeInterface\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Prophecy/Doubler/ClassPatch/DisableConstructorPatch.php
+
+		-
 			message: '#^Method Prophecy\\Doubler\\Doubler\:\:createDoubleClass\(\) should return class\-string\<Prophecy\\Doubler\\DoubleInterface&T of object\> but returns class\-string\.$#'
 			identifier: return.type
 			count: 1
@@ -27,12 +33,6 @@ parameters:
 		-
 			message: '#^Call to function method_exists\(\) with ReflectionMethod and ''hasTentativeReturnT…'' will always evaluate to true\.$#'
 			identifier: function.alreadyNarrowedType
-			count: 1
-			path: src/Prophecy/Doubler/Generator/ClassMirror.php
-
-		-
-			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(ReflectionIntersectionType\|ReflectionNamedType\|string\)\: mixed\)\|null, Closure\(string\)\: string given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Prophecy/Doubler/Generator/ClassMirror.php
 

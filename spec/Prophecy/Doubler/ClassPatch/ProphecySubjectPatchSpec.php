@@ -7,6 +7,7 @@ use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
 
 class ProphecySubjectPatchSpec extends ObjectBehavior
 {
@@ -58,10 +59,10 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         $method3->getName()->willReturn('method3');
         $method4->getName()->willReturn('method4');
 
-        $method1->getReturnTypeNode()->willReturn(new ReturnTypeNode('int'));
-        $method2->getReturnTypeNode()->willReturn(new ReturnTypeNode('int'));
-        $method3->getReturnTypeNode()->willReturn(new ReturnTypeNode('void'));
-        $method4->getReturnTypeNode()->willReturn(new ReturnTypeNode('never'));
+        $method1->getReturnTypeNode()->willReturn(new ReturnTypeNode(new BuiltinType('int')));
+        $method2->getReturnTypeNode()->willReturn(new ReturnTypeNode(new BuiltinType('int')));
+        $method3->getReturnTypeNode()->willReturn(new ReturnTypeNode(new BuiltinType('void')));
+        $method4->getReturnTypeNode()->willReturn(new ReturnTypeNode(new BuiltinType('never')));
 
         $node->getMethods()->willReturn(array(
             'method1' => $method1,

@@ -4,6 +4,7 @@ namespace spec\Prophecy\Doubler\Generator\Node;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
 
 class ArgumentNodeSpec extends ObjectBehavior
 {
@@ -94,9 +95,9 @@ class ArgumentNodeSpec extends ObjectBehavior
 
     function it_has_a_mutable_type()
     {
-        $this->setTypeNode(new ArgumentTypeNode('int'));
+        $this->setTypeNode(new ArgumentTypeNode(new BuiltinType('int')));
 
-        $this->getTypeNode()->shouldBeLike(new ArgumentTypeNode('int'));
+        $this->getTypeNode()->shouldBeLike(new ArgumentTypeNode(new BuiltinType('int')));
     }
 
     function it_does_not_have_default_value_by_default()

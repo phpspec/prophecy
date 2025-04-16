@@ -8,6 +8,11 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\Generator\ClassMirror;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
+use Prophecy\Doubler\Generator\Node\Type\IntersectionType;
+use Prophecy\Doubler\Generator\Node\Type\ObjectType;
+use Prophecy\Doubler\Generator\Node\Type\SimpleType;
+use Prophecy\Doubler\Generator\Node\Type\UnionType;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Prophet;
@@ -96,18 +101,21 @@ class ClassMirrorTest extends TestCase
 
 
         $this->assertEquals('arg_1', $argNodes[0]->getName());
-        $this->assertEquals(new ArgumentTypeNode('ArrayAccess'), $argNodes[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(new ObjectType('ArrayAccess')), $argNodes[0]->getTypeNode());
         $this->assertFalse($argNodes[0]->isOptional());
 
         $this->assertEquals('arg_2', $argNodes[1]->getName());
-        $this->assertEquals(new ArgumentTypeNode('array'), $argNodes[1]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(new BuiltinType('array')), $argNodes[1]->getTypeNode());
         $this->assertTrue($argNodes[1]->isOptional());
         $this->assertEquals(array(), $argNodes[1]->getDefault());
         $this->assertFalse($argNodes[1]->isPassedByReference());
         $this->assertFalse($argNodes[1]->isVariadic());
 
         $this->assertEquals('arg_3', $argNodes[2]->getName());
-        $this->assertEquals(new ArgumentTypeNode('ArrayAccess', 'null'), $argNodes[2]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(new UnionType([
+            new BuiltinType('null'),
+            new ObjectType('ArrayAccess'),
+        ])), $argNodes[2]->getTypeNode());
         $this->assertTrue($argNodes[2]->isOptional());
         $this->assertNull($argNodes[2]->getDefault());
         $this->assertFalse($argNodes[2]->isPassedByReference());
@@ -128,13 +136,16 @@ class ClassMirrorTest extends TestCase
         $this->assertCount(2, $argNodes);
 
         $this->assertEquals('arg_1', $argNodes[0]->getName());
-        $this->assertEquals(new ArgumentTypeNode('callable'), $argNodes[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(new BuiltinType('callable')), $argNodes[0]->getTypeNode());
         $this->assertFalse($argNodes[0]->isOptional());
         $this->assertFalse($argNodes[0]->isPassedByReference());
         $this->assertFalse($argNodes[0]->isVariadic());
 
         $this->assertEquals('arg_2', $argNodes[1]->getName());
-        $this->assertEquals(new ArgumentTypeNode('callable', 'null'), $argNodes[1]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(new UnionType([
+            new BuiltinType('null'),
+            new BuiltinType('callable'),
+        ])), $argNodes[1]->getTypeNode());
         $this->assertTrue($argNodes[1]->isOptional());
         $this->assertNull($argNodes[1]->getDefault());
         $this->assertFalse($argNodes[1]->isPassedByReference());
@@ -175,7 +186,7 @@ class ClassMirrorTest extends TestCase
         $this->assertCount(1, $argNodes);
 
         $this->assertEquals('args', $argNodes[0]->getName());
-        $this->assertEquals(new ArgumentTypeNode('array'), $argNodes[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(new BuiltinType('array')), $argNodes[0]->getTypeNode());
         $this->assertFalse($argNodes[0]->isOptional());
         $this->assertFalse($argNodes[0]->isPassedByReference());
         $this->assertTrue($argNodes[0]->isVariadic());
@@ -313,9 +324,9 @@ class ClassMirrorTest extends TestCase
         $this->assertTrue($classNode->hasMethod('getSelf'));
         $this->assertTrue($classNode->hasMethod('getParent'));
 
-        $this->assertEquals(new ReturnTypeNode('string'), $classNode->getMethod('getName')->getReturnTypeNode());
-        $this->assertEquals(new ReturnTypeNode('\Fixtures\Prophecy\WithReturnTypehints'), $classNode->getMethod('getSelf')->getReturnTypeNode());
-        $this->assertEquals(new ReturnTypeNode('\Fixtures\Prophecy\EmptyClass'), $classNode->getMethod('getParent')->getReturnTypeNode());
+        $this->assertEquals(new ReturnTypeNode(new BuiltinType('string')), $classNode->getMethod('getName')->getReturnTypeNode());
+        $this->assertEquals(new ReturnTypeNode(new ObjectType('Fixtures\Prophecy\WithReturnTypehints')), $classNode->getMethod('getSelf')->getReturnTypeNode());
+        $this->assertEquals(new ReturnTypeNode(new ObjectType('Fixtures\Prophecy\EmptyClass')), $classNode->getMethod('getParent')->getReturnTypeNode());
     }
 
     #[Test]
@@ -359,7 +370,10 @@ class ClassMirrorTest extends TestCase
         $classNode = $mirror->reflect(new \ReflectionClass('Fixtures\Prophecy\NullableArrayParameter'), array());
         $method = $classNode->getMethod('iHaveNullableArrayParameterWithNotNullDefaultValue');
         $arguments = $method->getArguments();
-        $this->assertEquals(new ArgumentTypeNode('array', 'null'), $arguments[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(new UnionType([
+            new BuiltinType('null'),
+            new BuiltinType('array'),
+        ])), $arguments[0]->getTypeNode());
     }
 
     #[Test]
@@ -467,7 +481,11 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionReturnTypes'), []);
         $methodNode = $classNode->getMethods()['doSomething'];
 
-        $this->assertSame(['\stdClass', 'bool'], $methodNode->getReturnTypeNode()->getTypes());
+
+        $this->assertEquals(new UnionType([
+            new ObjectType('stdClass'),
+            new BuiltinType('bool'),
+        ]), $methodNode->getReturnTypeNode()->getType());
     }
 
     #[Test]
@@ -480,7 +498,10 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionReturnTypeFalse'), []);
         $methodNode = $classNode->getMethods()['method'];
 
-        $this->assertSame(['\stdClass', 'false'], $methodNode->getReturnTypeNode()->getTypes());
+        $this->assertEquals(new UnionType([
+            new ObjectType('stdClass'),
+            new BuiltinType('false'),
+        ]), $methodNode->getReturnTypeNode()->getType());
     }
 
     #[Test]
@@ -493,7 +514,7 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionArgumentTypes'), []);
         $methodNode = $classNode->getMethods()['doSomething'];
 
-        $this->assertEquals(new ArgumentTypeNode('bool', '\\stdClass'), $methodNode->getArguments()[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(\stdClass::class, 'bool'), $methodNode->getArguments()[0]->getTypeNode());
     }
 
     #[Test]
@@ -506,7 +527,7 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionArgumentTypeFalse'), []);
         $methodNode = $classNode->getMethods()['method'];
 
-        $this->assertEquals(new ArgumentTypeNode('false', '\stdClass'), $methodNode->getArguments()[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(\stdClass::class, 'false'), $methodNode->getArguments()[0]->getTypeNode());
     }
 
     #[Test]
@@ -559,27 +580,45 @@ class ClassMirrorTest extends TestCase
     }
 
     #[Test]
-    public function it_can_not_double_intersection_return_types(): void
+    public function it_can_double_intersection_return_types(): void
     {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Intersection types are not supported in this PHP version');
         }
 
-        $this->expectException(ClassMirrorException::class);
-
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionReturnType'), []);
+
+        $method = $classNode->getMethod('doSomething');
+        $returnType = $method->getReturnTypeNode();
+
+        $this->assertEquals(
+            new IntersectionType([
+                new ObjectType('Fixtures\Prophecy\Bar'),
+                new ObjectType('Fixtures\Prophecy\Baz'),
+            ]),
+            $returnType->getType()
+        );
     }
 
     #[Test]
-    public function it_can_not_double_intersection_argument_types(): void
+    public function it_can_double_intersection_argument_types(): void
     {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Intersection types are not supported in this PHP version');
         }
 
-        $this->expectException(ClassMirrorException::class);
-
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionArgumentType'), []);
+
+        $method = $classNode->getMethod('doSomething');
+        $argType = $method->getArguments()[0]->getTypeNode();
+
+        $this->assertEquals(
+            new IntersectionType([
+                new ObjectType('Fixtures\Prophecy\Bar'),
+                new ObjectType('Fixtures\Prophecy\Baz'),
+            ]),
+            $argType->getType()
+        );
     }
 
     #[Test]
@@ -633,7 +672,10 @@ class ClassMirrorTest extends TestCase
         $method = $classNode->getMethod('method');
         $arguments = $method->getArguments();
 
-        $this->assertEquals(new ArgumentTypeNode('null', 'false'), $arguments[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(new UnionType([
+            new BuiltinType('null'),
+            new BuiltinType('false'),
+        ])), $arguments[0]->getTypeNode());
     }
 
     #[Test]
@@ -643,21 +685,42 @@ class ClassMirrorTest extends TestCase
             $this->markTestSkipped('DNF intersection types are not supported in this PHP version');
         }
 
-        $this->expectException(ClassMirrorException::class);
-
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfArgumentType'), []);
+
+
+        $method = $classNode->getMethod('doSomething');
+        $argType = $method->getArguments()[0]->getTypeNode();
+
+        $this->assertEquals(
+            new UnionType([
+                new IntersectionType([
+                    new ObjectType('Fixtures\Prophecy\A'),
+                    new ObjectType('Fixtures\Prophecy\B'),
+                ]),
+                new ObjectType('Fixtures\Prophecy\C'),
+            ]),
+            $argType->getType()
+        );
     }
 
     #[Test]
-    public function it_can_not_double_dnf_intersection_return_types(): void
+    public function it_can_double_dnf_intersection_return_types(): void
     {
-        if (PHP_VERSION_ID < 80200) {
-            $this->markTestSkipped('DNF intersection types are not supported in this PHP version');
-        }
-
-        $this->expectException(ClassMirrorException::class);
-
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfReturnType'), []);
+
+        $method = $classNode->getMethod('doSomething');
+        $returnType = $method->getReturnTypeNode();
+
+        $this->assertEquals(
+            new UnionType([
+                new IntersectionType([
+                    new ObjectType('Fixtures\Prophecy\A'),
+                    new ObjectType('Fixtures\Prophecy\B'),
+                ]),
+                new ObjectType('Fixtures\Prophecy\C'),
+            ]),
+            $returnType->getType()
+        );
     }
 
     #[Test]
@@ -722,7 +785,10 @@ class ClassMirrorTest extends TestCase
         $method = $classNode->getMethod('method');
         $arguments = $method->getArguments();
 
-        $this->assertEquals(new ArgumentTypeNode('null', 'true'), $arguments[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode(new UnionType([
+            new BuiltinType('null'),
+            new BuiltinType('true'),
+        ])), $arguments[0]->getTypeNode());
     }
 
     #[Test]

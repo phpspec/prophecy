@@ -14,6 +14,8 @@ namespace Prophecy\Doubler\ClassPatch;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
+use Prophecy\Doubler\Generator\Node\Type\UnionType;
 
 /**
  * Disable constructor.
@@ -57,12 +59,32 @@ class DisableConstructorPatch implements ClassPatchInterface
         foreach ($constructor->getArguments() as $argument) {
             $argument->setDefault(null);
 
-            $types = $argument->getTypeNode()->getNonNullTypes();
-            if ([] === $types || ['mixed'] === $types || ['\mixed'] === $types) {
+            $type = $argument->getTypeNode()->getType();
+            if (
+                $type instanceof BuiltinType
+                && ($type->getType() === 'null' || $type->getType() === 'mixed')
+            ) {
                 continue;
             }
 
-            $argument->setTypeNode(new ArgumentTypeNode('null', ...$types));
+            if ($type instanceof UnionType && $type->has(new BuiltinType('null'))) {
+                continue;
+            }
+
+            if (null === $type) {
+                continue;
+            }
+
+            if ($type instanceof UnionType) {
+                $argument->setTypeNode(new ArgumentTypeNode(new UnionType(
+                    [new BuiltinType('null'), ...$type->getTypes()]
+                )));
+                continue;
+            }
+
+            $argument->setTypeNode(new ArgumentTypeNode(new UnionType(
+                [new BuiltinType('null'), $type]
+            )));
         }
 
         $constructor->setCode(<<<PHP

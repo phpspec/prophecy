@@ -36,7 +36,6 @@ class ReturnTypeNodeSpec extends ObjectBehavior
     function it_will_normalise_type_aliases_types()
     {
         $this->beConstructedWith('double', 'real', 'boolean', 'integer');
-
         $this->getTypes()->shouldReturn(['float', 'bool', 'int']);
     }
 

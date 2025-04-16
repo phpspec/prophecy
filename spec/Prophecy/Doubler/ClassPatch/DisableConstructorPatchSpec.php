@@ -8,6 +8,8 @@ use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
+use Prophecy\Doubler\Generator\Node\Type\UnionType;
 
 class DisableConstructorPatchSpec extends ObjectBehavior
 {
@@ -30,20 +32,26 @@ class DisableConstructorPatchSpec extends ObjectBehavior
         ClassNode $class,
         MethodNode $method,
         ArgumentNode $arg1,
-        ArgumentNode $arg2
+        ArgumentNode $arg2,
+        ArgumentNode $arg3
     ) {
-        $arg1->getTypeNode()->willReturn(new ArgumentTypeNode('string', 'null'));
-        $arg2->getTypeNode()->willReturn(new ArgumentTypeNode('mixed'));
+        $arg1->getTypeNode()->willReturn(new ArgumentTypeNode(new UnionType([
+            new BuiltinType('string'),
+            new BuiltinType('null'),
+        ])));
+        $arg2->getTypeNode()->willReturn(new ArgumentTypeNode(new BuiltinType('mixed')));
+        $arg3->getTypeNode()->willReturn(new ArgumentTypeNode(new BuiltinType('string')));
 
         $class->isExtendable('__construct')->willReturn(true);
         $class->hasMethod('__construct')->willReturn(true);
         $class->getMethod('__construct')->willReturn($method);
-        $method->getArguments()->willReturn(array($arg1, $arg2));
+        $method->getArguments()->willReturn(array($arg1, $arg2, $arg3));
 
         $arg1->setDefault(null)->shouldBeCalled();
         $arg2->setDefault(null)->shouldBeCalled();
+        $arg3->setDefault(null)->shouldBeCalled();
 
-        $arg1->setTypeNode(new ArgumentTypeNode('null', 'string'))->shouldBeCalled();
+        $arg3->setTypeNode(new ArgumentTypeNode(new UnionType([new BuiltinType('null'), new BuiltinType('string')])))->shouldBeCalled();
 
         $method->setCode(Argument::type('string'))->shouldBeCalled();
 
