@@ -2,11 +2,23 @@
 
 namespace Prophecy\Doubler\Generator\Node\Type;
 
-class SimpleType extends AbstractType implements \Stringable
+class SimpleType implements TypeInterface, \Stringable
 {
-    private $type;
+    private string $type;
+    private bool $builtin;
     public function __construct(string $type)
     {
+        $this->type = $this->normalizeType($type);
+    }
+
+    public function isBuiltin(): bool
+    {
+        return $this->builtin;
+    }
+
+    private function normalizeType(string $type): string
+    {
+        $this->builtin = true;
         switch ($type) {
             // type aliases
             case 'double':
@@ -35,10 +47,38 @@ class SimpleType extends AbstractType implements \Stringable
             case 'void':
             case 'never':
                 return $type;
+            // Class / Interface type
             default:
-                // Class / Interface type
-                throw new \Exception('TODO');
+                $this->builtin = false;
                 return $this->prefixWithNsSeparator($type);
         }
+    }
+
+    private function prefixWithNsSeparator(string $type): string
+    {
+        // Avoid double-prefixing if already prefixed
+        if (str_starts_with($type, '\\')) {
+            return $type;
+        }
+        return '\\'. $type;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getType();
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function equals(TypeInterface $givenType): bool
+    {
+        if (!$givenType instanceof SimpleType) {
+            return false;
+        }
+
+        return $this->type === $givenType->getType();
     }
 }

@@ -2,26 +2,26 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
-use Prophecy\Doubler\Generator\Node\Type\AbstractType;
+use Prophecy\Doubler\Generator\Node\Type\TypeInterface;
 use Prophecy\Doubler\Generator\Node\Type\SimpleType;
 use Prophecy\Doubler\Generator\Node\Type\UnionType;
 use Prophecy\Exception\Doubler\DoubleException;
 
 abstract class TypeNodeAbstract
 {
-    protected AbstractType $type;
+    protected TypeInterface $type;
 
     /**
-     * @param string|AbstractType ...$types
+     * @param string|TypeInterface ...$types
      */
-    public function __construct(string|AbstractType ...$types)
+    public function __construct(string|TypeInterface ...$types)
     {
         $deprecation = 'Only 1 type will be supported in the future, strings are no longer supported as type.';
         if (count($types) !== 1) {
             // TODO: trigger deprecation notice
         } else {
             foreach ($types as $type) {
-                if (!$type instanceof AbstractType) {
+                if (!$type instanceof TypeInterface) {
                     // TODO: deprecation notice
                     break;
                 }
@@ -68,7 +68,7 @@ abstract class TypeNodeAbstract
         return $types;
     }
 
-    public function getType(): AbstractType
+    public function getType(): TypeInterface
     {
         return $this->type;
     }
@@ -134,29 +134,25 @@ abstract class TypeNodeAbstract
     protected function guardIsValidType()
     {
         if (\PHP_VERSION_ID < 80200) {
-            if ($this->types == ['null' => 'null']) {
+            if ($this->type->equals(new SimpleType('null'))) {
                 throw new DoubleException('Type cannot be standalone null');
             }
 
-            if ($this->types == ['false' => 'false']) {
+            if ($this->type->equals(new SimpleType('false'))) {
                 throw new DoubleException('Type cannot be standalone false');
             }
 
-            if ($this->types == ['false' => 'false', 'null' => 'null']) {
+            if ($this->type->equals(new UnionType([new SimpleType('false'), new SimpleType('null')]))) {
                 throw new DoubleException('Type cannot be nullable false');
             }
 
-            if ($this->types == ['true' => 'true']) {
+            if ($this->type->equals(new SimpleType('true'))) {
                 throw new DoubleException('Type cannot be standalone true');
             }
 
-            if ($this->types == ['true' => 'true', 'null' => 'null']) {
+            if ($this->type->equals(new UnionType([new SimpleType('true'), new SimpleType('null')]))) {
                 throw new DoubleException('Type cannot be nullable true');
             }
-        }
-
-        if (\PHP_VERSION_ID >= 80000 && isset($this->types['mixed']) && count($this->types) !== 1) {
-            throw new DoubleException('mixed cannot be part of a union');
         }
     }
 }

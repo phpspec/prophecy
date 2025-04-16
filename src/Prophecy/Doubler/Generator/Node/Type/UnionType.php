@@ -2,10 +2,12 @@
 
 namespace Prophecy\Doubler\Generator\Node\Type;
 
-class UnionType extends AbstractType
+use Prophecy\Exception\Doubler\DoubleException;
+
+class UnionType implements TypeInterface
 {
     /**
-     * @param list<AbstractType> $types
+     * @param list<SimpleType|IntersectionType> $types
      */
     public function __construct(private array $types)
     {
@@ -13,16 +15,60 @@ class UnionType extends AbstractType
     }
 
     /**
-     * @return list<AbstractType>
+     * @return list<SimpleType|IntersectionType>
      */
     public function getTypes(): array
     {
         return $this->types;
     }
-    public function isRecursive(): bool
+
+    private function guard(): void
+    {
+        $typeCount = count($this->types);
+
+        if ($typeCount < 2) {
+            // Throwing LogicException as this indicates misuse of the UnionType class itself.
+            throw new DoubleException(sprintf(
+                'UnionType must be constructed with at least two types. Got %d.',
+                $typeCount
+            ));
+        }
+
+        // To detect duplicates
+        $typeStrings = [];
+
+        foreach ($this->types as $type) {
+            if ($type instanceof UnionType) {
+                throw new DoubleException('Union types cannot contain other unions.');
+            }
+            if ($type instanceof IntersectionType) {
+                continue; // Valid type, nothing to be checked
+            }
+            if (!$type instanceof SimpleType) {
+                throw new DoubleException(sprintf('Unexpected type "%s". Only IntersectionType and SimpleType are supported in UnionType.', get_class($type)));
+            }
+            $typeName = (string) $type;
+            $typeStrings[] = $typeName;
+
+            if (in_array($typeName, ['void', 'never', 'mixed'], true)) {
+                throw new DoubleException(sprintf('Type "%s" cannot be part of a union type.', $typeName));
+            }
+        }
+
+        // Rule: Union types cannot contain duplicate types (e.g., int|string|int is invalid).
+        // Reflection usually resolves this, but it's good practice to ensure consistency.
+        if (count(array_unique($typeStrings)) !== $typeCount) {
+            throw new DoubleException(sprintf(
+                'Union types cannot contain duplicate types. Found duplicates in: %s',
+                implode('|', $typeStrings)
+            ));
+        }
+    }
+
+    private function has(SimpleType|IntersectionType $givenType): bool
     {
         foreach ($this->types as $type) {
-            if ($type instanceof IntersectionType) {
+            if ($type->equals($givenType)) {
                 return true;
             }
         }
@@ -30,8 +76,20 @@ class UnionType extends AbstractType
         return false;
     }
 
-    private function guard(): void
+    public function equals(TypeInterface $givenType): bool
     {
-        // Cannot contain void or never
+        if (!$givenType instanceof UnionType) {
+            return false;
+        }
+
+        if (count($this->types) !== count($givenType->getTypes())) {
+            return false;
+        }
+
+        foreach ($this->types as $type) {
+            if (!$givenType->has($type)) {
+                return false;
+            }
+        }
     }
 }
