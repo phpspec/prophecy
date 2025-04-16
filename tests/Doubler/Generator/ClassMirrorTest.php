@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\Generator\ClassMirror;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\IntersectionType;
+use Prophecy\Doubler\Generator\Node\Type\SimpleType;
+use Prophecy\Doubler\Generator\Node\Type\UnionType;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Prophet;
@@ -493,7 +496,7 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionArgumentTypes'), []);
         $methodNode = $classNode->getMethods()['doSomething'];
 
-        $this->assertEquals(new ArgumentTypeNode('bool', '\\stdClass'), $methodNode->getArguments()[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode('\\stdClass', 'bool'), $methodNode->getArguments()[0]->getTypeNode());
     }
 
     #[Test]
@@ -506,7 +509,7 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\UnionArgumentTypeFalse'), []);
         $methodNode = $classNode->getMethods()['method'];
 
-        $this->assertEquals(new ArgumentTypeNode('false', '\stdClass'), $methodNode->getArguments()[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode('\stdClass', 'false'), $methodNode->getArguments()[0]->getTypeNode());
     }
 
     #[Test]
@@ -559,15 +562,24 @@ class ClassMirrorTest extends TestCase
     }
 
     #[Test]
-    public function it_can_not_double_intersection_return_types(): void
+    public function it_can_double_intersection_return_types(): void
     {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Intersection types are not supported in this PHP version');
         }
 
-        $this->expectException(ClassMirrorException::class);
-
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionReturnType'), []);
+
+        $method = $classNode->getMethod('doSomething');
+        $returnType = $method->getReturnTypeNode();
+
+        $this->assertEquals(
+            new IntersectionType([
+                new SimpleType('\Fixtures\Prophecy\Bar'),
+                new SimpleType('\Fixtures\Prophecy\Baz'),
+            ]),
+            $returnType->getType()
+        );
     }
 
     #[Test]
@@ -633,7 +645,7 @@ class ClassMirrorTest extends TestCase
         $method = $classNode->getMethod('method');
         $arguments = $method->getArguments();
 
-        $this->assertEquals(new ArgumentTypeNode('null', 'false'), $arguments[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode('false', 'null'), $arguments[0]->getTypeNode());
     }
 
     #[Test]
@@ -649,15 +661,23 @@ class ClassMirrorTest extends TestCase
     }
 
     #[Test]
-    public function it_can_not_double_dnf_intersection_return_types(): void
+    public function it_can_double_dnf_intersection_return_types(): void
     {
-        if (PHP_VERSION_ID < 80200) {
-            $this->markTestSkipped('DNF intersection types are not supported in this PHP version');
-        }
-
-        $this->expectException(ClassMirrorException::class);
-
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfReturnType'), []);
+
+        $method = $classNode->getMethod('doSomething');
+        $returnType = $method->getReturnTypeNode();
+
+        $this->assertEquals(
+            new UnionType([
+                new IntersectionType([
+                    new SimpleType('\Fixtures\Prophecy\A'),
+                    new SimpleType('\Fixtures\Prophecy\B'),
+                ]),
+                new SimpleType('\Fixtures\Prophecy\C'),
+            ]),
+            $returnType->getType()
+        );
     }
 
     #[Test]
@@ -722,7 +742,7 @@ class ClassMirrorTest extends TestCase
         $method = $classNode->getMethod('method');
         $arguments = $method->getArguments();
 
-        $this->assertEquals(new ArgumentTypeNode('null', 'true'), $arguments[0]->getTypeNode());
+        $this->assertEquals(new ArgumentTypeNode('true', 'null'), $arguments[0]->getTypeNode());
     }
 
     #[Test]

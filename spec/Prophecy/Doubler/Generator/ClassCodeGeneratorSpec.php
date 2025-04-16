@@ -10,6 +10,9 @@ use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\IntersectionType;
+use Prophecy\Doubler\Generator\Node\Type\SimpleType;
+use Prophecy\Doubler\Generator\Node\Type\UnionType;
 
 class ClassCodeGeneratorSpec extends ObjectBehavior
 {
@@ -115,10 +118,10 @@ class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generat
 public $name;
 private $email;
 
-public static function getName(array $fullname, \ReflectionClass $class, object $instance): ?string {
+public static function getName(array $fullname, \ReflectionClass $class, object $instance): string|null {
 return $this->name;
 }
-protected  function getEmail(?string $default = 'ever.zet@gmail.com') {
+protected  function getEmail(string|null $default = 'ever.zet@gmail.com') {
 return $this->email;
 }
 public  function &getRefValue( $refValue): string {
@@ -271,7 +274,7 @@ PHP;
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface {
 
-public  function getName(?array &$fullname = NULL) {
+public  function getName(array|null &$fullname = NULL) {
 return $this->name;
 }
 
@@ -307,6 +310,47 @@ namespace  {
 class CustomClass extends \stdClass implements  {
 
 public  function foo(): int|string|null {
+
+}
+
+}
+}
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+
+        $code->shouldBe($expected);
+    }
+
+    function it_generates_proper_code_for_intersection_return_types(
+        ClassNode $class,
+        MethodNode $method
+    ) {
+        $class->getParentClass()->willReturn('stdClass');
+        $class->getInterfaces()->willReturn([]);
+        $class->getProperties()->willReturn([]);
+        $class->getMethods()->willReturn(array($method));
+        $class->isReadOnly()->willReturn(false);
+
+        $method->getName()->willReturn('foo');
+        $method->getVisibility()->willReturn('public');
+        $method->isStatic()->willReturn(false);
+        $method->getArguments()->willReturn([]);
+        $method->getReturnTypeNode()->willReturn(new ReturnTypeNode(
+            new UnionType([
+                new IntersectionType([new SimpleType('Foo'), new SimpleType('Bar')]),
+                new SimpleType('string'),
+            ])
+        ));
+        $method->returnsReference()->willReturn(false);
+        $method->getCode()->willReturn('');
+
+        $code = $this->generate('CustomClass', $class);
+
+        $expected = <<<'PHP'
+namespace  {
+class CustomClass extends \stdClass implements  {
+
+public  function foo(): \Foo&\Bar|string {
 
 }
 
