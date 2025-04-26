@@ -744,7 +744,7 @@ class ClassMirrorTest extends TestCase
      * @todo: remove this test and test it works!
      * test
      */
-    public function it_can_not_double_dnf_intersection_return_types()
+    public function it_can_double_dnf_intersection_return_types()
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('DNF intersection types are not supported in this PHP version');

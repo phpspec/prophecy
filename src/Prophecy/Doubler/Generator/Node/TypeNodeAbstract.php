@@ -52,10 +52,26 @@ abstract class TypeNodeAbstract
         }
     }
 
+    /**
+     * @deprecated use nullable() instead
+     */
     public function canUseNullShorthand(): bool
     {
         if ($this->type instanceof UnionType) {
             return $this->type->has(new SimpleType('null')) && count($this->type->getTypes()) === 2;
+        }
+
+        return false;
+    }
+
+    public function nullable()
+    {
+        if ($this->type instanceof UnionType) {
+            return $this->type->has(new SimpleType('null'));
+        }
+
+        if ($this->type instanceof SimpleType && $this->type->getType() === 'null') {
+            return true;
         }
 
         return false;
@@ -86,7 +102,7 @@ abstract class TypeNodeAbstract
         return array_values($types);
     }
 
-    public function getType(): TypeInterface
+    public function getType(): ?TypeInterface
     {
         return $this->type;
     }
