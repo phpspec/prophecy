@@ -2,45 +2,140 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
+use Prophecy\Doubler\Generator\Node\Type\IntersectionType;
+use Prophecy\Doubler\Generator\Node\Type\TypeInterface;
+use Prophecy\Doubler\Generator\Node\Type\SimpleType;
+use Prophecy\Doubler\Generator\Node\Type\UnionType;
 use Prophecy\Exception\Doubler\DoubleException;
 
 abstract class TypeNodeAbstract
 {
-    /** @var array<string, string> */
-    protected $types = [];
+    protected TypeInterface|null $type;
 
-    public function __construct(string ...$types)
+    /**
+     * @param string|TypeInterface ...$types
+     */
+    public function __construct(string|TypeInterface ...$types)
     {
-        foreach ($types as $type) {
-            $type = $this->getRealType($type);
-            $this->types[$type] = $type;
+        $deprecation = 'Only 1 type will be supported in the future, strings are no longer supported as type.';
+        if (count($types) !== 1) {
+            // TODO: trigger deprecation notice
+        } else {
+            foreach ($types as $type) {
+                if (!$type instanceof TypeInterface) {
+                    // TODO: deprecation notice
+                    break;
+                }
+            }
         }
 
-        $this->guardIsValidType();
+        // BC Layer for usage with strings
+        $typesNormalized = [];
+        $union = [];
+        foreach ($types as $index => $type) {
+            if (is_string($type)) {
+                $type = new SimpleType($type);
+                if (!in_array($type->getType(), $typesNormalized, true)) {
+                    $union[] = $type;
+                    $typesNormalized[] = $type->getType();
+                }
+                continue;
+            }
+            $union[] = $type;
+        }
+
+        // BC Layer for usage with many types
+        if (count($union) > 1) {
+            $this->type = new UnionType($union);
+        } else {
+            $this->type = $union[0] ?? null;
+        }
     }
 
+    /**
+     * @deprecated use nullable() instead
+     */
     public function canUseNullShorthand(): bool
     {
-        return isset($this->types['null']) && count($this->types) === 2;
+        if ($this->type instanceof UnionType) {
+            return $this->type->has(new SimpleType('null')) && count($this->type->getTypes()) === 2;
+        }
+
+        return false;
+    }
+
+    public function nullable()
+    {
+        if ($this->type instanceof UnionType) {
+            return $this->type->has(new SimpleType('null'));
+        }
+
+        if ($this->type instanceof SimpleType && $this->type->getType() === 'null') {
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * @return list<string>
+     * @deprecated use getType() instead
      */
     public function getTypes(): array
     {
-        return array_values($this->types);
+        // TODO: add deprecation notice
+        if ($this->type instanceof SimpleType) {
+            return [$this->type->getType()];
+        }
+
+        $types = [];
+
+        if ($this->type instanceof UnionType) {
+            foreach ($this->type->getTypes() as $type) {
+                if ($type instanceof IntersectionType) {
+                    throw new DoubleException('getType() method is deprecated and do not support IntersectionType by design. Use getType() instead.');
+                }
+                $types[$type->getType()] = $type->getType();
+            }
+        }
+
+        return array_values($types);
+    }
+
+    public function getType(): ?TypeInterface
+    {
+        return $this->type;
     }
 
     /**
+     * @deprecated use getType() instead
      * @return list<string>
      */
     public function getNonNullTypes(): array
     {
-        $nonNullTypes = $this->types;
-        unset($nonNullTypes['null']);
+        if ($this->type === null) {
+            return [];
+        }
+        if ($this->type instanceof UnionType) {
+            $types = [];
+            foreach ($this->type->getTypes() as $type) {
+                if ($type->getType() === 'null') {
+                    continue;
+                }
+                $types[] = $type->getType();
+            }
 
-        return array_values($nonNullTypes);
+            return $types;
+        }
+
+        if ($this->type instanceof SimpleType) {
+            if ($this->type->getType() === 'null') {
+                return [];
+            }
+            return [$this->type->getType()];
+        }
+
+        throw new DoubleException('getNonNullTypes() method is deprecated and do not support IntersectionType by design. Use getType() instead.');
     }
 
     protected function prefixWithNsSeparator(string $type): string
@@ -60,7 +155,7 @@ abstract class TypeNodeAbstract
             case 'integer':
                 return 'int';
 
-                //  built in types
+            //  built in types
             case 'self':
             case 'static':
             case 'array':
@@ -74,44 +169,42 @@ abstract class TypeNodeAbstract
             case 'iterable':
             case 'object':
             case 'null':
-                return $type;
             case 'mixed':
-                return \PHP_VERSION_ID < 80000 ? $this->prefixWithNsSeparator($type) : $type;
-
+            case 'void':
+            case 'never':
+                return $type;
             default:
+                // Class / Interface type
                 return $this->prefixWithNsSeparator($type);
         }
     }
 
     /**
+     * @todo: put this in SimpleType
      * @return void
      */
     protected function guardIsValidType()
     {
         if (\PHP_VERSION_ID < 80200) {
-            if ($this->types == ['null' => 'null']) {
+            if ($this->type->equals(new SimpleType('null'))) {
                 throw new DoubleException('Type cannot be standalone null');
             }
 
-            if ($this->types == ['false' => 'false']) {
+            if ($this->type->equals(new SimpleType('false'))) {
                 throw new DoubleException('Type cannot be standalone false');
             }
 
-            if ($this->types == ['false' => 'false', 'null' => 'null']) {
+            if ($this->type->equals(new UnionType([new SimpleType('false'), new SimpleType('null')]))) {
                 throw new DoubleException('Type cannot be nullable false');
             }
 
-            if ($this->types == ['true' => 'true']) {
+            if ($this->type->equals(new SimpleType('true'))) {
                 throw new DoubleException('Type cannot be standalone true');
             }
 
-            if ($this->types == ['true' => 'true', 'null' => 'null']) {
+            if ($this->type->equals(new UnionType([new SimpleType('true'), new SimpleType('null')]))) {
                 throw new DoubleException('Type cannot be nullable true');
             }
-        }
-
-        if (\PHP_VERSION_ID >= 80000 && isset($this->types['mixed']) && count($this->types) !== 1) {
-            throw new DoubleException('mixed cannot be part of a union');
         }
     }
 }

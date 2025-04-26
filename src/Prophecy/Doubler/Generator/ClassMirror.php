@@ -13,6 +13,10 @@ namespace Prophecy\Doubler\Generator;
 
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\IntersectionType;
+use Prophecy\Doubler\Generator\Node\Type\TypeInterface;
+use Prophecy\Doubler\Generator\Node\Type\SimpleType;
+use Prophecy\Doubler\Generator\Node\Type\UnionType;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use ReflectionClass;
@@ -158,14 +162,22 @@ class ClassMirror
             $node->setReturnsReference();
         }
 
+        $returnReflectionType = null;
         if ($method->hasReturnType()) {
-            \assert($method->getReturnType() !== null);
-            $returnTypes = $this->getTypeHints($method->getReturnType(), $method->getDeclaringClass(), $method->getReturnType()->allowsNull());
-            $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
+            $returnReflectionType = $method->getReturnType();
+            \assert($returnReflectionType !== null);
         } elseif (method_exists($method, 'hasTentativeReturnType') && $method->hasTentativeReturnType()) {
-            \assert($method->getTentativeReturnType() !== null);
-            $returnTypes = $this->getTypeHints($method->getTentativeReturnType(), $method->getDeclaringClass(), $method->getTentativeReturnType()->allowsNull());
-            $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
+            // Tentative return types also need reflection
+            $returnReflectionType = $method->getTentativeReturnType();
+            \assert($returnReflectionType !== null);
+        }
+
+        if (null !== $returnReflectionType) {
+            $returnType = $this->createTypeFromReflection(
+                $returnReflectionType,
+                $method->getDeclaringClass()
+            );
+            $node->setReturnTypeNode(new ReturnTypeNode($returnType));
         }
 
         if (is_array($params = $method->getParameters()) && count($params)) {
@@ -203,7 +215,6 @@ class ClassMirror
             $node->setAsPassedByReference();
         }
 
-
         $methodNode->addArgument($node);
     }
 
@@ -230,6 +241,74 @@ class ClassMirror
         }
 
         return $parameter->getDefaultValue();
+    }
+
+    /**
+     * @param ReflectionClass<object> $declaringClass Context reflection class
+     */
+    private function createTypeFromReflection(ReflectionType $type, ReflectionClass $declaringClass): TypeInterface
+    {
+        if ($type instanceof ReflectionIntersectionType) {
+            foreach ($type->getTypes() as $innerReflectionType) {
+                $innerTypes[] = new SimpleType($innerReflectionType->getName());
+            }
+            return new IntersectionType($innerTypes);
+        }
+
+        if ($type instanceof ReflectionUnionType) {
+            $innerTypes = [];
+            foreach ($type->getTypes() as $innerReflectionType) {
+                if ($innerReflectionType instanceof ReflectionIntersectionType) {
+                    $innerTypes[] = $this->createTypeFromReflection($innerReflectionType, $declaringClass);
+                    continue;
+                }
+                $name = $this->resolveTypeName($innerReflectionType->getName(), $declaringClass);
+                $innerTypes[] = new SimpleType($name);
+            }
+            // Nullability is handled by 'null' being one of the types in the union
+            return new UnionType($innerTypes);
+        }
+
+        // Handle Named Types (single types like int, string, MyClass, ?MyClass)
+        if ($type instanceof ReflectionNamedType) {
+            $name = $this->resolveTypeName($type->getName(), $declaringClass);
+            $simpleType = new SimpleType($name); // SimpleType constructor normalizes
+
+            // Handle nullability for named types explicitly by wrapping in a UnionType if needed
+            if ($type->allowsNull() && $name !== 'mixed' && $name !== 'null') {
+                // Check if SimpleType already resolved to 'null' (e.g. input was 'null')
+                if ($simpleType->getType() === 'null') {
+                    return $simpleType; // Already null, no union needed
+                }
+                // Check if SimpleType already resolved to 'mixed'
+                if ($simpleType->getType() === 'mixed') {
+                    return $simpleType; // mixed implies null, no union needed
+                }
+
+                return new UnionType([new SimpleType('null'), $simpleType]);
+            }
+
+            return $simpleType;
+        }
+
+        // Unknown ReflectionType implementation
+        throw new ClassMirrorException('Unknown reflection type: ' . get_class($type), $declaringClass);
+    }
+
+    private function resolveTypeName(string $name, ReflectionClass $contextClass): string
+    {
+        if ($name === 'self') {
+            return $contextClass->getName();
+        }
+        if ($name === 'parent') {
+            $parent = $contextClass->getParentClass();
+            if (false === $parent) {
+                throw new ClassMirrorException(sprintf('Cannot use "parent" type hint in class "%s" as it does not have a parent.', $contextClass->getName()), $contextClass);
+            }
+            return $parent->getName();
+        }
+
+        return $name;
     }
 
     /**
@@ -277,7 +356,7 @@ class ClassMirror
             $types
         );
 
-        if ($types && $types != ['mixed'] && $allowsNull) {
+        if ($types && $types != ['mixed'] && $allowsNull && !in_array('null', $types, true)) {
             $types[] = 'null';
         }
 

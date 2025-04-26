@@ -2,6 +2,7 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
+use Prophecy\Doubler\Generator\Node\Type\SimpleType;
 use Prophecy\Exception\Doubler\DoubleException;
 
 final class ReturnTypeNode extends TypeNodeAbstract
@@ -34,14 +35,22 @@ final class ReturnTypeNode extends TypeNodeAbstract
      *
      * @return bool
      */
-    public function isVoid()
+    public function isVoid(): bool
     {
-        return $this->types == ['void' => 'void'];
+        if ($this->type === null) {
+            return true;
+        }
+
+        return $this->type->equals(new SimpleType('void'));
     }
 
     public function hasReturnStatement(): bool
     {
-        return $this->types !== ['void' => 'void']
-            && $this->types !== ['never' => 'never'];
+        if ($this->type === null) {
+            return true;
+        }
+
+        return !$this->type->equals(new SimpleType('void'))
+            && !$this->type->equals(new SimpleType('never'));
     }
 }
