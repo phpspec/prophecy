@@ -147,7 +147,6 @@ class ExportUtil
                 return 'Array &'.$key;
             }
 
-            \assert(\is_array($value));
             $array  = $value;
             $key    = $processed->add($value);
             $values = '';
@@ -172,12 +171,10 @@ class ExportUtil
             $class = get_class($value);
 
             if ($processed->contains($value)) {
-                \assert(\is_object($value));
                 return sprintf('%s#%d Object', $class, spl_object_id($value));
             }
 
             $processed->add($value);
-            \assert(\is_object($value));
             $values = '';
             $array  = self::toArray($value);
 
@@ -193,6 +190,7 @@ class ExportUtil
 
                 $values = "\n".$values.$whitespace;
             }
+            \assert(\is_object($value));
 
             return sprintf('%s#%d Object (%s)', $class, spl_object_id($value), $values);
         }

@@ -60,9 +60,8 @@ class ArrayEntryToken implements TokenInterface
 
         $keyScores = array_map(array($this->key,'scoreArgument'), array_keys($argument));
         $valueScores = array_map(array($this->value,'scoreArgument'), $argument);
-        /** @var callable(int|false, int|false): (int|false) $scoreEntry */
-        $scoreEntry = function ($value, $key) {
-            return $value && $key ? min(8, ($key + $value) / 2) : false;
+        $scoreEntry = static function ($value, $key) {
+            return $value && $key ? (int) min(8, ($key + $value) / 2) : false;
         };
 
         return max(array_map($scoreEntry, $valueScores, $keyScores));
