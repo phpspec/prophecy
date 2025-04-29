@@ -7,12 +7,6 @@ parameters:
 			path: src/Prophecy/Argument/Token/ExactValueToken.php
 
 		-
-			message: '#^Method Prophecy\\Comparator\\ProphecyComparator\:\:assertEquals\(\) has parameter \$processed with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Prophecy/Comparator/ProphecyComparator.php
-
-		-
 			message: '#^Method Prophecy\\Doubler\\CachedDoubler\:\:createDoubleClass\(\) should return class\-string\<Prophecy\\Doubler\\DoubleInterface&T of object\> but returns class\-string\.$#'
 			identifier: return.type
 			count: 1
