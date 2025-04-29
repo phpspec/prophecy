@@ -281,6 +281,6 @@ class ClassMirror
             $types[] = 'null';
         }
 
-        return $types;
+        return array_values($types);
     }
 }

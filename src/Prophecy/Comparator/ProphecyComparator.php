@@ -34,9 +34,7 @@ class ProphecyComparator extends ObjectComparator
      * @param float $delta
      * @param bool  $canonicalize
      * @param bool  $ignoreCase
-     * @param array $processed
-     *
-     * @phpstan-param list<array{object, object}> $processed
+     * @param mixed[] $processed
      */
     public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = array()): void
     {
