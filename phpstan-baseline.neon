@@ -49,12 +49,6 @@ parameters:
 			path: src/Prophecy/Doubler/LazyDouble.php
 
 		-
-			message: '#^Property Prophecy\\Doubler\\LazyDouble\:\:\$class \(ReflectionClass\<T of object\>\|null\) is never assigned ReflectionClass\<T of object\> so it can be removed from the property type\.$#'
-			identifier: property.unusedType
-			count: 1
-			path: src/Prophecy/Doubler/LazyDouble.php
-
-		-
 			message: '#^Call to function method_exists\(\) with ReflectionMethod and ''hasTentativeReturnT…'' will always evaluate to true\.$#'
 			identifier: function.alreadyNarrowedType
 			count: 1
