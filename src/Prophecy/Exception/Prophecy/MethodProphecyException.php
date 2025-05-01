@@ -20,9 +20,9 @@ class MethodProphecyException extends ObjectProphecyException
     /**
      * @param string $message
      */
-    public function __construct($message, MethodProphecy $methodProphecy)
+    public function __construct($message, MethodProphecy $methodProphecy, ?\Throwable $previous = null)
     {
-        parent::__construct($message, $methodProphecy->getObjectProphecy());
+        parent::__construct($message, $methodProphecy->getObjectProphecy(), $previous);
 
         $this->methodProphecy = $methodProphecy;
     }
