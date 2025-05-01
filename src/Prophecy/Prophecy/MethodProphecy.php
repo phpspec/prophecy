@@ -12,6 +12,7 @@
 namespace Prophecy\Prophecy;
 
 use Prophecy\Argument;
+use Prophecy\Exception\Doubler\ClassMirrorException;
 use Prophecy\Exception\Prediction\PredictionException;
 use Prophecy\Prophet;
 use Prophecy\Promise;
@@ -179,7 +180,12 @@ class MethodProphecy
                         }
 
                         $prophet = new Prophet();
-                        return $prophet->prophesize($defaultType)->reveal();
+
+                        try {
+                            return $prophet->prophesize($defaultType)->reveal();
+                        } catch (ClassMirrorException $e) {
+                            throw new MethodProphecyException(\sprintf('Cannot create a return value for the method. Configure an explicit return value instead.'), $method, $e);
+                        }
                 }
             });
         }
