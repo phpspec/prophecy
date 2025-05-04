@@ -2,6 +2,7 @@
 
 namespace Tests\Prophecy\Doubler\ClassPatch;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\ClassPatch\MagicCallPatch;
 use Prophecy\Doubler\Generator\ClassMirror;
@@ -13,6 +14,7 @@ class MagicCallPatchTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_supports_classes_with_invalid_tags()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithPhpdocClass');
@@ -32,6 +34,7 @@ class MagicCallPatchTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_supports_arguments_for_magic_methods()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithPhpdocClass');
