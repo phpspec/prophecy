@@ -2,6 +2,8 @@
 
 namespace Tests\Prophecy\Doubler\Generator\Node;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
@@ -36,6 +38,8 @@ class TypeNodeAbstractTest extends TestCase
      * @test
      * @dataProvider childClassDataProvider
      */
+    #[DataProvider('childClassDataProvider')]
+    #[Test]
     public function it_can_use_null_shorthand_only_with_two_types(TypeNodeAbstract $node, bool $expected): void
     {
         $this->assertSame($expected, $node->canUseNullShorthand());

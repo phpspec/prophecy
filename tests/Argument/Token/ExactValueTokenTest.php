@@ -2,6 +2,7 @@
 
 namespace Tests\Prophecy\Argument\Token;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument\Token\ExactValueToken;
 
@@ -12,6 +13,7 @@ class ExactValueTokenTest extends TestCase
      * @see https://github.com/phpspec/prophecy/issues/268
      * @see https://stackoverflow.com/a/19097159/2424814
      */
+    #[Test]
     public function does_not_trigger_nesting_error()
     {
         $child1 = new ChildClass('A', new ParentClass());
@@ -24,6 +26,7 @@ class ExactValueTokenTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function scores_10_for_objects_with_same_fields()
     {
         $child1 = new ChildClass('A', new ParentClass());
@@ -36,6 +39,7 @@ class ExactValueTokenTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function scores_10_for_matching_callables()
     {
         $callable = function () {};
@@ -47,6 +51,7 @@ class ExactValueTokenTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function scores_false_for_object_and_string()
     {
         $child1 = new ChildClass('A', new ParentClass());
@@ -58,6 +63,7 @@ class ExactValueTokenTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function scores_false_for_object_and_int()
     {
         $child1 = new ChildClass('A', new ParentClass());
@@ -69,6 +75,7 @@ class ExactValueTokenTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function scores_false_for_object_and_stdclass()
     {
         $child1 = new ChildClass('A', new ParentClass());
@@ -80,6 +87,7 @@ class ExactValueTokenTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function scores_false_for_object_and_null()
     {
         $child1 = new ChildClass('A', new ParentClass());

@@ -3,6 +3,7 @@
 namespace Tests\Prophecy\Doubler\Generator;
 
 use Fixtures\Prophecy\SelfReferencing;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\Generator\ClassMirror;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
@@ -16,6 +17,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_reflects_allowed_magic_methods()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\SpecialMethods');
@@ -30,6 +32,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_reflects_protected_abstract_methods()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithProtectedAbstractMethod');
@@ -49,6 +52,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_reflects_public_static_methods()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithStaticMethod');
@@ -68,6 +72,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_marks_required_args_without_types_as_not_optional()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithArguments');
@@ -91,6 +96,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_properly_reads_methods_arguments_with_types()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithArguments');
@@ -126,6 +132,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_properly_reads_methods_arguments_with_callable_types()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithCallableArgument');
@@ -155,6 +162,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_properly_reads_methods_variadic_arguments()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithVariadicArgument');
@@ -177,6 +185,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_properly_reads_methods_typehinted_variadic_arguments()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithTypehintedVariadicArgument');
@@ -199,6 +208,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_marks_passed_by_reference_args_as_passed_by_reference()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithReferences');
@@ -220,6 +230,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_throws_an_exception_if_class_is_final()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\FinalClass');
@@ -234,6 +245,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_ignores_final_methods()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithFinalMethod');
@@ -248,6 +260,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_marks_final_methods_as_unextendable()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithFinalMethod');
@@ -263,6 +276,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_throws_an_exception_if_interface_provided_instead_of_class()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\EmptyInterface');
@@ -277,6 +291,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_reflects_all_interfaces_methods()
     {
         $mirror = new ClassMirror();
@@ -302,6 +317,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_ignores_virtually_private_methods()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithVirtuallyPrivateMethod');
@@ -319,6 +335,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_does_not_throw_exception_for_virtually_private_finals()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithFinalVirtuallyPrivateMethod');
@@ -333,6 +350,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_reflects_return_typehints()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithReturnTypehints');
@@ -354,6 +372,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_throws_an_exception_if_class_provided_in_interfaces_list()
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\EmptyClass');
@@ -368,6 +387,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_throws_an_exception_if_not_reflection_provided_as_interface()
     {
         $mirror = new ClassMirror();
@@ -380,6 +400,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_doesnt_use_scalar_typehints()
     {
         if (PHP_VERSION_ID >= 80000) {
@@ -400,6 +421,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_doesnt_fail_to_typehint_nonexistent_FQCN()
     {
         $mirror = new ClassMirror();
@@ -413,6 +435,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_doesnt_fail_on_array_nullable_parameter_with_not_null_default_value()
     {
         $mirror = new ClassMirror();
@@ -426,6 +449,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_doesnt_fail_to_typehint_nonexistent_RQCN()
     {
         $mirror = new ClassMirror();
@@ -439,6 +463,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     function it_doesnt_fail_when_method_is_extended_with_more_params()
     {
         $mirror = new ClassMirror();
@@ -457,6 +482,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     function it_doesnt_fail_to_mock_self_referencing_interface()
     {
         $mirror = new ClassMirror();
@@ -474,6 +500,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     function it_changes_argument_names_if_they_are_varying()
     {
         // Use test doubles in this test, as arguments named ... in the Reflection API can only happen for internal classes
@@ -526,7 +553,10 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals('__dot_dot_dot__', $argumentNode->getName());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
+    #[Test]
     public function it_can_double_a_class_with_union_return_types()
     {
         if (PHP_VERSION_ID < 80000) {
@@ -542,6 +572,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_class_with_union_return_type_with_false()
     {
         if (PHP_VERSION_ID < 80000) {
@@ -555,6 +586,7 @@ class ClassMirrorTest extends TestCase
     }
 
     /** @test */
+    #[Test]
     public function it_can_double_a_class_with_union_argument_types()
     {
         if (PHP_VERSION_ID < 80000) {
@@ -570,6 +602,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_class_with_union_argument_type_with_false()
     {
         if (PHP_VERSION_ID < 80000) {
@@ -583,6 +616,7 @@ class ClassMirrorTest extends TestCase
     }
 
     /** @test */
+    #[Test]
     public function it_can_double_a_class_with_mixed_types()
     {
         if (PHP_VERSION_ID < 80000) {
@@ -597,6 +631,7 @@ class ClassMirrorTest extends TestCase
     }
 
     /** @test */
+    #[Test]
     public function it_can_double_inherited_self_return_type()
     {
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\ClassExtendAbstractWithMethodWithReturnType'), []);
@@ -608,6 +643,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_never_return_type()
     {
         if (PHP_VERSION_ID < 80100) {
@@ -624,6 +660,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_not_double_an_enum()
     {
         if (PHP_VERSION_ID < 80100) {
@@ -638,6 +675,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_not_double_intersection_return_types()
     {
         if (PHP_VERSION_ID < 80100) {
@@ -652,6 +690,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_not_double_intersection_argument_types()
     {
         if (PHP_VERSION_ID < 80100) {
@@ -666,6 +705,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_standalone_return_type_of_false()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -681,6 +721,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_standalone_parameter_type_of_false()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -697,6 +738,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_nullable_return_type_of_false()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -712,6 +754,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_nullable_parameter_type_of_false()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -728,6 +771,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_not_double_dnf_intersection_argument_types()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -742,6 +786,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_not_double_dnf_intersection_return_types()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -756,6 +801,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_standalone_return_type_of_true()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -771,6 +817,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_reflects_non_read_only_class()
     {
         $classNode = (new ClassMirror())->reflect(
@@ -784,6 +831,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_standalone_parameter_type_of_true()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -800,6 +848,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_nullable_return_type_of_true()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -815,6 +864,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_nullable_parameter_type_of_true()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -831,6 +881,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_standalone_return_type_of_null()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -846,6 +897,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_can_double_a_standalone_parameter_type_of_null()
     {
         if (PHP_VERSION_ID < 80200) {
@@ -862,6 +914,7 @@ class ClassMirrorTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_reflects_read_only_class()
     {
         if (PHP_VERSION_ID < 80200) {

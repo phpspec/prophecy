@@ -3,6 +3,7 @@
 namespace Tests\Prophecy;
 
 use Fixtures\Prophecy\ReturningFinalClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\DoubleInterface;
 use Prophecy\Exception\Prophecy\MethodProphecyException;
@@ -14,6 +15,7 @@ class FunctionalTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function case_insensitive_method_names()
     {
         $prophet = new Prophet();
@@ -31,6 +33,7 @@ class FunctionalTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_implements_the_double_interface()
     {
         $prophet = new Prophet();
@@ -42,6 +45,7 @@ class FunctionalTest extends TestCase
     /**
      * @test
      */
+    #[Test]
     public function it_implements_the_prophecy_subject_interface()
     {
         $prophet = new Prophet();
