@@ -66,23 +66,23 @@ class TraversablePatch implements ClassPatchInterface
         $node->addInterface('Iterator');
 
         $currentMethod = new MethodNode('current');
-        (\PHP_VERSION_ID >= 80100) && $currentMethod->setReturnTypeNode(new ReturnTypeNode('mixed'));
+        $currentMethod->setReturnTypeNode(new ReturnTypeNode('mixed'));
         $node->addMethod($currentMethod);
 
         $keyMethod = new MethodNode('key');
-        (\PHP_VERSION_ID >= 80100) && $keyMethod->setReturnTypeNode(new ReturnTypeNode('mixed'));
+        $keyMethod->setReturnTypeNode(new ReturnTypeNode('mixed'));
         $node->addMethod($keyMethod);
 
         $nextMethod = new MethodNode('next');
-        (\PHP_VERSION_ID >= 80100) && $nextMethod->setReturnTypeNode(new ReturnTypeNode('void'));
+        $nextMethod->setReturnTypeNode(new ReturnTypeNode('void'));
         $node->addMethod($nextMethod);
 
         $rewindMethod = new MethodNode('rewind');
-        (\PHP_VERSION_ID >= 80100) && $rewindMethod->setReturnTypeNode(new ReturnTypeNode('void'));
+        $rewindMethod->setReturnTypeNode(new ReturnTypeNode('void'));
         $node->addMethod($rewindMethod);
 
         $validMethod = new MethodNode('valid');
-        (\PHP_VERSION_ID >= 80100) && $validMethod->setReturnTypeNode(new ReturnTypeNode('bool'));
+        $validMethod->setReturnTypeNode(new ReturnTypeNode('bool'));
         $node->addMethod($validMethod);
     }
 
