@@ -34,10 +34,6 @@ class TypeNodeAbstractTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     * @dataProvider childClassDataProvider
-     */
     #[DataProvider('childClassDataProvider')]
     #[Test]
     public function it_can_use_null_shorthand_only_with_two_types(TypeNodeAbstract $node, bool $expected): void

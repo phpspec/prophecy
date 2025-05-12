@@ -11,11 +11,8 @@ use Prophecy\Doubler\Generator\Node\ClassNode;
 
 class MagicCallPatchTest extends TestCase
 {
-    /**
-     * @test
-     */
     #[Test]
-    public function it_supports_classes_with_invalid_tags()
+    public function it_supports_classes_with_invalid_tags(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithPhpdocClass');
 
@@ -31,11 +28,8 @@ class MagicCallPatchTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_supports_arguments_for_magic_methods()
+    public function it_supports_arguments_for_magic_methods(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithPhpdocClass');
 

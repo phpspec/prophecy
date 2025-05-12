@@ -9,11 +9,8 @@ use PHPUnit\Framework\TestCase;
 
 class FactoryProviderTest extends TestCase
 {
-    /**
-     * @test
-     */
     #[Test]
-    function it_should_have_ClosureComparator_registered()
+    function it_should_have_ClosureComparator_registered(): void
     {
         $comparator = FactoryProvider::getInstance()->getComparatorFor(function () {}, function () {});
 

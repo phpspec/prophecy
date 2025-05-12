@@ -29,7 +29,7 @@
         "friendsofphp/php-cs-fixer": "^3.40",
         "phpspec/phpspec": "^6.0 || ^7.0",
         "phpstan/phpstan": "^2.1.13",
-        "phpunit/phpunit": "^8.0 || ^9.0 || ^10.0 || ^11.0 || ^12.0"
+        "phpunit/phpunit": "^11.0 || ^12.0"
     },
 
     "autoload": {
