@@ -59,9 +59,3 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Prophecy/Prophecy/MethodProphecy.php
-
-		-
-			message: '#^Cannot access offset mixed on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Prophecy/Util/ExportUtil.php
