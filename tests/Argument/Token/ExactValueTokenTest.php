@@ -9,12 +9,11 @@ use Prophecy\Argument\Token\ExactValueToken;
 class ExactValueTokenTest extends TestCase
 {
     /**
-     * @test
      * @see https://github.com/phpspec/prophecy/issues/268
      * @see https://stackoverflow.com/a/19097159/2424814
      */
     #[Test]
-    public function does_not_trigger_nesting_error()
+    public function does_not_trigger_nesting_error(): void
     {
         $child1 = new ChildClass('A', new ParentClass());
         $child2 = new ChildClass('B', new ParentClass());
@@ -23,11 +22,8 @@ class ExactValueTokenTest extends TestCase
         self::assertEquals(false, $exactValueToken->scoreArgument($child2));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function scores_10_for_objects_with_same_fields()
+    public function scores_10_for_objects_with_same_fields(): void
     {
         $child1 = new ChildClass('A', new ParentClass());
         $child2 = new ChildClass('A', new ParentClass());
@@ -36,11 +32,8 @@ class ExactValueTokenTest extends TestCase
         self::assertEquals(10, $exactValueToken->scoreArgument($child2));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function scores_10_for_matching_callables()
+    public function scores_10_for_matching_callables(): void
     {
         $callable = function () {};
 
@@ -48,11 +41,8 @@ class ExactValueTokenTest extends TestCase
         self::assertEquals(10, $exactValueToken->scoreArgument($callable));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function scores_false_for_object_and_string()
+    public function scores_false_for_object_and_string(): void
     {
         $child1 = new ChildClass('A', new ParentClass());
 
@@ -60,11 +50,8 @@ class ExactValueTokenTest extends TestCase
         self::assertEquals(false, $exactValueToken->scoreArgument("A"));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function scores_false_for_object_and_int()
+    public function scores_false_for_object_and_int(): void
     {
         $child1 = new ChildClass('A', new ParentClass());
 
@@ -72,11 +59,8 @@ class ExactValueTokenTest extends TestCase
         self::assertEquals(false, $exactValueToken->scoreArgument(100));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function scores_false_for_object_and_stdclass()
+    public function scores_false_for_object_and_stdclass(): void
     {
         $child1 = new ChildClass('A', new ParentClass());
 
@@ -84,11 +68,8 @@ class ExactValueTokenTest extends TestCase
         self::assertEquals(false, $exactValueToken->scoreArgument(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function scores_false_for_object_and_null()
+    public function scores_false_for_object_and_null(): void
     {
         $child1 = new ChildClass('A', new ParentClass());
 

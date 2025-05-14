@@ -27,10 +27,8 @@ final class TypeHintReference
             case 'string':
             case 'iterable':
             case 'object':
-                return true;
-
             case 'mixed':
-                return PHP_VERSION_ID >= 80000;
+                return true;
 
             default:
                 return false;

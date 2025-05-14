@@ -15,11 +15,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ["7.4", "8.0", "8.1", "8.2", "8.3"]
+        php: ["8.2", "8.3"]
         composer-flags: [ "" ]
         experimental: [ false ]
         include:
-          - php: 7.4
+          - php: 8.2
             composer-flags: "--prefer-lowest"
           - php: "8.4" # TODO move that to a normal job once phpspec supports PHP 8.4
             composer-flags: "--ignore-platform-req=php+"
@@ -59,7 +59,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.3"
           coverage: none
       - name: Install dependencies
         run: COMPOSER_ROOT_VERSION=dev-master composer update --no-scripts
@@ -73,7 +73,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.3"
           coverage: none
       - name: Install dependencies
         run: COMPOSER_ROOT_VERSION=dev-master composer update --no-scripts

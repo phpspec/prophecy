@@ -12,11 +12,8 @@ use Prophecy\Prophet;
 
 class FunctionalTest extends TestCase
 {
-    /**
-     * @test
-     */
     #[Test]
-    public function case_insensitive_method_names()
+    public function case_insensitive_method_names(): void
     {
         $prophet = new Prophet();
         $prophecy = $prophet->prophesize('ArrayObject');
@@ -30,11 +27,8 @@ class FunctionalTest extends TestCase
         self::assertSame(3, $arrayObject->offsetGet(3));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_implements_the_double_interface()
+    public function it_implements_the_double_interface(): void
     {
         $prophet = new Prophet();
         $object = $prophet->prophesize('stdClass')->reveal();
@@ -42,11 +36,8 @@ class FunctionalTest extends TestCase
         $this->assertInstanceOf(DoubleInterface::class, $object);
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_implements_the_prophecy_subject_interface()
+    public function it_implements_the_prophecy_subject_interface(): void
     {
         $prophet = new Prophet();
         $object = $prophet->prophesize('stdClass')->reveal();
@@ -54,7 +45,7 @@ class FunctionalTest extends TestCase
         $this->assertInstanceOf(ProphecySubjectInterface::class, $object);
     }
 
-    public function testUnconfiguredFinalReturnType()
+    public function testUnconfiguredFinalReturnType(): void
     {
         $prophet = new Prophet();
         $object = $prophet->prophesize(ReturningFinalClass::class);

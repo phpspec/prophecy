@@ -14,11 +14,8 @@ use Prophecy\Prophet;
 
 class ClassMirrorTest extends TestCase
 {
-    /**
-     * @test
-     */
     #[Test]
-    public function it_reflects_allowed_magic_methods()
+    public function it_reflects_allowed_magic_methods(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\SpecialMethods');
 
@@ -29,11 +26,8 @@ class ClassMirrorTest extends TestCase
         $this->assertCount(7, $node->getMethods());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_reflects_protected_abstract_methods()
+    public function it_reflects_protected_abstract_methods(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithProtectedAbstractMethod');
 
@@ -49,11 +43,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals('protected', $methodNodes['innerDetail']->getVisibility());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_reflects_public_static_methods()
+    public function it_reflects_public_static_methods(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithStaticMethod');
 
@@ -69,11 +60,8 @@ class ClassMirrorTest extends TestCase
         $this->assertTrue($methodNodes['innerDetail']->isStatic());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_marks_required_args_without_types_as_not_optional()
+    public function it_marks_required_args_without_types_as_not_optional(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithArguments');
 
@@ -93,11 +81,8 @@ class ClassMirrorTest extends TestCase
         $this->assertFalse($argNodes[0]->isVariadic());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_properly_reads_methods_arguments_with_types()
+    public function it_properly_reads_methods_arguments_with_types(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithArguments');
 
@@ -129,11 +114,8 @@ class ClassMirrorTest extends TestCase
         $this->assertFalse($argNodes[2]->isVariadic());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_properly_reads_methods_arguments_with_callable_types()
+    public function it_properly_reads_methods_arguments_with_callable_types(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithCallableArgument');
 
@@ -159,11 +141,8 @@ class ClassMirrorTest extends TestCase
         $this->assertFalse($argNodes[1]->isVariadic());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_properly_reads_methods_variadic_arguments()
+    public function it_properly_reads_methods_variadic_arguments(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithVariadicArgument');
 
@@ -182,11 +161,8 @@ class ClassMirrorTest extends TestCase
         $this->assertTrue($argNodes[0]->isVariadic());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_properly_reads_methods_typehinted_variadic_arguments()
+    public function it_properly_reads_methods_typehinted_variadic_arguments(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithTypehintedVariadicArgument');
 
@@ -205,11 +181,8 @@ class ClassMirrorTest extends TestCase
         $this->assertTrue($argNodes[0]->isVariadic());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_marks_passed_by_reference_args_as_passed_by_reference()
+    public function it_marks_passed_by_reference_args_as_passed_by_reference(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithReferences');
 
@@ -227,11 +200,8 @@ class ClassMirrorTest extends TestCase
         $this->assertTrue($argNodes[1]->isPassedByReference());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_throws_an_exception_if_class_is_final()
+    public function it_throws_an_exception_if_class_is_final(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\FinalClass');
 
@@ -242,11 +212,8 @@ class ClassMirrorTest extends TestCase
         $mirror->reflect($class, array());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_ignores_final_methods()
+    public function it_ignores_final_methods(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithFinalMethod');
 
@@ -257,11 +224,8 @@ class ClassMirrorTest extends TestCase
         $this->assertCount(0, $classNode->getMethods());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_marks_final_methods_as_unextendable()
+    public function it_marks_final_methods_as_unextendable(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithFinalMethod');
 
@@ -273,11 +237,8 @@ class ClassMirrorTest extends TestCase
         $this->assertFalse($classNode->isExtendable('finalImplementation'));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_throws_an_exception_if_interface_provided_instead_of_class()
+    public function it_throws_an_exception_if_interface_provided_instead_of_class(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\EmptyInterface');
 
@@ -288,11 +249,8 @@ class ClassMirrorTest extends TestCase
         $mirror->reflect($class, array());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_reflects_all_interfaces_methods()
+    public function it_reflects_all_interfaces_methods(): void
     {
         $mirror = new ClassMirror();
 
@@ -314,11 +272,8 @@ class ClassMirrorTest extends TestCase
         $this->assertTrue($classNode->hasMethod('getVisibility'));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_ignores_virtually_private_methods()
+    public function it_ignores_virtually_private_methods(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithVirtuallyPrivateMethod');
 
@@ -332,11 +287,8 @@ class ClassMirrorTest extends TestCase
         $this->assertFalse($classNode->hasMethod('_getName'));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_does_not_throw_exception_for_virtually_private_finals()
+    public function it_does_not_throw_exception_for_virtually_private_finals(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithFinalVirtuallyPrivateMethod');
 
@@ -347,11 +299,8 @@ class ClassMirrorTest extends TestCase
         $this->assertCount(0, $classNode->getMethods());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_reflects_return_typehints()
+    public function it_reflects_return_typehints(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\WithReturnTypehints');
 
@@ -369,11 +318,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode('\Fixtures\Prophecy\EmptyClass'), $classNode->getMethod('getParent')->getReturnTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_throws_an_exception_if_class_provided_in_interfaces_list()
+    public function it_throws_an_exception_if_class_provided_in_interfaces_list(): void
     {
         $class = new \ReflectionClass('Fixtures\Prophecy\EmptyClass');
 
@@ -384,11 +330,8 @@ class ClassMirrorTest extends TestCase
         $mirror->reflect(null, array($class));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_throws_an_exception_if_not_reflection_provided_as_interface()
+    public function it_throws_an_exception_if_not_reflection_provided_as_interface(): void
     {
         $mirror = new ClassMirror();
 
@@ -397,32 +340,8 @@ class ClassMirrorTest extends TestCase
         $mirror->reflect(null, array(null));
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_doesnt_use_scalar_typehints()
-    {
-        if (PHP_VERSION_ID >= 80000) {
-            $this->markTestSkipped('Internal types have scalar hints in PHP 8');
-        }
-
-        $mirror = new ClassMirror();
-
-        $classNode = $mirror->reflect(new \ReflectionClass('ReflectionMethod'), array());
-        $method = $classNode->getMethod('export');
-        $arguments = $method->getArguments();
-
-        $this->assertEquals(new ArgumentTypeNode(), $arguments[0]->getTypeNode());
-        $this->assertEquals(new ArgumentTypeNode(), $arguments[1]->getTypeNode());
-        $this->assertEquals(new ArgumentTypeNode(), $arguments[2]->getTypeNode());
-    }
-
-    /**
-     * @test
-     */
-    #[Test]
-    public function it_doesnt_fail_to_typehint_nonexistent_FQCN()
+    public function it_doesnt_fail_to_typehint_nonexistent_FQCN(): void
     {
         $mirror = new ClassMirror();
 
@@ -432,11 +351,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ArgumentTypeNode('I\Simply\Am\Nonexistent'), $arguments[0]->getTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_doesnt_fail_on_array_nullable_parameter_with_not_null_default_value()
+    public function it_doesnt_fail_on_array_nullable_parameter_with_not_null_default_value(): void
     {
         $mirror = new ClassMirror();
 
@@ -446,11 +362,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ArgumentTypeNode('array', 'null'), $arguments[0]->getTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_doesnt_fail_to_typehint_nonexistent_RQCN()
+    public function it_doesnt_fail_to_typehint_nonexistent_RQCN(): void
     {
         $mirror = new ClassMirror();
 
@@ -460,11 +373,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ArgumentTypeNode('I\Simply\Am\Not'), $arguments[0]->getTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    function it_doesnt_fail_when_method_is_extended_with_more_params()
+    function it_doesnt_fail_when_method_is_extended_with_more_params(): void
     {
         $mirror = new ClassMirror();
 
@@ -479,11 +389,8 @@ class ClassMirrorTest extends TestCase
         $this->assertCount(2, $method->getArguments());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    function it_doesnt_fail_to_mock_self_referencing_interface()
+    function it_doesnt_fail_to_mock_self_referencing_interface(): void
     {
         $mirror = new ClassMirror();
 
@@ -497,11 +404,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode(SelfReferencing::class), $method->getReturnTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    function it_changes_argument_names_if_they_are_varying()
+    function it_changes_argument_names_if_they_are_varying(): void
     {
         // Use test doubles in this test, as arguments named ... in the Reflection API can only happen for internal classes
         $prophet = new Prophet();
@@ -553,11 +457,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals('__dot_dot_dot__', $argumentNode->getName());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_class_with_union_return_types()
+    public function it_can_double_a_class_with_union_return_types(): void
     {
         if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in this PHP version');
@@ -569,11 +470,8 @@ class ClassMirrorTest extends TestCase
         $this->assertSame(['\stdClass', 'bool'], $methodNode->getReturnTypeNode()->getTypes());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_class_with_union_return_type_with_false()
+    public function it_can_double_a_class_with_union_return_type_with_false(): void
     {
         if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types with false are not supported in this PHP version');
@@ -585,9 +483,8 @@ class ClassMirrorTest extends TestCase
         $this->assertSame(['\stdClass', 'false'], $methodNode->getReturnTypeNode()->getTypes());
     }
 
-    /** @test */
     #[Test]
-    public function it_can_double_a_class_with_union_argument_types()
+    public function it_can_double_a_class_with_union_argument_types(): void
     {
         if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in this PHP version');
@@ -599,11 +496,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ArgumentTypeNode('bool', '\\stdClass'), $methodNode->getArguments()[0]->getTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_class_with_union_argument_type_with_false()
+    public function it_can_double_a_class_with_union_argument_type_with_false(): void
     {
         if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types with false are not supported in this PHP version');
@@ -615,9 +509,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ArgumentTypeNode('false', '\stdClass'), $methodNode->getArguments()[0]->getTypeNode());
     }
 
-    /** @test */
     #[Test]
-    public function it_can_double_a_class_with_mixed_types()
+    public function it_can_double_a_class_with_mixed_types(): void
     {
         if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Mixed type is not supported in this PHP version');
@@ -630,9 +523,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode('mixed'), $methodNode->getReturnTypeNode());
     }
 
-    /** @test */
     #[Test]
-    public function it_can_double_inherited_self_return_type()
+    public function it_can_double_inherited_self_return_type(): void
     {
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\ClassExtendAbstractWithMethodWithReturnType'), []);
         $methodNode = $classNode->getMethods()['returnSelf'];
@@ -640,11 +532,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode('Fixtures\Prophecy\AbstractBaseClassWithMethodWithReturnType'), $methodNode->getReturnTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_never_return_type()
+    public function it_can_double_never_return_type(): void
     {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Never type is not supported in this PHP version');
@@ -657,11 +546,8 @@ class ClassMirrorTest extends TestCase
 
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_not_double_an_enum()
+    public function it_can_not_double_an_enum(): void
     {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Enums are not supported in this PHP version');
@@ -672,11 +558,8 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\Enum'), []);
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_not_double_intersection_return_types()
+    public function it_can_not_double_intersection_return_types(): void
     {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Intersection types are not supported in this PHP version');
@@ -687,11 +570,8 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionReturnType'), []);
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_not_double_intersection_argument_types()
+    public function it_can_not_double_intersection_argument_types(): void
     {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Intersection types are not supported in this PHP version');
@@ -702,11 +582,8 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\IntersectionArgumentType'), []);
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_standalone_return_type_of_false()
+    public function it_can_double_a_standalone_return_type_of_false(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Standalone return type of false is not supported in this PHP version');
@@ -718,11 +595,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode('false'), $methodNode->getReturnTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_standalone_parameter_type_of_false()
+    public function it_can_double_a_standalone_parameter_type_of_false(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Standalone parameter type of false is not supported in this PHP version');
@@ -735,11 +609,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ArgumentTypeNode('false'), $arguments[0]->getTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_nullable_return_type_of_false()
+    public function it_can_double_a_nullable_return_type_of_false(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Nullable return type of false is not supported in this PHP version');
@@ -751,11 +622,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode('null', 'false'), $methodNode->getReturnTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_nullable_parameter_type_of_false()
+    public function it_can_double_a_nullable_parameter_type_of_false(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Nullable parameter type of false is not supported in this PHP version');
@@ -768,11 +636,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ArgumentTypeNode('null', 'false'), $arguments[0]->getTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_not_double_dnf_intersection_argument_types()
+    public function it_can_not_double_dnf_intersection_argument_types(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('DNF intersection types are not supported in this PHP version');
@@ -783,11 +648,8 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfArgumentType'), []);
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_not_double_dnf_intersection_return_types()
+    public function it_can_not_double_dnf_intersection_return_types(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('DNF intersection types are not supported in this PHP version');
@@ -798,11 +660,8 @@ class ClassMirrorTest extends TestCase
         $classNode = (new ClassMirror())->reflect(new \ReflectionClass('Fixtures\Prophecy\DnfReturnType'), []);
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_standalone_return_type_of_true()
+    public function it_can_double_a_standalone_return_type_of_true(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Standalone return type of true is not supported in this PHP version');
@@ -814,11 +673,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode('true'), $methodNode->getReturnTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_reflects_non_read_only_class()
+    public function it_reflects_non_read_only_class(): void
     {
         $classNode = (new ClassMirror())->reflect(
             new \ReflectionClass('Fixtures\Prophecy\EmptyClass'),
@@ -828,11 +684,8 @@ class ClassMirrorTest extends TestCase
         $this->assertFalse($classNode->isReadOnly());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_standalone_parameter_type_of_true()
+    public function it_can_double_a_standalone_parameter_type_of_true(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Standalone parameter type of true is not supported in this PHP version');
@@ -845,11 +698,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ArgumentTypeNode('true'), $arguments[0]->getTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_nullable_return_type_of_true()
+    public function it_can_double_a_nullable_return_type_of_true(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Nullable return type of true is not supported in this PHP version');
@@ -861,11 +711,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode('null', 'true'), $methodNode->getReturnTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_nullable_parameter_type_of_true()
+    public function it_can_double_a_nullable_parameter_type_of_true(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Nullable parameter type of true is not supported in this PHP version');
@@ -878,11 +725,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ArgumentTypeNode('null', 'true'), $arguments[0]->getTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_standalone_return_type_of_null()
+    public function it_can_double_a_standalone_return_type_of_null(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Standalone return type of null is not supported in this PHP version');
@@ -894,11 +738,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ReturnTypeNode('null'), $methodNode->getReturnTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_can_double_a_standalone_parameter_type_of_null()
+    public function it_can_double_a_standalone_parameter_type_of_null(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Standalone parameter type of null is not supported in this PHP version');
@@ -911,11 +752,8 @@ class ClassMirrorTest extends TestCase
         $this->assertEquals(new ArgumentTypeNode('null'), $arguments[0]->getTypeNode());
     }
 
-    /**
-     * @test
-     */
     #[Test]
-    public function it_reflects_read_only_class()
+    public function it_reflects_read_only_class(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Read only classes are not supported in this PHP version');
