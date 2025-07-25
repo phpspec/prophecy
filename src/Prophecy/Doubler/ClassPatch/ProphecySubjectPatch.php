@@ -56,6 +56,10 @@ class ProphecySubjectPatch implements ClassPatchInterface
                 $method->setCode(
                     '$this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());'
                 );
+            } elseif (!$method->isStatic() && $method->getReturnTypeNode()->isSelfOrStatic()) {
+                $method->setCode(
+                    'return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args()) ?? $this;'
+                );
             } else {
                 $method->setCode(
                     'return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());'
