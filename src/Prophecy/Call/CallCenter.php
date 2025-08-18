@@ -84,7 +84,7 @@ class CallCenter
 
         // If fake/stub doesn't have method prophecy for this call - throw exception
         if (!count($matches)) {
-            $this->unexpectedCalls->attach(new Call($methodName, $arguments, null, null, $file, $line), $prophecy);
+            $this->unexpectedCalls->offsetSet(new Call($methodName, $arguments, null, null, $file, $line), $prophecy);
             $this->recordedCalls[] = new Call($methodName, $arguments, null, null, $file, $line);
 
             return null;
