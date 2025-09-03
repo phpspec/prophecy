@@ -49,7 +49,7 @@ class CallbackPromise implements PromiseInterface
     {
         $callback = $this->callback;
 
-        if ($callback instanceof Closure && method_exists('Closure', 'bind') && (new ReflectionFunction($callback))->getClosureThis() !== null) {
+        if ($callback instanceof Closure && (new ReflectionFunction($callback))->getClosureThis() !== null) {
             $callback = Closure::bind($callback, $object) ?? $this->callback;
         }
 

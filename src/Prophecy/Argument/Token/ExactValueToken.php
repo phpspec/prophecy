@@ -36,7 +36,7 @@ class ExactValueToken implements TokenInterface
      *
      * @param mixed $value
      */
-    public function __construct($value, StringUtil $util = null, ComparatorFactory $comparatorFactory = null)
+    public function __construct($value, ?StringUtil $util = null, ?ComparatorFactory $comparatorFactory = null)
     {
         $this->value = $value;
         $this->util  = $util ?: new StringUtil();
@@ -62,8 +62,8 @@ class ExactValueToken implements TokenInterface
                 $comparator->assertEquals($argument, $this->value);
                 return 10;
             } catch (ComparisonFailure $failure) {
-            	return false;
-			}
+                return false;
+            }
         }
 
         // If either one is an object it should be castable to a string

@@ -28,9 +28,9 @@ class CallPrediction implements PredictionInterface
 {
     private $util;
 
-    public function __construct(StringUtil $util = null)
+    public function __construct(?StringUtil $util = null)
     {
-        $this->util = $util ?: new StringUtil;
+        $this->util = $util ?: new StringUtil();
     }
 
     public function check(array $calls, ObjectProphecy $object, MethodProphecy $method)
@@ -41,7 +41,7 @@ class CallPrediction implements PredictionInterface
 
         $methodCalls = $object->findProphecyMethodCalls(
             $method->getMethodName(),
-            new ArgumentsWildcard(array(new AnyValuesToken))
+            new ArgumentsWildcard(array(new AnyValuesToken()))
         );
 
         if (count($methodCalls)) {

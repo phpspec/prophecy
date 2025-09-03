@@ -66,7 +66,7 @@ class ArgumentNode
         $this->typeNode = $typeNode;
     }
 
-    public function getTypeNode() : ArgumentTypeNode
+    public function getTypeNode(): ArgumentTypeNode
     {
         return $this->typeNode;
     }

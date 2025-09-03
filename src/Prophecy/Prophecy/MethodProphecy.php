@@ -95,18 +95,15 @@ class MethodProphecy
         if (true === $reflectedMethod->hasReturnType() || $hasTentativeReturnType) {
             if ($hasTentativeReturnType) {
                 $reflectionType = $reflectedMethod->getTentativeReturnType();
-            }
-            else {
+            } else {
                 $reflectionType = $reflectedMethod->getReturnType();
             }
 
             if ($reflectionType instanceof ReflectionNamedType) {
                 $types = [$reflectionType];
-            }
-            elseif ($reflectionType instanceof ReflectionUnionType) {
+            } elseif ($reflectionType instanceof ReflectionUnionType) {
                 $types = $reflectionType->getTypes();
-            }
-            else {
+            } else {
                 throw new MethodProphecyException(sprintf(
                     "Can not add prophecy for a method `%s::%s()`\nas its return type is not supported by Prophecy yet.",
                     get_class($double),
@@ -115,32 +112,29 @@ class MethodProphecy
             }
 
             $types = array_map(
-                function(ReflectionNamedType $type) { return $type->getName(); },
+                function (ReflectionNamedType $type) { return $type->getName(); },
                 $types
             );
 
             usort(
                 $types,
-                static function(string $type1, string $type2) {
+                static function (string $type1, string $type2) {
 
                     // null is lowest priority
                     if ($type2 == 'null') {
                         return -1;
-                    }
-                    elseif ($type1 == 'null') {
+                    } elseif ($type1 == 'null') {
                         return 1;
                     }
 
                     // objects are higher priority than scalars
-                    $isObject = static function($type) {
+                    $isObject = static function ($type) {
                         return class_exists($type) || interface_exists($type);
                     };
 
-                    if($isObject($type1) && !$isObject($type2)) {
+                    if ($isObject($type1) && !$isObject($type2)) {
                         return -1;
-                    }
-                    elseif(!$isObject($type1) && $isObject($type2))
-                    {
+                    } elseif (!$isObject($type1) && $isObject($type2)) {
                         return 1;
                     }
 
@@ -176,7 +170,7 @@ class MethodProphecy
                         return (function () { yield; })();
 
                     case 'object':
-                        $prophet = new Prophet;
+                        $prophet = new Prophet();
                         return $prophet->prophesize()->reveal();
 
                     default:
@@ -184,7 +178,7 @@ class MethodProphecy
                             throw new MethodProphecyException(sprintf('Cannot create a return value for the method as the type "%s" is not supported. Configure an explicit return value instead.', $defaultType), $method);
                         }
 
-                        $prophet = new Prophet;
+                        $prophet = new Prophet();
                         return $prophet->prophesize($defaultType)->reveal();
                 }
             });
@@ -292,7 +286,7 @@ class MethodProphecy
             ));
         }
 
-        $generator =  function() use ($items, $return) {
+        $generator =  function () use ($items, $return) {
             yield from $items;
 
             return $return;
@@ -372,7 +366,7 @@ class MethodProphecy
      */
     public function shouldBeCalled()
     {
-        return $this->should(new Prediction\CallPrediction);
+        return $this->should(new Prediction\CallPrediction());
     }
 
     /**
@@ -384,7 +378,7 @@ class MethodProphecy
      */
     public function shouldNotBeCalled()
     {
-        return $this->should(new Prediction\NoCallsPrediction);
+        return $this->should(new Prediction\NoCallsPrediction());
     }
 
     /**
@@ -468,7 +462,7 @@ class MethodProphecy
      */
     public function shouldHaveBeenCalled()
     {
-        return $this->shouldHave(new Prediction\CallPrediction);
+        return $this->shouldHave(new Prediction\CallPrediction());
     }
 
     /**
@@ -482,7 +476,7 @@ class MethodProphecy
      */
     public function shouldNotHaveBeenCalled()
     {
-        return $this->shouldHave(new Prediction\NoCallsPrediction);
+        return $this->shouldHave(new Prediction\NoCallsPrediction());
     }
 
     /**

@@ -60,9 +60,8 @@ class ArrayEntryToken implements TokenInterface
 
         $keyScores = array_map(array($this->key,'scoreArgument'), array_keys($argument));
         $valueScores = array_map(array($this->value,'scoreArgument'), $argument);
-        /** @var callable(int|false, int|false): (int|false) $scoreEntry */
-        $scoreEntry = function ($value, $key) {
-            return $value && $key ? min(8, ($key + $value) / 2) : false;
+        $scoreEntry = static function ($value, $key) {
+            return $value && $key ? (int) min(8, ($key + $value) / 2) : false;
         };
 
         return max(array_map($scoreEntry, $valueScores, $keyScores));
@@ -141,9 +140,9 @@ class ArrayEntryToken implements TokenInterface
 
         if (!\is_int($key) && !\is_string($key)) {
             throw new InvalidArgumentException(sprintf(
-            'You can only use integer or string keys to match key of ArrayAccess object'.PHP_EOL.
-                'But you used `%s`.',
-               $this->key
+                'You can only use integer or string keys to match key of ArrayAccess object'.PHP_EOL.
+                    'But you used `%s`.',
+                $this->key
             ));
         }
 

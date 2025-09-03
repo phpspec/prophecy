@@ -49,7 +49,7 @@ class Call
      * @param null|int    $line
      */
     public function __construct($methodName, array $arguments, $returnValue,
-                                Exception $exception = null, $file, $line)
+        ?Exception $exception, $file, $line)
     {
         $this->methodName  = $methodName;
         $this->arguments   = $arguments;

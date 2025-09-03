@@ -38,7 +38,7 @@ class ClassMirror
         '__wakeup',
         '__toString',
         '__call',
-        '__invoke'
+        '__invoke',
     );
 
     /**
@@ -52,7 +52,7 @@ class ClassMirror
      */
     public function reflect(?ReflectionClass $class, array $interfaces)
     {
-        $node = new Node\ClassNode;
+        $node = new Node\ClassNode();
 
         if (null !== $class) {
             if (true === $class->isInterface()) {
@@ -162,8 +162,7 @@ class ClassMirror
             \assert($method->getReturnType() !== null);
             $returnTypes = $this->getTypeHints($method->getReturnType(), $method->getDeclaringClass(), $method->getReturnType()->allowsNull());
             $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
-        }
-        elseif (method_exists($method, 'hasTentativeReturnType') && $method->hasTentativeReturnType()) {
+        } elseif (method_exists($method, 'hasTentativeReturnType') && $method->hasTentativeReturnType()) {
             \assert($method->getTentativeReturnType() !== null);
             $returnTypes = $this->getTypeHints($method->getTentativeReturnType(), $method->getDeclaringClass(), $method->getTentativeReturnType()->allowsNull());
             $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
@@ -238,15 +237,14 @@ class ClassMirror
      *
      * @return list<string>
      */
-    private function getTypeHints(?ReflectionType $type, ReflectionClass $class, bool $allowsNull) : array
+    private function getTypeHints(?ReflectionType $type, ReflectionClass $class, bool $allowsNull): array
     {
         $types = [];
 
         if ($type instanceof ReflectionNamedType) {
             $types = [$type->getName()];
 
-        }
-        elseif ($type instanceof ReflectionUnionType) {
+        } elseif ($type instanceof ReflectionUnionType) {
             $types = $type->getTypes();
             if (\PHP_VERSION_ID >= 80200) {
                 foreach ($types as $reflectionType) {
@@ -255,16 +253,14 @@ class ClassMirror
                     }
                 }
             }
-        }
-        elseif ($type instanceof ReflectionIntersectionType) {
+        } elseif ($type instanceof ReflectionIntersectionType) {
             throw new ClassMirrorException('Doubling intersection types is not supported', $class);
-        }
-        elseif(is_object($type)) {
-            throw new ClassMirrorException('Unknown reflection type ' . get_class($type), $class);
+        } elseif (is_object($type)) {
+            throw new ClassMirrorException('Unknown reflection type '.get_class($type), $class);
         }
 
         $types = array_map(
-            function(string $type) use ($class) {
+            function (string $type) use ($class) {
                 if ($type === 'self') {
                     return $class->getName();
                 }
@@ -285,6 +281,6 @@ class ClassMirror
             $types[] = 'null';
         }
 
-        return $types;
+        return array_values($types);
     }
 }

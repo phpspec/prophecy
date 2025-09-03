@@ -28,7 +28,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
     ) {
         $class->getParentClass()->willReturn('RuntimeException');
         $class->getInterfaces()->willReturn(array(
-            'Prophecy\Doubler\Generator\MirroredInterface', 'ArrayAccess', 'ArrayIterator'
+            'Prophecy\Doubler\Generator\MirroredInterface', 'ArrayAccess', 'ArrayIterator',
         ));
         $class->getProperties()->willReturn(array('name' => 'public', 'email' => 'private'));
         $class->getMethods()->willReturn(array($method1, $method2, $method3, $method4, $method5));
@@ -75,8 +75,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method5->getCode()->willReturn('return;');
 
         $argument11->getName()->willReturn('fullname');
-        $argument11->isOptional()->willReturn(true);
-        $argument11->getDefault()->willReturn(null);
+        $argument11->isOptional()->willReturn(false);
         $argument11->isPassedByReference()->willReturn(false);
         $argument11->isVariadic()->willReturn(false);
         $argument11->getTypeNode()->willReturn(new ArgumentTypeNode('array'));
@@ -116,7 +115,7 @@ class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generat
 public $name;
 private $email;
 
-public static function getName(array $fullname = NULL, \ReflectionClass $class, object $instance): ?string {
+public static function getName(array $fullname, \ReflectionClass $class, object $instance): ?string {
 return $this->name;
 }
 protected  function getEmail(?string $default = 'ever.zet@gmail.com') {
@@ -155,7 +154,7 @@ PHP;
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
         $class->getProperties()->willReturn(array());
         $class->getMethods()->willReturn(array(
-            $method1, $method2, $method3, $method4
+            $method1, $method2, $method3, $method4,
         ));
         $class->isReadOnly()->willReturn(false);
 
@@ -265,14 +264,14 @@ PHP;
         $argument->getDefault()->willReturn(null);
         $argument->isPassedByReference()->willReturn(true);
         $argument->isVariadic()->willReturn(false);
-        $argument->getTypeNode()->willReturn(new ArgumentTypeNode('array'));
+        $argument->getTypeNode()->willReturn(new ArgumentTypeNode('array', 'null'));
 
         $code = $this->generate('CustomClass', $class);
-        $expected =<<<'PHP'
+        $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface {
 
-public  function getName(array &$fullname = NULL) {
+public  function getName(?array &$fullname = NULL) {
 return $this->name;
 }
 
@@ -283,12 +282,10 @@ PHP;
         $code->shouldBe($expected);
     }
 
-    function it_generates_proper_code_for_union_return_types
-    (
+    function it_generates_proper_code_for_union_return_types(
         ClassNode $class,
         MethodNode $method
-    )
-    {
+    ) {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn([]);
         $class->getProperties()->willReturn([]);
@@ -305,7 +302,7 @@ PHP;
 
         $code = $this->generate('CustomClass', $class);
 
-        $expected =<<<'PHP'
+        $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \stdClass implements  {
 
@@ -321,13 +318,11 @@ PHP;
         $code->shouldBe($expected);
     }
 
-    function it_generates_proper_code_for_union_argument_types
-    (
+    function it_generates_proper_code_for_union_argument_types(
         ClassNode $class,
         MethodNode $method,
         ArgumentNode $argument
-    )
-    {
+    ) {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn([]);
         $class->getProperties()->willReturn([]);
@@ -350,7 +345,7 @@ PHP;
 
         $code = $this->generate('CustomClass', $class);
 
-        $expected =<<<'PHP'
+        $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \stdClass implements  {
 
@@ -375,7 +370,7 @@ PHP;
         $class->isReadOnly()->willReturn(false);
 
         $code = $this->generate('CustomClass', $class);
-        $expected =<<<'PHP'
+        $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
 
@@ -396,7 +391,7 @@ PHP;
         $class->isReadOnly()->willReturn(false);
 
         $code = $this->generate('My\Awesome\CustomClass', $class);
-        $expected =<<<'PHP'
+        $expected = <<<'PHP'
 namespace My\Awesome {
 class CustomClass extends \stdClass implements \Prophecy\Doubler\Generator\MirroredInterface {
 
@@ -417,7 +412,7 @@ PHP;
         $class->isReadOnly()->willReturn(true);
 
         $code = $this->generate('CustomClass', $class);
-        $expected =<<<'PHP'
+        $expected = <<<'PHP'
 namespace  {
 readonly class CustomClass extends \ReadOnlyClass implements \Prophecy\Doubler\Generator\MirroredInterface {
 

@@ -3,7 +3,6 @@
 namespace spec\Prophecy\Prediction;
 
 use PhpSpec\ObjectBehavior;
-
 use Prophecy\Call\Call;
 use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -24,7 +23,7 @@ class CallbackPredictionSpec extends ObjectBehavior
     function it_proxies_call_to_callback(ObjectProphecy $object, MethodProphecy $method, Call $call)
     {
         $returnFirstCallCallback = function ($calls, $object, $method) {
-            throw new RuntimeException;
+            throw new RuntimeException();
         };
 
         $this->beConstructedWith($returnFirstCallCallback);

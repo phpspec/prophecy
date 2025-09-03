@@ -94,44 +94,28 @@ class MagicalApi
     /**
      * @return void
      */
-    public function definedMethod()
-    {
-
-    }
+    public function definedMethod() {}
 }
 
 /**
  * @method
  */
-class MagicalApiInvalidMethodDefinition
-{
-}
+class MagicalApiInvalidMethodDefinition {}
 
 /**
  * @method void definedMethod()
  */
-class MagicalApiExtended extends MagicalApi
-{
-
-}
+class MagicalApiExtended extends MagicalApi {}
 
 /**
  */
-class MagicalApiImplemented implements MagicalApiInterface
-{
-
-}
+class MagicalApiImplemented implements MagicalApiInterface {}
 
 /**
  */
-class MagicalApiImplementedExtended extends MagicalApiImplemented
-{
-}
+class MagicalApiImplementedExtended extends MagicalApiImplemented {}
 
 /**
  * @method void implementedMethod()
  */
-interface MagicalApiInterface
-{
-
-}
+interface MagicalApiInterface {}

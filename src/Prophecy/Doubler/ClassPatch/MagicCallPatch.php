@@ -30,7 +30,7 @@ class MagicCallPatch implements ClassPatchInterface
 
     private $tagRetriever;
 
-    public function __construct(MethodTagRetrieverInterface $tagRetriever = null)
+    public function __construct(?MethodTagRetrieverInterface $tagRetriever = null)
     {
         $this->tagRetriever = null === $tagRetriever ? new ClassAndInterfaceTagRetriever() : $tagRetriever;
     }
@@ -77,9 +77,18 @@ class MagicCallPatch implements ClassPatchInterface
 
                         // only magic methods can have a contract that needs to be enforced
                         if (in_array($methodName, self::MAGIC_METHODS_WITH_ARGUMENTS)) {
-                            foreach($tag->getArguments() as $argument) {
-                                $argumentNode = new ArgumentNode($argument['name']);
-                                $methodNode->addArgument($argumentNode);
+                            if (method_exists($tag, 'getParameters')) {
+                                // Reflection Docblock 5.4.0+.
+                                foreach ($tag->getParameters() as $argument) {
+                                    $argumentNode = new ArgumentNode($argument->getName());
+                                    $methodNode->addArgument($argumentNode);
+                                }
+                            } else {
+                                // Reflection Docblock < 5.4.0.
+                                foreach ($tag->getArguments() as $argument) {
+                                    $argumentNode = new ArgumentNode($argument['name']);
+                                    $methodNode->addArgument($argumentNode);
+                                }
                             }
                         }
 

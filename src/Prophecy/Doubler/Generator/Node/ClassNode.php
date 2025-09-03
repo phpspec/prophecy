@@ -149,7 +149,7 @@ class ClassNode
      */
     public function addMethod(MethodNode $method, $force = false)
     {
-        if (!$this->isExtendable($method->getName())){
+        if (!$this->isExtendable($method->getName())) {
             $message = sprintf(
                 'Method `%s` is not extendable, so can not be added.', $method->getName()
             );
@@ -206,7 +206,7 @@ class ClassNode
      */
     public function addUnextendableMethod($unextendableMethod)
     {
-        if (!$this->isExtendable($unextendableMethod)){
+        if (!$this->isExtendable($unextendableMethod)) {
             return;
         }
         $this->unextendableMethods[] = $unextendableMethod;

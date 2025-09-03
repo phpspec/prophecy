@@ -11,6 +11,7 @@
 
 namespace Prophecy\Doubler\ClassPatch;
 
+use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 
@@ -55,11 +56,18 @@ class DisableConstructorPatch implements ClassPatchInterface
         \assert($constructor !== null);
         foreach ($constructor->getArguments() as $argument) {
             $argument->setDefault(null);
+
+            $types = $argument->getTypeNode()->getNonNullTypes();
+            if ([] === $types || ['mixed'] === $types || ['\mixed'] === $types) {
+                continue;
+            }
+
+            $argument->setTypeNode(new ArgumentTypeNode('null', ...$types));
         }
 
         $constructor->setCode(<<<PHP
 if (0 < func_num_args()) {
-    call_user_func_array(array('parent', '__construct'), func_get_args());
+    call_user_func_array(array(parent::class, '__construct'), func_get_args());
 }
 PHP
         );

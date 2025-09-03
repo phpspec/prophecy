@@ -74,7 +74,7 @@ if (null === \$this->objectProphecyClosure) {
     };
 }
 PHP
-    );
+        );
 
         $prophecyGetter = new MethodNode('getProphecy');
         $prophecyGetter->setCode('return \call_user_func($this->objectProphecyClosure);');

@@ -1,31 +1,67 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
+			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|int\|resource\|string\|null, mixed given\.$#'
+			identifier: argument.type
 			count: 2
 			path: src/Prophecy/Argument/Token/ExactValueToken.php
 
 		-
-			message: "#^Method Prophecy\\\\Call\\\\CallCenter\\:\\:indentArguments\\(\\) should return array\\<string\\> but returns array\\<string\\>\\|null\\.$#"
-			count: 1
-			path: src/Prophecy/Call/CallCenter.php
-
-		-
-			message: "#^Method Prophecy\\\\Doubler\\\\CachedDoubler\\:\\:createDoubleClass\\(\\) should return class\\-string\\<Prophecy\\\\Doubler\\\\DoubleInterface&T of object\\> but returns class\\-string\\.$#"
+			message: '#^Method Prophecy\\Doubler\\CachedDoubler\:\:createDoubleClass\(\) should return class\-string\<Prophecy\\Doubler\\DoubleInterface&T of object\> but returns class\-string\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Prophecy/Doubler/CachedDoubler.php
 
 		-
-			message: "#^Method Prophecy\\\\Doubler\\\\Doubler\\:\\:createDoubleClass\\(\\) should return class\\-string\\<Prophecy\\\\Doubler\\\\DoubleInterface&T of object\\> but returns class\\-string\\.$#"
+			message: '#^Method Prophecy\\Doubler\\Doubler\:\:createDoubleClass\(\) should return class\-string\<Prophecy\\Doubler\\DoubleInterface&T of object\> but returns class\-string\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Prophecy/Doubler/Doubler.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(ReflectionIntersectionType\\|ReflectionNamedType\\|string\\)\\: mixed\\)\\|null, Closure\\(string\\)\\: string given\\.$#"
+			message: '#^Call to function method_exists\(\) with ''ReflectionClass'' and ''isReadOnly'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: src/Prophecy/Doubler/Generator/ClassMirror.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(ReflectionIntersectionType\\|ReflectionNamedType\\)\\: mixed\\)\\|null, Closure\\(ReflectionNamedType\\)\\: string given\\.$#"
+			message: '#^Call to function method_exists\(\) with ReflectionMethod and ''hasTentativeReturnT…'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Prophecy/Doubler/Generator/ClassMirror.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(ReflectionIntersectionType\|ReflectionNamedType\|string\)\: mixed\)\|null, Closure\(string\)\: string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Prophecy/Doubler/Generator/ClassMirror.php
+
+		-
+			message: '#^PHPDoc tag @var with type static\(Prophecy\\Doubler\\LazyDouble\<U of object\>\) is not subtype of native type \$this\(Prophecy\\Doubler\\LazyDouble\<T of object\>\)\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/Prophecy/Doubler/LazyDouble.php
+
+		-
+			message: '#^Property Prophecy\\Doubler\\LazyDouble\:\:\$class \(ReflectionClass\<T of object\>\|null\) does not accept ReflectionClass\<U of object\>\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Prophecy/Doubler/LazyDouble.php
+
+		-
+			message: '#^Call to function method_exists\(\) with ReflectionMethod and ''hasTentativeReturnT…'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: src/Prophecy/Prophecy/MethodProphecy.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(ReflectionIntersectionType\|ReflectionNamedType\)\: mixed\)\|null, Closure\(ReflectionNamedType\)\: string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Prophecy/Prophecy/MethodProphecy.php
+
+		-
+			message: '#^Cannot access offset mixed on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Prophecy/Util/ExportUtil.php

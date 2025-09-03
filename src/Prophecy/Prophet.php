@@ -44,25 +44,25 @@ class Prophet
     private $prophecies = array();
 
     public function __construct(
-        Doubler $doubler = null,
-        RevealerInterface $revealer = null,
-        StringUtil $util = null
+        ?Doubler $doubler = null,
+        ?RevealerInterface $revealer = null,
+        ?StringUtil $util = null
     ) {
         if (null === $doubler) {
             $doubler = new CachedDoubler();
-            $doubler->registerClassPatch(new ClassPatch\SplFileInfoPatch);
-            $doubler->registerClassPatch(new ClassPatch\TraversablePatch);
-            $doubler->registerClassPatch(new ClassPatch\ThrowablePatch);
-            $doubler->registerClassPatch(new ClassPatch\DisableConstructorPatch);
-            $doubler->registerClassPatch(new ClassPatch\ProphecySubjectPatch);
-            $doubler->registerClassPatch(new ClassPatch\ReflectionClassNewInstancePatch);
-            $doubler->registerClassPatch(new ClassPatch\MagicCallPatch);
-            $doubler->registerClassPatch(new ClassPatch\KeywordPatch);
+            $doubler->registerClassPatch(new ClassPatch\SplFileInfoPatch());
+            $doubler->registerClassPatch(new ClassPatch\TraversablePatch());
+            $doubler->registerClassPatch(new ClassPatch\ThrowablePatch());
+            $doubler->registerClassPatch(new ClassPatch\DisableConstructorPatch());
+            $doubler->registerClassPatch(new ClassPatch\ProphecySubjectPatch());
+            $doubler->registerClassPatch(new ClassPatch\ReflectionClassNewInstancePatch());
+            $doubler->registerClassPatch(new ClassPatch\MagicCallPatch());
+            $doubler->registerClassPatch(new ClassPatch\KeywordPatch());
         }
 
         $this->doubler  = $doubler;
-        $this->revealer = $revealer ?: new Revealer;
-        $this->util     = $util ?: new StringUtil;
+        $this->revealer = $revealer ?: new Revealer();
+        $this->util     = $util ?: new StringUtil();
     }
 
     /**

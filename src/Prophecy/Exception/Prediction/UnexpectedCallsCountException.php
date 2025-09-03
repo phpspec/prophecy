@@ -22,7 +22,7 @@ class UnexpectedCallsCountException extends UnexpectedCallsException
      * @param string         $message
      * @param MethodProphecy $methodProphecy
      * @param int            $count
-     * @param list<Call>     $calls
+     * @param array<Call>     $calls
      */
     public function __construct($message, MethodProphecy $methodProphecy, $count, array $calls)
     {

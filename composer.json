@@ -18,16 +18,17 @@
     ],
 
     "require": {
-        "php":                               "^7.2 || 8.0.* || 8.1.* || 8.2.* || 8.3.*",
+        "php":                               "^7.4 || 8.0.* || 8.1.* || 8.2.* || 8.3.* || 8.4.*",
         "phpdocumentor/reflection-docblock": "^5.2",
-        "sebastian/comparator":              "^3.0 || ^4.0 || ^5.0 || ^6.0",
+        "sebastian/comparator":              "^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0",
         "doctrine/instantiator":             "^1.2 || ^2.0",
-        "sebastian/recursion-context":       "^3.0 || ^4.0 || ^5.0 || ^6.0"
+        "sebastian/recursion-context":       "^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0"
     },
 
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.40",
         "phpspec/phpspec": "^6.0 || ^7.0",
-        "phpstan/phpstan": "^1.9",
+        "phpstan/phpstan": "^2.1.13",
         "phpunit/phpunit": "^8.0 || ^9.0 || ^10.0"
     },
 
@@ -45,11 +46,15 @@
     },
 
     "scripts": {
+        "cs:check": "@php php-cs-fixer check --verbose --diff",
+        "cs:fix": "@php php-cs-fixer fix",
         "phpstan": "phpstan analyse",
         "phpstan:baseline": "phpstan analyse --generate-baseline"
     },
 
     "scripts-descriptions": {
+        "cs:check": "Check coding standards",
+        "cs:fix": "Fix coding standards",
         "phpstan": "Run PHPStan analysis",
         "phpstan:baseline": "Dump PHPStan baseline file - use only for updating, do not add new errors when possible"
     },
