@@ -83,8 +83,8 @@ class ArrayEntryTokenSpec extends ObjectBehavior
     ) {
         $key->__toString()->willReturn('any_token');
         $this->beConstructedWith($key, $value);
-        $errorMessage = 'You can only use exact value tokens to match key of ArrayAccess object'.PHP_EOL.
-                        'But you used `any_token`.';
+        $errorMessage = 'You can only use exact value tokens to match key of ArrayAccess object'.PHP_EOL
+                        .'But you used `any_token`.';
         $this->shouldThrow(new InvalidArgumentException($errorMessage))->duringScoreArgument($object);
     }
 
