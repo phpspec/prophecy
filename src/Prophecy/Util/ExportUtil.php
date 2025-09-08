@@ -131,9 +131,9 @@ class ExportUtil
                 return 'Binary String: 0x'.bin2hex($value);
             }
 
-            return "'".
-            str_replace(array("\r\n", "\n\r", "\r"), array("\n", "\n", "\n"), $value).
-            "'";
+            return "'"
+            .str_replace(array("\r\n", "\n\r", "\r"), array("\n", "\n", "\n"), $value)
+            ."'";
         }
 
         $whitespace = str_repeat(' ', 4 * $indentation);

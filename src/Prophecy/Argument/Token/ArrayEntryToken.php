@@ -130,8 +130,8 @@ class ArrayEntryToken implements TokenInterface
     {
         if (!$this->key instanceof ExactValueToken) {
             throw new InvalidArgumentException(sprintf(
-                'You can only use exact value tokens to match key of ArrayAccess object'.PHP_EOL.
-                'But you used `%s`.',
+                'You can only use exact value tokens to match key of ArrayAccess object'.PHP_EOL
+                .'But you used `%s`.',
                 $this->key
             ));
         }
@@ -140,8 +140,8 @@ class ArrayEntryToken implements TokenInterface
 
         if (!\is_int($key) && !\is_string($key)) {
             throw new InvalidArgumentException(sprintf(
-                'You can only use integer or string keys to match key of ArrayAccess object'.PHP_EOL.
-                    'But you used `%s`.',
+                'You can only use integer or string keys to match key of ArrayAccess object'.PHP_EOL
+                    .'But you used `%s`.',
                 $this->key
             ));
         }

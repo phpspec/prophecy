@@ -125,8 +125,8 @@ class ObjectProphecy implements ProphecyInterface
 
         if (!$double instanceof ProphecySubjectInterface) {
             throw new ObjectProphecyException(
-                "Generated double must implement ProphecySubjectInterface, but it does not.\n".
-                'It seems you have wrongly configured doubler without required ClassPatch.',
+                "Generated double must implement ProphecySubjectInterface, but it does not.\n"
+                .'It seems you have wrongly configured doubler without required ClassPatch.',
                 $this
             );
         }

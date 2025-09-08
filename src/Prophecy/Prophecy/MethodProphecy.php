@@ -81,8 +81,8 @@ class MethodProphecy
         $reflectedMethod = new \ReflectionMethod($double, $methodName);
         if ($reflectedMethod->isFinal()) {
             throw new MethodProphecyException(sprintf(
-                "Can not add prophecy for a method `%s::%s()`\n".
-                "as it is a final method.",
+                "Can not add prophecy for a method `%s::%s()`\n"
+                ."as it is a final method.",
                 get_class($double),
                 $methodName
             ), $this);
@@ -208,8 +208,8 @@ class MethodProphecy
 
         if (!$arguments instanceof Argument\ArgumentsWildcard) {
             throw new InvalidArgumentException(sprintf(
-                "Either an array or an instance of ArgumentsWildcard expected as\n".
-                'a `MethodProphecy::withArguments()` argument, but got %s.',
+                "Either an array or an instance of ArgumentsWildcard expected as\n"
+                .'a `MethodProphecy::withArguments()` argument, but got %s.',
                 gettype($arguments)
             ));
         }
