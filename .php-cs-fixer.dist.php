@@ -14,7 +14,7 @@ return (new PhpCsFixer\Config())
         'method_argument_space' => ['on_multiline' => 'ignore'],
         // Since PHP 7.2 is supported we can't add trailing commas in arguments, parameters and match
         'trailing_comma_in_multiline' => ['elements' => ['arrays']],
-        'visibility_required' => false,
+        'modifier_keywords' => false,
     ])
     ->setFinder(
         (new PhpCsFixer\Finder())
