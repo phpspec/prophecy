@@ -5,6 +5,7 @@ namespace spec\Prophecy\Doubler\Generator\Node;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
 
 class MethodNodeSpec extends ObjectBehavior
 {
@@ -125,9 +126,9 @@ class MethodNodeSpec extends ObjectBehavior
 
     function it_can_modify_return_type()
     {
-        $this->setReturnTypeNode(new ReturnTypeNode('array'));
+        $this->setReturnTypeNode(new ReturnTypeNode(new BuiltinType('array')));
 
-        $this->getReturnTypeNode()->shouldBeLike(new ReturnTypeNode('array'));
+        $this->getReturnTypeNode()->shouldBeLike(new ReturnTypeNode(new BuiltinType('array')));
     }
 
     function it_can_modify_return_type_as_strings_using_deprecated_methods()

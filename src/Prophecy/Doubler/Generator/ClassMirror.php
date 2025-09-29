@@ -13,6 +13,12 @@ namespace Prophecy\Doubler\Generator;
 
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
+use Prophecy\Doubler\Generator\Node\Type\IntersectionType;
+use Prophecy\Doubler\Generator\Node\Type\ObjectType;
+use Prophecy\Doubler\Generator\Node\Type\TypeInterface;
+use Prophecy\Doubler\Generator\Node\Type\SimpleType;
+use Prophecy\Doubler\Generator\Node\Type\UnionType;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use ReflectionClass;
@@ -158,14 +164,20 @@ class ClassMirror
             $node->setReturnsReference();
         }
 
+        $returnReflectionType = null;
         if ($method->hasReturnType()) {
-            \assert($method->getReturnType() !== null);
-            $returnTypes = $this->getTypeHints($method->getReturnType(), $method->getDeclaringClass(), $method->getReturnType()->allowsNull());
-            $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
+            $returnReflectionType = $method->getReturnType();
         } elseif (method_exists($method, 'hasTentativeReturnType') && $method->hasTentativeReturnType()) {
-            \assert($method->getTentativeReturnType() !== null);
-            $returnTypes = $this->getTypeHints($method->getTentativeReturnType(), $method->getDeclaringClass(), $method->getTentativeReturnType()->allowsNull());
-            $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
+            // Tentative return types also need reflection
+            $returnReflectionType = $method->getTentativeReturnType();
+        }
+
+        if (null !== $returnReflectionType) {
+            $returnType = $this->createTypeFromReflection(
+                $returnReflectionType,
+                $method->getDeclaringClass()
+            );
+            $node->setReturnTypeNode(new ReturnTypeNode($returnType));
         }
 
         if (is_array($params = $method->getParameters()) && count($params)) {
@@ -187,9 +199,11 @@ class ClassMirror
         $name = $parameter->getName() == '...' ? '__dot_dot_dot__' : $parameter->getName();
         $node = new Node\ArgumentNode($name);
 
-        $typeHints = $this->getTypeHints($parameter->getType(), $declaringClass, $parameter->allowsNull());
-
-        $node->setTypeNode(new ArgumentTypeNode(...$typeHints));
+        $refType = $parameter->getType();
+        if (null !== $refType) {
+            $typeHint = $this->createTypeFromReflection($refType, $declaringClass);
+            $node->setTypeNode(new ArgumentTypeNode($typeHint));
+        }
 
         if ($parameter->isVariadic()) {
             $node->setAsVariadic();
@@ -202,7 +216,6 @@ class ClassMirror
         if ($parameter->isPassedByReference()) {
             $node->setAsPassedByReference();
         }
-
 
         $methodNode->addArgument($node);
     }
@@ -233,52 +246,84 @@ class ClassMirror
     }
 
     /**
-     * @param ReflectionClass<object> $class
-     *
-     * @return list<string>
+     * @param ReflectionClass<object> $declaringClass Context reflection class
      */
-    private function getTypeHints(?ReflectionType $type, ReflectionClass $class, bool $allowsNull): array
+    private function createTypeFromReflection(ReflectionType $type, ReflectionClass $declaringClass): TypeInterface
     {
-        $types = [];
+        if ($type instanceof ReflectionIntersectionType) {
+            $innerTypes = [];
+            /** @var ReflectionNamedType $innerReflectionType */
+            foreach ($type->getTypes() as $innerReflectionType) {
+                // Intersections cannot be composed of builtin types
+                /** @var class-string $objectType */
+                $objectType = $innerReflectionType->getName();
+                $innerTypes[] = new ObjectType($objectType);
+            }
+            return new IntersectionType($innerTypes);
+        }
 
-        if ($type instanceof ReflectionNamedType) {
-            $types = [$type->getName()];
-
-        } elseif ($type instanceof ReflectionUnionType) {
-            $types = $type->getTypes();
-            foreach ($types as $reflectionType) {
-                if ($reflectionType instanceof ReflectionIntersectionType) {
-                    throw new ClassMirrorException('Doubling intersection types is not supported', $class);
+        if ($type instanceof ReflectionUnionType) {
+            $innerTypes = [];
+            /** @var ReflectionIntersectionType|ReflectionNamedType $innerReflectionType */
+            foreach ($type->getTypes() as $innerReflectionType) {
+                if ($innerReflectionType instanceof ReflectionIntersectionType) {
+                    /** @var IntersectionType $intersection */
+                    $intersection = $this->createTypeFromReflection($innerReflectionType, $declaringClass);
+                    $innerTypes[] = $intersection;
+                    continue;
+                }
+                $name = $this->resolveTypeName($innerReflectionType->getName(), $declaringClass);
+                if ($innerReflectionType->isBuiltin() || $name === 'static') {
+                    $innerTypes[] = new BuiltinType($name);
+                } elseif ($name === 'self') {
+                    $innerTypes[] = new ObjectType($declaringClass->getName());
+                } else {
+                    /** @var class-string $name */
+                    $innerTypes[] = new ObjectType($name);
                 }
             }
-        } elseif ($type instanceof ReflectionIntersectionType) {
-            throw new ClassMirrorException('Doubling intersection types is not supported', $class);
-        } elseif (is_object($type)) {
-            throw new ClassMirrorException('Unknown reflection type '.get_class($type), $class);
+            // Nullability is handled by 'null' being one of the types in the union
+            return new UnionType($innerTypes);
         }
 
-        $types = array_map(
-            function (string $type) use ($class) {
-                if ($type === 'self') {
-                    return $class->getName();
-                }
-                if ($type === 'parent') {
-                    if (false === $class->getParentClass()) {
-                        throw new ClassMirrorException(sprintf('Invalid type "parent" in class "%s" without a parent', $class->getName()), $class);
-                    }
+        // Handle Named Types (single types like int, string, MyClass, ?MyClass)
+        if ($type instanceof ReflectionNamedType) {
+            $name = $this->resolveTypeName($type->getName(), $declaringClass);
+            if ($type->isBuiltin() || $name === 'static') {
+                $simpleType = new BuiltinType($name); // SimpleType constructor normalizes
+            } else {
+                /** @var class-string $name */
+                $simpleType = new ObjectType($name);
+            }
 
-                    return $class->getParentClass()->getName();
-                }
+            // Handle nullability for named types explicitly by wrapping in a UnionType if needed
+            if ($type->allowsNull() && $name !== 'mixed' && $name !== 'null') {
+                return new UnionType([new BuiltinType('null'), $simpleType]);
+            }
 
-                return $type;
-            },
-            $types
-        );
-
-        if ($types && $types != ['mixed'] && $allowsNull) {
-            $types[] = 'null';
+            return $simpleType;
         }
 
-        return array_values($types);
+        // Unknown ReflectionType implementation
+        throw new ClassMirrorException('Unknown reflection type: '.get_class($type), $declaringClass);
+    }
+
+    /**
+     * @param ReflectionClass<object> $contextClass
+     */
+    private function resolveTypeName(string $name, \ReflectionClass $contextClass): string
+    {
+        if ($name === 'self') {
+            return $contextClass->getName();
+        }
+        if ($name === 'parent') {
+            $parent = $contextClass->getParentClass();
+            if (false === $parent) {
+                throw new ClassMirrorException(sprintf('Cannot use "parent" type hint in class "%s" as it does not have a parent.', $contextClass->getName()), $contextClass);
+            }
+            return $parent->getName();
+        }
+
+        return $name;
     }
 }

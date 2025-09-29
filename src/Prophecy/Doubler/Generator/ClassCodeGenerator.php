@@ -12,7 +12,13 @@
 namespace Prophecy\Doubler\Generator;
 
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\IntersectionType;
+use Prophecy\Doubler\Generator\Node\Type\ObjectType;
+use Prophecy\Doubler\Generator\Node\Type\SimpleType;
+use Prophecy\Doubler\Generator\Node\Type\TypeInterface;
+use Prophecy\Doubler\Generator\Node\Type\UnionType;
 use Prophecy\Doubler\Generator\Node\TypeNodeAbstract;
+use Prophecy\Exception\Doubler\ClassCreatorException;
 
 /**
  * Class code creator.
@@ -78,16 +84,11 @@ class ClassCodeGenerator
 
     private function generateTypes(TypeNodeAbstract $typeNode): string
     {
-        if (!$typeNode->getTypes()) {
+        if ($typeNode->getType() === null) {
             return '';
         }
 
-        // When we require PHP 8 we can stop generating ?foo nullables and remove this first block
-        if ($typeNode->canUseNullShorthand()) {
-            return sprintf('?%s', $typeNode->getNonNullTypes()[0]);
-        } else {
-            return join('|', $typeNode->getTypes());
-        }
+        return (string) $typeNode->getType();
     }
 
     /**

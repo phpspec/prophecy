@@ -2,31 +2,21 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
+use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
+use Prophecy\Doubler\Generator\Node\Type\SimpleType;
 use Prophecy\Exception\Doubler\DoubleException;
 
 final class ReturnTypeNode extends TypeNodeAbstract
 {
-    protected function getRealType(string $type): string
+    protected function isBuiltIn(string $type): bool
     {
         switch ($type) {
             case 'void':
             case 'never':
-                return $type;
+                return true;
             default:
-                return parent::getRealType($type);
+                return parent::isBuiltIn($type);
         }
-    }
-
-    protected function guardIsValidType()
-    {
-        if (isset($this->types['void']) && count($this->types) !== 1) {
-            throw new DoubleException('void cannot be part of a union');
-        }
-        if (isset($this->types['never']) && count($this->types) !== 1) {
-            throw new DoubleException('never cannot be part of a union');
-        }
-
-        parent::guardIsValidType();
     }
 
     /**
@@ -34,14 +24,22 @@ final class ReturnTypeNode extends TypeNodeAbstract
      *
      * @return bool
      */
-    public function isVoid()
+    public function isVoid(): bool
     {
-        return $this->types == ['void' => 'void'];
+        if ($this->getType() === null) {
+            return true;
+        }
+
+        return $this->getType()->equals(new BuiltinType('void'));
     }
 
     public function hasReturnStatement(): bool
     {
-        return $this->types !== ['void' => 'void']
-            && $this->types !== ['never' => 'never'];
+        if ($this->getType() === null) {
+            return true;
+        }
+
+        return !$this->getType()->equals(new BuiltinType('void'))
+            && !$this->getType()->equals(new BuiltinType('never'));
     }
 }

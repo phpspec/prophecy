@@ -10,6 +10,11 @@ use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
+use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
+use Prophecy\Doubler\Generator\Node\Type\IntersectionType;
+use Prophecy\Doubler\Generator\Node\Type\ObjectType;
+use Prophecy\Doubler\Generator\Node\Type\SimpleType;
+use Prophecy\Doubler\Generator\Node\Type\UnionType;
 
 class ClassCodeGeneratorSpec extends ObjectBehavior
 {
@@ -39,7 +44,10 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method1->returnsReference()->willReturn(false);
         $method1->isStatic()->willReturn(true);
         $method1->getArguments()->willReturn(array($argument11, $argument12, $argument13));
-        $method1->getReturnTypeNode()->willReturn(new ReturnTypeNode('string', 'null'));
+        $method1->getReturnTypeNode()->willReturn(new ReturnTypeNode(new UnionType([
+            new BuiltinType('string'),
+            new BuiltinType('null'),
+        ])));
         $method1->getCode()->willReturn('return $this->name;');
 
         $method2->getName()->willReturn('getEmail');
@@ -55,7 +63,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method3->returnsReference()->willReturn(true);
         $method3->isStatic()->willReturn(false);
         $method3->getArguments()->willReturn(array($argument31));
-        $method3->getReturnTypeNode()->willReturn(new ReturnTypeNode('string'));
+        $method3->getReturnTypeNode()->willReturn(new ReturnTypeNode(new BuiltinType('string')));
         $method3->getCode()->willReturn('return $this->refValue;');
 
         $method4->getName()->willReturn('doSomething');
@@ -63,7 +71,7 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method4->returnsReference()->willReturn(false);
         $method4->isStatic()->willReturn(false);
         $method4->getArguments()->willReturn(array());
-        $method4->getReturnTypeNode()->willReturn(new ReturnTypeNode('void'));
+        $method4->getReturnTypeNode()->willReturn(new ReturnTypeNode(new BuiltinType('void')));
         $method4->getCode()->willReturn('return;');
 
         $method5->getName()->willReturn('returnObject');
@@ -71,33 +79,36 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $method5->returnsReference()->willReturn(false);
         $method5->isStatic()->willReturn(false);
         $method5->getArguments()->willReturn(array());
-        $method5->getReturnTypeNode()->willReturn(new ReturnTypeNode('object'));
+        $method5->getReturnTypeNode()->willReturn(new ReturnTypeNode(new BuiltinType('object')));
         $method5->getCode()->willReturn('return;');
 
         $argument11->getName()->willReturn('fullname');
         $argument11->isOptional()->willReturn(false);
         $argument11->isPassedByReference()->willReturn(false);
         $argument11->isVariadic()->willReturn(false);
-        $argument11->getTypeNode()->willReturn(new ArgumentTypeNode('array'));
+        $argument11->getTypeNode()->willReturn(new ArgumentTypeNode(new BuiltinType('array')));
 
         $argument12->getName()->willReturn('class');
         $argument12->isOptional()->willReturn(false);
         $argument12->isPassedByReference()->willReturn(false);
         $argument12->isVariadic()->willReturn(false);
-        $argument12->getTypeNode()->willReturn(new ArgumentTypeNode('ReflectionClass'));
+        $argument12->getTypeNode()->willReturn(new ArgumentTypeNode(new ObjectType('ReflectionClass')));
 
         $argument13->getName()->willReturn('instance');
         $argument13->isOptional()->willReturn(false);
         $argument13->isPassedByReference()->willReturn(false);
         $argument13->isVariadic()->willReturn(false);
-        $argument13->getTypeNode()->willReturn(new ArgumentTypeNode('object'));
+        $argument13->getTypeNode()->willReturn(new ArgumentTypeNode(new BuiltinType('object')));
 
         $argument21->getName()->willReturn('default');
         $argument21->isOptional()->willReturn(true);
         $argument21->getDefault()->willReturn('ever.zet@gmail.com');
         $argument21->isPassedByReference()->willReturn(false);
         $argument21->isVariadic()->willReturn(false);
-        $argument21->getTypeNode()->willReturn(new ArgumentTypeNode('string', 'null'));
+        $argument21->getTypeNode()->willReturn(new ArgumentTypeNode(new UnionType([
+            new BuiltinType('string'),
+            new BuiltinType('null'),
+        ])));
 
         $argument31->getName()->willReturn('refValue');
         $argument31->isOptional()->willReturn(false);
@@ -115,10 +126,10 @@ class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generat
 public $name;
 private $email;
 
-public static function getName(array $fullname, \ReflectionClass $class, object $instance): ?string {
+public static function getName(array $fullname, \ReflectionClass $class, object $instance): string|null {
 return $this->name;
 }
-protected  function getEmail(?string $default = 'ever.zet@gmail.com') {
+protected  function getEmail(string|null $default = 'ever.zet@gmail.com') {
 return $this->email;
 }
 public  function &getRefValue( $refValue): string {
@@ -206,13 +217,13 @@ PHP;
         $argument3->isOptional()->willReturn(false);
         $argument3->isPassedByReference()->willReturn(false);
         $argument3->isVariadic()->willReturn(true);
-        $argument3->getTypeNode()->willReturn(new ArgumentTypeNode('ReflectionClass'));
+        $argument3->getTypeNode()->willReturn(new ArgumentTypeNode(new ObjectType('ReflectionClass')));
 
         $argument4->getName()->willReturn('args');
         $argument4->isOptional()->willReturn(false);
         $argument4->isPassedByReference()->willReturn(true);
         $argument4->isVariadic()->willReturn(true);
-        $argument4->getTypeNode()->willReturn(new ArgumentTypeNode('ReflectionClass'));
+        $argument4->getTypeNode()->willReturn(new ArgumentTypeNode(new ObjectType('ReflectionClass')));
 
 
         $code = $this->generate('CustomClass', $class);
@@ -264,14 +275,17 @@ PHP;
         $argument->getDefault()->willReturn(null);
         $argument->isPassedByReference()->willReturn(true);
         $argument->isVariadic()->willReturn(false);
-        $argument->getTypeNode()->willReturn(new ArgumentTypeNode('array', 'null'));
+        $argument->getTypeNode()->willReturn(new ArgumentTypeNode(new UnionType([
+            new BuiltinType('array'),
+            new BuiltinType('null'),
+        ])));
 
         $code = $this->generate('CustomClass', $class);
         $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface {
 
-public  function getName(?array &$fullname = NULL) {
+public  function getName(array|null &$fullname = NULL) {
 return $this->name;
 }
 
@@ -296,7 +310,11 @@ PHP;
         $method->getVisibility()->willReturn('public');
         $method->isStatic()->willReturn(false);
         $method->getArguments()->willReturn([]);
-        $method->getReturnTypeNode()->willReturn(new ReturnTypeNode('int', 'string', 'null'));
+        $method->getReturnTypeNode()->willReturn(new ReturnTypeNode(new UnionType([
+            new BuiltinType('int'),
+            new BuiltinType('string'),
+            new BuiltinType('null'),
+        ])));
         $method->returnsReference()->willReturn(false);
         $method->getCode()->willReturn('');
 
@@ -307,6 +325,86 @@ namespace  {
 class CustomClass extends \stdClass implements  {
 
 public  function foo(): int|string|null {
+
+}
+
+}
+}
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+
+        $code->shouldBe($expected);
+    }
+
+    function it_generates_proper_code_for_dnf_types(
+        ClassNode $class,
+        MethodNode $method
+    ) {
+        $class->getParentClass()->willReturn('stdClass');
+        $class->getInterfaces()->willReturn([]);
+        $class->getProperties()->willReturn([]);
+        $class->getMethods()->willReturn(array($method));
+        $class->isReadOnly()->willReturn(false);
+
+        $method->getName()->willReturn('foo');
+        $method->getVisibility()->willReturn('public');
+        $method->isStatic()->willReturn(false);
+        $method->getArguments()->willReturn([]);
+        $method->getReturnTypeNode()->willReturn(new ReturnTypeNode(
+            new UnionType([
+                new IntersectionType([new ObjectType('Foo'), new ObjectType('Bar')]),
+                new BuiltinType('string'),
+            ])
+        ));
+        $method->returnsReference()->willReturn(false);
+        $method->getCode()->willReturn('');
+
+        $code = $this->generate('CustomClass', $class);
+
+        $expected = <<<'PHP'
+namespace  {
+class CustomClass extends \stdClass implements  {
+
+public  function foo(): (\Foo&\Bar)|string {
+
+}
+
+}
+}
+PHP;
+        $expected = strtr($expected, array("\r\n" => "\n", "\r" => "\n"));
+
+        $code->shouldBe($expected);
+    }
+
+
+    function it_generates_proper_code_for_intersection_return_types(
+        ClassNode $class,
+        MethodNode $method
+    ) {
+        $class->getParentClass()->willReturn('stdClass');
+        $class->getInterfaces()->willReturn([]);
+        $class->getProperties()->willReturn([]);
+        $class->getMethods()->willReturn(array($method));
+        $class->isReadOnly()->willReturn(false);
+
+        $method->getName()->willReturn('foo');
+        $method->getVisibility()->willReturn('public');
+        $method->isStatic()->willReturn(false);
+        $method->getArguments()->willReturn([]);
+        $method->getReturnTypeNode()->willReturn(new ReturnTypeNode(
+            new IntersectionType([new ObjectType('Foo'), new ObjectType('Bar')])
+        ));
+        $method->returnsReference()->willReturn(false);
+        $method->getCode()->willReturn('');
+
+        $code = $this->generate('CustomClass', $class);
+
+        $expected = <<<'PHP'
+namespace  {
+class CustomClass extends \stdClass implements  {
+
+public  function foo(): \Foo&\Bar {
 
 }
 
@@ -337,7 +435,11 @@ PHP;
         $method->returnsReference()->willReturn(false);
         $method->getCode()->willReturn('');
 
-        $argument->getTypeNode()->willReturn(new ArgumentTypeNode('int', 'string', 'null'));
+        $argument->getTypeNode()->willReturn(new ArgumentTypeNode(new UnionType([
+            new BuiltinType('int'),
+            new BuiltinType('string'),
+            new BuiltinType('null'),
+        ])));
         $argument->getName()->willReturn('arg');
         $argument->isPassedByReference()->willReturn(false);
         $argument->isVariadic()->willReturn(false);

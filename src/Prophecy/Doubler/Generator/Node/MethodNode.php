@@ -207,7 +207,7 @@ class MethodNode
      */
     public function hasNullableReturnType()
     {
-        return $this->returnTypeNode->canUseNullShorthand();
+        return $this->returnTypeNode->isNullable();
     }
 
     /**

@@ -76,10 +76,10 @@ class ClassNodeSpec extends ObjectBehavior
         $this->addMethod($method1);
         $this->addMethod($method2);
 
-        $this->getMethods()->shouldReturn(array(
+        $this->getMethods()->shouldReturn([
             '__construct' => $method1,
             'getName'     => $method2,
-        ));
+        ]);
     }
 
     function its_hasMethod_returns_true_if_method_exists(MethodNode $method)
