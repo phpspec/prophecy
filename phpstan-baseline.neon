@@ -59,3 +59,9 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Prophecy/Prophecy/MethodProphecy.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: src/Prophecy/Util/ExportUtil.php
