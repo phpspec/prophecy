@@ -33,7 +33,6 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         $node->getMethods()->willReturn(array());
         $node->hasMethod(Argument::any())->willReturn(false);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);
-        $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);
 
         $this->apply($node);
     }
@@ -50,13 +49,17 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         $node->addProperty('objectProphecyClosure', 'private')->willReturn(null);
         $node->hasMethod(Argument::any())->willReturn(false);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);
-        $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);
 
         $constructor->getName()->willReturn('__construct');
         $method1->getName()->willReturn('method1');
         $method2->getName()->willReturn('method2');
         $method3->getName()->willReturn('method3');
         $method4->getName()->willReturn('method4');
+
+        $method1->isStatic()->willReturn(false);
+        $method2->isStatic()->willReturn(false);
+        $method3->isStatic()->willReturn(false);
+        $method4->isStatic()->willReturn(false);
 
         $method1->getReturnTypeNode()->willReturn(new ReturnTypeNode('int'));
         $method2->getReturnTypeNode()->willReturn(new ReturnTypeNode('int'));
@@ -79,6 +82,51 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         $method3->setCode('$this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
             ->shouldBeCalled();
         $method4->setCode('$this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
+            ->shouldBeCalled();
+
+        $this->apply($node);
+    }
+
+    function it_returns_the_object_when_not_static_and_return_type_is_self_or_static(
+        ClassNode $node,
+        MethodNode $method1,
+        MethodNode $method2,
+        MethodNode $method3,
+        MethodNode $method4
+    ) {
+        $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->willReturn(null);
+        $node->addProperty('objectProphecyClosure', 'private')->willReturn(null);
+        $node->hasMethod(Argument::any())->willReturn(false);
+        $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);
+
+        $method1->getName()->willReturn('method1');
+        $method2->getName()->willReturn('method2');
+        $method3->getName()->willReturn('method3');
+        $method4->getName()->willReturn('method4');
+
+        $method1->isStatic()->willReturn(false);
+        $method2->isStatic()->willReturn(false);
+        $method3->isStatic()->willReturn(true);
+        $method4->isStatic()->willReturn(true);
+
+        $method1->getReturnTypeNode()->willReturn(new ReturnTypeNode('self'));
+        $method2->getReturnTypeNode()->willReturn(new ReturnTypeNode('static'));
+        $method3->getReturnTypeNode()->willReturn(new ReturnTypeNode('self'));
+        $method4->getReturnTypeNode()->willReturn(new ReturnTypeNode('static'));
+        $node->getMethods()->willReturn(array(
+            'method1' => $method1,
+            'method2' => $method2,
+            'method3' => $method3,
+            'method4' => $method4,
+        ));
+
+        $method1->setCode('return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args()) ?? $this;')
+            ->shouldBeCalled();
+        $method2->setCode('return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args()) ?? $this;')
+            ->shouldBeCalled();
+        $method3->setCode('return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
+            ->shouldBeCalled();
+        $method4->setCode('return $this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
             ->shouldBeCalled();
 
         $this->apply($node);

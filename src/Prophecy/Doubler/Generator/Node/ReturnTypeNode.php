@@ -44,4 +44,10 @@ final class ReturnTypeNode extends TypeNodeAbstract
         return $this->types !== ['void' => 'void']
             && $this->types !== ['never' => 'never'];
     }
+
+    public function isSelfOrStatic(): bool
+    {
+        return $this->types === ['self' => 'self']
+            || $this->types === ['static' => 'static'];
+    }
 }
