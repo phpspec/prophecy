@@ -1,6 +1,25 @@
 Unreleased
 ==========
 
+1.23.0
+======
+
+**Removed:**
+
+* Remove support for PHP lower than 8.2 (@Nek-)
+
+**Added:*
+
+* Add support for doubling classes using intersection types and DNF types (@Nek-)
+
+**Fixed:**
+
+* Fix deprecation for `SplObjectStorage` changes in PHP 8.5 (@Nek-)
+
+**Changed:**
+
+* Improve error message for unsupported default return values (@stof)
+
 1.22.0
 ======
 
