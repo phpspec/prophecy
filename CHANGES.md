@@ -8,7 +8,7 @@ Unreleased
 
 * Remove support for PHP lower than 8.2 (@Nek-)
 
-**Added:*
+**Added:**
 
 * Add support for doubling classes using intersection types and DNF types (@Nek-)
 
