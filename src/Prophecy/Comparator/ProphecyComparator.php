@@ -12,12 +12,14 @@
 namespace Prophecy\Comparator;
 
 use Prophecy\Prophecy\ProphecyInterface;
+use SebastianBergmann\Comparator\Comparator;
+use SebastianBergmann\Comparator\Factory;
 use SebastianBergmann\Comparator\ObjectComparator;
 
 /**
  * @final
  */
-class ProphecyComparator extends ObjectComparator
+class ProphecyComparator extends Comparator
 {
     /**
      * @param mixed $expected
@@ -25,7 +27,7 @@ class ProphecyComparator extends ObjectComparator
      */
     public function accepts($expected, $actual): bool
     {
-        return is_object($expected) && is_object($actual) && $actual instanceof ProphecyInterface;
+        return \is_object($expected) && $actual instanceof ProphecyInterface;
     }
 
     /**
@@ -34,11 +36,23 @@ class ProphecyComparator extends ObjectComparator
      * @param float $delta
      * @param bool  $canonicalize
      * @param bool  $ignoreCase
-     * @param mixed[] $processed
      */
-    public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = array()): void
+    public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false): void
     {
         \assert($actual instanceof ProphecyInterface);
-        parent::assertEquals($expected, $actual->reveal(), $delta, $canonicalize, $ignoreCase, $processed);
+        $this->getComparatorFactory()->getComparatorFor($expected, $actual->reveal())->assertEquals($expected, $actual->reveal(), $delta, $canonicalize, $ignoreCase);
+    }
+
+    private function getComparatorFactory(): Factory
+    {
+        // sebastianbergmann/comparator 5+
+        // @phpstan-ignore function.alreadyNarrowedType
+        if (\method_exists($this, 'factory')) {
+            return $this->factory();
+        }
+
+        // sebastianbergmann/comparator <5
+        // @phpstan-ignore property.private
+        return $this->factory;
     }
 }

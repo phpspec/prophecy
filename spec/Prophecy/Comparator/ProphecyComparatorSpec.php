@@ -3,14 +3,15 @@
 namespace spec\Prophecy\Comparator;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Prophecy\Prophet;
+use SebastianBergmann\Comparator\Comparator;
+use SebastianBergmann\Comparator\Factory;
 
 class ProphecyComparatorSpec extends ObjectBehavior
 {
     function it_is_a_comparator()
     {
-        $this->shouldHaveType('SebastianBergmann\Comparator\ObjectComparator');
+        $this->shouldHaveType(Comparator::class);
     }
 
     function it_accepts_only_prophecy_objects()
@@ -34,6 +35,9 @@ class ProphecyComparatorSpec extends ObjectBehavior
         $prophet = new Prophet();
         $prophecy = $prophet->prophesize('Prophecy\Prophecy\ObjectProphecy');
         $prophecy->__call('reveal', array())->willReturn(new \stdClass());
+
+        $factory = new Factory();
+        $factory->register($this->getWrappedObject());
 
         $this->shouldNotThrow()->duringAssertEquals($prophecy->reveal(), $prophecy);
     }
