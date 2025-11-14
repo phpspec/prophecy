@@ -15,7 +15,7 @@ class ArgumentsWildcardSpec extends ObjectBehavior
         $id  = spl_object_id($object->getWrappedObject());
 
         $objHash = "exact(42), exact(\"zet\"), exact($class#$id Object (\n" .
-            "    'objectProphecyClosureContainer' => Prophecy\Doubler\ClassPatch\ProphecySubjectPatch\ObjectProphecyClosureContainer#%s Object (\n" .
+            "    'objectProphecyClosureContainer' => Prophecy\Doubler\ObjectProphecyClosureContainer#%s Object (\n" .
             "        'closure' => Closure#%s Object (\n" .
             "            0 => Closure#%s Object\n" .
             "        )\n" .

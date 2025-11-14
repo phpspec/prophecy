@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Prophecy\Doubler\ClassPatch\ProphecySubjectPatch;
+namespace Prophecy\Doubler;
 
 /**
  * Container for the closure that can be used and modified in a read-only class.

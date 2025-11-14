@@ -137,7 +137,7 @@ class ExactValueTokenSpec extends ObjectBehavior
             get_class($object->getWrappedObject()),
             spl_object_id($object->getWrappedObject())
         ) . " Object (\n" .
-            "    'objectProphecyClosure' => Prophecy\Doubler\ClassPatch\ProphecySubjectPatch\ObjectProphecyClosureContainer#%s Object (\n" .
+            "    'objectProphecyClosureContainer' => Prophecy\Doubler\ObjectProphecyClosureContainer#%s Object (\n" .
             "        'closure' => Closure#%s Object (\n" .
             "            0 => Closure#%s Object\n" .
             "        )\n" .
