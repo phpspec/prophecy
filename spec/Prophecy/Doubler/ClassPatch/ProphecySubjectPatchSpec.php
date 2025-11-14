@@ -6,6 +6,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\PropertyNode;
 use Prophecy\Doubler\Generator\Node\PropertyTypeNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
@@ -31,10 +32,12 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
     {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->shouldBeCalled();
         $node->addProperty(
-            'objectProphecyClosureContainer',
-            'private',
-            new PropertyTypeNode('Prophecy\Doubler\ObjectProphecyClosureContainer')
-        )->willReturn(Argument::type('Prophecy\Doubler\ObjectProphecyClosureContainer'));
+            new PropertyNode(
+                'objectProphecyClosureContainer',
+                'private',
+                new PropertyTypeNode('Prophecy\Doubler\ObjectProphecyClosureContainer')
+            )
+        );
 
         $node->getMethods()->willReturn(array());
         $node->hasMethod(Argument::any())->willReturn(false);
@@ -54,10 +57,12 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
     ) {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->willReturn(null);
         $node->addProperty(
-            'objectProphecyClosureContainer',
-            'private',
-            new PropertyTypeNode('Prophecy\Doubler\ObjectProphecyClosureContainer')
-        )->willReturn(Argument::type('Prophecy\Doubler\ObjectProphecyClosureContainer'));
+            new PropertyNode(
+                'objectProphecyClosureContainer',
+                'private',
+                new PropertyTypeNode('Prophecy\Doubler\ObjectProphecyClosureContainer')
+            )
+        );
 
         $node->hasMethod(Argument::any())->willReturn(false);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);

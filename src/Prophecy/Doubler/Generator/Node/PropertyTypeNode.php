@@ -11,7 +11,4 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
-class PropertyTypeNode extends TypeNodeAbstract
-{
-
-}
+class PropertyTypeNode extends TypeNodeAbstract {}

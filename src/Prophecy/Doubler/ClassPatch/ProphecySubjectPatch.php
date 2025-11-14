@@ -15,6 +15,7 @@ use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\PropertyNode;
 use Prophecy\Doubler\Generator\Node\PropertyTypeNode;
 use Prophecy\Doubler\Generator\Node\Type\ObjectType;
 
@@ -47,16 +48,18 @@ class ProphecySubjectPatch implements ClassPatchInterface
     {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface');
         $node->addProperty(
-            'objectProphecyClosureContainer',
-            'private',
-            new PropertyTypeNode('Prophecy\Doubler\ObjectProphecyClosureContainer')
+            new PropertyNode(
+                'objectProphecyClosureContainer',
+                'private',
+                new PropertyTypeNode('Prophecy\Doubler\ObjectProphecyClosureContainer')
+            )
         );
 
         foreach ($node->getMethods() as $name => $method) {
             if ('__construct' === strtolower($name)) {
                 $method->setCode(
-                    $method->getCode() .
                     '$this->objectProphecyClosureContainer = new \Prophecy\Doubler\ObjectProphecyClosureContainer();'
+                    .$method->getCode()
                 );
 
                 continue;

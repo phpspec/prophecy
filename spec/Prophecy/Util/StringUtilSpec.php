@@ -74,13 +74,13 @@ class StringUtilSpec extends ObjectBehavior
         $objHash = sprintf('%s#%s',
             get_class($object->getWrappedObject()),
             spl_object_id($object->getWrappedObject())
-        ) . " Object (\n" .
-            "    'objectProphecyClosureContainer' => Prophecy\Doubler\ObjectProphecyClosureContainer#%s Object (\n" .
-            "        'closure' => Closure#%s Object (\n" .
-            "            0 => Closure#%s Object\n" .
-            "        )\n" .
-            "    )\n" .
-            ")";
+        )." Object (\n"
+            ."    'objectProphecyClosureContainer' => Prophecy\Doubler\ObjectProphecyClosureContainer#%s Object (\n"
+            ."        'closure' => Closure#%s Object (\n"
+            ."            0 => Closure#%s Object\n"
+            ."        )\n"
+            ."    )\n"
+            .")";
 
         $idRegexExpr = '[0-9]+';
         $this->stringify($object)->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $idRegexExpr, $idRegexExpr, $idRegexExpr)));

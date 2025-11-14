@@ -18,27 +18,21 @@ use Prophecy\Exception\InvalidArgumentException;
  */
 class PropertyNode
 {
-    private $name;
+    private string $name;
+
+    /** @phpstan-var 'public'|'private'|'protected' */
+    private string $visibility;
+
+    private PropertyTypeNode $typeNode;
 
     /**
-     * @var string
-     *
-     * @phpstan-var 'public'|'private'|'protected'
+     * @phpstan-param 'public'|'private'|'protected' $visibility
      */
-    private $visibility = 'public';
-
-    /**
-     * @var PropertyTypeNode
-     */
-    private $typeNode;
-
-    /**
-     * @param string $name
-     */
-    public function __construct(string $name)
+    public function __construct(string $name, string $visibility = 'public', PropertyTypeNode $typeNode = new PropertyTypeNode())
     {
         $this->name = $name;
-        $this->typeNode = new PropertyTypeNode();
+        $this->setVisibility($visibility);
+        $this->typeNode = $typeNode;
     }
 
     /**
@@ -60,7 +54,7 @@ class PropertyNode
     /**
      * @return void
      */
-    public function setTypeNode(PropertyTypeNode $typeNode)
+    public function setTypeNode(PropertyTypeNode $typeNode): void
     {
         $this->typeNode = $typeNode;
     }
@@ -82,10 +76,8 @@ class PropertyNode
      *
      * @phpstan-param 'public'|'private'|'protected' $visibility
      */
-    public function setVisibility(string $visibility)
+    public function setVisibility(string $visibility): void
     {
-        $visibility = strtolower($visibility);
-
         if (!\in_array($visibility, array('public', 'private', 'protected'), true)) {
             throw new InvalidArgumentException(sprintf(
                 '`%s` method visibility is not supported.', $visibility

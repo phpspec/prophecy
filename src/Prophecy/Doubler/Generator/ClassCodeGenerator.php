@@ -54,7 +54,7 @@ class ClassCodeGenerator
             )
         );
 
-        foreach ((array) $class->getPropertyNodes() as $propertyNode) {
+        foreach ($class->getPropertyNodes() as $propertyNode) {
             $code .= $this->generateProperty($propertyNode)."\n";
         }
         $code .= "\n";
@@ -69,11 +69,7 @@ class ClassCodeGenerator
 
     private function generateProperty(Node\PropertyNode $property): string
     {
-        if (PHP_VERSION_ID >= 70400) {
-            $type = ($type = $this->generateTypes($property->getTypeNode())) ? $type.' ' : '';
-        } else {
-            $type = '';
-        }
+        $type = ($type = $this->generateTypes($property->getTypeNode())) ? $type.' ' : '';
 
         $php = sprintf("%s %s%s;",
             $property->getVisibility(),

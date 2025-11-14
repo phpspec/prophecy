@@ -31,16 +31,9 @@ class ClassNode
     private $interfaces  = array();
 
     /**
-     * @var array<string, string>
-     *
-     * @phpstan-var array<string, 'public'|'private'|'protected'>
-     */
-    private $properties  = array();
-
-    /**
      * @var array<string, PropertyNode>
      */
-    private $propertyNodes = array();
+    private $properties = [];
 
     /**
      * @var list<string>
@@ -111,30 +104,49 @@ class ClassNode
      * @return array<string, string>
      *
      * @phpstan-return array<string, 'public'|'private'|'protected'>
+     *
+     * @deprecated
      */
     public function getProperties()
     {
-        return $this->properties;
+        trigger_deprecation(
+            'phpspec/prophecy',
+            '1.24',
+            'Use getPropertyNodes() instead. It allows you to retrieve the type as well as visibility.'
+        );
+
+        $propertiesOldFormat = array_map(function ($property) {
+            return $property->getVisibility();
+        }, $this->properties);
+
+        return $propertiesOldFormat;
     }
 
     /**
      * @return array<string, PropertyNode>
      */
-    public function getPropertyNodes()
+    public function getPropertyNodes(): array
     {
-        return $this->propertyNodes;
+        return $this->properties;
     }
 
     /**
-     * @param string $name
-     * @param string $visibility
-     *
-     * @return void
-     *
      * @phpstan-param 'public'|'private'|'protected' $visibility
      */
-    public function addProperty($name, $visibility = 'public', ?PropertyTypeNode $typeNode = null)
+    public function addProperty(PropertyNode|string $property, string $visibility = 'public'): void
     {
+        if ($property instanceof PropertyNode) {
+            $this->properties[$property->getName()] = $property;
+
+            return;
+        }
+
+        trigger_deprecation(
+            'phpspec/prophecy',
+            '1.24',
+            'The method addProperty() now expects a PropertyNode object instead of a string'
+        );
+
         $visibility = strtolower($visibility);
 
         if (!\in_array($visibility, array('public', 'private', 'protected'), true)) {
@@ -143,15 +155,10 @@ class ClassNode
             ));
         }
 
-        $propertyNode = new PropertyNode($name);
+        $propertyNode = new PropertyNode($property);
         $propertyNode->setVisibility($visibility);
-        if ($typeNode) {
-            $propertyNode->setTypeNode($typeNode);
-        }
 
-        $this->propertyNodes[$name] = $propertyNode;
-
-        $this->properties[$name] = $visibility;
+        $this->properties[$property] = $propertyNode;
     }
 
     /**

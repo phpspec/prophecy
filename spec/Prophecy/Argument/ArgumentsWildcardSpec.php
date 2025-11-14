@@ -14,13 +14,13 @@ class ArgumentsWildcardSpec extends ObjectBehavior
         $class = get_class($object->getWrappedObject());
         $id  = spl_object_id($object->getWrappedObject());
 
-        $objHash = "exact(42), exact(\"zet\"), exact($class#$id Object (\n" .
-            "    'objectProphecyClosureContainer' => Prophecy\Doubler\ObjectProphecyClosureContainer#%s Object (\n" .
-            "        'closure' => Closure#%s Object (\n" .
-            "            0 => Closure#%s Object\n" .
-            "        )\n" .
-            "    )\n" .
-            "))";
+        $objHash = "exact(42), exact(\"zet\"), exact($class#$id Object (\n"
+            ."    'objectProphecyClosureContainer' => Prophecy\Doubler\ObjectProphecyClosureContainer#%s Object (\n"
+            ."        'closure' => Closure#%s Object (\n"
+            ."            0 => Closure#%s Object\n"
+            ."        )\n"
+            ."    )\n"
+            ."))";
 
         $idRegexExpr = '[0-9]+';
         $this->__toString()->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $idRegexExpr, $idRegexExpr, $idRegexExpr)));
