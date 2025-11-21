@@ -144,11 +144,17 @@ class IdenticalValueTokenSpec extends ObjectBehavior
         $objHash = sprintf('identical(%s#%s',
             get_class($object->getWrappedObject()),
             spl_object_id($object->getWrappedObject())
-        )." Object (\n    'objectProphecyClosure' => Closure#%s Object (\n        0 => Closure#%s Object\n    )\n))";
+        )." Object (\n"
+            ."    'objectProphecyClosureContainer' => Prophecy\Doubler\ObjectProphecyClosureContainer#%s Object (\n"
+            ."        'closure' => Closure#%s Object (\n"
+            ."            0 => Closure#%s Object\n"
+            ."        )\n"
+            ."    )\n"
+            ."))";
 
         $this->beConstructedWith($object);
 
         $idRegexExpr = '[0-9]+';
-        $this->__toString()->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $idRegexExpr, $idRegexExpr)));
+        $this->__toString()->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $idRegexExpr, $idRegexExpr, $idRegexExpr)));
     }
 }

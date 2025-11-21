@@ -2,10 +2,12 @@
 
 namespace Tests\Prophecy;
 
+use Fixtures\Prophecy\ReadOnlyClass;
 use Fixtures\Prophecy\ReturningFinalClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\DoubleInterface;
+use Prophecy\Doubler\Generator\ClassMirror;
 use Prophecy\Exception\Prophecy\MethodProphecyException;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 use Prophecy\Prophet;
@@ -58,5 +60,14 @@ class FunctionalTest extends TestCase
         $this->expectExceptionMessage('Cannot create a return value for the method. Configure an explicit return value instead.');
 
         $double->doSomething();
+    }
+
+    #[Test]
+    public function it_can_prophet_readonly_classes(): void
+    {
+        $prophet = new Prophet();
+        $object = $prophet->prophesize(ReadOnlyClass::class);
+
+        $this->assertInstanceOf(ReadOnlyClass::class, $object->reveal());
     }
 }
