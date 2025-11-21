@@ -1,6 +1,13 @@
 Unreleased
 ==========
 
+1.24.0
+======
+
+**Added:**
+
+* Add support for PHP 8.5 (@andypost)
+
 1.23.1
 ======
 
