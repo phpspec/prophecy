@@ -29,6 +29,11 @@ class CallCenter
     private $util;
 
     /**
+     * @var bool
+     */
+    private $failFast = false;
+
+    /**
      * @var Call[]
      */
     private $recordedCalls = array();
@@ -82,7 +87,12 @@ class CallCenter
         // There are method prophecies, so it's a fake/stub. Searching prophecy for this call
         $matches = $this->findMethodProphecies($prophecy, $methodName, $arguments);
 
-        // If fake/stub doesn't have method prophecy for this call - throw exception
+        // If fake/stub doesn't have method prophecy for this call - throw exception to fail fast
+        if ($this->failFast && !count($matches)) {
+            $this->createUnexpectedCallException($prophecy, $methodName, $arguments);
+        }
+
+        // If fake/stub doesn't have method prophecy for this call - record unexpected call and fail on checkPredictions
         if (!count($matches)) {
             $this->unexpectedCalls->offsetSet(new Call($methodName, $arguments, null, null, $file, $line), $prophecy);
             $this->recordedCalls[] = new Call($methodName, $arguments, null, null, $file, $line);
@@ -144,6 +154,11 @@ class CallCenter
                 ;
             })
         );
+    }
+
+    public function makeUnexpectedCallsFailFast(bool $failFast): void
+    {
+        $this->failFast = $failFast;
     }
 
     /**

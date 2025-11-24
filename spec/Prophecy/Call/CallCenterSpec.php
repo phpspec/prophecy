@@ -121,6 +121,33 @@ class CallCenterSpec extends ObjectBehavior
             ->shouldReturn('second');
     }
 
+    function createWithFailFast(bool $failFast)
+    {
+        $callCenter = new self();
+        $callCenter->makeUnexpectedCallsFailFast($failFast);
+        
+        return $callCenter;
+    }
+
+    function it_throws_exception_if_call_does_not_match_any_of_defined_method_prophecies_and_fail_fast_is_enabled(
+        $objectProphecy,
+        MethodProphecy $method,
+        ArgumentsWildcard $arguments
+    ) {
+        $method->getMethodName()->willReturn('getName');
+        $method->getArgumentsWildcard()->willReturn($arguments);
+        $arguments->scoreArguments(array('world', 'everything'))->willReturn(false);
+        $arguments->__toString()->willReturn('arg1, arg2');
+
+        $objectProphecy->getMethodProphecies()->willReturn(array('method1' => array($method)));
+        $objectProphecy->getMethodProphecies('getName')->willReturn(array($method));
+
+        $this->makeUnexpectedCallsFailFast(true);
+
+        $this->shouldThrow('Prophecy\Exception\Call\UnexpectedCallException')
+            ->duringMakeCall($objectProphecy, 'getName', array('world', 'everything'));
+    }
+
     function it_returns_null_if_method_prophecy_that_matches_makeCall_arguments_has_no_promise(
         $objectProphecy,
         MethodProphecy $method,

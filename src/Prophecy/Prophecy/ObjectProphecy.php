@@ -137,6 +137,16 @@ class ObjectProphecy implements ProphecyInterface
     }
 
     /**
+     * Disables the possibility of using this as a spy, making unexpected calls fail immediately
+     * 
+     * @param bool $enable
+     */
+    public function enableSpyBehavior(bool $enable = true): void
+    {
+        $this->callCenter->makeUnexpectedCallsFailFast(! $enable);
+    }
+
+    /**
      * Adds method prophecy to object prophecy.
      *
      * @param MethodProphecy $methodProphecy
