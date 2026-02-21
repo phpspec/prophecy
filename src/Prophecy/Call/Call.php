@@ -11,7 +11,7 @@
 
 namespace Prophecy\Call;
 
-use Exception;
+use Throwable;
 use Prophecy\Argument\ArgumentsWildcard;
 
 /**
@@ -44,12 +44,12 @@ class Call
      * @param string      $methodName
      * @param array<mixed> $arguments
      * @param mixed       $returnValue
-     * @param Exception|null $exception
+     * @param Throwable|null $exception
      * @param null|string $file
      * @param null|int    $line
      */
     public function __construct($methodName, array $arguments, $returnValue,
-        ?Exception $exception, $file, $line)
+        ?Throwable $exception, $file, $line)
     {
         $this->methodName  = $methodName;
         $this->arguments   = $arguments;
@@ -96,7 +96,7 @@ class Call
     /**
      * Returns exception that call thrown.
      *
-     * @return null|Exception
+     * @return null|Throwable
      */
     public function getException()
     {
