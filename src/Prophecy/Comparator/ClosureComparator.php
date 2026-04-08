@@ -41,8 +41,11 @@ final class ClosureComparator extends Comparator
     public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false): void
     {
         if ($expected !== $actual) {
-            // Support for sebastian/comparator < 5
-            if ((new \ReflectionMethod(ComparisonFailure::class, '__construct'))->getNumberOfParameters() >= 6) {
+            // sebastian/comparator < 5 has a 6-param constructor with $identical (bool) as 5th param,
+            // while >= 8 also has 6 params but with $contextLines (int) as 6th param.
+            // Checking the parameter name avoids passing wrong types to the wrong signature.
+            $r = new \ReflectionMethod(ComparisonFailure::class, '__construct');
+            if ($r->getNumberOfParameters() >= 6 && $r->getParameters()[4]->getName() === 'identical') {
                 // @phpstan-ignore-next-line
                 throw new ComparisonFailure($expected, $actual, '', '', false, 'all closures are different if not identical');
             }

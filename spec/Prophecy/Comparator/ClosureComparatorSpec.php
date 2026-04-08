@@ -26,7 +26,8 @@ class ClosureComparatorSpec extends ObjectBehavior
 
     function it_asserts_that_different_closures_are_different()
     {
-        $this->shouldThrow()->duringAssertEquals(function () {}, function () {});
+        $this->shouldThrow(new \SebastianBergmann\Comparator\ComparisonFailure(null, null, '', '', 'all closures are different if not identical'))
+            ->duringAssertEquals(function () {}, function () {});
     }
 
     function it_asserts_that_closures_are_equal_if_its_the_same_closure()
