@@ -1,10 +1,22 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|int\|resource\|string\|null, mixed given\.$#'
+			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|GMP\|int\|resource\|string\|null, mixed given\.$#'
 			identifier: argument.type
 			count: 2
 			path: src/Prophecy/Argument/Token/ExactValueToken.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Prophecy/Argument/Token/InArrayToken.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Prophecy/Argument/Token/NotInArrayToken.php
 
 		-
 			message: '#^Method Prophecy\\Doubler\\CachedDoubler\:\:createDoubleClass\(\) should return class\-string\<Prophecy\\Doubler\\DoubleInterface&T of object\> but returns class\-string\.$#'
@@ -45,6 +57,12 @@ parameters:
 		-
 			message: '#^Property Prophecy\\Doubler\\LazyDouble\:\:\$class \(ReflectionClass\<T of object\>\|null\) does not accept ReflectionClass\<U of object\>\.$#'
 			identifier: assign.propertyType
+			count: 1
+			path: src/Prophecy/Doubler/LazyDouble.php
+
+		-
+			message: '#^Property Prophecy\\Doubler\\LazyDouble\:\:\$class \(ReflectionClass\<T of object\>\|null\) is never assigned ReflectionClass\<T of object\> so it can be removed from the property type\.$#'
+			identifier: property.unusedType
 			count: 1
 			path: src/Prophecy/Doubler/LazyDouble.php
 
