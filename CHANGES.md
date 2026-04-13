@@ -1,6 +1,13 @@
 Unreleased
 ==========
 
+1.26.1
+======
+
+**Fixed:**
+
+* Fix compatibility with `sebastian/comparator` 8.1+ (@stof)
+
 1.26.0
 ======
 
