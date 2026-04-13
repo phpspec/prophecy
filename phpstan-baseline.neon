@@ -1,10 +1,22 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|int\|resource\|string\|null, mixed given\.$#'
+			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|GMP\|int\|resource\|string\|null, mixed given\.$#'
 			identifier: argument.type
 			count: 2
 			path: src/Prophecy/Argument/Token/ExactValueToken.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Prophecy/Argument/Token/InArrayToken.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Prophecy/Argument/Token/NotInArrayToken.php
 
 		-
 			message: '#^Method Prophecy\\Doubler\\CachedDoubler\:\:createDoubleClass\(\) should return class\-string\<Prophecy\\Doubler\\DoubleInterface&T of object\> but returns class\-string\.$#'
@@ -17,6 +29,12 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Prophecy/Doubler/ClassPatch/DisableConstructorPatch.php
+
+		-
+			message: '#^Call to an undefined method phpDocumentor\\Reflection\\DocBlock\\Tags\\Method\:\:getArguments\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Prophecy/Doubler/ClassPatch/MagicCallPatch.php
 
 		-
 			message: '#^Method Prophecy\\Doubler\\Doubler\:\:createDoubleClass\(\) should return class\-string\<Prophecy\\Doubler\\DoubleInterface&T of object\> but returns class\-string\.$#'
@@ -49,6 +67,12 @@ parameters:
 			path: src/Prophecy/Doubler/LazyDouble.php
 
 		-
+			message: '#^Property Prophecy\\Doubler\\LazyDouble\:\:\$class \(ReflectionClass\<T of object\>\|null\) is never assigned ReflectionClass\<T of object\> so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Prophecy/Doubler/LazyDouble.php
+
+		-
 			message: '#^Call to function method_exists\(\) with ReflectionMethod and ''hasTentativeReturnT…'' will always evaluate to true\.$#'
 			identifier: function.alreadyNarrowedType
 			count: 1
@@ -65,9 +89,3 @@ parameters:
 			identifier: offsetAccess.invalidOffset
 			count: 1
 			path: src/Prophecy/Util/ExportUtil.php
-
-		-
-			message: '#^Call to an undefined method phpDocumentor\\Reflection\\DocBlock\\Tags\\Method\:\:getArguments\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/Prophecy/Doubler/ClassPatch/MagicCallPatch.php
