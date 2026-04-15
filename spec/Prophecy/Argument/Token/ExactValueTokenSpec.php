@@ -136,12 +136,18 @@ class ExactValueTokenSpec extends ObjectBehavior
         $objHash = sprintf('exact(%s#%s',
             get_class($object->getWrappedObject()),
             spl_object_id($object->getWrappedObject())
-        )." Object (\n    'objectProphecyClosure' => Closure#%s Object (\n        0 => Closure#%s Object\n    )\n))";
+        )." Object (\n"
+            ."    'objectProphecyClosureContainer' => Prophecy\Doubler\ObjectProphecyClosureContainer#%s Object (\n"
+            ."        'closure' => Closure#%s Object (\n"
+            ."            0 => Closure#%s Object\n"
+            ."        )\n"
+            ."    )\n"
+            ."))";
 
         $this->beConstructedWith($object);
 
         $idRegexExpr = '[0-9]+';
-        $this->__toString()->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $idRegexExpr, $idRegexExpr)));
+        $this->__toString()->shouldMatch(sprintf('/^%s$/', sprintf(preg_quote("$objHash"), $idRegexExpr, $idRegexExpr, $idRegexExpr)));
     }
 
     function it_scores_10_if_value_an_numeric_and_equal_to_argument_as_stringable()

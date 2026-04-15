@@ -7,6 +7,7 @@ use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\PropertyNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
 use Prophecy\Doubler\Generator\Node\Type\IntersectionType;
@@ -32,7 +33,11 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $class->getInterfaces()->willReturn(array(
             'Prophecy\Doubler\Generator\MirroredInterface', 'ArrayAccess', 'ArrayIterator',
         ));
-        $class->getProperties()->willReturn(array('name' => 'public', 'email' => 'private'));
+        $name = new PropertyNode('name', 'public', new BuiltinType('mixed'));
+        $name->setVisibility('public');
+        $email = new PropertyNode('email', 'public', new BuiltinType('mixed'));
+        $email->setVisibility('private');
+        $class->getPropertyNodes()->willReturn(array('name' => $name, 'email' => $email));
         $class->getMethods()->willReturn(array($method1, $method2, $method3, $method4, $method5));
         $class->isReadOnly()->willReturn(false);
 
@@ -120,8 +125,8 @@ class ClassCodeGeneratorSpec extends ObjectBehavior
         $expected = <<<'PHP'
 namespace  {
 class CustomClass extends \RuntimeException implements \Prophecy\Doubler\Generator\MirroredInterface, \ArrayAccess, \ArrayIterator {
-public $name;
-private $email;
+public mixed $name;
+private mixed $email;
 
 public static function getName(array $fullname, \ReflectionClass $class, object $instance): string|null {
 return $this->name;
@@ -160,7 +165,7 @@ PHP;
     ) {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
-        $class->getProperties()->willReturn(array());
+        $class->getPropertyNodes()->willReturn(array());
         $class->getMethods()->willReturn(array(
             $method1, $method2, $method3, $method4,
         ));
@@ -255,7 +260,7 @@ PHP;
     ) {
         $class->getParentClass()->willReturn('RuntimeException');
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
-        $class->getProperties()->willReturn(array());
+        $class->getPropertyNodes()->willReturn(array());
         $class->getMethods()->willReturn(array($method));
         $class->isReadOnly()->willReturn(false);
 
@@ -299,7 +304,7 @@ PHP;
     ) {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn([]);
-        $class->getProperties()->willReturn([]);
+        $class->getPropertyNodes()->willReturn([]);
         $class->getMethods()->willReturn(array($method));
         $class->isReadOnly()->willReturn(false);
 
@@ -339,7 +344,7 @@ PHP;
     ) {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn([]);
-        $class->getProperties()->willReturn([]);
+        $class->getPropertyNodes()->willReturn([]);
         $class->getMethods()->willReturn(array($method));
         $class->isReadOnly()->willReturn(false);
 
@@ -381,7 +386,7 @@ PHP;
     ) {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn([]);
-        $class->getProperties()->willReturn([]);
+        $class->getPropertyNodes()->willReturn([]);
         $class->getMethods()->willReturn(array($method));
         $class->isReadOnly()->willReturn(false);
 
@@ -420,7 +425,7 @@ PHP;
     ) {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn([]);
-        $class->getProperties()->willReturn([]);
+        $class->getPropertyNodes()->willReturn([]);
         $class->getMethods()->willReturn(array($method));
         $class->isReadOnly()->willReturn(false);
 
@@ -464,7 +469,7 @@ PHP;
     {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
-        $class->getProperties()->willReturn(array());
+        $class->getPropertyNodes()->willReturn(array());
         $class->getMethods()->willReturn(array());
         $class->isReadOnly()->willReturn(false);
 
@@ -485,7 +490,7 @@ PHP;
     {
         $class->getParentClass()->willReturn('stdClass');
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
-        $class->getProperties()->willReturn(array());
+        $class->getPropertyNodes()->willReturn(array());
         $class->getMethods()->willReturn(array());
         $class->isReadOnly()->willReturn(false);
 
@@ -506,7 +511,7 @@ PHP;
     {
         $class->getParentClass()->willReturn('ReadOnlyClass');
         $class->getInterfaces()->willReturn(array('Prophecy\Doubler\Generator\MirroredInterface'));
-        $class->getProperties()->willReturn(array());
+        $class->getPropertyNodes()->willReturn(array());
         $class->getMethods()->willReturn(array());
         $class->isReadOnly()->willReturn(true);
 

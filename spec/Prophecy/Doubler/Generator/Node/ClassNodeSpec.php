@@ -4,6 +4,8 @@ namespace spec\Prophecy\Doubler\Generator\Node;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\PropertyNode;
+use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
 use Prophecy\Exception\Doubler\MethodNotExtendableException;
 
 class ClassNodeSpec extends ObjectBehavior
@@ -120,7 +122,7 @@ class ClassNodeSpec extends ObjectBehavior
         $this->getProperties()->shouldHaveCount(0);
     }
 
-    function it_is_able_to_have_properties()
+    function it_is_able_to_have_properties_deprecated_api()
     {
         $this->addProperty('title');
         $this->addProperty('text', 'private');
@@ -128,6 +130,15 @@ class ClassNodeSpec extends ObjectBehavior
             'title' => 'public',
             'text'  => 'private',
         ));
+    }
+
+    function it_is_able_to_have_properties()
+    {
+        $prop1 = new PropertyNode('title', 'public', new BuiltinType('string'));
+        $prop2 = new PropertyNode('text', 'private', new BuiltinType('string'));
+        $this->addProperty($prop1);
+        $this->addProperty($prop2);
+        $this->getPropertyNodes()->shouldReturn(['title' => $prop1, 'text' => $prop2]);
     }
 
     function its_addProperty_does_not_accept_unsupported_visibility()

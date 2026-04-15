@@ -6,8 +6,10 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Prophecy\Doubler\Generator\Node\PropertyNode;
 use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Doubler\Generator\Node\Type\BuiltinType;
+use Prophecy\Doubler\Generator\Node\Type\ObjectType;
 
 class ProphecySubjectPatchSpec extends ObjectBehavior
 {
@@ -29,8 +31,14 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
     function it_forces_class_to_implement_ProphecySubjectInterface(ClassNode $node)
     {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->shouldBeCalled();
+        $node->addProperty(
+            new PropertyNode(
+                'objectProphecyClosureContainer',
+                'private',
+                new ObjectType('Prophecy\Doubler\ObjectProphecyClosureContainer')
+            )
+        );
 
-        $node->addProperty('objectProphecyClosure', 'private')->willReturn(null);
         $node->getMethods()->willReturn(array());
         $node->hasMethod(Argument::any())->willReturn(false);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);
@@ -48,7 +56,14 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         MethodNode $method4
     ) {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->willReturn(null);
-        $node->addProperty('objectProphecyClosure', 'private')->willReturn(null);
+        $node->addProperty(
+            new PropertyNode(
+                'objectProphecyClosureContainer',
+                'private',
+                new ObjectType('Prophecy\Doubler\ObjectProphecyClosureContainer')
+            )
+        );
+
         $node->hasMethod(Argument::any())->willReturn(false);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);
         $node->addMethod(Argument::type('Prophecy\Doubler\Generator\Node\MethodNode'), true)->willReturn(null);

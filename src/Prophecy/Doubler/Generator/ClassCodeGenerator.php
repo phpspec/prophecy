@@ -47,8 +47,8 @@ class ClassCodeGenerator
             )
         );
 
-        foreach ($class->getProperties() as $name => $visibility) {
-            $code .= sprintf("%s \$%s;\n", $visibility, $name);
+        foreach ($class->getPropertyNodes() as $propertyNode) {
+            $code .= $this->generateProperty($propertyNode)."\n";
         }
         $code .= "\n";
 
@@ -58,6 +58,19 @@ class ClassCodeGenerator
         $code .= "\n}";
 
         return sprintf("namespace %s {\n%s\n}", $namespace, $code);
+    }
+
+    private function generateProperty(Node\PropertyNode $property): string
+    {
+        $type = ($type = ((string) $property->getTypeNode())) ? $type.' ' : '';
+
+        $php = sprintf("%s %s%s;",
+            $property->getVisibility(),
+            $type,
+            '$'.$property->getName()
+        );
+
+        return $php;
     }
 
     private function generateMethod(Node\MethodNode $method): string
