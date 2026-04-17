@@ -158,6 +158,32 @@ class CallCenterSpec extends ObjectBehavior
         $calls[0]->getArguments()->shouldReturn(array('everything'));
     }
 
+    function it_records_calls_when_promise_throws_a_throwable(
+        $objectProphecy,
+        MethodProphecy $method,
+        ArgumentsWildcard $arguments,
+        PromiseInterface $promise
+    ) {
+        $method->hasReturnVoid()->willReturn(false);
+        $method->getMethodName()->willReturn('getName');
+        $method->getArgumentsWildcard()->willReturn($arguments);
+        $method->getPromise()->willReturn($promise);
+        $arguments->scoreArguments(array('world'))->willReturn(100);
+
+        $objectProphecy->getMethodProphecies()->willReturn(array('getName' => array($method)));
+        $objectProphecy->getMethodProphecies('getName')->willReturn(array($method));
+        $objectProphecy->reveal()->willReturn(new \stdClass());
+
+        $error = new \TypeError('type error');
+        $promise->execute(array('world'), $objectProphecy->getWrappedObject(), $method)->willThrow($error);
+
+        $this->shouldThrow($error)->duringMakeCall($objectProphecy, 'getName', array('world'));
+
+        $calls = $this->findCalls('getName', $arguments);
+        $calls->shouldHaveCount(1);
+        $calls[0]->getException()->shouldBeAnInstanceOf('TypeError');
+    }
+
     function it_records_the_error_when_stub_has_got_unexpected_method_calls(
         $objectProphecy,
         MethodProphecy $method,

@@ -32,6 +32,14 @@ class CallSpec extends ObjectBehavior
         $this->getException()->shouldReturn($exception);
     }
 
+    function it_accepts_throwable_instances()
+    {
+        $error = new \Error('some error');
+        $this->beConstructedWith('setValues', array(5, 2), null, $error, 'some_file.php', 23);
+
+        $this->getException()->shouldReturn($error);
+    }
+
     function it_exposes_file_and_line_through_getter()
     {
         $this->getFile()->shouldReturn('some_file.php');

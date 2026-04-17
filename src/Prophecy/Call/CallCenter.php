@@ -101,7 +101,7 @@ class CallCenter
         if ($promise = $methodProphecy->getPromise()) {
             try {
                 $returnValue = $promise->execute($arguments, $prophecy, $methodProphecy);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $exception = $e;
             }
         }
