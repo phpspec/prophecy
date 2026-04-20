@@ -174,6 +174,10 @@ class MethodProphecy
                         $prophet = new Prophet();
                         return $prophet->prophesize()->reveal();
 
+                    case 'self':
+                    case 'static':
+                        return $object->reveal();
+
                     default:
                         if (!class_exists($defaultType) && !interface_exists($defaultType)) {
                             throw new MethodProphecyException(sprintf('Cannot create a return value for the method as the type "%s" is not supported. Configure an explicit return value instead.', $defaultType), $method);
