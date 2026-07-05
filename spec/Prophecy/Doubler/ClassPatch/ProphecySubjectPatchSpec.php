@@ -45,7 +45,8 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         MethodNode $method1,
         MethodNode $method2,
         MethodNode $method3,
-        MethodNode $method4
+        MethodNode $method4,
+        MethodNode $destructor
     ) {
         $node->addInterface('Prophecy\Prophecy\ProphecySubjectInterface')->willReturn(null);
         $node->addProperty('objectProphecyClosure', 'private')->willReturn(null);
@@ -58,17 +59,20 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         $method2->getName()->willReturn('method2');
         $method3->getName()->willReturn('method3');
         $method4->getName()->willReturn('method4');
+        $destructor->getName()->willReturn('__destruct');
 
         $method1->getReturnTypeNode()->willReturn(new ReturnTypeNode(new BuiltinType('int')));
         $method2->getReturnTypeNode()->willReturn(new ReturnTypeNode(new BuiltinType('int')));
         $method3->getReturnTypeNode()->willReturn(new ReturnTypeNode(new BuiltinType('void')));
         $method4->getReturnTypeNode()->willReturn(new ReturnTypeNode(new BuiltinType('never')));
+        $destructor->getReturnTypeNode()->shouldNotBeCalled();
 
         $node->getMethods()->willReturn(array(
             'method1' => $method1,
             'method2' => $method2,
             'method3' => $method3,
             'method4' => $method4,
+            '__destruct' => $destructor,
         ));
 
         $constructor->setCode(Argument::any())->shouldNotBeCalled();
@@ -80,6 +84,8 @@ class ProphecySubjectPatchSpec extends ObjectBehavior
         $method3->setCode('$this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
             ->shouldBeCalled();
         $method4->setCode('$this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
+            ->shouldBeCalled();
+        $destructor->setCode('$this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());')
             ->shouldBeCalled();
 
         $this->apply($node);
