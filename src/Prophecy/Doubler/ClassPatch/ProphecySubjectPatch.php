@@ -48,11 +48,13 @@ class ProphecySubjectPatch implements ClassPatchInterface
         $node->addProperty('objectProphecyClosure', 'private');
 
         foreach ($node->getMethods() as $name => $method) {
-            if ('__construct' === strtolower($name)) {
+            $methodName = strtolower($name);
+
+            if ('__construct' === $methodName) {
                 continue;
             }
 
-            if (!$method->getReturnTypeNode()->hasReturnStatement()) {
+            if ('__destruct' === $methodName || !$method->getReturnTypeNode()->hasReturnStatement()) {
                 $method->setCode(
                     '$this->getProphecy()->makeProphecyMethodCall(__FUNCTION__, func_get_args());'
                 );
