@@ -48,7 +48,7 @@ class StringUtil
             $stringify = array($this, __FUNCTION__);
 
             return '['.implode(', ', array_map(function ($item, $key) use ($stringify) {
-                return (is_integer($key) ? $key : '"'.$key.'"')
+                return (is_int($key) ? $key : '"'.$key.'"')
                     .' => '.call_user_func($stringify, $item);
             }, $value, array_keys($value))).']';
         }

@@ -61,12 +61,6 @@ parameters:
 			path: src/Prophecy/Doubler/LazyDouble.php
 
 		-
-			message: '#^Property Prophecy\\Doubler\\LazyDouble\:\:\$class \(ReflectionClass\<T of object\>\|null\) does not accept ReflectionClass\<U of object\>\.$#'
-			identifier: assign.propertyType
-			count: 1
-			path: src/Prophecy/Doubler/LazyDouble.php
-
-		-
 			message: '#^Property Prophecy\\Doubler\\LazyDouble\:\:\$class \(ReflectionClass\<T of object\>\|null\) is never assigned ReflectionClass\<T of object\> so it can be removed from the property type\.$#'
 			identifier: property.unusedType
 			count: 1

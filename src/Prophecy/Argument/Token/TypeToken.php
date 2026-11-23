@@ -46,7 +46,13 @@ class TypeToken implements TokenInterface
      */
     public function scoreArgument($argument)
     {
-        $checker = "is_{$this->type}";
+        // is_integer(), is_long() and is_double() are deprecated aliases since PHP 8.6
+        $type = [
+            'integer' => 'int',
+            'long' => 'int',
+            'double' => 'float'
+        ][$this->type] ?? $this->type;
+        $checker = "is_{$type}";
         if (function_exists($checker)) {
             return call_user_func($checker, $argument) ? 5 : false;
         }
